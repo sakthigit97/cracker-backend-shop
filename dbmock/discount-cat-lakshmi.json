@@ -1,0 +1,10 @@
+{
+  "discountId": { "S": "disc-cat-lakshmi" },
+  "discountType": { "S": "CATEGORY" },
+  "targetId": { "S": "cat-lakshmi" },
+  "discountMode": { "S": "PERCENT" },
+  "discountValue": { "N": "40" },
+  "priority": { "N": "2" },
+  "isActive": { "BOOL": true },
+  "createdAt": { "S": "2026-01-15T10:00:00Z" }
+}

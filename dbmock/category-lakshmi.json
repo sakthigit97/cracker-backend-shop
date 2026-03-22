@@ -1,0 +1,8 @@
+{
+  "categoryId": { "S": "cat-lakshmi" },
+  "name": { "S": "Lakshmi Crackers" },
+  "imageUrl": { "S": "https://s3.amazonaws.com/mock/categories/lakshmi.png" },
+  "isActive": { "BOOL": true },
+  "sortOrder": { "N": "1" },
+  "createdAt": { "S": "2026-01-15T10:00:00Z" }
+}

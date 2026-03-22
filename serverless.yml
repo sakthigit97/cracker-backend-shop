@@ -1,0 +1,727 @@
+service: cracker-backend
+
+provider:
+  name: aws
+  runtime: nodejs24.x
+  region: ap-south-1
+  stage: dev
+
+  environment:
+    JWT_SECRET: ${env:JWT_SECRET}
+    CART_TABLE: Carts
+    PRODUCTS_TABLE: Products
+    ORDERS_TABLE: Orders
+    BUCKET_NAME: cracker-app
+    BRAND_TABLE: Brands
+    CATEGORY_TABLE: Categories
+    USERS_TABLE: Users
+    ADMIN_CONFIG_TABLE: AdminConfig
+    DISCOUNT_TABLE: Discounts
+    REGION: ap-south-1
+
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:5173
+        - https://frontend-cracker-shop.vercel.app
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+        - x-guest-id
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - PATCH
+      allowCredentials: false
+
+    binaryMediaTypes:
+      - application/pdf
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:DeleteItem
+            - dynamodb:BatchGetItem
+            - dynamodb:BatchWriteItem
+          Resource:
+            - arn:aws:dynamodb:ap-south-1:*:table/Users
+            - arn:aws:dynamodb:ap-south-1:*:table/Products
+            - arn:aws:dynamodb:ap-south-1:*:table/Products*
+            - arn:aws:dynamodb:ap-south-1:*:table/Products/index/*
+            - arn:aws:dynamodb:ap-south-1:*:table/Categories
+            - arn:aws:dynamodb:ap-south-1:*:table/Brands
+            - arn:aws:dynamodb:ap-south-1:*:table/Discounts
+            - arn:aws:dynamodb:ap-south-1:*:table/Carts*
+            - arn:aws:dynamodb:ap-south-1:*:table/Orders
+            - arn:aws:dynamodb:ap-south-1:*:table/Orders/index/*
+            - arn:aws:dynamodb:ap-south-1:*:table/AdminConfig*
+
+        - Effect: Allow
+          Action:
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::cracker-app
+
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:DeleteObject
+          Resource:
+            - arn:aws:s3:::cracker-app/products/*
+            - arn:aws:s3:::cracker-app/imports/*
+            - arn:aws:s3:::cracker-app/brands/*
+            - arn:aws:s3:::cracker-app/categories/*
+            - arn:aws:s3:::cracker-app/config/*
+
+package: 
+  patterns:
+    - assets/**
+
+functions:
+  login:
+    handler: src/auth/login.handler
+    events:
+      - httpApi:
+          path: /auth/login
+          method: post
+
+  sendOtp:
+    handler: src/auth/send-otp.handler
+    events:
+      - httpApi:
+          path: /auth/register/send-otp
+          method: post
+
+  register:
+    handler: src/auth/register.handler
+    events:
+      - httpApi:
+          path: /auth/register/verify
+          method: post
+
+  getProfile:
+    handler: src/user/get-profile.main
+    events:
+      - httpApi:
+          path: /user/profile
+          method: get
+
+  updateProfile:
+    handler: src/user/update-profile.main
+    events:
+      - httpApi:
+          path: /user/profile
+          method: put
+
+  getProducts:
+    handler: src/handlers/getProducts.handler
+    events:
+      - httpApi:
+          path: /products
+          method: get
+
+  getProductDetails:
+    handler: src/handlers/getProductDetails.handler
+    events:
+      - httpApi:
+          path: /products/details/{productId}
+          method: get
+
+  getProductsByCategory:
+    handler: src/handlers/getProductsByCategory.handler
+    events:
+      - httpApi:
+          path: /products/category/{categoryId}
+          method: get
+
+  getProductsByBrand:
+    handler: src/handlers/getProductsByBrand.handler
+    events:
+      - httpApi:
+          path: /products/brand/{brandId}
+          method: get
+
+  getCategories:
+    handler: src/handlers/getCategories.handler
+    events:
+      - httpApi:
+          path: /categories
+          method: get
+
+  getBrands:
+    handler: src/handlers/getBrands.handler
+    events:
+      - httpApi:
+          path: /brands
+          method: get
+
+  getCart:
+    handler: src/handlers/cart.getCart
+    events:
+      - httpApi:
+          path: /cart
+          method: GET
+
+  addCartItem:
+    handler: src/handlers/cart.addItem
+    events:
+      - httpApi:
+          path: /cart/add
+          method: POST
+
+  removeCartItem:
+    handler: src/handlers/cart.removeItem
+    events:
+      - httpApi:
+          path: /cart/remove
+          method: POST
+
+  clearCart:
+    handler: src/handlers/cart.clearCart
+    events:
+      - httpApi:
+          path: /cart/clear
+          method: POST
+
+  productBatch:
+    handler: src/handlers/productBatch.handler
+    events:
+      - httpApi:
+          path: /products/batch
+          method: POST
+
+  cartMerge:
+    handler: src/handlers/cartMerge.handler
+    events:
+      - httpApi:
+          path: /cart/merge
+          method: POST
+
+  cartSync:
+    handler: src/handlers/cartSync.handler
+    events:
+      - httpApi:
+          path: /cart/sync
+          method: POST
+
+  createOrder:
+    handler: src/handlers/Orders.handler
+    events:
+      - httpApi:
+          path: /orders
+          method: POST
+
+  getOrders:
+    handler: src/handlers/getOrders.handler
+    events:
+      - httpApi:
+          path: /orders
+          method: GET
+
+  cancelOrder:
+    handler: src/handlers/cancelOrder.handler
+    events:
+      - httpApi:
+          path: /orders/{orderId}/cancel
+          method: PUT
+
+  adjustOrder:
+    handler: src/handlers/adjustOrder.handler
+    events:
+      - httpApi:
+          path: /orders/{orderId}/adjust
+          method: PUT
+
+  adminDashboard:
+    handler: src/handlers/adminDashboard.handler
+    events:
+      - httpApi:
+          path: /admin/dashboard
+          method: GET
+
+  adminOrders:
+    handler: src/handlers/adminOrders.handler
+    events:
+      - httpApi:
+          path: /admin/orders
+          method: GET
+
+  adminOrderDetails:
+    handler: src/handlers/adminOrderDetails.handler
+    events:
+      - httpApi:
+          path: /admin/orders/{orderId}
+          method: GET
+
+  adminOrderUpdate:
+    handler: src/handlers/adminUpdateOrder.handler
+    events:
+      - httpApi:
+          path: /admin/orders/{orderId}
+          method: PUT
+
+  adminGetProducts:
+    handler: src/handlers/getAdminProducts.handler
+    events:
+      - httpApi:
+          path: /admin/products
+          method: GET
+
+  adminCreateProduct:
+    handler: src/handlers/createAdminProduct.handler
+    events:
+      - httpApi:
+          path: /admin/product
+          method: POST
+
+  adminUpdateProduct:
+    handler: src/handlers/updateAdminProduct.handler
+    events:
+      - httpApi:
+          path: /admin/products/{productId}
+          method: PATCH
+
+  adminDeactivateProduct:
+    handler: src/handlers/deactivateAdminProduct.handler
+    events:
+      - httpApi:
+          path: /admin/products/{productId}/deactivate
+          method: PATCH
+
+  getPresignedURL:
+    handler: src/handlers/getPresignedUrls.handler
+    events:
+      - httpApi:
+          path: /admin/products/presign
+          method: POST
+
+  adminGetProduct:
+    handler: src/handlers/getAdminProduct.handler
+    events:
+      - httpApi:
+          path: /admin/products/{productId}
+          method: GET
+
+  getProductUploadURL:
+    handler: src/handlers/adminGenerateImportUploadUrl.handler
+    events:
+      - httpApi:
+          path: /admin/products/import/upload-url
+          method: POST
+
+  getProductValidateURL:
+    handler: src/handlers/adminValidateProductImport.handler
+    events:
+      - httpApi:
+          path: /admin/products/import/validate
+          method: POST
+
+  getProductUploadConfirm:
+    handler: src/handlers/adminConfirmProductImport.handler
+    events:
+      - httpApi:
+          path: /admin/products/import/confirm
+          method: POST
+
+  getCategoryList:
+    handler: src/handlers/adminListCategories.handler
+    events:
+      - httpApi:
+          path: /admin/categories
+          method: GET
+
+  CreateCategory:
+    handler: src/handlers/adminCreateCategory.handler
+    events:
+      - httpApi:
+          path: /admin/categories
+          method: POST
+
+  UpdateStatusCategory:
+    handler: src/handlers/adminUpdateCategoryStatus.handler
+    events:
+      - httpApi:
+          path: /admin/categories/{categoryId}/status
+          method: PATCH
+
+  UpdateCategory:
+    handler: src/handlers/adminUpdateCategory.handler
+    events:
+      - httpApi:
+          path: /admin/categories/{categoryId}
+          method: PUT
+
+  getCategoryById:
+    handler: src/handlers/adminGetCategoryById.handler
+    events:
+      - httpApi:
+          path: /admin/categories/{categoryId}
+          method: GET
+
+  AdminDeleteCategory:
+    handler: src/handlers/adminDeleteCategory.handler
+    events:
+      - httpApi:
+          path: /admin/categories/{categoryId}
+          method: delete
+
+  CategoryPresignUrl:
+    handler: src/handlers/adminPresignCategoryImage.handler
+    events:
+      - httpApi:
+          path: /admin/categories/presign-image
+          method: POST
+
+  cleanupOrphanProductImages:
+    handler: src/handlers/cleanupOrphanProductImages.handler
+    events:
+      - schedule:
+          rate: cron(0 2 * * ? *)
+
+  AdminListBrands:
+    handler: src/handlers/adminListBrands.handler
+    events:
+      - httpApi:
+          path: /admin/brands
+          method: GET
+
+  AdminGetBrandById:
+    handler: src/handlers/adminGetBrand.handler
+    events:
+      - httpApi:
+          path: /admin/brands/{brandId}
+          method: GET
+
+  AdminCreateBrand:
+    handler: src/handlers/adminCreateBrand.handler
+    events:
+      - httpApi:
+          path: /admin/brands
+          method: POST
+
+  AdminUpdateBrand:
+    handler: src/handlers/adminUpdateBrand.handler
+    events:
+      - httpApi:
+          path: /admin/brands/{brandId}
+          method: PUT
+
+  AdminUpdateBrandStatus:
+    handler: src/handlers/adminUpdateBrandStatus.handler
+    events:
+      - httpApi:
+          path: /admin/brands/{brandId}/status
+          method: PATCH
+
+  AdminDeleteBrand:
+    handler: src/handlers/adminDeleteBrand.handler
+    events:
+      - httpApi:
+          path: /admin/brands/{brandId}
+          method: DELETE
+
+  AdminPresignBrandLogo:
+    handler: src/handlers/adminPresignBrandLogo.handler
+    events:
+      - httpApi:
+          path: /admin/brands/presign-logo
+          method: POST
+
+  adminListUsers:
+    handler: src/handlers/adminListUsers.handler
+    events:
+      - httpApi:
+          path: /admin/users
+          method: GET
+
+  adminDeleteUser:
+    handler: src/handlers/adminDeleteUser.handler
+    events:
+      - httpApi:
+          path: /admin/users/{userId}
+          method: DELETE
+
+  deleteProduct:
+    handler: src/handlers/deleteProduct.handler
+    events:
+      - httpApi:
+          path: /admin/products/{productId}
+          method: DELETE
+
+  getConfig:
+    handler: src/handlers/getConfig.handler
+    events:
+      - httpApi:
+          path: /config
+          method: GET
+
+  updateAdminConfig:
+    handler: src/handlers/adminUpdateConfig.handler
+    events:
+      - httpApi:
+          path: /admin/config
+          method: PUT
+
+  AdminPresignConfigLogo:
+    handler: src/handlers/adminConfigSliderPresign.handler
+    events:
+      - httpApi:
+          path: /admin/config/slider-presign
+          method: POST
+
+  adminListDiscounts:
+    handler: src/handlers/adminListDiscounts.handler
+    events:
+      - httpApi:
+          path: /admin/discounts
+          method: GET
+
+  adminCreateDiscount:
+    handler: src/handlers/adminCreateDiscount.handler
+    events:
+      - httpApi:
+          path: /admin/discounts
+          method: POST
+
+  adminGetDiscountById:
+    handler: src/handlers/adminGetDiscountById.handler
+    events:
+      - httpApi:
+          path: /admin/discounts/{discountId}
+          method: GET
+
+  adminUpdateDiscount:
+    handler: src/handlers/adminUpdateDiscount.handler
+    events:
+      - httpApi:
+          path: /admin/discounts/{discountId}
+          method: PUT
+
+  orderInvoice:
+    handler: src/handlers/orderInvoice.handler
+    events:
+      - httpApi:
+          path: /orders/{orderId}/invoice
+          method: GET
+
+resources:
+  Resources:
+    ProductImagesBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: cracker-app
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - http://localhost:5173
+                - https://frontend-cracker-shop.vercel.app
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+              AllowedHeaders:
+                - "*"
+              MaxAge: 3000
+    ProductImagesBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: cracker-app
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicReadProductImages
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+              Resource:
+                - arn:aws:s3:::cracker-app/products/*
+                - arn:aws:s3:::cracker-app/categories/*
+                - arn:aws:s3:::cracker-app/brands/*
+                - arn:aws:s3:::cracker-app/imports/*
+                - arn:aws:s3:::cracker-app/config/*
+
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Users
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: mobile
+            AttributeType: S
+        KeySchema:
+          - AttributeName: mobile
+            KeyType: HASH
+
+    BrandsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Brands
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: brandId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: brandId
+            KeyType: HASH
+
+    CategoriesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Categories
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: categoryId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: categoryId
+            KeyType: HASH
+
+    OrdersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Orders
+        BillingMode: PAY_PER_REQUEST
+
+        AttributeDefinitions:
+          - AttributeName: orderId
+            AttributeType: S
+          - AttributeName: meta
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: N
+          - AttributeName: status
+            AttributeType: S
+
+        KeySchema:
+          - AttributeName: orderId
+            KeyType: HASH
+          - AttributeName: meta
+            KeyType: RANGE
+
+        GlobalSecondaryIndexes:
+          - IndexName: userId-createdAt-index
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+          - IndexName: meta-createdAt-index
+            KeySchema:
+              - AttributeName: meta
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+          - IndexName: status-meta-index
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: meta
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+    ProductsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Products
+        BillingMode: PAY_PER_REQUEST
+
+        AttributeDefinitions:
+          - AttributeName: productId
+            AttributeType: S
+          - AttributeName: categoryId
+            AttributeType: S
+          - AttributeName: brandId
+            AttributeType: S
+          - AttributeName: isActive
+            AttributeType: S
+
+        KeySchema:
+          - AttributeName: productId
+            KeyType: HASH
+
+        GlobalSecondaryIndexes:
+          - IndexName: isActive-index
+            KeySchema:
+              - AttributeName: isActive
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+          - IndexName: categoryId-index
+            KeySchema:
+              - AttributeName: categoryId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+          - IndexName: brandId-index
+            KeySchema:
+              - AttributeName: brandId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    DiscountsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Discounts
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: discountId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: discountId
+            KeyType: HASH
+
+    CartsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Carts
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: cartId
+            AttributeType: S
+          - AttributeName: itemId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: cartId
+            KeyType: HASH
+          - AttributeName: itemId
+            KeyType: RANGE
+
+    AdminConfigTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: AdminConfig
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: configId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: configId
+            KeyType: HASH

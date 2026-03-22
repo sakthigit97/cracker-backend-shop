@@ -1,0 +1,16 @@
+{
+  "productId": { "S": "prod-1001" },
+  "name": { "S": "3.5 inch Lakshmi Crackers" },
+  "categoryId": { "S": "cat-lakshmi" },
+  "brandId": { "S": "brand-standard" },
+  "price": { "N": "236" },
+  "imageUrls": {
+    "L": [
+      { "S": "https://s3.amazonaws.com/mock/products/lakshmi-1.jpg" },
+      { "S": "https://s3.amazonaws.com/mock/products/lakshmi-2.jpg" }
+    ]
+  },
+  "videoUrl": { "S": "https://s3.amazonaws.com/mock/products/lakshmi-demo.mp4" },
+  "isActive": { "S": "true" },
+  "createdAt": { "S": "2026-01-15T10:00:00Z" }
+}

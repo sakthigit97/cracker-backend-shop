@@ -1,0 +1,23 @@
+[
+  {
+    "IndexName": "categoryId-index",
+    "KeySchema": [
+      { "AttributeName": "categoryId", "KeyType": "HASH" }
+    ],
+    "Projection": { "ProjectionType": "ALL" }
+  },
+  {
+    "IndexName": "brandId-index",
+    "KeySchema": [
+      { "AttributeName": "brandId", "KeyType": "HASH" }
+    ],
+    "Projection": { "ProjectionType": "ALL" }
+  },
+  {
+    "IndexName": "isActive-index",
+    "KeySchema": [
+      { "AttributeName": "isActive", "KeyType": "HASH" }
+    ],
+    "Projection": { "ProjectionType": "ALL" }
+  }
+]

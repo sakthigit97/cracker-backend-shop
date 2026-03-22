@@ -1,0 +1,14 @@
+{
+  "productId": { "S": "prod-1002" },
+  "name": { "S": "Atom Bomb" },
+  "categoryId": { "S": "cat-bomb" },
+  "brandId": { "S": "brand-standard" },
+  "price": { "N": "220" },
+  "imageUrls": {
+    "L": [
+      { "S": "https://s3.amazonaws.com/mock/products/bomb-1.jpg" }
+    ]
+  },
+  "isActive": { "S": "true" },
+  "createdAt": { "S": "2026-01-15T10:00:00Z" }
+}
