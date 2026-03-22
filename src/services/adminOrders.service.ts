@@ -11,8 +11,10 @@ export class AdminOrdersService {
         toDate?: number;
         orderId?: string;
     }) {
-        if (input.orderId) {
-            const order = await this.repo.getOrderById(input.orderId);
+        const search = input.orderId?.trim();
+        if (search && search.length > 15) {
+            const order = await this.repo.getOrderById(search);
+
             return {
                 items: order ? [order] : [],
                 nextCursor: null,
@@ -25,6 +27,7 @@ export class AdminOrdersService {
             cursor: input.cursor,
             fromDate: input.fromDate,
             toDate: input.toDate,
+            orderId: search,
         });
     }
 }

@@ -1,8 +1,7 @@
-import { QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { QueryCommand, GetCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "../utils/dynamo";
 
 const TABLE = process.env.ORDERS_TABLE!;
-
 export class AdminOrdersRepository {
 
     async getOrdersByStatus({
@@ -11,66 +10,80 @@ export class AdminOrdersRepository {
         cursor,
         fromDate,
         toDate,
+        orderId,
     }: {
         status: string;
         limit: number;
         cursor?: any;
         fromDate?: number;
         toDate?: number;
+        orderId?: string;
     }) {
-        let filter = "";
-        const values: any = {
-            ":s": status,
-            ":m": "ORDER",
-        };
+        let items: any[] = [];
+        let lastKey = cursor;
 
-        if (fromDate && toDate) {
-            filter = "createdAt BETWEEN :from AND :to";
-            values[":from"] = fromDate;
-            values[":to"] = toDate;
-        }
+        do {
+            const values: any = {
+                ":s": status,
+                ":m": "ORDER",
+            };
 
-        const res = await ddb.send(
-            new QueryCommand({
-                TableName: TABLE,
-                IndexName: "status-meta-index",
-                KeyConditionExpression: "#status = :s AND #meta = :m",
-                FilterExpression: filter || undefined,
-                ExpressionAttributeNames: {
-                    "#status": "status",
-                    "#meta": "meta",
-                },
-                ExpressionAttributeValues: values,
-                ScanIndexForward: false,
-                Limit: limit,
-                ExclusiveStartKey: cursor,
-            })
-        );
+            let filterParts: string[] = [];
+            if (fromDate && toDate) {
+                filterParts.push("createdAt BETWEEN :from AND :to");
+                values[":from"] = fromDate;
+                values[":to"] = toDate;
+            }
+
+            if (orderId) {
+                filterParts.push("contains(orderId, :oid)");
+                values[":oid"] = orderId;
+            }
+
+            const res = await ddb.send(
+                new QueryCommand({
+                    TableName: TABLE,
+                    IndexName: "status-meta-index",
+                    KeyConditionExpression: "#status = :s AND #meta = :m",
+                    FilterExpression:
+                        filterParts.length > 0
+                            ? filterParts.join(" AND ")
+                            : undefined,
+                    ExpressionAttributeNames: {
+                        "#status": "status",
+                        "#meta": "meta",
+                    },
+                    ExpressionAttributeValues: values,
+                    ScanIndexForward: false,
+                    Limit: 25,
+                    ExclusiveStartKey: lastKey,
+                })
+            );
+
+            const fetched = res.Items || [];
+            items.push(...fetched);
+
+            lastKey = res.LastEvaluatedKey;
+
+        } while (items.length < limit && lastKey);
 
         return {
-            items: res.Items || [],
-            nextCursor: res.LastEvaluatedKey || null,
+            items: items.slice(0, limit),
+            nextCursor: lastKey || null,
         };
     }
 
     async getOrderById(orderId: string) {
         const res = await ddb.send(
-            new QueryCommand({
+            new GetCommand({
                 TableName: TABLE,
-                IndexName: "meta-createdAt-index",
-                KeyConditionExpression: "#meta = :m",
-                FilterExpression: "orderId = :oid",
-                ExpressionAttributeNames: {
-                    "#meta": "meta",
+                Key: {
+                    orderId,
+                    meta: "ORDER",
                 },
-                ExpressionAttributeValues: {
-                    ":m": "ORDER",
-                    ":oid": orderId,
-                },
-                Limit: 1,
             })
         );
 
-        return res.Items?.[0] || null;
+        return res.Item || null;
     }
 }

@@ -25,7 +25,7 @@ __export(productBatch_exports, {
 module.exports = __toCommonJS(productBatch_exports);
 
 // src/services/product.service.ts
-var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
+var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
 
 // src/utils/dynamo.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
@@ -65,6 +65,55 @@ var ProductRepository = class {
   }
 };
 
+// src/services/discount.service.ts
+var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
+var DISCOUNT_TABLE = "Discounts";
+async function getActiveDiscounts() {
+  const res = await ddb.send(
+    new import_lib_dynamodb3.ScanCommand({
+      TableName: DISCOUNT_TABLE,
+      FilterExpression: "isActive = :true",
+      ExpressionAttributeValues: {
+        ":true": true
+      }
+    })
+  );
+  return res.Items || [];
+}
+
+// src/services/price.service.ts
+function applyDiscount(product, discounts) {
+  let applied = null;
+  applied = discounts.find(
+    (d) => d.discountType === "PRODUCT" && d.targetId === product.productId
+  ) || discounts.find(
+    (d) => d.discountType === "CATEGORY" && d.targetId === product.categoryId
+  ) || discounts.find(
+    (d) => d.discountType === "BRAND" && d.targetId === product.brandId
+  );
+  if (!applied) {
+    return {
+      price: product.price,
+      originalPrice: null,
+      discountText: null
+    };
+  }
+  let finalPrice = product.price;
+  if (applied.discountMode === "PERCENT") {
+    finalPrice = Math.round(
+      product.price - product.price * applied.discountValue / 100
+    );
+  }
+  if (applied.discountMode === "FLAT") {
+    finalPrice = product.price - applied.discountValue;
+  }
+  return {
+    price: finalPrice,
+    originalPrice: product.price,
+    discountText: applied.discountMode === "PERCENT" ? `${applied.discountValue}% OFF` : `\u20B9${applied.discountValue} OFF`
+  };
+}
+
 // src/services/product.service.ts
 var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
 var ProductService = class {
@@ -76,7 +125,25 @@ var ProductService = class {
     if (uniqueIds.length > 100) {
       throw new Error("Too many products requested");
     }
-    return this.repo.batchGet(uniqueIds);
+    const products = await this.repo.batchGet(uniqueIds);
+    if (!products || products.length === 0) return [];
+    const discounts = await getActiveDiscounts();
+    const productMap = new Map(products.map((p) => [p.productId, p]));
+    return uniqueIds.map((id) => productMap.get(id)).filter((p) => Boolean(p)).filter((p) => p.isActive === "true" || p.isActive === true).map((p) => {
+      const priceInfo = applyDiscount(p, discounts);
+      return {
+        productId: p.productId,
+        name: p.name,
+        description: p.description ?? null,
+        image: p.imageUrls?.[0] ?? null,
+        price: priceInfo.price,
+        originalPrice: priceInfo.originalPrice > priceInfo.price ? priceInfo.originalPrice : void 0,
+        discountText: priceInfo.discountText,
+        categoryId: p.categoryId,
+        brandId: p.brandId,
+        qty: p.quantity
+      };
+    });
   }
   async deleteProduct(productId) {
     return this.repo.deleteProduct(productId);

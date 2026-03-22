@@ -8,12 +8,19 @@ interface CreateOrderInput {
     paymentMode?: string;
     paymentStatus?: string;
     transactionId?: string | null;
+    subtotal: number;
+    packagingCharge: number;
+    gstAmount: number;
+    totalAmount: number;
+    walletUsed: number;
+    finalPayable: number;
 }
 
 const CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
+
 export class OrderService {
     constructor(private repo = new OrderRepository()) { }
-    private productRepo = new ProductRepository()
+    private productRepo = new ProductRepository();
 
     async createOrder(input: CreateOrderInput): Promise<string> {
         const now = Date.now();
@@ -25,23 +32,27 @@ export class OrderService {
 
         const days = isTamilNadu ? 5 : 10;
         const expectedDelivery = now + days * 24 * 60 * 60 * 1000;
-        const items = await this.repo.buildItemsSnapshot(input.cartItems);
-        let totalAmount = items.reduce((sum, i) => sum + i.total, 0);
-        const user = await this.repo.getUserByMobile(input.userId);
-        let creditUsed = 0;
-        const credit = Number(user?.walletCredit || 0);
 
-        if (credit > 0) {
-            creditUsed = Math.min(credit, totalAmount);
-            totalAmount = totalAmount - creditUsed;
-            await this.repo.deductWalletCredit(input.userId, creditUsed);
+        const items = await this.repo.buildItemsSnapshot(input.cartItems);
+
+        const user = await this.repo.getUserByMobile(input.userId);
+        const availableCredit = Number(user?.walletCredit || 0);
+
+        if (input.walletUsed > availableCredit) {
+            throw new Error("Invalid wallet usage");
         }
+
+        if (input.walletUsed > 0) {
+            await this.repo.deductWalletCredit(input.userId, input.walletUsed);
+        }
+
         const paymentMode = input.paymentMode || "OFFLINE";
         const paymentStatus =
             input.paymentStatus ||
             (paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED");
 
         const transactionId = input.transactionId || null;
+
         const order = {
             meta: "ORDER",
             orderId,
@@ -53,8 +64,12 @@ export class OrderService {
             transactionId,
             items,
             expectedDelivery,
-            totalAmount,
-            referralCreditUsed: creditUsed,
+            subtotal: input.subtotal,
+            packagingCharge: input.packagingCharge,
+            gstAmount: input.gstAmount,
+            totalAmount: input.totalAmount,
+            walletUsed: input.walletUsed,
+            finalPayable: input.finalPayable,
             statusHistory: [
                 {
                     status: "ORDER_PLACED",
@@ -70,7 +85,9 @@ export class OrderService {
         };
 
         await this.repo.create(order);
-        const isPaid = paymentMode === "OFFLINE" || paymentStatus === "SUCCESS";
+
+        const isPaid =
+            paymentMode === "OFFLINE" || paymentStatus === "SUCCESS";
 
         if (
             isPaid &&
@@ -214,16 +231,25 @@ export class OrderService {
             };
         });
 
-        const totalAmount = updatedItems.reduce(
+        const subtotal = updatedItems.reduce(
             (sum: number, i: any) => sum + i.total,
             0
         );
+
+        const packagingCharge = Number(order.packagingCharge || 0);
+        const gstAmount = Number(order.gstAmount || 0);
+        const walletUsed = Number(order.walletUsed || 0);
+
+        const totalAmount = subtotal + packagingCharge + gstAmount;
+        const finalPayable = totalAmount - walletUsed;
 
         const now = Date.now();
 
         await this.repo.updateItems(orderId, {
             items: updatedItems,
+            subtotal,
             totalAmount,
+            finalPayable,
             updatedAt: now,
             modifiedAt: now,
             modifiedBy: isAdmin ? "ADMIN" : `USER#${userId}`,

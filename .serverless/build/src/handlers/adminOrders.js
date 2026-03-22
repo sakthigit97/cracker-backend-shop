@@ -3950,57 +3950,62 @@ var AdminOrdersRepository = class {
     limit,
     cursor,
     fromDate,
-    toDate
+    toDate,
+    orderId
   }) {
-    let filter = "";
-    const values = {
-      ":s": status,
-      ":m": "ORDER"
-    };
-    if (fromDate && toDate) {
-      filter = "createdAt BETWEEN :from AND :to";
-      values[":from"] = fromDate;
-      values[":to"] = toDate;
-    }
-    const res = await ddb.send(
-      new import_lib_dynamodb2.QueryCommand({
-        TableName: TABLE,
-        IndexName: "status-meta-index",
-        KeyConditionExpression: "#status = :s AND #meta = :m",
-        FilterExpression: filter || void 0,
-        ExpressionAttributeNames: {
-          "#status": "status",
-          "#meta": "meta"
-        },
-        ExpressionAttributeValues: values,
-        ScanIndexForward: false,
-        Limit: limit,
-        ExclusiveStartKey: cursor
-      })
-    );
+    let items = [];
+    let lastKey = cursor;
+    do {
+      const values = {
+        ":s": status,
+        ":m": "ORDER"
+      };
+      let filterParts = [];
+      if (fromDate && toDate) {
+        filterParts.push("createdAt BETWEEN :from AND :to");
+        values[":from"] = fromDate;
+        values[":to"] = toDate;
+      }
+      if (orderId) {
+        filterParts.push("contains(orderId, :oid)");
+        values[":oid"] = orderId;
+      }
+      const res = await ddb.send(
+        new import_lib_dynamodb2.QueryCommand({
+          TableName: TABLE,
+          IndexName: "status-meta-index",
+          KeyConditionExpression: "#status = :s AND #meta = :m",
+          FilterExpression: filterParts.length > 0 ? filterParts.join(" AND ") : void 0,
+          ExpressionAttributeNames: {
+            "#status": "status",
+            "#meta": "meta"
+          },
+          ExpressionAttributeValues: values,
+          ScanIndexForward: false,
+          Limit: 25,
+          ExclusiveStartKey: lastKey
+        })
+      );
+      const fetched = res.Items || [];
+      items.push(...fetched);
+      lastKey = res.LastEvaluatedKey;
+    } while (items.length < limit && lastKey);
     return {
-      items: res.Items || [],
-      nextCursor: res.LastEvaluatedKey || null
+      items: items.slice(0, limit),
+      nextCursor: lastKey || null
     };
   }
   async getOrderById(orderId) {
     const res = await ddb.send(
-      new import_lib_dynamodb2.QueryCommand({
+      new import_lib_dynamodb2.GetCommand({
         TableName: TABLE,
-        IndexName: "meta-createdAt-index",
-        KeyConditionExpression: "#meta = :m",
-        FilterExpression: "orderId = :oid",
-        ExpressionAttributeNames: {
-          "#meta": "meta"
-        },
-        ExpressionAttributeValues: {
-          ":m": "ORDER",
-          ":oid": orderId
-        },
-        Limit: 1
+        Key: {
+          orderId,
+          meta: "ORDER"
+        }
       })
     );
-    return res.Items?.[0] || null;
+    return res.Item || null;
   }
 };
 
@@ -4010,8 +4015,9 @@ var AdminOrdersService = class {
     this.repo = repo;
   }
   async listOrders(input) {
-    if (input.orderId) {
-      const order = await this.repo.getOrderById(input.orderId);
+    const search = input.orderId?.trim();
+    if (search && search.length > 15) {
+      const order = await this.repo.getOrderById(search);
       return {
         items: order ? [order] : [],
         nextCursor: null
@@ -4022,7 +4028,8 @@ var AdminOrdersService = class {
       limit: input.limit,
       cursor: input.cursor,
       fromDate: input.fromDate,
-      toDate: input.toDate
+      toDate: input.toDate,
+      orderId: search
     });
   }
 };

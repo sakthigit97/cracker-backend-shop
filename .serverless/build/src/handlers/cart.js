@@ -4057,7 +4057,6 @@ function getOptionalUserId(event) {
 var service = new CartService();
 function resolveCartContext(event) {
   const userId = getOptionalUserId(event);
-  console.log("user id =>" + userId);
   if (userId) {
     return {
       pk: `USER#${userId}`,
@@ -4074,12 +4073,8 @@ function resolveCartContext(event) {
   };
 }
 var getCart = async (event) => {
-  console.log("=== GET CART START ===");
   const { pk, guestId } = resolveCartContext(event);
   const items = await service.getCart(pk);
-  console.log("Resolved cartId:", pk);
-  console.log("Resolved guestId:", guestId);
-  console.log("Items from DB:", items);
   return {
     statusCode: 200,
     headers: guestId ? { "x-guest-id": guestId } : {},

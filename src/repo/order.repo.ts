@@ -215,20 +215,24 @@ export class OrderRepository {
                     meta: "ORDER",
                 },
                 UpdateExpression: `
-        SET 
-          #items = :items,
-          totalAmount = :totalAmount,
-          updatedAt = :updatedAt,
-          modifiedAt = :modifiedAt,
-          modifiedBy = :modifiedBy,
-          statusHistory = :statusHistory
-      `,
+                SET 
+                    #items = :items,
+                    subtotal = :subtotal,
+                    totalAmount = :totalAmount,
+                    finalPayable = :finalPayable,
+                    updatedAt = :updatedAt,
+                    modifiedAt = :modifiedAt,
+                    modifiedBy = :modifiedBy,
+                    statusHistory = :statusHistory
+            `,
                 ExpressionAttributeNames: {
-                    "#items": "items", // 🔥 FIX FOR RESERVED WORD
+                    "#items": "items",
                 },
                 ExpressionAttributeValues: {
                     ":items": data.items,
+                    ":subtotal": data.subtotal,
                     ":totalAmount": data.totalAmount,
+                    ":finalPayable": data.finalPayable,
                     ":updatedAt": data.updatedAt,
                     ":modifiedAt": data.modifiedAt,
                     ":modifiedBy": data.modifiedBy,

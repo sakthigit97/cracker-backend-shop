@@ -13,6 +13,7 @@ export const handler = async (event: any) => {
         const userCartId = `USER#${userId}`;
 
         const body = JSON.parse(event.body || "{}");
+
         const rawAddress = body.address;
         const address = typeof rawAddress === "string" ? rawAddress.trim() : "";
         if (!address) {
@@ -22,7 +23,9 @@ export const handler = async (event: any) => {
             };
         }
 
-        const paymentMode = body.paymentMode === "ONLINE" ? "ONLINE" : "OFFLINE";
+        const paymentMode =
+            body.paymentMode === "ONLINE" ? "ONLINE" : "OFFLINE";
+
         const paymentStatus =
             typeof body.paymentStatus === "string"
                 ? body.paymentStatus
@@ -34,6 +37,43 @@ export const handler = async (event: any) => {
             typeof body.transactionId === "string"
                 ? body.transactionId
                 : null;
+
+        // Pricing snapshot from frontend
+        const subtotal = Number(body.subtotal || 0);
+        const packagingCharge = Number(body.packagingCharge || 0);
+        const gstAmount = Number(body.gstAmount || 0);
+        const totalAmount = Number(body.totalAmount || 0);
+        const walletUsed = Number(body.walletUsed || 0);
+        const finalPayable = Number(body.finalPayable || 0);
+
+        if (
+            subtotal < 0 ||
+            packagingCharge < 0 ||
+            gstAmount < 0 ||
+            totalAmount < 0 ||
+            walletUsed < 0 ||
+            finalPayable < 0
+        ) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ message: "Invalid pricing data" }),
+            };
+        }
+
+        const expectedTotal = subtotal + packagingCharge + gstAmount;
+        if (totalAmount !== expectedTotal) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ message: "Invalid total amount" }),
+            };
+        }
+
+        if (finalPayable !== totalAmount - walletUsed) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ message: "Invalid final payable amount" }),
+            };
+        }
 
         const cartItems = await cartService.getCart(userCartId);
         if (!cartItems || cartItems.length === 0) {
@@ -50,6 +90,12 @@ export const handler = async (event: any) => {
             paymentMode,
             paymentStatus,
             transactionId,
+            subtotal,
+            packagingCharge,
+            gstAmount,
+            totalAmount,
+            walletUsed,
+            finalPayable,
         });
 
         await cartService.clear(userCartId);

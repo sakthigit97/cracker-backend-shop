@@ -157,7 +157,8 @@ var handler = async (event) => {
         originalPrice: priceInfo.originalPrice,
         discountText: priceInfo.discountText,
         categoryId: p.categoryId,
-        brandId: p.brandId
+        brandId: p.brandId,
+        qty: p.quantity
       };
     }) || [];
     return success({

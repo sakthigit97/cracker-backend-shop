@@ -4002,10 +4002,10 @@ var AdminUpdateOrderRepository = class {
 };
 
 // src/repo/order.repo.ts
-var import_lib_dynamodb5 = require("@aws-sdk/lib-dynamodb");
+var import_lib_dynamodb6 = require("@aws-sdk/lib-dynamodb");
 
 // src/services/product.service.ts
-var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
+var import_lib_dynamodb5 = require("@aws-sdk/lib-dynamodb");
 
 // src/repo/product.repo.ts
 var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
@@ -4035,6 +4035,55 @@ var ProductRepository = class {
   }
 };
 
+// src/services/discount.service.ts
+var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
+var DISCOUNT_TABLE = "Discounts";
+async function getActiveDiscounts() {
+  const res = await ddb.send(
+    new import_lib_dynamodb4.ScanCommand({
+      TableName: DISCOUNT_TABLE,
+      FilterExpression: "isActive = :true",
+      ExpressionAttributeValues: {
+        ":true": true
+      }
+    })
+  );
+  return res.Items || [];
+}
+
+// src/services/price.service.ts
+function applyDiscount(product, discounts) {
+  let applied = null;
+  applied = discounts.find(
+    (d) => d.discountType === "PRODUCT" && d.targetId === product.productId
+  ) || discounts.find(
+    (d) => d.discountType === "CATEGORY" && d.targetId === product.categoryId
+  ) || discounts.find(
+    (d) => d.discountType === "BRAND" && d.targetId === product.brandId
+  );
+  if (!applied) {
+    return {
+      price: product.price,
+      originalPrice: null,
+      discountText: null
+    };
+  }
+  let finalPrice = product.price;
+  if (applied.discountMode === "PERCENT") {
+    finalPrice = Math.round(
+      product.price - product.price * applied.discountValue / 100
+    );
+  }
+  if (applied.discountMode === "FLAT") {
+    finalPrice = product.price - applied.discountValue;
+  }
+  return {
+    price: finalPrice,
+    originalPrice: product.price,
+    discountText: applied.discountMode === "PERCENT" ? `${applied.discountValue}% OFF` : `\u20B9${applied.discountValue} OFF`
+  };
+}
+
 // src/services/product.service.ts
 var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
 var ProductService = class {
@@ -4046,7 +4095,25 @@ var ProductService = class {
     if (uniqueIds.length > 100) {
       throw new Error("Too many products requested");
     }
-    return this.repo.batchGet(uniqueIds);
+    const products = await this.repo.batchGet(uniqueIds);
+    if (!products || products.length === 0) return [];
+    const discounts = await getActiveDiscounts();
+    const productMap = new Map(products.map((p) => [p.productId, p]));
+    return uniqueIds.map((id) => productMap.get(id)).filter((p) => Boolean(p)).filter((p) => p.isActive === "true" || p.isActive === true).map((p) => {
+      const priceInfo = applyDiscount(p, discounts);
+      return {
+        productId: p.productId,
+        name: p.name,
+        description: p.description ?? null,
+        image: p.imageUrls?.[0] ?? null,
+        price: priceInfo.price,
+        originalPrice: priceInfo.originalPrice > priceInfo.price ? priceInfo.originalPrice : void 0,
+        discountText: priceInfo.discountText,
+        categoryId: p.categoryId,
+        brandId: p.brandId,
+        qty: p.quantity
+      };
+    });
   }
   async deleteProduct(productId) {
     return this.repo.deleteProduct(productId);
@@ -4089,7 +4156,7 @@ var OrderRepository = class {
   }
   async create(order) {
     await ddb.send(
-      new import_lib_dynamodb5.PutCommand({
+      new import_lib_dynamodb6.PutCommand({
         TableName: TABLE_NAME2,
         Item: order
       })
@@ -4097,7 +4164,7 @@ var OrderRepository = class {
   }
   async getOrdersByUser(userId, limit, cursor) {
     const res = await ddb.send(
-      new import_lib_dynamodb5.QueryCommand({
+      new import_lib_dynamodb6.QueryCommand({
         TableName: TABLE_NAME2,
         IndexName: "userId-createdAt-index",
         KeyConditionExpression: "userId = :uid",
@@ -4116,7 +4183,7 @@ var OrderRepository = class {
   }
   async getById(orderId) {
     const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
+      new import_lib_dynamodb6.GetCommand({
         TableName: TABLE_NAME2,
         Key: {
           orderId,
@@ -4128,7 +4195,7 @@ var OrderRepository = class {
   }
   async updateStatus(orderId, data) {
     await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
+      new import_lib_dynamodb6.UpdateCommand({
         TableName: TABLE_NAME2,
         Key: {
           orderId,
@@ -4157,7 +4224,7 @@ var OrderRepository = class {
   }
   async getUserByMobile(mobile) {
     const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
+      new import_lib_dynamodb6.GetCommand({
         TableName: "Users",
         Key: { mobile }
       })
@@ -4167,7 +4234,7 @@ var OrderRepository = class {
   async deductWalletCredit(mobile, usedAmount) {
     if (usedAmount <= 0) return;
     await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
+      new import_lib_dynamodb6.UpdateCommand({
         TableName: "Users",
         Key: { mobile },
         UpdateExpression: "SET walletCredit = walletCredit - :amt",
@@ -4179,7 +4246,7 @@ var OrderRepository = class {
   }
   async markReferralRewarded(mobile) {
     await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
+      new import_lib_dynamodb6.UpdateCommand({
         TableName: "Users",
         Key: { mobile },
         UpdateExpression: "SET referralRewarded = :t",
@@ -4192,7 +4259,7 @@ var OrderRepository = class {
   async addWalletCreditByReferralCode(referralCode, amount) {
     if (!referralCode || amount <= 0) return;
     const scanRes = await ddb.send(
-      new import_lib_dynamodb5.ScanCommand({
+      new import_lib_dynamodb6.ScanCommand({
         TableName: "Users",
         FilterExpression: "referralCode = :c",
         ExpressionAttributeValues: {
@@ -4204,7 +4271,7 @@ var OrderRepository = class {
     const refUser = scanRes.Items?.[0];
     if (!refUser) return;
     await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
+      new import_lib_dynamodb6.UpdateCommand({
         TableName: "Users",
         Key: { mobile: refUser.mobile },
         UpdateExpression: "SET walletCredit = if_not_exists(walletCredit, :z) + :amt",
@@ -4217,7 +4284,7 @@ var OrderRepository = class {
   }
   async getAdminConfig() {
     const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
+      new import_lib_dynamodb6.GetCommand({
         TableName: "AdminConfig",
         Key: {
           configId: "global"
@@ -4228,28 +4295,31 @@ var OrderRepository = class {
   }
   async updateItems(orderId, data) {
     await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
+      new import_lib_dynamodb6.UpdateCommand({
         TableName: TABLE_NAME2,
         Key: {
           orderId,
           meta: "ORDER"
         },
         UpdateExpression: `
-        SET 
-          #items = :items,
-          totalAmount = :totalAmount,
-          updatedAt = :updatedAt,
-          modifiedAt = :modifiedAt,
-          modifiedBy = :modifiedBy,
-          statusHistory = :statusHistory
-      `,
+                SET 
+                    #items = :items,
+                    subtotal = :subtotal,
+                    totalAmount = :totalAmount,
+                    finalPayable = :finalPayable,
+                    updatedAt = :updatedAt,
+                    modifiedAt = :modifiedAt,
+                    modifiedBy = :modifiedBy,
+                    statusHistory = :statusHistory
+            `,
         ExpressionAttributeNames: {
           "#items": "items"
-          // 🔥 FIX FOR RESERVED WORD
         },
         ExpressionAttributeValues: {
           ":items": data.items,
+          ":subtotal": data.subtotal,
           ":totalAmount": data.totalAmount,
+          ":finalPayable": data.finalPayable,
           ":updatedAt": data.updatedAt,
           ":modifiedAt": data.modifiedAt,
           ":modifiedBy": data.modifiedBy,

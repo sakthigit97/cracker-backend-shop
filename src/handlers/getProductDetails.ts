@@ -13,7 +13,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
             return error("productId is required", 400);
         }
 
-        // Fetch product
         const productRes = await ddb.send(
             new GetCommand({
                 TableName: "Products",
@@ -27,11 +26,8 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
             return error("Product not found", 404);
         }
 
-        // Fetch discounts
         const discounts = await getActiveDiscounts();
-
         const priceInfo = applyDiscount(productRes.Item, discounts);
-
         const product = {
             id: productRes.Item.productId,
             name: productRes.Item.name,

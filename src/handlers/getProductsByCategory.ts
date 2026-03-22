@@ -55,6 +55,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
           discountText: priceInfo.discountText,
           categoryId: p.categoryId,
           brandId: p.brandId,
+          qty: p.quantity
         };
       }) || [];
 

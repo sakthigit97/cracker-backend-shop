@@ -1,6 +1,8 @@
 import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "../utils/dynamo";
 import { ProductRepository } from "../repo/product.repo";
+import { getActiveDiscounts } from "./discount.service";
+import { applyDiscount } from "./price.service";
 
 const PRODUCT_TABLE = process.env.PRODUCTS_TABLE!;
 export async function getActiveProducts(
@@ -43,8 +45,33 @@ export class ProductService {
         if (uniqueIds.length > 100) {
             throw new Error("Too many products requested");
         }
+        const products = await this.repo.batchGet(uniqueIds);
+        if (!products || products.length === 0) return [];
+        const discounts = await getActiveDiscounts();
+        const productMap = new Map(products.map(p => [p.productId, p]));
 
-        return this.repo.batchGet(uniqueIds);
+        return uniqueIds
+            .map((id) => productMap.get(id))
+            .filter((p): p is any => Boolean(p))
+            .filter((p) => p.isActive === "true" || p.isActive === true)
+            .map((p) => {
+                const priceInfo = applyDiscount(p, discounts);
+                return {
+                    productId: p.productId,
+                    name: p.name,
+                    description: p.description ?? null,
+                    image: p.imageUrls?.[0] ?? null,
+                    price: priceInfo.price,
+                    originalPrice:
+                        priceInfo.originalPrice > priceInfo.price
+                            ? priceInfo.originalPrice
+                            : undefined,
+                    discountText: priceInfo.discountText,
+                    categoryId: p.categoryId,
+                    brandId: p.brandId,
+                    qty: p.quantity
+                };
+            });
     }
 
     async deleteProduct(productId: string) {

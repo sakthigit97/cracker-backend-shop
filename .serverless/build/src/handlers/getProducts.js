@@ -25,7 +25,7 @@ __export(getProducts_exports, {
 module.exports = __toCommonJS(getProducts_exports);
 
 // src/services/product.service.ts
-var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
+var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
 
 // src/utils/dynamo.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
@@ -41,39 +41,12 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
 var TABLE_NAME = process.env.PRODUCTS_TABLE;
 
-// src/services/product.service.ts
-var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
-async function getActiveProducts(limit, lastKey, search) {
-  const params = {
-    TableName: PRODUCT_TABLE,
-    IndexName: "isActive-index",
-    KeyConditionExpression: "isActive = :true",
-    ExpressionAttributeValues: {
-      ":true": "true"
-    },
-    Limit: limit,
-    ExclusiveStartKey: lastKey
-  };
-  if (search) {
-    params.FilterExpression = "contains(#st, :q)";
-    params.ExpressionAttributeNames = {
-      "#st": "searchText"
-    };
-    params.ExpressionAttributeValues[":q"] = search;
-  }
-  const res = await ddb.send(new import_lib_dynamodb3.QueryCommand(params));
-  return {
-    items: res.Items || [],
-    lastKey: res.LastEvaluatedKey
-  };
-}
-
 // src/services/discount.service.ts
-var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
+var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
 var DISCOUNT_TABLE = "Discounts";
 async function getActiveDiscounts() {
   const res = await ddb.send(
-    new import_lib_dynamodb4.ScanCommand({
+    new import_lib_dynamodb3.ScanCommand({
       TableName: DISCOUNT_TABLE,
       FilterExpression: "isActive = :true",
       ExpressionAttributeValues: {
@@ -114,6 +87,33 @@ function applyDiscount(product, discounts) {
     price: finalPrice,
     originalPrice: product.price,
     discountText: applied.discountMode === "PERCENT" ? `${applied.discountValue}% OFF` : `\u20B9${applied.discountValue} OFF`
+  };
+}
+
+// src/services/product.service.ts
+var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
+async function getActiveProducts(limit, lastKey, search) {
+  const params = {
+    TableName: PRODUCT_TABLE,
+    IndexName: "isActive-index",
+    KeyConditionExpression: "isActive = :true",
+    ExpressionAttributeValues: {
+      ":true": "true"
+    },
+    Limit: limit,
+    ExclusiveStartKey: lastKey
+  };
+  if (search) {
+    params.FilterExpression = "contains(#st, :q)";
+    params.ExpressionAttributeNames = {
+      "#st": "searchText"
+    };
+    params.ExpressionAttributeValues[":q"] = search;
+  }
+  const res = await ddb.send(new import_lib_dynamodb4.QueryCommand(params));
+  return {
+    items: res.Items || [],
+    lastKey: res.LastEvaluatedKey
   };
 }
 
@@ -174,7 +174,8 @@ var handler = async (event) => {
         originalPrice: priceInfo.originalPrice,
         discountText: priceInfo.discountText,
         categoryId: p.categoryId,
-        brandId: p.brandId
+        brandId: p.brandId,
+        qty: p.quantity
       };
     });
     return success({

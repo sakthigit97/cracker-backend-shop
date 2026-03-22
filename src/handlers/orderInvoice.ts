@@ -9,7 +9,6 @@ const repo = new OrderRepository();
 export const handler = async (event: any) => {
     try {
         verifyJwt(event);
-
         const orderId = event.pathParameters?.orderId;
         if (!orderId) {
             return { statusCode: 400, body: "orderId required" };
@@ -33,6 +32,7 @@ export const handler = async (event: any) => {
         const left = 50;
         const right = width - 50;
         let y = 820;
+
         page.drawRectangle({
             x: 0,
             y: 780,
@@ -48,15 +48,12 @@ export const handler = async (event: any) => {
             font,
         });
 
-        page.drawText(
-            "Premium quality crackers from Sivakasi",
-            {
-                x: left,
-                y: 800,
-                size: 10,
-                font,
-            }
-        );
+        page.drawText("Premium quality crackers from Sivakasi", {
+            x: left,
+            y: 800,
+            size: 10,
+            font,
+        });
 
         page.drawText("INVOICE", {
             x: width - 130,
@@ -144,11 +141,7 @@ export const handler = async (event: any) => {
 
         y -= 30;
 
-        let subtotal = 0;
-
         order.items.forEach((item: any) => {
-            subtotal += item.price * item.quantity;
-
             page.drawText(item.name, {
                 x: left + 5,
                 y,
@@ -190,42 +183,64 @@ export const handler = async (event: any) => {
         });
 
         y -= 25;
-        const grandTotal = order.items.reduce(
-            (sum: number, i: any) => sum + i.total,
-            0
-        );
 
-        page.drawText("Subtotal:", {
-            x: 420,
-            y,
-            size: 11,
-            font,
+        const subtotal = Number(order.subtotal || 0);
+        const packaging = Number(order.packagingCharge || 0);
+        const gst = Number(order.gstAmount || 0);
+        const totalAmount = Number(order.totalAmount || 0);
+        const walletUsed = Number(order.walletUsed || 0);
+        const finalPayable = Number(order.finalPayable || totalAmount);
+
+        const labelX = 380;
+        const valueX = 540;
+
+        function drawValue(text: string, yPos: number, size = 11) {
+            const textWidth = font.widthOfTextAtSize(text, size);
+            page.drawText(text, {
+                x: valueX - textWidth,
+                y: yPos,
+                size,
+                font,
+            });
+        }
+
+        page.drawText("Subtotal", { x: labelX, y, size: 11, font });
+        drawValue(`₹${subtotal}`, y);
+
+        y -= 18;
+        page.drawText("Packaging Charges", { x: labelX, y, size: 11, font });
+        drawValue(`₹${packaging}`, y);
+
+        y -= 18;
+        page.drawText("GST (18%)", { x: labelX, y, size: 11, font });
+        drawValue(`₹${gst}`, y);
+
+        y -= 18;
+        page.drawLine({
+            start: { x: labelX, y },
+            end: { x: valueX, y },
+            thickness: 1,
+            color: rgb(0.8, 0.8, 0.8),
         });
 
-        page.drawText(`₹${subtotal}`, {
-            x: 510,
-            y,
-            size: 11,
-            font,
-        });
+        y -= 18;
 
-        y -= 20;
+        page.drawText("Total Amount", { x: labelX, y, size: 12, font });
+        drawValue(`₹${totalAmount}`, y, 12);
 
-        page.drawText("Grand Total:", {
-            x: 420,
-            y,
-            size: 14,
-            font,
-        });
+        y -= 18;
 
-        page.drawText(`₹${grandTotal}`, {
-            x: 510,
-            y,
-            size: 14,
-            font,
-        });
+        if (walletUsed > 0) {
+            page.drawText("Wallet Used", { x: labelX, y, size: 11, font });
+            drawValue(`- ₹${walletUsed}`, y);
+            y -= 18;
+        }
+
+        page.drawText("Final Payable", { x: labelX, y, size: 14, font });
+        drawValue(`₹${finalPayable}`, y, 14);
 
         y -= 40;
+
         page.drawText(
             "This is a system generated invoice and does not require signature.",
             {
