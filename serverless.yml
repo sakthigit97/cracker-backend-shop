@@ -514,6 +514,20 @@ functions:
           path: /orders/{orderId}/invoice
           method: GET
 
+  revenueReport:
+    handler: src/handlers/getRevenueReport.handler
+    events:
+      - httpApi:
+          path: /admin/reports/revenue
+          method: GET
+
+  productReport:
+    handler: src/handlers/getProductReport.handler
+    events:
+      - httpApi:
+          path: /admin/reports/products
+          method: GET
+
 resources:
   Resources:
     ProductImagesBucket:

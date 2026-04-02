@@ -38,7 +38,6 @@ export const handler = async (event: any) => {
                 ? body.transactionId
                 : null;
 
-        // Pricing snapshot from frontend
         const subtotal = Number(body.subtotal || 0);
         const packagingCharge = Number(body.packagingCharge || 0);
         const gstAmount = Number(body.gstAmount || 0);

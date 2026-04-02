@@ -14,8 +14,7 @@ export const withAuth = (handler: any) => {
 
       const token = authHeader.split(" ")[1];
       const payload = verifyToken(token);
-
-      event.user = payload; // { sub, role }
+      event.user = payload;
 
       return handler(event);
     } catch (err) {

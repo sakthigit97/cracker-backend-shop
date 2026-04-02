@@ -23,7 +23,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       event.queryStringParameters?.cursor
     );
 
-    // Fetch products + discounts in parallel
     const [res, discounts] = await Promise.all([
       ddb.send(
         new QueryCommand({
