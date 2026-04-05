@@ -130,7 +130,8 @@ var handler = async (event) => {
       discountText: priceInfo.discountText,
       categoryId: productRes.Item.categoryId,
       brandId: productRes.Item.brandId,
-      youtubeUrl: productRes.Item.videoUrl ?? null
+      youtubeUrl: productRes.Item.videoUrl ?? null,
+      qty: productRes.Item.quantity ?? 0
     };
     return success(product);
   } catch (err) {

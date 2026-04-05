@@ -8,7 +8,6 @@ export const handler = async (event: any) => {
         const { userId } = verifyJwt(event);
 
         const limit = Number(event.queryStringParameters?.limit || 10);
-
         const cursor = event.queryStringParameters?.cursor
             ? JSON.parse(
                 Buffer.from(

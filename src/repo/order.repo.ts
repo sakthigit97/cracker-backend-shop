@@ -10,32 +10,27 @@ import { ddb } from "../utils/dynamo";
 import { ProductService } from "../services/product.service";
 
 const TABLE_NAME = process.env.ORDERS_TABLE || "Orders";
-
 export class OrderRepository {
     private productService = new ProductService();
 
     async buildItemsSnapshot(cartItems: { itemId: string; quantity: number }[]) {
         const productIds = cartItems.map((c) => c.itemId);
-
         const products = await this.productService.batchGetProducts(productIds);
-
         const map = new Map(
             products.map((p: any) => [
                 p.productId,
                 {
                     name: p.name,
                     price: p.price,
-                    image:
-                        Array.isArray(p.imageUrls) && p.imageUrls.length > 0
-                            ? p.imageUrls[0]
-                            : null,
+                    image: p.image || null,
+                    originalPrice: p.originalPrice || null,
+                    discountText: p.discountText || ''
                 },
             ])
         );
 
         return cartItems.map((c) => {
             const product = map.get(c.itemId);
-
             if (!product) {
                 throw new Error(`Product not found or inactive: ${c.itemId}`);
             }
@@ -47,6 +42,8 @@ export class OrderRepository {
                 image: product.image || null,
                 quantity: c.quantity,
                 total: product.price * c.quantity,
+                originalPrice: product.originalPrice || null,
+                discountText: product.discountText || '',
             };
         });
     }

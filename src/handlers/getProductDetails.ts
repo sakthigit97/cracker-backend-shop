@@ -39,6 +39,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
             categoryId: productRes.Item.categoryId,
             brandId: productRes.Item.brandId,
             youtubeUrl: productRes.Item.videoUrl ?? null,
+            qty: productRes.Item.quantity ?? 0
         };
 
         return success(product);

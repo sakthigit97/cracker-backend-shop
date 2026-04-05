@@ -4135,7 +4135,9 @@ var OrderRepository = class {
         {
           name: p.name,
           price: p.price,
-          image: Array.isArray(p.imageUrls) && p.imageUrls.length > 0 ? p.imageUrls[0] : null
+          image: p.image || null,
+          originalPrice: p.originalPrice || null,
+          discountText: p.discountText || ""
         }
       ])
     );
@@ -4150,7 +4152,9 @@ var OrderRepository = class {
         price: product.price,
         image: product.image || null,
         quantity: c.quantity,
-        total: product.price * c.quantity
+        total: product.price * c.quantity,
+        originalPrice: product.originalPrice || null,
+        discountText: product.discountText || ""
       };
     });
   }

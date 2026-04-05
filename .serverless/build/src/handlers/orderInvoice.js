@@ -62634,7 +62634,9 @@ var OrderRepository = class {
         {
           name: p.name,
           price: p.price,
-          image: Array.isArray(p.imageUrls) && p.imageUrls.length > 0 ? p.imageUrls[0] : null
+          image: p.image || null,
+          originalPrice: p.originalPrice || null,
+          discountText: p.discountText || ""
         }
       ])
     );
@@ -62649,7 +62651,9 @@ var OrderRepository = class {
         price: product.price,
         image: product.image || null,
         quantity: c.quantity,
-        total: product.price * c.quantity
+        total: product.price * c.quantity,
+        originalPrice: product.originalPrice || null,
+        discountText: product.discountText || ""
       };
     });
   }
@@ -62962,19 +62966,51 @@ var handler = async (event) => {
         size: 10,
         font
       });
-      page.drawText(`\u20B9${item.price}`, {
-        x: 420,
-        y,
-        size: 10,
-        font
-      });
+      if (item.originalPrice && item.originalPrice > item.price) {
+        page.drawText(`\u20B9${item.originalPrice}`, {
+          x: 420,
+          y,
+          size: 9,
+          font,
+          color: (0, import_pdf_lib.rgb)(0.6, 0.6, 0.6)
+        });
+        const textWidth = font.widthOfTextAtSize(`\u20B9${item.originalPrice}`, 9);
+        page.drawLine({
+          start: { x: 420, y: y + 4 },
+          end: { x: 420 + textWidth, y: y + 4 },
+          thickness: 1,
+          color: (0, import_pdf_lib.rgb)(0.6, 0.6, 0.6)
+        });
+        page.drawText(`\u20B9${item.price}`, {
+          x: 420,
+          y: y - 12,
+          size: 10,
+          font
+        });
+        if (item.discountText) {
+          page.drawText(`${item.discountText}`, {
+            x: 470,
+            y: y - 12,
+            size: 8,
+            font,
+            color: (0, import_pdf_lib.rgb)(0, 0.5, 0)
+          });
+        }
+      } else {
+        page.drawText(`\u20B9${item.price}`, {
+          x: 420,
+          y,
+          size: 10,
+          font
+        });
+      }
       page.drawText(`\u20B9${item.total}`, {
         x: 510,
         y,
         size: 10,
         font
       });
-      y -= 18;
+      y -= item.originalPrice && item.originalPrice > item.price ? 36 : 22;
     });
     y -= 10;
     page.drawLine({
@@ -63019,16 +63055,6 @@ var handler = async (event) => {
     page.drawText("Final Payable", { x: labelX, y, size: 14, font });
     drawValue2(`\u20B9${finalPayable}`, y, 14);
     y -= 40;
-    page.drawText(
-      "This is a system generated invoice and does not require signature.",
-      {
-        x: left,
-        y,
-        size: 9,
-        font,
-        color: (0, import_pdf_lib.rgb)(0.5, 0.5, 0.5)
-      }
-    );
     const pdfBytes = await pdfDoc.save();
     return {
       statusCode: 200,

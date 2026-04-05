@@ -23,9 +23,7 @@ export const handler = async (event: any) => {
             };
         }
 
-        const paymentMode =
-            body.paymentMode === "ONLINE" ? "ONLINE" : "OFFLINE";
-
+        const paymentMode = body.paymentMode === "ONLINE" ? "ONLINE" : "OFFLINE";
         const paymentStatus =
             typeof body.paymentStatus === "string"
                 ? body.paymentStatus
