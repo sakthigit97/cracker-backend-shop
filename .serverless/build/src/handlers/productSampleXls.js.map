@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../src/handlers/productSampleXls.ts"],
+  "sourcesContent": ["import { S3Client, GetObjectCommand } from \"@aws-sdk/client-s3\";\r\nimport { getSignedUrl } from \"@aws-sdk/s3-request-presigner\";\r\n\r\nconst s3 = new S3Client({ region: \"ap-south-1\" });\r\nexport const handler = async () => {\r\n    try {\r\n        const command = new GetObjectCommand({\r\n            Bucket: \"cracker-app\",\r\n            Key: \"templates/product-import-template.xlsx\",\r\n        });\r\n\r\n        const url = await getSignedUrl(s3, command, {\r\n            expiresIn: 3600,\r\n        });\r\n\r\n        return {\r\n            statusCode: 200,\r\n            body: JSON.stringify({ url }),\r\n        };\r\n    } catch (err) {\r\n        return {\r\n            statusCode: 500,\r\n            body: \"Failed to generate URL\",\r\n        };\r\n    }\r\n};"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,uBAA2C;AAC3C,kCAA6B;AAE7B,IAAM,KAAK,IAAI,0BAAS,EAAE,QAAQ,aAAa,CAAC;AACzC,IAAM,UAAU,YAAY;AAC/B,MAAI;AACA,UAAM,UAAU,IAAI,kCAAiB;AAAA,MACjC,QAAQ;AAAA,MACR,KAAK;AAAA,IACT,CAAC;AAED,UAAM,MAAM,UAAM,0CAAa,IAAI,SAAS;AAAA,MACxC,WAAW;AAAA,IACf,CAAC;AAED,WAAO;AAAA,MACH,YAAY;AAAA,MACZ,MAAM,KAAK,UAAU,EAAE,IAAI,CAAC;AAAA,IAChC;AAAA,EACJ,SAAS,KAAK;AACV,WAAO;AAAA,MACH,YAAY;AAAA,MACZ,MAAM;AAAA,IACV;AAAA,EACJ;AACJ;",
+  "names": []
+}

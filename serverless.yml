@@ -82,6 +82,7 @@ provider:
             - arn:aws:s3:::cracker-app/brands/*
             - arn:aws:s3:::cracker-app/categories/*
             - arn:aws:s3:::cracker-app/config/*
+            - arn:aws:s3:::cracker-app/templates/*
 
 package: 
   patterns:
@@ -526,6 +527,13 @@ functions:
     events:
       - httpApi:
           path: /admin/reports/products
+          method: GET
+
+  getProductXlsPresignedURL:
+    handler: src/handlers/productSampleXls.handler
+    events:
+      - httpApi:
+          path: /api/template-download
           method: GET
 
 resources:
