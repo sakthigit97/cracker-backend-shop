@@ -93,6 +93,25 @@ function applyDiscount(product, discounts) {
 // src/services/product.service.ts
 var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
 async function getActiveProducts(limit, lastKey, search) {
+  const searchLower = search?.toLowerCase();
+  if (searchLower) {
+    const params2 = {
+      TableName: PRODUCT_TABLE,
+      FilterExpression: "isActive = :true AND contains(#st, :q)",
+      ExpressionAttributeNames: {
+        "#st": "searchText"
+      },
+      ExpressionAttributeValues: {
+        ":true": "true",
+        ":q": searchLower
+      }
+    };
+    const res2 = await ddb.send(new import_lib_dynamodb4.ScanCommand(params2));
+    return {
+      items: (res2.Items || []).slice(0, limit),
+      lastKey: res2.LastEvaluatedKey
+    };
+  }
   const params = {
     TableName: PRODUCT_TABLE,
     IndexName: "isActive-index",
@@ -103,13 +122,6 @@ async function getActiveProducts(limit, lastKey, search) {
     Limit: limit,
     ExclusiveStartKey: lastKey
   };
-  if (search) {
-    params.FilterExpression = "contains(#st, :q)";
-    params.ExpressionAttributeNames = {
-      "#st": "searchText"
-    };
-    params.ExpressionAttributeValues[":q"] = search;
-  }
   const res = await ddb.send(new import_lib_dynamodb4.QueryCommand(params));
   return {
     items: res.Items || [],

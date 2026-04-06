@@ -10,7 +10,6 @@ import { success, error } from "../libs/response";
 import { OtpService } from "../utils/otp.service";
 
 const otpService = new OtpService();
-
 export const handler = async (event: any) => {
   try {
     const body = JSON.parse(event.body || "{}");
@@ -27,9 +26,7 @@ export const handler = async (event: any) => {
       referralCodeUsed,
     } = body;
 
-    const code = referralCodeUsed
-      ? referralCodeUsed.trim().toUpperCase()
-      : "";
+    const code = referralCodeUsed ? referralCodeUsed.trim().toUpperCase() : "";
 
     if (!mobile || !otp || !name || !password || !address) {
       return error("Missing required fields", 400);
@@ -64,20 +61,10 @@ export const handler = async (event: any) => {
     );
 
     const config = configRes.Item || {};
-
-    const isReferralEnabled =
-      config.isReferralEnabled?.BOOL === true;
-
-    const isJoinBonusEnabled =
-      config.isJoinBonusEnabled?.BOOL === true;
-
-    const joinBonusAmount = config.joinBonusAmount?.N
-      ? Number(config.joinBonusAmount.N)
-      : 0;
-
-    const initialCredit = isJoinBonusEnabled
-      ? joinBonusAmount
-      : 0;
+    const isReferralEnabled = config.isReferralEnabled?.BOOL === true;
+    const isJoinBonusEnabled = config.isJoinBonusEnabled?.BOOL === true;
+    const joinBonusAmount = config.joinBonusAmount?.N ? Number(config.joinBonusAmount.N) : 0;
+    const initialCredit = isJoinBonusEnabled ? joinBonusAmount : 0;
 
     let referredBy = "";
     if (code && isReferralEnabled) {
@@ -87,13 +74,12 @@ export const handler = async (event: any) => {
           FilterExpression: "referralCode = :code",
           ExpressionAttributeValues: {
             ":code": { S: code },
-          },
-          Limit: 1,
+          }
         })
       );
 
       if (!referralCheck.Items || referralCheck.Items.length === 0) {
-        return error("Invalid referral code", 400);
+        return error("Invalid referral code or not available", 400);
       }
 
       const refUser = referralCheck.Items[0];

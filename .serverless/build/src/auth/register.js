@@ -1863,12 +1863,11 @@ var handler = async (event) => {
           FilterExpression: "referralCode = :code",
           ExpressionAttributeValues: {
             ":code": { S: code }
-          },
-          Limit: 1
+          }
         })
       );
       if (!referralCheck.Items || referralCheck.Items.length === 0) {
-        return error("Invalid referral code", 400);
+        return error("Invalid referral code or not available", 400);
       }
       const refUser = referralCheck.Items[0];
       if (refUser.mobile?.S === mobile) {

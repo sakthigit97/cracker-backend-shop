@@ -1,15 +1,37 @@
-import { QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { QueryCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "../utils/dynamo";
 import { ProductRepository } from "../repo/product.repo";
 import { getActiveDiscounts } from "./discount.service";
 import { applyDiscount } from "./price.service";
 
 const PRODUCT_TABLE = process.env.PRODUCTS_TABLE!;
+
 export async function getActiveProducts(
     limit: number,
     lastKey?: any,
     search?: string
 ) {
+    const searchLower = search?.toLowerCase();
+    if (searchLower) {
+        const params: any = {
+            TableName: PRODUCT_TABLE,
+            FilterExpression: "isActive = :true AND contains(#st, :q)",
+            ExpressionAttributeNames: {
+                "#st": "searchText",
+            },
+            ExpressionAttributeValues: {
+                ":true": "true",
+                ":q": searchLower,
+            },
+        };
+
+        const res = await ddb.send(new ScanCommand(params));
+        return {
+            items: (res.Items || []).slice(0, limit),
+            lastKey: res.LastEvaluatedKey,
+        };
+    }
+
     const params: any = {
         TableName: PRODUCT_TABLE,
         IndexName: "isActive-index",
@@ -21,20 +43,43 @@ export async function getActiveProducts(
         ExclusiveStartKey: lastKey,
     };
 
-    if (search) {
-        params.FilterExpression = "contains(#st, :q)";
-        params.ExpressionAttributeNames = {
-            "#st": "searchText",
-        };
-        params.ExpressionAttributeValues[":q"] = search;
-    }
-
     const res = await ddb.send(new QueryCommand(params));
     return {
         items: res.Items || [],
         lastKey: res.LastEvaluatedKey,
     };
 }
+
+// export async function getActiveProducts(
+//     limit: number,
+//     lastKey?: any,
+//     search?: string
+// ) {
+//     const params: any = {
+//         TableName: PRODUCT_TABLE,
+//         IndexName: "isActive-index",
+//         KeyConditionExpression: "isActive = :true",
+//         ExpressionAttributeValues: {
+//             ":true": "true",
+//         },
+//         Limit: limit,
+//         ExclusiveStartKey: lastKey,
+//     };
+
+//     if (search) {
+//         params.FilterExpression = "contains(#st, :q)";
+//         params.ExpressionAttributeNames = {
+//             "#st": "searchText",
+//         };
+//         params.ExpressionAttributeValues[":q"] = search;
+//     }
+
+//     const res = await ddb.send(new QueryCommand(params));
+//     return {
+//         items: res.Items || [],
+//         lastKey: res.LastEvaluatedKey,
+//     };
+// }
 
 export class ProductService {
     constructor(private repo = new ProductRepository()) { }

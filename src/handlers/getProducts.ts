@@ -36,12 +36,14 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
                 qty: p.quantity
             };
         });
+
         return success({
             items: products,
             pagination: {
                 nextCursor: encodeCursor(lastKey),
             },
         });
+
     } catch (err) {
         console.error("getProducts error:", err);
         return error("Failed to fetch products", 500);

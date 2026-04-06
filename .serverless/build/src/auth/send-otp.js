@@ -23,6 +23,13 @@ __export(send_otp_exports, {
   handler: () => handler
 });
 module.exports = __toCommonJS(send_otp_exports);
+var import_client_dynamodb2 = require("@aws-sdk/client-dynamodb");
+
+// src/libs/db.ts
+var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
+var dbClient = new import_client_dynamodb.DynamoDBClient({
+  region: "ap-south-1"
+});
 
 // src/libs/response.ts
 var success = (data, statusCode = 200) => ({
@@ -69,6 +76,17 @@ var handler = async (event) => {
     const { mobile } = body;
     if (!/^[6-9]\d{9}$/.test(mobile)) {
       return error("Enter a valid mobile number", 400);
+    }
+    const existing = await dbClient.send(
+      new import_client_dynamodb2.GetItemCommand({
+        TableName: "Users",
+        Key: {
+          mobile: { S: mobile }
+        }
+      })
+    );
+    if (existing.Item) {
+      return error("User already registered", 409);
     }
     await otpService.sendOtp(mobile);
     return success({
