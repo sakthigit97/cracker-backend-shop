@@ -5,7 +5,6 @@ import { getActiveDiscounts } from "./discount.service";
 import { applyDiscount } from "./price.service";
 
 const PRODUCT_TABLE = process.env.PRODUCTS_TABLE!;
-
 export async function getActiveProducts(
     limit: number,
     lastKey?: any,
@@ -15,13 +14,15 @@ export async function getActiveProducts(
     if (searchLower) {
         const params: any = {
             TableName: PRODUCT_TABLE,
-            FilterExpression: "isActive = :true AND contains(#st, :q)",
+            FilterExpression: "isActive = :true AND contains(#st, :q) AND #qty >= :minQty",
             ExpressionAttributeNames: {
                 "#st": "searchText",
+                "#qty": "quantity",
             },
             ExpressionAttributeValues: {
                 ":true": "true",
                 ":q": searchLower,
+                ":minQty": 1,
             },
         };
 
@@ -49,37 +50,6 @@ export async function getActiveProducts(
         lastKey: res.LastEvaluatedKey,
     };
 }
-
-// export async function getActiveProducts(
-//     limit: number,
-//     lastKey?: any,
-//     search?: string
-// ) {
-//     const params: any = {
-//         TableName: PRODUCT_TABLE,
-//         IndexName: "isActive-index",
-//         KeyConditionExpression: "isActive = :true",
-//         ExpressionAttributeValues: {
-//             ":true": "true",
-//         },
-//         Limit: limit,
-//         ExclusiveStartKey: lastKey,
-//     };
-
-//     if (search) {
-//         params.FilterExpression = "contains(#st, :q)";
-//         params.ExpressionAttributeNames = {
-//             "#st": "searchText",
-//         };
-//         params.ExpressionAttributeValues[":q"] = search;
-//     }
-
-//     const res = await ddb.send(new QueryCommand(params));
-//     return {
-//         items: res.Items || [],
-//         lastKey: res.LastEvaluatedKey,
-//     };
-// }
 
 export class ProductService {
     constructor(private repo = new ProductRepository()) { }

@@ -97,13 +97,15 @@ async function getActiveProducts(limit, lastKey, search) {
   if (searchLower) {
     const params2 = {
       TableName: PRODUCT_TABLE,
-      FilterExpression: "isActive = :true AND contains(#st, :q)",
+      FilterExpression: "isActive = :true AND contains(#st, :q) AND #qty >= :minQty",
       ExpressionAttributeNames: {
-        "#st": "searchText"
+        "#st": "searchText",
+        "#qty": "quantity"
       },
       ExpressionAttributeValues: {
         ":true": "true",
-        ":q": searchLower
+        ":q": searchLower,
+        ":minQty": 1
       }
     };
     const res2 = await ddb.send(new import_lib_dynamodb4.ScanCommand(params2));

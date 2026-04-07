@@ -536,6 +536,14 @@ functions:
           path: /api/template-download
           method: GET
 
+  restoreOrder:
+    handler: src/handlers/orderRestore.handler
+    events:
+      - httpApi:
+          path: /orders/restore
+          method: POST
+
+
 resources:
   Resources:
     ProductImagesBucket:

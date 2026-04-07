@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
-import { QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { QueryCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "../utils/dynamo";
 import { getActiveDiscounts } from "../services/discount.service";
 import { applyDiscount } from "../services/price.service";
@@ -19,12 +19,38 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       50
     );
 
+    const search = event.queryStringParameters?.search?.trim();
+    const searchLower = search?.toLowerCase();
+
     const cursor = decodeCursor(
       event.queryStringParameters?.cursor
     );
 
-    const [res, discounts] = await Promise.all([
-      ddb.send(
+    let items: any[] = [];
+    let lastKey = null;
+    if (searchLower) {
+      const params: any = {
+        TableName: "Products",
+        FilterExpression:
+          "isActive = :active AND contains(#st, :q) AND #cid = :cid AND #qty >= :minQty",
+        ExpressionAttributeNames: {
+          "#st": "searchText",
+          "#cid": "categoryId",
+          "#qty": "quantity",
+        },
+        ExpressionAttributeValues: {
+          ":active": "true",
+          ":q": searchLower,
+          ":cid": categoryId,
+          ":minQty": 1,
+        },
+      };
+
+      const res = await ddb.send(new ScanCommand(params));
+      items = (res.Items || []).slice(0, limit);
+      lastKey = res.LastEvaluatedKey;
+    } else {
+      const res = await ddb.send(
         new QueryCommand({
           TableName: "Products",
           IndexName: "categoryId-index",
@@ -37,14 +63,15 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
           Limit: limit,
           ExclusiveStartKey: cursor,
         })
-      ),
-      getActiveDiscounts(),
-    ]);
+      );
+      items = res.Items || [];
+      lastKey = res.LastEvaluatedKey;
+    }
+    const discounts = await getActiveDiscounts();
 
     const products =
-      res.Items?.map((p: any) => {
+      items.map((p: any) => {
         const priceInfo = applyDiscount(p, discounts);
-
         return {
           id: p.productId,
           name: p.name,
@@ -54,14 +81,14 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
           discountText: priceInfo.discountText,
           categoryId: p.categoryId,
           brandId: p.brandId,
-          qty: p.quantity
+          qty: p.quantity,
         };
       }) || [];
 
     return success({
       items: products,
       pagination: {
-        nextCursor: encodeCursor(res.LastEvaluatedKey),
+        nextCursor: encodeCursor(lastKey),
       },
     });
   } catch (err) {

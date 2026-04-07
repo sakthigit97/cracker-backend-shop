@@ -25,7 +25,6 @@ export const handler = async (event: any) => {
             };
         }
 
-        /* ---------- FULL SYNC (fallback) ---------- */
         await service.clear(userCartId);
         for (const [productId, qty] of Object.entries(items)) {
             if (qty > 0) {
