@@ -234,24 +234,18 @@ var service = new PopularProductsService();
 var handler = async () => {
   try {
     const limit = 10;
-    const [{ items }, discounts] = await Promise.all([
-      service.getPopularProducts({ limit }),
-      getActiveDiscounts()
-    ]);
-    const products = items.map((p) => {
-      const priceInfo = applyDiscount(p, discounts);
-      return {
-        id: p.productId,
-        name: p.name,
-        image: p.imageUrls?.[0] ?? p.image ?? null,
-        price: priceInfo.price,
-        originalPrice: priceInfo.originalPrice > priceInfo.price ? priceInfo.originalPrice : void 0,
-        discountText: priceInfo.discountText,
-        categoryId: p.categoryId,
-        brandId: p.brandId,
-        qty: p.quantity ?? p.qty
-      };
-    });
+    const { items } = await service.getPopularProducts({ limit });
+    const products = items.map((p) => ({
+      id: p.productId,
+      name: p.name,
+      image: p.image ?? null,
+      price: p.price,
+      originalPrice: p.originalPrice,
+      discountText: p.discountText,
+      categoryId: p.categoryId,
+      brandId: p.brandId,
+      qty: p.qty
+    }));
     return success({
       items: products
     });

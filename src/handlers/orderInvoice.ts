@@ -247,9 +247,11 @@ export const handler = async (event: any) => {
     page.drawText("Packaging Charges", { x: labelX, y, size: 11, font });
     drawValue(`₹${packaging}`, y);
 
-    y -= 18;
-    page.drawText("GST (18%)", { x: labelX, y, size: 11, font });
-    drawValue(`₹${gst}`, y);
+    if (gst > 0) {
+      y -= 18;
+      page.drawText("GST (18%)", { x: labelX, y, size: 11, font });
+      drawValue(`₹${gst}`, y);
+    }
 
     y -= 18;
     page.drawLine({
