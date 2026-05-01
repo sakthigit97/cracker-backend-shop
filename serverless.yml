@@ -17,6 +17,7 @@ provider:
     USERS_TABLE: Users
     ADMIN_CONFIG_TABLE: AdminConfig
     DISCOUNT_TABLE: Discounts
+    RECAPTCHA_SECRET: 6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh
     REGION: ap-south-1
 
   httpApi:
@@ -84,7 +85,7 @@ provider:
             - arn:aws:s3:::cracker-app/config/*
             - arn:aws:s3:::cracker-app/templates/*
 
-package: 
+package:
   patterns:
     - assets/**
 
@@ -543,6 +544,26 @@ functions:
           path: /orders/restore
           method: POST
 
+  populerProducts:
+    handler: src/handlers/popularProducts.handler
+    events:
+      - httpApi:
+          path: /products/popular
+          method: GET
+
+  forgotSendOtp:
+    handler: src/auth/forgot/send-otp.handler
+    events:
+      - httpApi:
+          path: /auth/forgot/send-otp
+          method: POST
+
+  resetPassword:
+    handler: src/auth/forgot/reset.handler
+    events:
+      - httpApi:
+          path: /auth/forgot/reset
+          method: POST
 
 resources:
   Resources:

@@ -70,12 +70,29 @@ var OtpService = class _OtpService {
 
 // src/auth/send-otp.ts
 var otpService = new OtpService();
+var verifyCaptcha = async (token) => {
+  const res = await fetch(
+    "https://www.google.com/recaptcha/api/siteverify",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: `secret=${process.env.RECAPTCHA_SECRET}&response=${token}`
+    }
+  );
+  const data = await res.json();
+  return data.success;
+};
 var handler = async (event) => {
   try {
     const body = JSON.parse(event.body || "{}");
-    const { mobile } = body;
+    const { mobile, captchaToken } = body;
     if (!/^[6-9]\d{9}$/.test(mobile)) {
       return error("Enter a valid mobile number", 400);
+    }
+    if (!captchaToken || !await verifyCaptcha(captchaToken)) {
+      return error("Invalid CAPTCHA", 400);
     }
     const existing = await dbClient.send(
       new import_client_dynamodb2.GetItemCommand({
