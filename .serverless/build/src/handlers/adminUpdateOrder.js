@@ -4242,6 +4242,7 @@ var OrderRepository = class {
         TableName: "Users",
         Key: { mobile },
         UpdateExpression: "SET walletCredit = walletCredit - :amt",
+        ConditionExpression: "walletCredit >= :amt",
         ExpressionAttributeValues: {
           ":amt": usedAmount
         }
@@ -4249,16 +4250,26 @@ var OrderRepository = class {
     );
   }
   async markReferralRewarded(mobile) {
-    await ddb.send(
-      new import_lib_dynamodb6.UpdateCommand({
-        TableName: "Users",
-        Key: { mobile },
-        UpdateExpression: "SET referralRewarded = :t",
-        ExpressionAttributeValues: {
-          ":t": true
-        }
-      })
-    );
+    try {
+      await ddb.send(
+        new import_lib_dynamodb6.UpdateCommand({
+          TableName: "Users",
+          Key: { mobile },
+          UpdateExpression: "SET referralRewarded = :t",
+          ConditionExpression: "referralRewarded = :f",
+          ExpressionAttributeValues: {
+            ":t": true,
+            ":f": false
+          }
+        })
+      );
+      return true;
+    } catch (err) {
+      if (err.name === "ConditionalCheckFailedException") {
+        return false;
+      }
+      throw err;
+    }
   }
   async addWalletCreditByReferralCode(referralCode, amount) {
     if (!referralCode || amount <= 0) return;
@@ -4374,7 +4385,7 @@ var AdminUpdateOrderService = class {
       adminComment: input.adminComment,
       adminId: input.adminId
     });
-    if (input.status === "PAYMENT_CONFIRMED") {
+    if (input.status === "DISPATCHED") {
       await this.handleReferralReward(existing.userId);
     }
     return updatedOrder;
@@ -4389,11 +4400,12 @@ var AdminUpdateOrderService = class {
     const isReferralEnabled = config.isReferralEnabled === true;
     const rewardAmount = Number(config.referralRewardAmount) || 0;
     if (!isReferralEnabled || rewardAmount <= 0) return;
+    const updated = await this.orderRepo.markReferralRewarded(userId);
+    if (!updated) return;
     await this.orderRepo.addWalletCreditByReferralCode(
       user.referredBy,
       rewardAmount
     );
-    await this.orderRepo.markReferralRewarded(userId);
   }
 };
 

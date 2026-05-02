@@ -17,7 +17,6 @@ interface CreateOrderInput {
 }
 
 const CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
-
 export class OrderService {
     constructor(private repo = new OrderRepository()) { }
     private productRepo = new ProductRepository();
@@ -32,9 +31,7 @@ export class OrderService {
 
         const days = isTamilNadu ? 5 : 10;
         const expectedDelivery = now + days * 24 * 60 * 60 * 1000;
-
         const items = await this.repo.buildItemsSnapshot(input.cartItems);
-
         const user = await this.repo.getUserByMobile(input.userId);
         const availableCredit = Number(user?.walletCredit || 0);
 
@@ -42,9 +39,6 @@ export class OrderService {
             throw new Error("Invalid wallet usage");
         }
 
-        if (input.walletUsed > 0) {
-            await this.repo.deductWalletCredit(input.userId, input.walletUsed);
-        }
 
         const paymentMode = input.paymentMode || "OFFLINE";
         const paymentStatus =
@@ -85,30 +79,9 @@ export class OrderService {
         };
 
         await this.repo.create(order);
-
-        const isPaid =
-            paymentMode === "OFFLINE" || paymentStatus === "SUCCESS";
-
-        if (
-            isPaid &&
-            user?.referredBy &&
-            user.referredBy !== "" &&
-            user.referralRewarded === false
-        ) {
-            const config = await this.repo.getAdminConfig();
-            const isReferralEnabled = config.isReferralEnabled === true;
-            const rewardAmount = Number(config.referralRewardAmount || 0);
-
-            if (isReferralEnabled && rewardAmount > 0) {
-                await this.repo.addWalletCreditByReferralCode(
-                    user.referredBy,
-                    rewardAmount
-                );
-
-                await this.repo.markReferralRewarded(input.userId);
-            }
+        if (input.walletUsed > 0) {
+            await this.repo.deductWalletCredit(input.userId, input.walletUsed);
         }
-
         return orderId;
     }
 
@@ -239,10 +212,8 @@ export class OrderService {
         const packagingCharge = Number(order.packagingCharge || 0);
         const gstAmount = Number(order.gstAmount || 0);
         const walletUsed = Number(order.walletUsed || 0);
-
         const totalAmount = subtotal + packagingCharge + gstAmount;
         const finalPayable = totalAmount - walletUsed;
-
         const now = Date.now();
 
         await this.repo.updateItems(orderId, {

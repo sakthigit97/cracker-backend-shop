@@ -2,7 +2,6 @@ import { verifyJwt } from "../utils/auth";
 import { AdminUpdateOrderService } from "../services/adminUpdateOrder.service";
 
 const service = new AdminUpdateOrderService();
-
 export const handler = async (event: any) => {
     try {
         const { role, userId } = verifyJwt(event);

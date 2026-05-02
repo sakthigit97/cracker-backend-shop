@@ -1853,7 +1853,8 @@ var handler = async (event) => {
     const config = configRes.Item || {};
     const isReferralEnabled = config.isReferralEnabled?.BOOL === true;
     const isJoinBonusEnabled = config.isJoinBonusEnabled?.BOOL === true;
-    const joinBonusAmount = config.joinBonusAmount?.N ? Number(config.joinBonusAmount.N) : 0;
+    const joinBonusAmount = config.joinBonusAmount?.N ? Number(config.joinBonusAmount.N) : config.joinBonusAmount?.S ? Number(config.joinBonusAmount.S) : 0;
+    console.log(isJoinBonusEnabled, joinBonusAmount, "-- join bonus bal ");
     const initialCredit = isJoinBonusEnabled ? joinBonusAmount : 0;
     let referredBy = "";
     if (code && isReferralEnabled) {

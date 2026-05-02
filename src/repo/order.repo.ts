@@ -141,6 +141,7 @@ export class OrderRepository {
                 TableName: "Users",
                 Key: { mobile },
                 UpdateExpression: "SET walletCredit = walletCredit - :amt",
+                ConditionExpression: "walletCredit >= :amt",
                 ExpressionAttributeValues: {
                     ":amt": usedAmount,
                 },
@@ -149,16 +150,26 @@ export class OrderRepository {
     }
 
     async markReferralRewarded(mobile: string) {
-        await ddb.send(
-            new UpdateCommand({
-                TableName: "Users",
-                Key: { mobile },
-                UpdateExpression: "SET referralRewarded = :t",
-                ExpressionAttributeValues: {
-                    ":t": true,
-                },
-            })
-        );
+        try {
+            await ddb.send(
+                new UpdateCommand({
+                    TableName: "Users",
+                    Key: { mobile },
+                    UpdateExpression: "SET referralRewarded = :t",
+                    ConditionExpression: "referralRewarded = :f",
+                    ExpressionAttributeValues: {
+                        ":t": true,
+                        ":f": false,
+                    },
+                })
+            );
+            return true;
+        } catch (err: any) {
+            if (err.name === "ConditionalCheckFailedException") {
+                return false;
+            }
+            throw err;
+        }
     }
 
     async addWalletCreditByReferralCode(referralCode: string, amount: number) {
@@ -173,7 +184,6 @@ export class OrderRepository {
                 Limit: 1,
             })
         );
-
         const refUser = scanRes.Items?.[0];
         if (!refUser) return;
 

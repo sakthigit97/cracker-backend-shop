@@ -4180,6 +4180,7 @@ var OrderRepository = class {
         TableName: "Users",
         Key: { mobile },
         UpdateExpression: "SET walletCredit = walletCredit - :amt",
+        ConditionExpression: "walletCredit >= :amt",
         ExpressionAttributeValues: {
           ":amt": usedAmount
         }
@@ -4187,16 +4188,26 @@ var OrderRepository = class {
     );
   }
   async markReferralRewarded(mobile) {
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: "Users",
-        Key: { mobile },
-        UpdateExpression: "SET referralRewarded = :t",
-        ExpressionAttributeValues: {
-          ":t": true
-        }
-      })
-    );
+    try {
+      await ddb.send(
+        new import_lib_dynamodb5.UpdateCommand({
+          TableName: "Users",
+          Key: { mobile },
+          UpdateExpression: "SET referralRewarded = :t",
+          ConditionExpression: "referralRewarded = :f",
+          ExpressionAttributeValues: {
+            ":t": true,
+            ":f": false
+          }
+        })
+      );
+      return true;
+    } catch (err) {
+      if (err.name === "ConditionalCheckFailedException") {
+        return false;
+      }
+      throw err;
+    }
   }
   async addWalletCreditByReferralCode(referralCode, amount) {
     if (!referralCode || amount <= 0) return;
@@ -4291,9 +4302,6 @@ var OrderService = class {
     if (input.walletUsed > availableCredit) {
       throw new Error("Invalid wallet usage");
     }
-    if (input.walletUsed > 0) {
-      await this.repo.deductWalletCredit(input.userId, input.walletUsed);
-    }
     const paymentMode = input.paymentMode || "OFFLINE";
     const paymentStatus = input.paymentStatus || (paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED");
     const transactionId = input.transactionId || null;
@@ -4328,18 +4336,8 @@ var OrderService = class {
       adminComment: ""
     };
     await this.repo.create(order);
-    const isPaid = paymentMode === "OFFLINE" || paymentStatus === "SUCCESS";
-    if (isPaid && user?.referredBy && user.referredBy !== "" && user.referralRewarded === false) {
-      const config = await this.repo.getAdminConfig();
-      const isReferralEnabled = config.isReferralEnabled === true;
-      const rewardAmount = Number(config.referralRewardAmount || 0);
-      if (isReferralEnabled && rewardAmount > 0) {
-        await this.repo.addWalletCreditByReferralCode(
-          user.referredBy,
-          rewardAmount
-        );
-        await this.repo.markReferralRewarded(input.userId);
-      }
+    if (input.walletUsed > 0) {
+      await this.repo.deductWalletCredit(input.userId, input.walletUsed);
     }
     return orderId;
   }

@@ -51,7 +51,7 @@ export class AdminUpdateOrderService {
             adminId: input.adminId,
         });
 
-        if (input.status === "PAYMENT_CONFIRMED") {
+        if (input.status === "DISPATCHED") {
             await this.handleReferralReward(existing.userId);
         }
 
@@ -73,11 +73,12 @@ export class AdminUpdateOrderService {
 
         if (!isReferralEnabled || rewardAmount <= 0) return;
 
+        const updated = await this.orderRepo.markReferralRewarded(userId);
+        if (!updated) return;
+
         await this.orderRepo.addWalletCreditByReferralCode(
             user.referredBy,
             rewardAmount
         );
-
-        await this.orderRepo.markReferralRewarded(userId);
     }
 }

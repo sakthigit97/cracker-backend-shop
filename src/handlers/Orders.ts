@@ -11,12 +11,10 @@ export const handler = async (event: any) => {
     try {
         const { userId } = verifyJwt(event);
         const userCartId = `USER#${userId}`;
-
         const body = JSON.parse(event.body || "{}");
-
         const rawAddress = body.address;
         const address = typeof rawAddress === "string" ? rawAddress.trim() : "";
-        if (!address) {
+        if (!address || address.length < 10) {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ message: "Address is required" }),
@@ -43,6 +41,12 @@ export const handler = async (event: any) => {
         const walletUsed = Number(body.walletUsed || 0);
         const finalPayable = Number(body.finalPayable || 0);
 
+        if (subtotal === 0 || totalAmount === 0) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ message: "Invalid pricing" }),
+            };
+        }
         if (
             subtotal < 0 ||
             packagingCharge < 0 ||
