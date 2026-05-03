@@ -69,9 +69,7 @@ export const handler = async (event: any) => {
         ? Number(config.joinBonusAmount.S)
         : 0;
 
-    console.log(isJoinBonusEnabled, joinBonusAmount, '-- join bonus bal ')
     const initialCredit = isJoinBonusEnabled ? joinBonusAmount : 0;
-
     let referredBy = "";
     if (code && isReferralEnabled) {
       const referralCheck = await dbClient.send(
