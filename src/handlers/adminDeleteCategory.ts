@@ -17,6 +17,7 @@ export const handler = async (event: any) => {
             return { statusCode: 400, body: "categoryId is required" };
         }
 
+
         await service.deleteCategory(categoryId);
 
         return {
@@ -25,8 +26,14 @@ export const handler = async (event: any) => {
                 message: "Category deleted successfully",
             }),
         };
-    } catch (err) {
+    } catch (err: any) {
         console.error("AdminDeleteCategory error", err);
-        return { statusCode: 500, body: "Internal Server Error" };
+        return {
+            statusCode: 500,
+            body: JSON.stringify({
+                success: false,
+                message: err?.message || "Internal Server Error",
+            })
+        };
     }
 };

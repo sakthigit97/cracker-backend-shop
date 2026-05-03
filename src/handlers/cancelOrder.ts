@@ -15,19 +15,18 @@ export const handler = async (event: any) => {
         }
 
         await service.cancelOrder(orderId, userId);
-
         return {
             statusCode: 200,
             body: JSON.stringify({ success: true }),
         };
     } catch (err: any) {
         console.error("Cancel order failed", err);
-
         return {
-            statusCode: 400,
+            statusCode: 500,
             body: JSON.stringify({
-                message: err.message || "Cancel failed",
-            }),
+                success: false,
+                message: err?.message || "Internal Server Error",
+            })
         };
     }
 };

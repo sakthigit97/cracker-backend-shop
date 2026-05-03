@@ -4476,9 +4476,10 @@ var handler = async (event) => {
   } catch (err) {
     console.error("Cancel order failed", err);
     return {
-      statusCode: 400,
+      statusCode: 500,
       body: JSON.stringify({
-        message: err.message || "Cancel failed"
+        success: false,
+        message: err?.message || "Internal Server Error"
       })
     };
   }

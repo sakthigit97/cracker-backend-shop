@@ -24,8 +24,14 @@ export const handler = async (event: any) => {
                 message: "User deleted successfully",
             }),
         };
-    } catch (err) {
+    } catch (err: any) {
         console.error("AdminDeleteUser error", err);
-        return { statusCode: 500, body: "Internal Server Error" };
+        return {
+            statusCode: 500,
+            body: JSON.stringify({
+                success: false,
+                message: err?.message || "Internal Server Error",
+            })
+        };
     }
 };

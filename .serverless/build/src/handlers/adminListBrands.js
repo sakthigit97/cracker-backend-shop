@@ -3945,6 +3945,7 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 // src/repo/adminBrand.repo.ts
 var import_crypto = require("crypto");
 var TABLE = process.env.BRAND_TABLE;
+var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
 var AdminBrandRepository = class {
   async listBrands({ limit, cursor, search, isActive }) {
     const params = {
@@ -4042,6 +4043,19 @@ var AdminBrandRepository = class {
     );
     return true;
   }
+  async hasProductsForBrand(brandId) {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.ScanCommand({
+        TableName: PRODUCT_TABLE,
+        FilterExpression: "brandId = :b",
+        ExpressionAttributeValues: {
+          ":b": brandId
+        },
+        ProjectionExpression: "productId"
+      })
+    );
+    return (res.Items?.length ?? 0) > 0;
+  }
 };
 
 // src/services/adminBrand.service.ts
@@ -4065,6 +4079,10 @@ var AdminBrandService = class {
     return this.repo.updateBrandStatus(brandId, isActive);
   }
   async deleteBrand(brandId) {
+    const hasProducts = await this.repo.hasProductsForBrand(brandId);
+    if (hasProducts) {
+      throw new Error("Brand is mapped to products and cannot be deleted");
+    }
     return this.repo.deleteBrand(brandId);
   }
 };

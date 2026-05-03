@@ -24,6 +24,11 @@ export class AdminBrandService {
     }
 
     async deleteBrand(brandId: string) {
+        const hasProducts = await this.repo.hasProductsForBrand(brandId);
+
+        if (hasProducts) {
+            throw new Error("Brand is mapped to products and cannot be deleted");
+        }
         return this.repo.deleteBrand(brandId);
     }
 }

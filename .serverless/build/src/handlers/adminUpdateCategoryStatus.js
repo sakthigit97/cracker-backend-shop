@@ -3945,6 +3945,7 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 // src/repo/adminCategory.repo.ts
 var import_crypto = require("crypto");
 var TABLE = process.env.CATEGORY_TABLE;
+var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
 var AdminCategoryRepository = class {
   async listCategories({
     limit,
@@ -4064,6 +4065,19 @@ var AdminCategoryRepository = class {
     );
     return true;
   }
+  async hasProductsForCategory(categoryId) {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.ScanCommand({
+        TableName: PRODUCT_TABLE,
+        FilterExpression: "categoryId = :c",
+        ExpressionAttributeValues: {
+          ":c": categoryId
+        },
+        ProjectionExpression: "productId"
+      })
+    );
+    return (res.Items?.length ?? 0) > 0;
+  }
 };
 
 // src/services/adminCategory.service.ts
@@ -4087,6 +4101,10 @@ var AdminCategoryService = class {
     return this.repo.updateCategory(categoryId, payload);
   }
   async deleteCategory(categoryId) {
+    const hasProducts = await this.repo.hasProductsForCategory(categoryId);
+    if (hasProducts) {
+      throw new Error("Category is mapped to products and cannot be deleted");
+    }
     return this.repo.deleteCategory(categoryId);
   }
 };
@@ -4123,7 +4141,13 @@ var handler = async (event) => {
     };
   } catch (err) {
     console.error("UpdateCategoryStatus error", err);
-    return { statusCode: 500, body: "Internal Server Error" };
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        success: false,
+        message: err?.message || "Internal Server Error"
+      })
+    };
   }
 };
 // Annotate the CommonJS export names for ESM import in node:

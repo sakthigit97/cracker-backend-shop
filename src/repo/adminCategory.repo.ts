@@ -3,6 +3,7 @@ import { ddb } from "../utils/dynamo";
 import { randomUUID } from "crypto";
 
 const TABLE = process.env.CATEGORY_TABLE!;
+const PRODUCT_TABLE = process.env.PRODUCTS_TABLE!;
 interface ListCategoryInput {
     limit: number;
     cursor?: string;
@@ -159,5 +160,19 @@ export class AdminCategoryRepository {
         );
 
         return true;
+    }
+
+    async hasProductsForCategory(categoryId: string): Promise<boolean> {
+        const res = await ddb.send(
+            new ScanCommand({
+                TableName: PRODUCT_TABLE,
+                FilterExpression: "categoryId = :c",
+                ExpressionAttributeValues: {
+                    ":c": categoryId,
+                },
+                ProjectionExpression: "productId",
+            })
+        );
+        return (res.Items?.length ?? 0) > 0;
     }
 }

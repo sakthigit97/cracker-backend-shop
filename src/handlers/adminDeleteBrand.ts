@@ -16,13 +16,18 @@ export const handler = async (event: any) => {
         }
 
         await service.deleteBrand(brandId);
-
         return {
             statusCode: 200,
             body: JSON.stringify({ success: true }),
         };
-    } catch (err) {
-        console.error("DeleteBrand error", err);
-        return { statusCode: 500, body: "Internal Server Error" };
+    } catch (err: any) {
+        console.error("DeleteBrand error", err?.message);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({
+                success: false,
+                message: err?.message || "Internal Server Error",
+            })
+        };
     }
 };

@@ -4080,7 +4080,10 @@ var handler = async (event) => {
     console.error("Admin dashboard error", err);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Internal Server Error" })
+      body: JSON.stringify({
+        success: false,
+        message: err?.message || "Internal Server Error"
+      })
     };
   }
 };

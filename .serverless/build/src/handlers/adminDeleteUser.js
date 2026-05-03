@@ -4020,7 +4020,13 @@ var handler = async (event) => {
     };
   } catch (err) {
     console.error("AdminDeleteUser error", err);
-    return { statusCode: 500, body: "Internal Server Error" };
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        success: false,
+        message: err?.message || "Internal Server Error"
+      })
+    };
   }
 };
 // Annotate the CommonJS export names for ESM import in node:

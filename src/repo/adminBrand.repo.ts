@@ -9,6 +9,7 @@ import { ddb } from "../utils/dynamo";
 import { randomUUID } from "crypto";
 
 const TABLE = process.env.BRAND_TABLE!;
+const PRODUCT_TABLE = process.env.PRODUCTS_TABLE!;
 
 interface ListBrandInput {
     limit: number;
@@ -103,8 +104,8 @@ export class AdminBrandRepository {
             new UpdateCommand({
                 TableName: TABLE,
                 Key: { brandId },
-                UpdateExpression :
-                "SET #name = :n, logoUrl = :l, isActive = :a",
+                UpdateExpression:
+                    "SET #name = :n, logoUrl = :l, isActive = :a",
                 ExpressionAttributeNames: {
                     "#name": "name",
                 },
@@ -143,5 +144,19 @@ export class AdminBrandRepository {
         );
 
         return true;
+    }
+
+    async hasProductsForBrand(brandId: string): Promise<boolean> {
+        const res = await ddb.send(
+            new ScanCommand({
+                TableName: PRODUCT_TABLE,
+                FilterExpression: "brandId = :b",
+                ExpressionAttributeValues: {
+                    ":b": brandId,
+                },
+                ProjectionExpression: "productId"
+            })
+        );
+        return (res.Items?.length ?? 0) > 0;
     }
 }

@@ -38,6 +38,11 @@ export class AdminCategoryService {
     }
 
     async deleteCategory(categoryId: string) {
+        const hasProducts = await this.repo.hasProductsForCategory(categoryId);
+
+        if (hasProducts) {
+            throw new Error("Category is mapped to products and cannot be deleted");
+        }
         return this.repo.deleteCategory(categoryId);
     }
 }

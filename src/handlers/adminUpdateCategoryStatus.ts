@@ -36,8 +36,14 @@ export const handler = async (event: any) => {
             statusCode: 200,
             body: JSON.stringify(updated),
         };
-    } catch (err) {
+    } catch (err: any) {
         console.error("UpdateCategoryStatus error", err);
-        return { statusCode: 500, body: "Internal Server Error" };
+        return {
+            statusCode: 500,
+            body: JSON.stringify({
+                success: false,
+                message: err?.message || "Internal Server Error",
+            })
+        };
     }
 };

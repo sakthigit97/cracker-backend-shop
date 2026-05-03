@@ -40,8 +40,14 @@ export const handler = async (event: any) => {
                 categoryId: id,
             }),
         };
-    } catch (err) {
+    } catch (err: any) {
         console.error("PresignCategoryImage error", err);
-        return { statusCode: 500, body: "Internal Server Error" };
+        return {
+            statusCode: 500,
+            body: JSON.stringify({
+                success: false,
+                message: err?.message || "Internal Server Error",
+            })
+        };
     }
 };

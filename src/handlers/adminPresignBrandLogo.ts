@@ -42,8 +42,14 @@ export const handler = async (event: any) => {
                 brandId: id,
             }),
         };
-    } catch (err) {
+    } catch (err: any) {
         console.error("PresignBrandLogo error", err);
-        return { statusCode: 500, body: "Internal Server Error" };
+        return {
+            statusCode: 500,
+            body: JSON.stringify({
+                success: false,
+                message: err?.message || "Internal Server Error",
+            })
+        };
     }
 };
