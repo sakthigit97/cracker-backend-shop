@@ -18,7 +18,10 @@ provider:
     ADMIN_CONFIG_TABLE: AdminConfig
     DISCOUNT_TABLE: Discounts
     CONTACT_TABLE: ContactUs
-    RECAPTCHA_SECRET: 6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh
+    OTP_TABLE: OtpTable
+    OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
+    MSG91_AUTH_KEY: ${env:MSG91_AUTH_KEY}
+    RECAPTCHA_SECRET: ${env:RECAPTCHA_SECRET}
     REGION: ap-south-1
 
   httpApi:
@@ -67,6 +70,7 @@ provider:
             - arn:aws:dynamodb:ap-south-1:*:table/Orders/index/*
             - arn:aws:dynamodb:ap-south-1:*:table/AdminConfig*
             - arn:aws:dynamodb:ap-south-1:*:table/ContactUs*
+            - arn:aws:dynamodb:ap-south-1:*:table/OtpTable*
 
         - Effect: Allow
           Action:
@@ -811,3 +815,21 @@ resources:
         KeySchema:
           - AttributeName: contactId
             KeyType: HASH
+
+    OtpTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: OtpTable
+        BillingMode: PAY_PER_REQUEST
+
+        AttributeDefinitions:
+          - AttributeName: mobile
+            AttributeType: S
+
+        KeySchema:
+          - AttributeName: mobile
+            KeyType: HASH
+
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true

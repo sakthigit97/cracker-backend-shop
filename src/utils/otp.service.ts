@@ -1,6 +1,6 @@
 export class OtpService {
     private static MOCK_OTP = "123456";
-    async sendOtp(mobile: string) {
+    async sendOtp(mobile: string, username: string) {
         // Later:
         // 1. Generate random OTP
         // 2. Store in DynamoDB with TTL

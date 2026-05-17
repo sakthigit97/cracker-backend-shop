@@ -47,7 +47,7 @@ export const handler = async (event: any) => {
       return error("User already registered", 409);
     }
 
-    await otpService.sendOtp(mobile);
+    await otpService.sendOtp(mobile, "User");
 
     return success({
       message: "OTP sent successfully",

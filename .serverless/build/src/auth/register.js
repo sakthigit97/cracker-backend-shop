@@ -33,7 +33,7 @@ __export(register_exports, {
   handler: () => handler
 });
 module.exports = __toCommonJS(register_exports);
-var import_client_dynamodb2 = require("@aws-sdk/client-dynamodb");
+var import_client_dynamodb3 = require("@aws-sdk/client-dynamodb");
 
 // src/libs/db.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
@@ -1786,20 +1786,89 @@ var error = (message, statusCode = 400) => ({
 });
 
 // src/utils/otp.service.ts
-var OtpService = class _OtpService {
-  static {
-    this.MOCK_OTP = "123456";
-  }
-  async sendOtp(mobile) {
+var import_client_dynamodb2 = require("@aws-sdk/client-dynamodb");
+var OtpService = class {
+  async sendOtp(mobile, username = "User") {
+    const otp = Math.floor(
+      1e5 + Math.random() * 9e5
+    ).toString();
+    const expiryTime = Math.floor(Date.now() / 1e3) + 5 * 60;
+    await dbClient.send(
+      new import_client_dynamodb2.PutItemCommand({
+        TableName: process.env.OTP_TABLE,
+        Item: {
+          mobile: { S: mobile },
+          otp: { S: otp },
+          ttl: {
+            N: String(expiryTime)
+          }
+        }
+      })
+    );
+    const payload = {
+      template_id: process.env.OTP_TEMPLATE_ID,
+      recipients: [
+        {
+          mobiles: `91${mobile}`,
+          OTP: otp,
+          USERNAME: username
+        }
+      ]
+    };
+    const res = await fetch(
+      "https://control.msg91.com/api/v5/flow/",
+      {
+        method: "POST",
+        headers: {
+          authkey: process.env.MSG91_AUTH_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+    const data = await res.json();
+    console.log(data);
+    if (!res.ok) {
+      console.error(
+        "MSG91 Error",
+        data
+      );
+      throw new Error(
+        "OTP send failed"
+      );
+    }
     return {
-      success: true,
-      message: "OTP sent successfully"
+      success: true
     };
   }
   async verifyOtp(mobile, otp) {
-    if (otp !== _OtpService.MOCK_OTP) {
-      throw new Error("Invalid OTP");
+    const res = await dbClient.send(
+      new import_client_dynamodb2.GetItemCommand({
+        TableName: process.env.OTP_TABLE,
+        Key: {
+          mobile: { S: mobile }
+        }
+      })
+    );
+    if (!res.Item) {
+      throw new Error(
+        "OTP expired"
+      );
     }
+    const storedOtp = res.Item.otp.S;
+    if (storedOtp !== otp) {
+      throw new Error(
+        "Invalid OTP"
+      );
+    }
+    await dbClient.send(
+      new import_client_dynamodb2.DeleteItemCommand({
+        TableName: process.env.OTP_TABLE,
+        Key: {
+          mobile: { S: mobile }
+        }
+      })
+    );
     return {
       success: true
     };
@@ -1832,7 +1901,7 @@ var handler = async (event) => {
       return error("Invalid OTP", 400);
     }
     const existing = await dbClient.send(
-      new import_client_dynamodb2.GetItemCommand({
+      new import_client_dynamodb3.GetItemCommand({
         TableName: "Users",
         Key: {
           mobile: { S: mobile }
@@ -1843,7 +1912,7 @@ var handler = async (event) => {
       return error("User already registered", 409);
     }
     const configRes = await dbClient.send(
-      new import_client_dynamodb2.GetItemCommand({
+      new import_client_dynamodb3.GetItemCommand({
         TableName: "AdminConfig",
         Key: {
           configId: { S: "global" }
@@ -1858,7 +1927,7 @@ var handler = async (event) => {
     let referredBy = "";
     if (code && isReferralEnabled) {
       const referralCheck = await dbClient.send(
-        new import_client_dynamodb2.ScanCommand({
+        new import_client_dynamodb3.ScanCommand({
           TableName: "Users",
           FilterExpression: "referralCode = :code",
           ExpressionAttributeValues: {
@@ -1878,7 +1947,7 @@ var handler = async (event) => {
     const myReferralCode = "CRK" + Math.floor(1e5 + Math.random() * 9e5);
     const passwordHash = await hashPassword(password);
     await dbClient.send(
-      new import_client_dynamodb2.PutItemCommand({
+      new import_client_dynamodb3.PutItemCommand({
         TableName: "Users",
         Item: {
           mobile: { S: mobile },
