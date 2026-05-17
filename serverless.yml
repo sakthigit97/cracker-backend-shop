@@ -17,6 +17,7 @@ provider:
     USERS_TABLE: Users
     ADMIN_CONFIG_TABLE: AdminConfig
     DISCOUNT_TABLE: Discounts
+    CONTACT_TABLE: ContactUs
     RECAPTCHA_SECRET: 6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh
     REGION: ap-south-1
 
@@ -565,6 +566,27 @@ functions:
           path: /auth/forgot/reset
           method: POST
 
+  contactSubmit:
+    handler: src/handlers/contactSubmit.handler
+    events:
+      - http:
+          path: /contact
+          method: POST
+
+  contactList:
+    handler: src/handlers/contactList.handler
+    events:
+      - http:
+          path: admin/contact
+          method: GET
+
+  contactUpdate:
+    handler: src/handlers/contactUpdate.handler
+    events:
+      - http:
+          path: admin/contact/{contactId}
+          method: PUT
+
 resources:
   Resources:
     ProductImagesBucket:
@@ -775,4 +797,16 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: configId
+            KeyType: HASH
+
+    ContactUsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ContactUs
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: contactId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: contactId
             KeyType: HASH
