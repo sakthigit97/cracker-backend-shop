@@ -66,6 +66,7 @@ provider:
             - arn:aws:dynamodb:ap-south-1:*:table/Orders
             - arn:aws:dynamodb:ap-south-1:*:table/Orders/index/*
             - arn:aws:dynamodb:ap-south-1:*:table/AdminConfig*
+            - arn:aws:dynamodb:ap-south-1:*:table/ContactUs*
 
         - Effect: Allow
           Action:
@@ -569,22 +570,22 @@ functions:
   contactSubmit:
     handler: src/handlers/contactSubmit.handler
     events:
-      - http:
+      - httpApi:
           path: /contact
           method: POST
 
   contactList:
     handler: src/handlers/contactList.handler
     events:
-      - http:
-          path: admin/contact
+      - httpApi:
+          path: /admin/contact
           method: GET
 
   contactUpdate:
     handler: src/handlers/contactUpdate.handler
     events:
-      - http:
-          path: admin/contact/{contactId}
+      - httpApi:
+          path: /admin/contact/{contactId}
           method: PUT
 
 resources:
