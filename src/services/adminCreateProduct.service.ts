@@ -12,6 +12,7 @@ interface CreateProductInput {
     searchText: string;
     isActive?: string;
     description: string;
+     packageTagIds?: string[];
 }
 
 export class AdminCreateProductService {
@@ -29,8 +30,9 @@ export class AdminCreateProductService {
             videoUrl: input.videoUrl || null,
             searchText: input.searchText,
             description: input.description.trim(),
+            packageTagIds: input.packageTagIds || [],
             isActive: input.isActive ?? "true",
-            createdAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),            
         };
 
         await this.repo.putProduct(product);

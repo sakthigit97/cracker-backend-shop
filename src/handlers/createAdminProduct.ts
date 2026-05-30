@@ -27,6 +27,7 @@ export const handler = async (event: any) => {
             searchText,
             description,
             isActive,
+            packageTagIds,
         } = body;
 
         if (
@@ -64,6 +65,7 @@ export const handler = async (event: any) => {
             searchText,
             description,
             isActive,
+            packageTagIds: packageTagIds || [],
         });
 
         return {

@@ -3973,6 +3973,7 @@ var AdminCreateProductService = class {
       videoUrl: input.videoUrl || null,
       searchText: input.searchText,
       description: input.description.trim(),
+      packageTagIds: input.packageTagIds || [],
       isActive: input.isActive ?? "true",
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
@@ -4004,7 +4005,8 @@ var handler = async (event) => {
       videoUrl,
       searchText,
       description,
-      isActive
+      isActive,
+      packageTagIds
     } = body;
     if (!productId || !name || !price || !brandId || !categoryId || !searchText || !description) {
       return {
@@ -4029,7 +4031,8 @@ var handler = async (event) => {
       videoUrl,
       searchText,
       description,
-      isActive
+      isActive,
+      packageTagIds: packageTagIds || []
     });
     return {
       statusCode: 201,

@@ -29,6 +29,9 @@ provider:
       allowedOrigins:
         - http://localhost:5173
         - https://frontend-cracker-shop.vercel.app
+        - https://d1wqhtxjg6zqoo.cloudfront.net
+        - https://sivakasipyropark.co.in
+        - https://www.sivakasipyropark.co.in
       allowedHeaders:
         - Content-Type
         - Authorization
@@ -591,6 +594,20 @@ functions:
       - httpApi:
           path: /admin/contact/{contactId}
           method: PUT
+
+  getPackages:
+    handler: src/handlers/getPackages.handler
+    events:
+      - httpApi:
+          path: /packages
+          method: GET
+
+  getPackageItems:
+    handler: src/handlers/getPackageDetails.handler
+    events:
+      - httpApi:
+          path: /packages/{packageId}
+          method: GET
 
 resources:
   Resources:
