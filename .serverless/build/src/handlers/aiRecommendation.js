@@ -84,14 +84,6 @@ var RegexIntentParser = class {
     if (!budget) {
       missingFields.push("budget");
     }
-    console.log(
-      "AI PARSED INTENT",
-      JSON.stringify({
-        budget,
-        tags: Array.from(tags),
-        missingFields
-      })
-    );
     return {
       budget,
       tags: Array.from(tags),
@@ -217,9 +209,7 @@ var RecommendationService = class {
         matchedTagCount,
         matchPercentage
       };
-    }).filter(
-      (item) => item.matchPercentage >= MIN_MATCH_PERCENTAGE
-    );
+    }).filter((item) => item.matchPercentage >= MIN_MATCH_PERCENTAGE);
     console.log(
       "AI MATCHED PRODUCTS",
       matchedProducts.length
@@ -283,13 +273,7 @@ var RecommendationService = class {
 // src/services/packageBuilder.service.ts
 var MAX_ITERATIONS = 1e3;
 var MAX_ADDITIONAL_PRODUCTS = 20;
-var MAX_QTY_PER_PRODUCT = Number.isFinite(
-  Number(
-    process.env.MAX_AI_PRODUCT_QTY
-  )
-) ? Number(
-  process.env.MAX_AI_PRODUCT_QTY
-) : 10;
+var MAX_QTY_PER_PRODUCT = Number.isFinite(Number(process.env.MAX_AI_PRODUCT_QTY)) ? Number(process.env.MAX_AI_PRODUCT_QTY) : 10;
 var PackageBuilderService = class {
   buildPackage(budget, candidates) {
     if (!candidates?.length) {
@@ -737,16 +721,12 @@ var AiRecommendationOrchestratorService = class {
         discountText: p.discountText,
         categoryId: p.categoryId,
         brandId: p.brandId,
-        qty: qtyMap.get(
-          p.productId
-        ) || 1
+        qty: qtyMap.get(p.productId) || 1
       })
     );
     let additionalProducts = [];
     if (packageResult.additionalProductIds.length) {
-      additionalProducts = await this.productService.batchGetProducts(
-        packageResult.additionalProductIds
-      );
+      additionalProducts = await this.productService.batchGetProducts(packageResult.additionalProductIds);
       console.log(
         "AI ADDITIONAL PRODUCTS",
         additionalProducts.length
@@ -817,10 +797,6 @@ var handler = async (event) => {
       );
     }
     const query = body?.query?.trim();
-    console.log(
-      "AI REQUEST QUERY",
-      query
-    );
     if (!query) {
       return error(
         "Query is required",

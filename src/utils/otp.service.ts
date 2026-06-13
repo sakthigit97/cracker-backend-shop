@@ -1,25 +1,119 @@
+import {
+    PutItemCommand,
+    GetItemCommand,
+    DeleteItemCommand,
+} from "@aws-sdk/client-dynamodb";
+
+import { dbClient } from "../libs/db";
 export class OtpService {
-    private static MOCK_OTP = "123456";
-    async sendOtp(mobile: string, username: string) {
-        // Later:
-        // 1. Generate random OTP
-        // 2. Store in DynamoDB with TTL
-        // 3. Send via SMS provider
+
+    async sendOtp(
+        mobile: string,
+        username: string = "User"
+    ) {
+        const otp = Math.floor(
+            100000 + Math.random() * 900000
+        ).toString();
+
+        const expiryTime =
+            Math.floor(Date.now() / 1000) +
+            5 * 60;
+
+        await dbClient.send(
+            new PutItemCommand({
+                TableName: process.env.OTP_TABLE!,
+                Item: {
+                    mobile: { S: mobile },
+                    otp: { S: otp },
+                    ttl: {
+                        N: String(expiryTime),
+                    },
+                },
+            })
+        );
+
+        const payload = {
+            template_id: process.env.OTP_TEMPLATE_ID,
+            recipients: [
+                {
+                    mobiles: `91${mobile}`,
+                    OTP: otp,
+                    USERNAME: username,
+                },
+            ],
+        };
+
+        const res = await fetch(
+            "https://control.msg91.com/api/v5/flow/",
+            {
+                method: "POST",
+                headers: {
+                    authkey:
+                        process.env.MSG91_AUTH_KEY!,
+                    "Content-Type":
+                        "application/json",
+                },
+                body: JSON.stringify(payload),
+            }
+        );
+
+        const data = await res.json();
+        console.log(data)
+
+        if (!res.ok) {
+            console.error(
+                "MSG91 Error",
+                data
+            );
+
+            throw new Error(
+                "OTP send failed"
+            );
+        }
+
         return {
             success: true,
-            message: "OTP sent successfully",
         };
     }
 
-    async verifyOtp(mobile: string, otp: string) {
-        // Later:
-        // 1. Fetch OTP record from DB
-        // 2. Check expiry
-        // 3. Match OTP
+    async verifyOtp(
+        mobile: string,
+        otp: string
+    ) {
+        const res = await dbClient.send(
+            new GetItemCommand({
+                TableName:
+                    process.env.OTP_TABLE!,
+                Key: {
+                    mobile: { S: mobile },
+                },
+            })
+        );
 
-        if (otp !== OtpService.MOCK_OTP) {
-            throw new Error("Invalid OTP");
+        if (!res.Item) {
+            throw new Error(
+                "OTP expired"
+            );
         }
+
+        const storedOtp =
+            res.Item.otp.S;
+
+        if (storedOtp !== otp) {
+            throw new Error(
+                "Invalid OTP"
+            );
+        }
+
+        await dbClient.send(
+            new DeleteItemCommand({
+                TableName:
+                    process.env.OTP_TABLE!,
+                Key: {
+                    mobile: { S: mobile },
+                },
+            })
+        );
 
         return {
             success: true,
