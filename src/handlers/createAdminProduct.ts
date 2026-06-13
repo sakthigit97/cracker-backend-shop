@@ -28,6 +28,7 @@ export const handler = async (event: any) => {
             description,
             isActive,
             packageTagIds,
+            aiTags,
         } = body;
 
         if (
@@ -66,6 +67,7 @@ export const handler = async (event: any) => {
             description,
             isActive,
             packageTagIds: packageTagIds || [],
+            aiTags: aiTags || []
         });
 
         return {

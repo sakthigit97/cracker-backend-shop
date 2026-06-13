@@ -12,6 +12,7 @@ interface UpdateProductInput {
     description?: string;
     isActive?: string;
     packageTagIds?: string[];
+    aiTags?: string[];
 }
 
 export class AdminUpdateProductService {

@@ -1,0 +1,16 @@
+export const AI_TAGS = [
+    "kids",
+    "family",
+    "adults",
+    "low-noise",
+    "medium-noise",
+    "high-noise",
+    "safe",
+    "eco-friendly",
+    "budget",
+    "premium",
+    "colorful",
+    "sound-cracker",
+    "festival-special",
+    "apartment-friendly",
+] as const;

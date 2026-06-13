@@ -25,6 +25,7 @@
         "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
         "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
         "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+        "MAX_AI_PRODUCT_QTY": "10",
         "REGION": "ap-south-1"
       },
       "httpApi": {
@@ -554,6 +555,12 @@
               "LogGroupName": "/aws/lambda/cracker-backend-dev-getPackageItems"
             }
           },
+          "AiRecommendationLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/cracker-backend-dev-aiRecommendation"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -646,7 +653,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/auth/login.handler",
               "Runtime": "nodejs24.x",
@@ -670,6 +677,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -690,7 +698,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/auth/send-otp.handler",
               "Runtime": "nodejs24.x",
@@ -714,6 +722,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -734,7 +743,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/auth/register.handler",
               "Runtime": "nodejs24.x",
@@ -758,6 +767,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -778,7 +788,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/user/get-profile.main",
               "Runtime": "nodejs24.x",
@@ -802,6 +812,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -822,7 +833,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/user/update-profile.main",
               "Runtime": "nodejs24.x",
@@ -846,6 +857,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -866,7 +878,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProducts.handler",
               "Runtime": "nodejs24.x",
@@ -890,6 +902,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -910,7 +923,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductDetails.handler",
               "Runtime": "nodejs24.x",
@@ -934,6 +947,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -954,7 +968,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductsByCategory.handler",
               "Runtime": "nodejs24.x",
@@ -978,6 +992,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -998,7 +1013,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductsByBrand.handler",
               "Runtime": "nodejs24.x",
@@ -1022,6 +1037,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1042,7 +1058,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getCategories.handler",
               "Runtime": "nodejs24.x",
@@ -1066,6 +1082,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1086,7 +1103,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getBrands.handler",
               "Runtime": "nodejs24.x",
@@ -1110,6 +1127,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1130,7 +1148,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.getCart",
               "Runtime": "nodejs24.x",
@@ -1154,6 +1172,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1174,7 +1193,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.addItem",
               "Runtime": "nodejs24.x",
@@ -1198,6 +1217,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1218,7 +1238,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.removeItem",
               "Runtime": "nodejs24.x",
@@ -1242,6 +1262,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1262,7 +1283,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.clearCart",
               "Runtime": "nodejs24.x",
@@ -1286,6 +1307,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1306,7 +1328,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/productBatch.handler",
               "Runtime": "nodejs24.x",
@@ -1330,6 +1352,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1350,7 +1373,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cartMerge.handler",
               "Runtime": "nodejs24.x",
@@ -1374,6 +1397,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1394,7 +1418,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cartSync.handler",
               "Runtime": "nodejs24.x",
@@ -1418,6 +1442,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1438,7 +1463,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/Orders.handler",
               "Runtime": "nodejs24.x",
@@ -1462,6 +1487,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1482,7 +1508,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getOrders.handler",
               "Runtime": "nodejs24.x",
@@ -1506,6 +1532,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1526,7 +1553,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cancelOrder.handler",
               "Runtime": "nodejs24.x",
@@ -1550,6 +1577,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1570,7 +1598,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adjustOrder.handler",
               "Runtime": "nodejs24.x",
@@ -1594,6 +1622,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1614,7 +1643,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDashboard.handler",
               "Runtime": "nodejs24.x",
@@ -1638,6 +1667,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1658,7 +1688,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminOrders.handler",
               "Runtime": "nodejs24.x",
@@ -1682,6 +1712,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1702,7 +1733,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminOrderDetails.handler",
               "Runtime": "nodejs24.x",
@@ -1726,6 +1757,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1746,7 +1778,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateOrder.handler",
               "Runtime": "nodejs24.x",
@@ -1770,6 +1802,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1790,7 +1823,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getAdminProducts.handler",
               "Runtime": "nodejs24.x",
@@ -1814,6 +1847,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1834,7 +1868,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/createAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -1858,6 +1892,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1878,7 +1913,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/updateAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -1902,6 +1937,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1922,7 +1958,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/deactivateAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -1946,6 +1982,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -1966,7 +2003,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getPresignedUrls.handler",
               "Runtime": "nodejs24.x",
@@ -1990,6 +2027,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2010,7 +2048,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2034,6 +2072,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2054,7 +2093,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGenerateImportUploadUrl.handler",
               "Runtime": "nodejs24.x",
@@ -2078,6 +2117,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2098,7 +2138,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminValidateProductImport.handler",
               "Runtime": "nodejs24.x",
@@ -2122,6 +2162,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2142,7 +2183,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminConfirmProductImport.handler",
               "Runtime": "nodejs24.x",
@@ -2166,6 +2207,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2186,7 +2228,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListCategories.handler",
               "Runtime": "nodejs24.x",
@@ -2210,6 +2252,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2230,7 +2273,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminCreateCategory.handler",
               "Runtime": "nodejs24.x",
@@ -2254,6 +2297,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2274,7 +2318,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateCategoryStatus.handler",
               "Runtime": "nodejs24.x",
@@ -2298,6 +2342,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2318,7 +2363,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateCategory.handler",
               "Runtime": "nodejs24.x",
@@ -2342,6 +2387,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2362,7 +2408,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGetCategoryById.handler",
               "Runtime": "nodejs24.x",
@@ -2386,6 +2432,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2406,7 +2453,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteCategory.handler",
               "Runtime": "nodejs24.x",
@@ -2430,6 +2477,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2450,7 +2498,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminPresignCategoryImage.handler",
               "Runtime": "nodejs24.x",
@@ -2474,6 +2522,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2494,7 +2543,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cleanupOrphanProductImages.handler",
               "Runtime": "nodejs24.x",
@@ -2518,6 +2567,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2538,7 +2588,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListBrands.handler",
               "Runtime": "nodejs24.x",
@@ -2562,6 +2612,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2582,7 +2633,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGetBrand.handler",
               "Runtime": "nodejs24.x",
@@ -2606,6 +2657,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2626,7 +2678,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminCreateBrand.handler",
               "Runtime": "nodejs24.x",
@@ -2650,6 +2702,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2670,7 +2723,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateBrand.handler",
               "Runtime": "nodejs24.x",
@@ -2694,6 +2747,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2714,7 +2768,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateBrandStatus.handler",
               "Runtime": "nodejs24.x",
@@ -2738,6 +2792,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2758,7 +2813,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteBrand.handler",
               "Runtime": "nodejs24.x",
@@ -2782,6 +2837,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2802,7 +2858,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminPresignBrandLogo.handler",
               "Runtime": "nodejs24.x",
@@ -2826,6 +2882,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2846,7 +2903,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListUsers.handler",
               "Runtime": "nodejs24.x",
@@ -2870,6 +2927,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2890,7 +2948,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteUser.handler",
               "Runtime": "nodejs24.x",
@@ -2914,6 +2972,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2934,7 +2993,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/deleteProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2958,6 +3017,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -2978,7 +3038,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getConfig.handler",
               "Runtime": "nodejs24.x",
@@ -3002,6 +3062,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3022,7 +3083,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateConfig.handler",
               "Runtime": "nodejs24.x",
@@ -3046,6 +3107,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3066,7 +3128,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminConfigSliderPresign.handler",
               "Runtime": "nodejs24.x",
@@ -3090,6 +3152,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3110,7 +3173,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListDiscounts.handler",
               "Runtime": "nodejs24.x",
@@ -3134,6 +3197,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3154,7 +3218,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminCreateDiscount.handler",
               "Runtime": "nodejs24.x",
@@ -3178,6 +3242,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3198,7 +3263,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGetDiscountById.handler",
               "Runtime": "nodejs24.x",
@@ -3222,6 +3287,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3242,7 +3308,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateDiscount.handler",
               "Runtime": "nodejs24.x",
@@ -3266,6 +3332,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3286,7 +3353,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/orderInvoice.handler",
               "Runtime": "nodejs24.x",
@@ -3310,6 +3377,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3330,7 +3398,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getRevenueReport.handler",
               "Runtime": "nodejs24.x",
@@ -3354,6 +3422,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3374,7 +3443,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductReport.handler",
               "Runtime": "nodejs24.x",
@@ -3398,6 +3467,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3418,7 +3488,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/productSampleXls.handler",
               "Runtime": "nodejs24.x",
@@ -3442,6 +3512,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3462,7 +3533,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/orderRestore.handler",
               "Runtime": "nodejs24.x",
@@ -3486,6 +3557,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3506,7 +3578,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/popularProducts.handler",
               "Runtime": "nodejs24.x",
@@ -3530,6 +3602,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3550,7 +3623,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/auth/forgot/send-otp.handler",
               "Runtime": "nodejs24.x",
@@ -3574,6 +3647,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3594,7 +3668,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/auth/forgot/reset.handler",
               "Runtime": "nodejs24.x",
@@ -3618,6 +3692,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3638,7 +3713,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/contactSubmit.handler",
               "Runtime": "nodejs24.x",
@@ -3662,6 +3737,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3682,7 +3758,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/contactList.handler",
               "Runtime": "nodejs24.x",
@@ -3706,6 +3782,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3726,7 +3803,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/contactUpdate.handler",
               "Runtime": "nodejs24.x",
@@ -3750,6 +3827,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3770,7 +3848,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getPackages.handler",
               "Runtime": "nodejs24.x",
@@ -3794,6 +3872,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3814,7 +3893,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getPackageDetails.handler",
               "Runtime": "nodejs24.x",
@@ -3838,6 +3917,7 @@
                   "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
                   "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
                   "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
                   "REGION": "ap-south-1",
                   "NODE_OPTIONS": "--enable-source-maps"
                 }
@@ -3853,734 +3933,789 @@
               "GetPackageItemsLogGroup"
             ]
           },
-          "LoginLambdaVersion2Xk3zDznzeOaV6s0ZMpGHcP8144gQGsZ7479MWxtDs": {
+          "AiRecommendationLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z/cracker-backend.zip"
+              },
+              "Handler": "src/handlers/aiRecommendation.handler",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "cracker-backend-dev-aiRecommendation",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+                  "CART_TABLE": "Carts",
+                  "PRODUCTS_TABLE": "Products",
+                  "ORDERS_TABLE": "Orders",
+                  "BUCKET_NAME": "cracker-app",
+                  "BRAND_TABLE": "Brands",
+                  "CATEGORY_TABLE": "Categories",
+                  "USERS_TABLE": "Users",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig",
+                  "DISCOUNT_TABLE": "Discounts",
+                  "CONTACT_TABLE": "ContactUs",
+                  "OTP_TABLE": "OtpTable",
+                  "OTP_TEMPLATE_ID": "69f780de7abea408c20efc63",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "REGION": "ap-south-1",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AiRecommendationLogGroup"
+            ]
+          },
+          "LoginLambdaVersionGzC2SZQlu6UzDaA1HhfHUVn606GWof0MbDm0l4Du5E": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "LoginLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "SendOtpLambdaVersion8LcUk4NJF6MpaWzGXClF07UO15e1gAHYyBnnAHh0": {
+          "SendOtpLambdaVersionLei3UpJkbY8TfSOxJqKkwYDWS71Vo8hwLmJQADpPHFo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SendOtpLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "RegisterLambdaVersionuTZkPhMGEVhfreYnFRDlRaIDQqP1PxQ9TeXJbcRYE": {
+          "RegisterLambdaVersion4hhVnN2Ras37q5R40Cc6E0ovYB9zn7AylrYe1tS10": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RegisterLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetProfileLambdaVersionfik7BB5bBESHNwTZICKweMv6l3sblXsTtXmkcRFHfQ": {
+          "GetProfileLambdaVersionq4sI6WQuR6fTmNZwyqPr6u0mbjNdN7IuG4vG1SeZpE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProfileLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "UpdateProfileLambdaVersionkNDnL3PRvB8nEAEC36RzKAMKFjBIk4X82Ww8nElBU": {
+          "UpdateProfileLambdaVersionEnjkuwt2PJPyo0qBF2oCEyttV4Eqsweccr1z3ke6Zk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateProfileLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetProductsLambdaVersiontTeKz6vHORUReVkKTAdLytNIWADIg4YDdGPu3Wzg": {
+          "GetProductsLambdaVersionDhJT1UsuAqoS5rpexvM57m401h0gQvYLOVLVqGLss": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductsLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetProductDetailsLambdaVersionY7jUG31ZXS7QGV7EtCJhmI9EHTZtqbt7VWLpwvQ0": {
+          "GetProductDetailsLambdaVersion6sqKLyIWQvXN6vCdL5OcryKI7PyxbVpYTv66oC273q0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductDetailsLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetProductsByCategoryLambdaVersionBllKcVF76TYLe9czeOP5opIkPOQPgKFK4slHHoDNo": {
+          "GetProductsByCategoryLambdaVersionAS1dZfBQL5RaMbOhSPTS4VGDpn9qgqO5rpthqnZRg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductsByCategoryLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetProductsByBrandLambdaVersionqHzPehJcQ0nc1eGIhspF5QWIMIq95ukXJ1zC5VRlHo": {
+          "GetProductsByBrandLambdaVersionV7PVUOeira5O92HA64g8CrH8PaFupLQtLvdWfYGcn8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductsByBrandLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetCategoriesLambdaVersionib3szNtzG4QMzpI6BVCB7PRr2E1VoxYjDlNzJkZke8": {
+          "GetCategoriesLambdaVersionSDmYHlQVZ5k4AEA1wuVhCG2SSohYL74404DnF1LW8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCategoriesLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetBrandsLambdaVersionGgKXbCKBLG2ToSOIAlZavwzgkSTL6jTmzXRfiG4QYqc": {
+          "GetBrandsLambdaVersion0zeCIcj8HCjbfuFONqo4Co4Ee883wPhsnwu2SYEUPqE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetBrandsLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetCartLambdaVersiontuzYnDgFG6Hi3fSf40LfU4rSKOuFFSPPbnZO94gk": {
+          "GetCartLambdaVersionA45UMDxviJHGckbtE81dfMVGkVEHcTRP2Fvxt0nmk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCartLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AddCartItemLambdaVersionxpZcpXKVIRyPstWFWR5Z0Cj4pcN83KvFWbyOCCoLqk": {
+          "AddCartItemLambdaVersionmiDcfnZfLJCNfaofwQKAnTJD6444Tow6KQ9yUcavz8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AddCartItemLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "RemoveCartItemLambdaVersionxLy26OpfrHH3IL9GDbnmcokrmiAgPHDzvb4LhnuiY": {
+          "RemoveCartItemLambdaVersion5DVwAWo4LierNBGHuTt7SCvH9TCzBA0AqaB2OKWi87Q": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RemoveCartItemLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "ClearCartLambdaVersionzrk1VqT7CQ3GPbZVoc8WAYMsxTOF6GvIOxkrOuLg": {
+          "ClearCartLambdaVersionRCl4CUkeYMmv9eoUTWJxNUwjcAZXzHD9posWu7hCx6g": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ClearCartLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "ProductBatchLambdaVersionIVBXEIZ4td9qC8gXBiji8kgShbjA7k1NIzLYPED4": {
+          "ProductBatchLambdaVersion37VkOWrEJsreARcFVJ0RbrLuYeBkssaBC3g6ozfJgw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ProductBatchLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "CartMergeLambdaVersionFynAQsLe4LzEs5x84ItpNvjECMMBIJli0jmBjXUeLpk": {
+          "CartMergeLambdaVersion3hAmGiyhqOsW7lXZTu0GjIVRzQmKlcRS3Ml7GKA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CartMergeLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "CartSyncLambdaVersionSi3hlQDQKdwit3AMFXTkH0I3CizyTnNe6F9saKmps": {
+          "CartSyncLambdaVersiondrEg5DH5MKDxpfJDv0sAaAE7uWv5lHPVXzQT3MCSI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CartSyncLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "CreateOrderLambdaVersion1sZcfCLbJTwFPJIx2cMbSQ0yGbdLGaNBeiEAUdWyts": {
+          "CreateOrderLambdaVersionaB6G3ST5Se4ZAZOyCkM6WBFWWZT7xXgfBoLso": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateOrderLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetOrdersLambdaVersionS43eFu3pSnqcTq7RfliGrZjTqzslP95F3MBCOPUtBpQ": {
+          "GetOrdersLambdaVersion9fHwEYw3FEsv1lsU0EaiIcSPB4z6VagFfME2H6RbU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetOrdersLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "CancelOrderLambdaVersionb0PaJ5zew5CjIpINW36ZEGiPyNi1iB9P1rwV1CtXVPI": {
+          "CancelOrderLambdaVersionXX4t5A6AWWpljhVH9iYUpzgLLeg2wbzMbNuKOT05h0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CancelOrderLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdjustOrderLambdaVersion8klnideX2dFSvyyWBxPzBEj9Pg5ksVtODB0eickE": {
+          "AdjustOrderLambdaVersionzd5cWIBb03JScEXGTtDYhXfFhuxuyyVyaYD42CIw4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdjustOrderLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminDashboardLambdaVersionDVwJteouDYfHCpSHZlluCj7hEFR6zECT55sX6w2po": {
+          "AdminDashboardLambdaVersionzbLUjP0lO5RUWVkPW0Kto0qCTvwuk76gPhdzQybE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminDashboardLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminOrdersLambdaVersionqvOdr0zjxHbzSsi2kejV60Y13tPv9kYP2bpWiDJqs": {
+          "AdminOrdersLambdaVersiontKmLbbBVMD7WBiRiWGerqh3VNhEcbo68AVjakwKJVI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminOrdersLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminOrderDetailsLambdaVersionayowncyECWxUPIl1LHTUhwdDhKeawT7gDfq2DjDhxKQ": {
+          "AdminOrderDetailsLambdaVersionE13b8UIaiwIB9dXNr3xs9y9xFdJv7W5BvDOLspeUgk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminOrderDetailsLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminOrderUpdateLambdaVersionedCiCPh7VRXaWBZQMGmuTwUzJkRluGeBUVRjt8vCqHo": {
+          "AdminOrderUpdateLambdaVersionPFeMfAPlenZwux7EdMlSeOd09fo4ksKwqGO03PfHc8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminOrderUpdateLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminGetProductsLambdaVersionOrJ1C4oSuQgT7CFDcwPLzfy7DOBuibBWnSryqKbygY": {
+          "AdminGetProductsLambdaVersionEQ3qZbhmNpGKUthZ4T2QaPE0djeLb80wp6b74hAM0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminGetProductsLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminCreateProductLambdaVersionzPdrtA7yqr2ZpDabHyRsLJodjSATrNdvMFyl5suErY": {
+          "AdminCreateProductLambdaVersiond9a2WLFbU7gLMNNp5IKOL0UXkDN8qneArM54Gd6jY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminCreateProductLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminUpdateProductLambdaVersion1Qop52j63tyiPX9rcjQzcNDRDsCxquZXaGaThBZRY": {
+          "AdminUpdateProductLambdaVersionLNqOAxAypI1TDerPGEtaTNbGFhfLxDHxZbnSUI629Us": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminUpdateProductLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminDeactivateProductLambdaVersionHV7QMiLhrXgEAo0oY3OBW83WAi0NbA43jh5tfIgwc": {
+          "AdminDeactivateProductLambdaVersionfPjWYUj0TuChELWotYp1hhOJIqBEEGhB54W6Dfego": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminDeactivateProductLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetPresignedURLLambdaVersion9L9L8Y792PRyVDAN87rsi40pcBgNmftW2Gr6kPKU": {
+          "GetPresignedURLLambdaVersionHNWLjhpun68H5cQfLfvCWJBY7QAan5pPd8F0ggiNg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetPresignedURLLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminGetProductLambdaVersion2XfAGwRbJvU7evSUYmS3TTVzXeNs611WU2O6ltdI": {
+          "AdminGetProductLambdaVersionnO0avun1mTrkMN9GCZdF9bs616xoeA2Phe3NF8lqFss": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminGetProductLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetProductUploadURLLambdaVersionhtGZHt434ZRg8tBCC8nJatZtgeIo0IpiPx4pvcEZzY": {
+          "GetProductUploadURLLambdaVersionAx7GE3t72nnasJMul5Sjmz60WcongCzYNSHPfXeWd4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductUploadURLLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetProductValidateURLLambdaVersionsZtmF1z4JvP6rewKu81WNII0ZN0dCp8ClBFTm3a6vw": {
+          "GetProductValidateURLLambdaVersionxc13Q8GorNyncVLtSMt1a6CIhOe4AyJIDrK6x0jiw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductValidateURLLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetProductUploadConfirmLambdaVersionaE5erkfJ47I5F1u4BfrnAgVQIIWg4jZppu08uB4MEc": {
+          "GetProductUploadConfirmLambdaVersionsaxB3ax8IcFMbPCQVdOcBVUAFYtcC3RM74KjN0Cc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductUploadConfirmLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetCategoryListLambdaVersionWuOenFDBA8KJE8xnSVA3LsoKHJuoQIX24OjcI8CtY": {
+          "GetCategoryListLambdaVersionzHvYUCbhFfLZ8tY6BhOwukLhcRj1FtMxtk7VloIhFo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCategoryListLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "CreateCategoryLambdaVersionGfs27FVEHl7ggVyNdA2c2tTge3xXjnI5rsKsOa5KmE": {
+          "CreateCategoryLambdaVersionrXGUpUEZC29htSiw6RNHNsDoCDuRumWTikkR0XMBhVA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateCategoryLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "UpdateStatusCategoryLambdaVersionh65neZMRGOBqCCuJDonGJYpyq6ED7KheSs6eoESs": {
+          "UpdateStatusCategoryLambdaVersionX6G6vxRbLO1Pfyy9wJOpXaRn5OEtTPul5ub10xRdhyU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateStatusCategoryLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "UpdateCategoryLambdaVersionwhsxu8SbUo37XdhMYQUOMGJZs0mLpD0EUF6rahrjZI": {
+          "UpdateCategoryLambdaVersionnfAVc5Lr84mShCngN9wywIijFnBB4tNH4hpWQPfmJc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateCategoryLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetCategoryByIdLambdaVersionm6vkSgokIFrB0L5T774kWYq0JcQm2JQTK98bwSCAhA": {
+          "GetCategoryByIdLambdaVersionpYVoXzwUkGQJdRSQM6Ln2PSeCvxmVxXiaoQqXXGKfWs": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCategoryByIdLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminDeleteCategoryLambdaVersionCB8cEhJ3QUQxyG48m9OKdPqnrgN5lEXzVRGdhhFrs": {
+          "AdminDeleteCategoryLambdaVersionaHqUHB5szIgdB5nQhxA7RRWeF18852iLKIjgOBAtcU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminDeleteCategoryLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "CategoryPresignUrlLambdaVersionxB99KYrwyF9hA9kxXD1Ox7yqSj49jG9eHani21ZycVs": {
+          "CategoryPresignUrlLambdaVersion7jxt9pCf5xDCwSysYs0V5m3Mulyx2EMHGQA2J2MtNk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CategoryPresignUrlLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "CleanupOrphanProductImagesLambdaVersionOCvsYzuj3HwLooTmpHPLChZx2AgbpYzDE0paP4X0": {
+          "CleanupOrphanProductImagesLambdaVersionLPQ6x8EKdffk7Ba84Z09VMDCuoCjpp3w5SsQC6eCPfo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CleanupOrphanProductImagesLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminListBrandsLambdaVersion5aTgxiUENzLwLsFvhNBSqKBvQ1cuat7ZwYOGRU9ck": {
+          "AdminListBrandsLambdaVersion5hgP58qLDBicOuxAVLRr4CjHO3E3QWNgCRUxN8bWQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminListBrandsLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminGetBrandByIdLambdaVersion5gzYPuX950qmdkzNmfCOTJUAxJecK7nJ0fxQLY0Xakg": {
+          "AdminGetBrandByIdLambdaVersionsYt6S3pWVY3m4vAB8mxP1PsBy4XBTOugZXrtGDmH0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminGetBrandByIdLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminCreateBrandLambdaVersiono7ghrr9s74w4eriq9RPSmyJ9YWULirZJwRCMwcStc": {
+          "AdminCreateBrandLambdaVersionJeKsfc7lpWWRDKtp4YRDenxDay7U7PLyFaWC9bs": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminCreateBrandLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminUpdateBrandLambdaVersionq3pI6gMBpAeX98Q0IptcoJvwdUjSN7DeHZ59Uk": {
+          "AdminUpdateBrandLambdaVersionQg5Hf3m8xC89fLW91jFAmGBVSrBUqgK63aZmOqRjI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminUpdateBrandLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminUpdateBrandStatusLambdaVersionlT1P2G3yvj6tvReolc8bvyTlGgStkYUUKuh7dABTIE": {
+          "AdminUpdateBrandStatusLambdaVersionpCKf6NAm7qTa9L5vORaBSA6exSuMF0Qvk9P8Miid4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminUpdateBrandStatusLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminDeleteBrandLambdaVersionwleuOe8eYz2GSQ23XpzFRmk6EfTWOclQg9H9vBzVNw": {
+          "AdminDeleteBrandLambdaVersionCugvZg3QJhfZ3aN9oMU122XL0PjlmKwM8rroTbMTc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminDeleteBrandLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminPresignBrandLogoLambdaVersionekJLSv9uAatuFbEQmWrgTZ40fqgE9raZySWbQ2k": {
+          "AdminPresignBrandLogoLambdaVersionXnoDKHyM7uzTbeAROVGluaWF98bqb2RAyxEdbLzWci8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminPresignBrandLogoLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminListUsersLambdaVersionNeXd76w6AcI3BaL6M005hTdV4SVf4GR29MgveOgM": {
+          "AdminListUsersLambdaVersionIugeIH7FmWIzRDSkVjPasoOfMPDzXrFXV2t0056eVRc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminListUsersLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminDeleteUserLambdaVersionxdQHFai0BqrNJnYu9KjaDI0tVKeYJpK2BbY8aZbNo": {
+          "AdminDeleteUserLambdaVersion5C3GnwkxgCGgvffo0M4Q1bR5ImujvYUFO9bxnJoq80": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminDeleteUserLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "DeleteProductLambdaVersionnHcKVGWKXKQw39fCeWy2fD9r9Y9BZN4YMuN1QSAw0": {
+          "DeleteProductLambdaVersion2bCRMDCCokoBFRrzSuOmVzZSeeD5ooQmzqyFhVL6M": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeleteProductLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetConfigLambdaVersionCDhDsixPHe9c5qxtz04117te5esiLRWAHX4Rtu1d8c": {
+          "GetConfigLambdaVersionwwW9xO1XJcM2aW8rpeiopFuKBecieWqIDrIXuPvMg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetConfigLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "UpdateAdminConfigLambdaVersionkME956k5qXjrcYtQ5GfZjT2a97Ey3RnPtqEoZyQlM": {
+          "UpdateAdminConfigLambdaVersionvjBzz9YvOw2bGDsamOERXfhxm6uuHyqBa6oaFCHMG7w": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateAdminConfigLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminPresignConfigLogoLambdaVersionmLaTCIwpPUij9pB24QIIurWcurYyW8SkOl6zIuuvcE": {
+          "AdminPresignConfigLogoLambdaVersionfpTtvegxbD4APmGWV7n5Hd78kIGI468BlnURgsKYqNw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminPresignConfigLogoLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminListDiscountsLambdaVersionEoJzpj60RoqlpOPBm2iIPtBURGXl9lumneejIk8O8": {
+          "AdminListDiscountsLambdaVersionol2RSPwVA9chBAOzWlnT2WNUeE83S9f1QxFCtz4O60": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminListDiscountsLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminCreateDiscountLambdaVersionwqWYVuScfJVT1rZCmHXPz41S1BeMo6kz4squMDVWsbE": {
+          "AdminCreateDiscountLambdaVersionPygzFCDSF9b9DEtsIm1cmjpK0b8kQRdVotJw8F8vEeY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminCreateDiscountLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminGetDiscountByIdLambdaVersionwbfwa04WvnoULEvlEZp4O6JuHEOwM8EAnw7jSKO6C0": {
+          "AdminGetDiscountByIdLambdaVersionEUt3IerqmondoR3WiKic36bqdA7IuliSdZ9a3xFeOyY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminGetDiscountByIdLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "AdminUpdateDiscountLambdaVersionNNqENjpjTLEDxdcCNTyu9HvU1w24nWyENBaad8GCKA": {
+          "AdminUpdateDiscountLambdaVersionoFi26K5DNnSeUkMrrjQ8YOvRegQpW40dzeAWI6IQBI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminUpdateDiscountLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "OrderInvoiceLambdaVersioncCyiVEPsS2IPHxqO6cA3K4t2lKksZLr70KOdPTLHGk": {
+          "OrderInvoiceLambdaVersionDTu7Lyf9cBlqWuP65XG5yJS4UXrqIGpYJP3rvfYFR1g": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "OrderInvoiceLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "RevenueReportLambdaVersione4BcftyRn34BHjfNuUy8DKYXXIodqAt16Eu3FjCHI": {
+          "RevenueReportLambdaVersionDEu4pwORoi5yq7nEHDW3OovC31KLPPorQv5k7ZN48Tw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RevenueReportLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "ProductReportLambdaVersionY6Aep9q0skxKiCpLkjzdilYJ0LM3I0akRlIer1UnMkQ": {
+          "ProductReportLambdaVersionRCp9KCtHpMJHO7IQ7viihmL12cOHhzSoue4c72pk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ProductReportLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetProductXlsPresignedURLLambdaVersionBkidafVGyk34j56Na9D5Rv3TGD2nBfuKihJW4Xvhf8": {
+          "GetProductXlsPresignedURLLambdaVersionV8b59hyeux32ThnQm0juJPnOavz0t3GQBtfI0DI1CM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductXlsPresignedURLLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "RestoreOrderLambdaVersiontoDzHdUvW4k0BXWoLA6GCEuCnYEtCXIybTDd7Ik8": {
+          "RestoreOrderLambdaVersionZhoNg4AIYPr3joF3mRJuhtkHmRFWpz77bTTFIG7S9Q": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RestoreOrderLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "PopulerProductsLambdaVersions2avbBfqXs5g3bWgIh7XE7CvCnawJvUg5UJZ7ARdk": {
+          "PopulerProductsLambdaVersionXAh8wdKnfIH0x4GUj4a3BwOlrhdhHWrxsgPp87rsg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "PopulerProductsLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "ForgotSendOtpLambdaVersionBcQp4yQbx8ht7hHqMzI9PTlGB2OWKdQSLTaBOF7ifk": {
+          "ForgotSendOtpLambdaVersionlgShgn1UQkN5B3hw08X9m2gzqWzecxnhBJbqF9mRKRw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ForgotSendOtpLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "ResetPasswordLambdaVersionFw7QVk0zMa082FyVy40UwItOx5e3dYIUs81SGhOMUU": {
+          "ResetPasswordLambdaVersionK2pHW6Jrp6ggePoUNsGrXjhYZ1KBh7eBYxayM7ReU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ResetPasswordLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "ContactSubmitLambdaVersionpIExNdxJSc9ZzL9FWYTPEoGciXqzdaUlNMKuQ54jRo": {
+          "ContactSubmitLambdaVersionzvn2qQwxRiaYGVbbsbH3A2bw32Lv5th13CqxNfCCO8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ContactSubmitLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "ContactListLambdaVersionT2yhmijoltm9F6pCfqP6W6r3QnnhWtvpwHmXmfXXlsg": {
+          "ContactListLambdaVersionvqevnwaTpUIX5ErTB05hNZJynd5D9dDKTtiuxtltyGc": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ContactListLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "ContactUpdateLambdaVersionNScxIaqCkvwvWP0HJvSkaEoxwfp8BEgPYN8e8Nc5Q": {
+          "ContactUpdateLambdaVersionNUxaGKSemgHqyWj2K74bTAgybHREShinc3U6Xrk9Ns4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ContactUpdateLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetPackagesLambdaVersionIBcYRI0vVtzwQ5didNH5o7dfnihx1nBJnVJqEM3R7lY": {
+          "GetPackagesLambdaVersionpJhXxXGj3PomATUWM7lHeKTCsnoCoSVHb1BhidnHU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetPackagesLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
-          "GetPackageItemsLambdaVersionmIdYV30nYhoSVbiN3Rh1kSUE92TDY6E10O0FBwQ7I": {
+          "GetPackageItemsLambdaVersionpx1xGi9BbKB7jMM13wZUJudlvRKmHVZIWKK5k0ZB2L8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetPackageItemsLambdaFunction"
               },
-              "CodeSha256": "T5GQn+0vxYOIqivwc4lp3abI1hWtr7RiGrNyl/ew2p0="
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
+            }
+          },
+          "AiRecommendationLambdaVersionnAEV6aQpINqlyfX9sESRMUeD8cuhHxjdLHiH3SUzOA": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "AiRecommendationLambdaFunction"
+              },
+              "CodeSha256": "x5PZ8G1dVbHqHLzCD0q3pG+1yn4xGI/Kc4Zz2WdP4tM="
             }
           },
           "CleanupOrphanProductImagesEventsRuleSchedule1": {
@@ -9845,6 +9980,78 @@
             },
             "DependsOn": "HttpApiIntegrationGetPackageItems"
           },
+          "AiRecommendationLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AiRecommendationLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAiRecommendation": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AiRecommendationLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRoutePostAiDashrecommendation": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "POST /ai-recommendation",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAiRecommendation"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAiRecommendation"
+          },
           "ProductImagesBucket": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
@@ -10235,7 +10442,7 @@
           "LoginLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "LoginLambdaVersion2Xk3zDznzeOaV6s0ZMpGHcP8144gQGsZ7479MWxtDs"
+              "Ref": "LoginLambdaVersionGzC2SZQlu6UzDaA1HhfHUVn606GWof0MbDm0l4Du5E"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-LoginLambdaFunctionQualifiedArn"
@@ -10244,7 +10451,7 @@
           "SendOtpLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SendOtpLambdaVersion8LcUk4NJF6MpaWzGXClF07UO15e1gAHYyBnnAHh0"
+              "Ref": "SendOtpLambdaVersionLei3UpJkbY8TfSOxJqKkwYDWS71Vo8hwLmJQADpPHFo"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-SendOtpLambdaFunctionQualifiedArn"
@@ -10253,7 +10460,7 @@
           "RegisterLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RegisterLambdaVersionuTZkPhMGEVhfreYnFRDlRaIDQqP1PxQ9TeXJbcRYE"
+              "Ref": "RegisterLambdaVersion4hhVnN2Ras37q5R40Cc6E0ovYB9zn7AylrYe1tS10"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-RegisterLambdaFunctionQualifiedArn"
@@ -10262,7 +10469,7 @@
           "GetProfileLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProfileLambdaVersionfik7BB5bBESHNwTZICKweMv6l3sblXsTtXmkcRFHfQ"
+              "Ref": "GetProfileLambdaVersionq4sI6WQuR6fTmNZwyqPr6u0mbjNdN7IuG4vG1SeZpE"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProfileLambdaFunctionQualifiedArn"
@@ -10271,7 +10478,7 @@
           "UpdateProfileLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateProfileLambdaVersionkNDnL3PRvB8nEAEC36RzKAMKFjBIk4X82Ww8nElBU"
+              "Ref": "UpdateProfileLambdaVersionEnjkuwt2PJPyo0qBF2oCEyttV4Eqsweccr1z3ke6Zk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-UpdateProfileLambdaFunctionQualifiedArn"
@@ -10280,7 +10487,7 @@
           "GetProductsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductsLambdaVersiontTeKz6vHORUReVkKTAdLytNIWADIg4YDdGPu3Wzg"
+              "Ref": "GetProductsLambdaVersionDhJT1UsuAqoS5rpexvM57m401h0gQvYLOVLVqGLss"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductsLambdaFunctionQualifiedArn"
@@ -10289,7 +10496,7 @@
           "GetProductDetailsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductDetailsLambdaVersionY7jUG31ZXS7QGV7EtCJhmI9EHTZtqbt7VWLpwvQ0"
+              "Ref": "GetProductDetailsLambdaVersion6sqKLyIWQvXN6vCdL5OcryKI7PyxbVpYTv66oC273q0"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductDetailsLambdaFunctionQualifiedArn"
@@ -10298,7 +10505,7 @@
           "GetProductsByCategoryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductsByCategoryLambdaVersionBllKcVF76TYLe9czeOP5opIkPOQPgKFK4slHHoDNo"
+              "Ref": "GetProductsByCategoryLambdaVersionAS1dZfBQL5RaMbOhSPTS4VGDpn9qgqO5rpthqnZRg"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductsByCategoryLambdaFunctionQualifiedArn"
@@ -10307,7 +10514,7 @@
           "GetProductsByBrandLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductsByBrandLambdaVersionqHzPehJcQ0nc1eGIhspF5QWIMIq95ukXJ1zC5VRlHo"
+              "Ref": "GetProductsByBrandLambdaVersionV7PVUOeira5O92HA64g8CrH8PaFupLQtLvdWfYGcn8"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductsByBrandLambdaFunctionQualifiedArn"
@@ -10316,7 +10523,7 @@
           "GetCategoriesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCategoriesLambdaVersionib3szNtzG4QMzpI6BVCB7PRr2E1VoxYjDlNzJkZke8"
+              "Ref": "GetCategoriesLambdaVersionSDmYHlQVZ5k4AEA1wuVhCG2SSohYL74404DnF1LW8"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetCategoriesLambdaFunctionQualifiedArn"
@@ -10325,7 +10532,7 @@
           "GetBrandsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetBrandsLambdaVersionGgKXbCKBLG2ToSOIAlZavwzgkSTL6jTmzXRfiG4QYqc"
+              "Ref": "GetBrandsLambdaVersion0zeCIcj8HCjbfuFONqo4Co4Ee883wPhsnwu2SYEUPqE"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetBrandsLambdaFunctionQualifiedArn"
@@ -10334,7 +10541,7 @@
           "GetCartLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCartLambdaVersiontuzYnDgFG6Hi3fSf40LfU4rSKOuFFSPPbnZO94gk"
+              "Ref": "GetCartLambdaVersionA45UMDxviJHGckbtE81dfMVGkVEHcTRP2Fvxt0nmk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetCartLambdaFunctionQualifiedArn"
@@ -10343,7 +10550,7 @@
           "AddCartItemLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AddCartItemLambdaVersionxpZcpXKVIRyPstWFWR5Z0Cj4pcN83KvFWbyOCCoLqk"
+              "Ref": "AddCartItemLambdaVersionmiDcfnZfLJCNfaofwQKAnTJD6444Tow6KQ9yUcavz8"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AddCartItemLambdaFunctionQualifiedArn"
@@ -10352,7 +10559,7 @@
           "RemoveCartItemLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RemoveCartItemLambdaVersionxLy26OpfrHH3IL9GDbnmcokrmiAgPHDzvb4LhnuiY"
+              "Ref": "RemoveCartItemLambdaVersion5DVwAWo4LierNBGHuTt7SCvH9TCzBA0AqaB2OKWi87Q"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-RemoveCartItemLambdaFunctionQualifiedArn"
@@ -10361,7 +10568,7 @@
           "ClearCartLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ClearCartLambdaVersionzrk1VqT7CQ3GPbZVoc8WAYMsxTOF6GvIOxkrOuLg"
+              "Ref": "ClearCartLambdaVersionRCl4CUkeYMmv9eoUTWJxNUwjcAZXzHD9posWu7hCx6g"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ClearCartLambdaFunctionQualifiedArn"
@@ -10370,7 +10577,7 @@
           "ProductBatchLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ProductBatchLambdaVersionIVBXEIZ4td9qC8gXBiji8kgShbjA7k1NIzLYPED4"
+              "Ref": "ProductBatchLambdaVersion37VkOWrEJsreARcFVJ0RbrLuYeBkssaBC3g6ozfJgw"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ProductBatchLambdaFunctionQualifiedArn"
@@ -10379,7 +10586,7 @@
           "CartMergeLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CartMergeLambdaVersionFynAQsLe4LzEs5x84ItpNvjECMMBIJli0jmBjXUeLpk"
+              "Ref": "CartMergeLambdaVersion3hAmGiyhqOsW7lXZTu0GjIVRzQmKlcRS3Ml7GKA"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CartMergeLambdaFunctionQualifiedArn"
@@ -10388,7 +10595,7 @@
           "CartSyncLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CartSyncLambdaVersionSi3hlQDQKdwit3AMFXTkH0I3CizyTnNe6F9saKmps"
+              "Ref": "CartSyncLambdaVersiondrEg5DH5MKDxpfJDv0sAaAE7uWv5lHPVXzQT3MCSI"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CartSyncLambdaFunctionQualifiedArn"
@@ -10397,7 +10604,7 @@
           "CreateOrderLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateOrderLambdaVersion1sZcfCLbJTwFPJIx2cMbSQ0yGbdLGaNBeiEAUdWyts"
+              "Ref": "CreateOrderLambdaVersionaB6G3ST5Se4ZAZOyCkM6WBFWWZT7xXgfBoLso"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CreateOrderLambdaFunctionQualifiedArn"
@@ -10406,7 +10613,7 @@
           "GetOrdersLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetOrdersLambdaVersionS43eFu3pSnqcTq7RfliGrZjTqzslP95F3MBCOPUtBpQ"
+              "Ref": "GetOrdersLambdaVersion9fHwEYw3FEsv1lsU0EaiIcSPB4z6VagFfME2H6RbU"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetOrdersLambdaFunctionQualifiedArn"
@@ -10415,7 +10622,7 @@
           "CancelOrderLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CancelOrderLambdaVersionb0PaJ5zew5CjIpINW36ZEGiPyNi1iB9P1rwV1CtXVPI"
+              "Ref": "CancelOrderLambdaVersionXX4t5A6AWWpljhVH9iYUpzgLLeg2wbzMbNuKOT05h0"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CancelOrderLambdaFunctionQualifiedArn"
@@ -10424,7 +10631,7 @@
           "AdjustOrderLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdjustOrderLambdaVersion8klnideX2dFSvyyWBxPzBEj9Pg5ksVtODB0eickE"
+              "Ref": "AdjustOrderLambdaVersionzd5cWIBb03JScEXGTtDYhXfFhuxuyyVyaYD42CIw4"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdjustOrderLambdaFunctionQualifiedArn"
@@ -10433,7 +10640,7 @@
           "AdminDashboardLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminDashboardLambdaVersionDVwJteouDYfHCpSHZlluCj7hEFR6zECT55sX6w2po"
+              "Ref": "AdminDashboardLambdaVersionzbLUjP0lO5RUWVkPW0Kto0qCTvwuk76gPhdzQybE"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminDashboardLambdaFunctionQualifiedArn"
@@ -10442,7 +10649,7 @@
           "AdminOrdersLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminOrdersLambdaVersionqvOdr0zjxHbzSsi2kejV60Y13tPv9kYP2bpWiDJqs"
+              "Ref": "AdminOrdersLambdaVersiontKmLbbBVMD7WBiRiWGerqh3VNhEcbo68AVjakwKJVI"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminOrdersLambdaFunctionQualifiedArn"
@@ -10451,7 +10658,7 @@
           "AdminOrderDetailsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminOrderDetailsLambdaVersionayowncyECWxUPIl1LHTUhwdDhKeawT7gDfq2DjDhxKQ"
+              "Ref": "AdminOrderDetailsLambdaVersionE13b8UIaiwIB9dXNr3xs9y9xFdJv7W5BvDOLspeUgk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminOrderDetailsLambdaFunctionQualifiedArn"
@@ -10460,7 +10667,7 @@
           "AdminOrderUpdateLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminOrderUpdateLambdaVersionedCiCPh7VRXaWBZQMGmuTwUzJkRluGeBUVRjt8vCqHo"
+              "Ref": "AdminOrderUpdateLambdaVersionPFeMfAPlenZwux7EdMlSeOd09fo4ksKwqGO03PfHc8"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminOrderUpdateLambdaFunctionQualifiedArn"
@@ -10469,7 +10676,7 @@
           "AdminGetProductsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminGetProductsLambdaVersionOrJ1C4oSuQgT7CFDcwPLzfy7DOBuibBWnSryqKbygY"
+              "Ref": "AdminGetProductsLambdaVersionEQ3qZbhmNpGKUthZ4T2QaPE0djeLb80wp6b74hAM0"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminGetProductsLambdaFunctionQualifiedArn"
@@ -10478,7 +10685,7 @@
           "AdminCreateProductLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminCreateProductLambdaVersionzPdrtA7yqr2ZpDabHyRsLJodjSATrNdvMFyl5suErY"
+              "Ref": "AdminCreateProductLambdaVersiond9a2WLFbU7gLMNNp5IKOL0UXkDN8qneArM54Gd6jY"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminCreateProductLambdaFunctionQualifiedArn"
@@ -10487,7 +10694,7 @@
           "AdminUpdateProductLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminUpdateProductLambdaVersion1Qop52j63tyiPX9rcjQzcNDRDsCxquZXaGaThBZRY"
+              "Ref": "AdminUpdateProductLambdaVersionLNqOAxAypI1TDerPGEtaTNbGFhfLxDHxZbnSUI629Us"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminUpdateProductLambdaFunctionQualifiedArn"
@@ -10496,7 +10703,7 @@
           "AdminDeactivateProductLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminDeactivateProductLambdaVersionHV7QMiLhrXgEAo0oY3OBW83WAi0NbA43jh5tfIgwc"
+              "Ref": "AdminDeactivateProductLambdaVersionfPjWYUj0TuChELWotYp1hhOJIqBEEGhB54W6Dfego"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminDeactivateProductLambdaFunctionQualifiedArn"
@@ -10505,7 +10712,7 @@
           "GetPresignedURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetPresignedURLLambdaVersion9L9L8Y792PRyVDAN87rsi40pcBgNmftW2Gr6kPKU"
+              "Ref": "GetPresignedURLLambdaVersionHNWLjhpun68H5cQfLfvCWJBY7QAan5pPd8F0ggiNg"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetPresignedURLLambdaFunctionQualifiedArn"
@@ -10514,7 +10721,7 @@
           "AdminGetProductLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminGetProductLambdaVersion2XfAGwRbJvU7evSUYmS3TTVzXeNs611WU2O6ltdI"
+              "Ref": "AdminGetProductLambdaVersionnO0avun1mTrkMN9GCZdF9bs616xoeA2Phe3NF8lqFss"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminGetProductLambdaFunctionQualifiedArn"
@@ -10523,7 +10730,7 @@
           "GetProductUploadURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductUploadURLLambdaVersionhtGZHt434ZRg8tBCC8nJatZtgeIo0IpiPx4pvcEZzY"
+              "Ref": "GetProductUploadURLLambdaVersionAx7GE3t72nnasJMul5Sjmz60WcongCzYNSHPfXeWd4"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductUploadURLLambdaFunctionQualifiedArn"
@@ -10532,7 +10739,7 @@
           "GetProductValidateURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductValidateURLLambdaVersionsZtmF1z4JvP6rewKu81WNII0ZN0dCp8ClBFTm3a6vw"
+              "Ref": "GetProductValidateURLLambdaVersionxc13Q8GorNyncVLtSMt1a6CIhOe4AyJIDrK6x0jiw"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductValidateURLLambdaFunctionQualifiedArn"
@@ -10541,7 +10748,7 @@
           "GetProductUploadConfirmLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductUploadConfirmLambdaVersionaE5erkfJ47I5F1u4BfrnAgVQIIWg4jZppu08uB4MEc"
+              "Ref": "GetProductUploadConfirmLambdaVersionsaxB3ax8IcFMbPCQVdOcBVUAFYtcC3RM74KjN0Cc"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductUploadConfirmLambdaFunctionQualifiedArn"
@@ -10550,7 +10757,7 @@
           "GetCategoryListLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCategoryListLambdaVersionWuOenFDBA8KJE8xnSVA3LsoKHJuoQIX24OjcI8CtY"
+              "Ref": "GetCategoryListLambdaVersionzHvYUCbhFfLZ8tY6BhOwukLhcRj1FtMxtk7VloIhFo"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetCategoryListLambdaFunctionQualifiedArn"
@@ -10559,7 +10766,7 @@
           "CreateCategoryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateCategoryLambdaVersionGfs27FVEHl7ggVyNdA2c2tTge3xXjnI5rsKsOa5KmE"
+              "Ref": "CreateCategoryLambdaVersionrXGUpUEZC29htSiw6RNHNsDoCDuRumWTikkR0XMBhVA"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CreateCategoryLambdaFunctionQualifiedArn"
@@ -10568,7 +10775,7 @@
           "UpdateStatusCategoryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateStatusCategoryLambdaVersionh65neZMRGOBqCCuJDonGJYpyq6ED7KheSs6eoESs"
+              "Ref": "UpdateStatusCategoryLambdaVersionX6G6vxRbLO1Pfyy9wJOpXaRn5OEtTPul5ub10xRdhyU"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-UpdateStatusCategoryLambdaFunctionQualifiedArn"
@@ -10577,7 +10784,7 @@
           "UpdateCategoryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateCategoryLambdaVersionwhsxu8SbUo37XdhMYQUOMGJZs0mLpD0EUF6rahrjZI"
+              "Ref": "UpdateCategoryLambdaVersionnfAVc5Lr84mShCngN9wywIijFnBB4tNH4hpWQPfmJc"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-UpdateCategoryLambdaFunctionQualifiedArn"
@@ -10586,7 +10793,7 @@
           "GetCategoryByIdLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCategoryByIdLambdaVersionm6vkSgokIFrB0L5T774kWYq0JcQm2JQTK98bwSCAhA"
+              "Ref": "GetCategoryByIdLambdaVersionpYVoXzwUkGQJdRSQM6Ln2PSeCvxmVxXiaoQqXXGKfWs"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetCategoryByIdLambdaFunctionQualifiedArn"
@@ -10595,7 +10802,7 @@
           "AdminDeleteCategoryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminDeleteCategoryLambdaVersionCB8cEhJ3QUQxyG48m9OKdPqnrgN5lEXzVRGdhhFrs"
+              "Ref": "AdminDeleteCategoryLambdaVersionaHqUHB5szIgdB5nQhxA7RRWeF18852iLKIjgOBAtcU"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminDeleteCategoryLambdaFunctionQualifiedArn"
@@ -10604,7 +10811,7 @@
           "CategoryPresignUrlLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CategoryPresignUrlLambdaVersionxB99KYrwyF9hA9kxXD1Ox7yqSj49jG9eHani21ZycVs"
+              "Ref": "CategoryPresignUrlLambdaVersion7jxt9pCf5xDCwSysYs0V5m3Mulyx2EMHGQA2J2MtNk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CategoryPresignUrlLambdaFunctionQualifiedArn"
@@ -10613,7 +10820,7 @@
           "CleanupOrphanProductImagesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CleanupOrphanProductImagesLambdaVersionOCvsYzuj3HwLooTmpHPLChZx2AgbpYzDE0paP4X0"
+              "Ref": "CleanupOrphanProductImagesLambdaVersionLPQ6x8EKdffk7Ba84Z09VMDCuoCjpp3w5SsQC6eCPfo"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CleanupOrphanProductImagesLambdaFunctionQualifiedArn"
@@ -10622,7 +10829,7 @@
           "AdminListBrandsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminListBrandsLambdaVersion5aTgxiUENzLwLsFvhNBSqKBvQ1cuat7ZwYOGRU9ck"
+              "Ref": "AdminListBrandsLambdaVersion5hgP58qLDBicOuxAVLRr4CjHO3E3QWNgCRUxN8bWQ"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminListBrandsLambdaFunctionQualifiedArn"
@@ -10631,7 +10838,7 @@
           "AdminGetBrandByIdLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminGetBrandByIdLambdaVersion5gzYPuX950qmdkzNmfCOTJUAxJecK7nJ0fxQLY0Xakg"
+              "Ref": "AdminGetBrandByIdLambdaVersionsYt6S3pWVY3m4vAB8mxP1PsBy4XBTOugZXrtGDmH0"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminGetBrandByIdLambdaFunctionQualifiedArn"
@@ -10640,7 +10847,7 @@
           "AdminCreateBrandLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminCreateBrandLambdaVersiono7ghrr9s74w4eriq9RPSmyJ9YWULirZJwRCMwcStc"
+              "Ref": "AdminCreateBrandLambdaVersionJeKsfc7lpWWRDKtp4YRDenxDay7U7PLyFaWC9bs"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminCreateBrandLambdaFunctionQualifiedArn"
@@ -10649,7 +10856,7 @@
           "AdminUpdateBrandLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminUpdateBrandLambdaVersionq3pI6gMBpAeX98Q0IptcoJvwdUjSN7DeHZ59Uk"
+              "Ref": "AdminUpdateBrandLambdaVersionQg5Hf3m8xC89fLW91jFAmGBVSrBUqgK63aZmOqRjI"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminUpdateBrandLambdaFunctionQualifiedArn"
@@ -10658,7 +10865,7 @@
           "AdminUpdateBrandStatusLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminUpdateBrandStatusLambdaVersionlT1P2G3yvj6tvReolc8bvyTlGgStkYUUKuh7dABTIE"
+              "Ref": "AdminUpdateBrandStatusLambdaVersionpCKf6NAm7qTa9L5vORaBSA6exSuMF0Qvk9P8Miid4"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminUpdateBrandStatusLambdaFunctionQualifiedArn"
@@ -10667,7 +10874,7 @@
           "AdminDeleteBrandLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminDeleteBrandLambdaVersionwleuOe8eYz2GSQ23XpzFRmk6EfTWOclQg9H9vBzVNw"
+              "Ref": "AdminDeleteBrandLambdaVersionCugvZg3QJhfZ3aN9oMU122XL0PjlmKwM8rroTbMTc"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminDeleteBrandLambdaFunctionQualifiedArn"
@@ -10676,7 +10883,7 @@
           "AdminPresignBrandLogoLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminPresignBrandLogoLambdaVersionekJLSv9uAatuFbEQmWrgTZ40fqgE9raZySWbQ2k"
+              "Ref": "AdminPresignBrandLogoLambdaVersionXnoDKHyM7uzTbeAROVGluaWF98bqb2RAyxEdbLzWci8"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminPresignBrandLogoLambdaFunctionQualifiedArn"
@@ -10685,7 +10892,7 @@
           "AdminListUsersLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminListUsersLambdaVersionNeXd76w6AcI3BaL6M005hTdV4SVf4GR29MgveOgM"
+              "Ref": "AdminListUsersLambdaVersionIugeIH7FmWIzRDSkVjPasoOfMPDzXrFXV2t0056eVRc"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminListUsersLambdaFunctionQualifiedArn"
@@ -10694,7 +10901,7 @@
           "AdminDeleteUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminDeleteUserLambdaVersionxdQHFai0BqrNJnYu9KjaDI0tVKeYJpK2BbY8aZbNo"
+              "Ref": "AdminDeleteUserLambdaVersion5C3GnwkxgCGgvffo0M4Q1bR5ImujvYUFO9bxnJoq80"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminDeleteUserLambdaFunctionQualifiedArn"
@@ -10703,7 +10910,7 @@
           "DeleteProductLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeleteProductLambdaVersionnHcKVGWKXKQw39fCeWy2fD9r9Y9BZN4YMuN1QSAw0"
+              "Ref": "DeleteProductLambdaVersion2bCRMDCCokoBFRrzSuOmVzZSeeD5ooQmzqyFhVL6M"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-DeleteProductLambdaFunctionQualifiedArn"
@@ -10712,7 +10919,7 @@
           "GetConfigLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetConfigLambdaVersionCDhDsixPHe9c5qxtz04117te5esiLRWAHX4Rtu1d8c"
+              "Ref": "GetConfigLambdaVersionwwW9xO1XJcM2aW8rpeiopFuKBecieWqIDrIXuPvMg"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetConfigLambdaFunctionQualifiedArn"
@@ -10721,7 +10928,7 @@
           "UpdateAdminConfigLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateAdminConfigLambdaVersionkME956k5qXjrcYtQ5GfZjT2a97Ey3RnPtqEoZyQlM"
+              "Ref": "UpdateAdminConfigLambdaVersionvjBzz9YvOw2bGDsamOERXfhxm6uuHyqBa6oaFCHMG7w"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-UpdateAdminConfigLambdaFunctionQualifiedArn"
@@ -10730,7 +10937,7 @@
           "AdminPresignConfigLogoLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminPresignConfigLogoLambdaVersionmLaTCIwpPUij9pB24QIIurWcurYyW8SkOl6zIuuvcE"
+              "Ref": "AdminPresignConfigLogoLambdaVersionfpTtvegxbD4APmGWV7n5Hd78kIGI468BlnURgsKYqNw"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminPresignConfigLogoLambdaFunctionQualifiedArn"
@@ -10739,7 +10946,7 @@
           "AdminListDiscountsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminListDiscountsLambdaVersionEoJzpj60RoqlpOPBm2iIPtBURGXl9lumneejIk8O8"
+              "Ref": "AdminListDiscountsLambdaVersionol2RSPwVA9chBAOzWlnT2WNUeE83S9f1QxFCtz4O60"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminListDiscountsLambdaFunctionQualifiedArn"
@@ -10748,7 +10955,7 @@
           "AdminCreateDiscountLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminCreateDiscountLambdaVersionwqWYVuScfJVT1rZCmHXPz41S1BeMo6kz4squMDVWsbE"
+              "Ref": "AdminCreateDiscountLambdaVersionPygzFCDSF9b9DEtsIm1cmjpK0b8kQRdVotJw8F8vEeY"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminCreateDiscountLambdaFunctionQualifiedArn"
@@ -10757,7 +10964,7 @@
           "AdminGetDiscountByIdLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminGetDiscountByIdLambdaVersionwbfwa04WvnoULEvlEZp4O6JuHEOwM8EAnw7jSKO6C0"
+              "Ref": "AdminGetDiscountByIdLambdaVersionEUt3IerqmondoR3WiKic36bqdA7IuliSdZ9a3xFeOyY"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminGetDiscountByIdLambdaFunctionQualifiedArn"
@@ -10766,7 +10973,7 @@
           "AdminUpdateDiscountLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminUpdateDiscountLambdaVersionNNqENjpjTLEDxdcCNTyu9HvU1w24nWyENBaad8GCKA"
+              "Ref": "AdminUpdateDiscountLambdaVersionoFi26K5DNnSeUkMrrjQ8YOvRegQpW40dzeAWI6IQBI"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminUpdateDiscountLambdaFunctionQualifiedArn"
@@ -10775,7 +10982,7 @@
           "OrderInvoiceLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "OrderInvoiceLambdaVersioncCyiVEPsS2IPHxqO6cA3K4t2lKksZLr70KOdPTLHGk"
+              "Ref": "OrderInvoiceLambdaVersionDTu7Lyf9cBlqWuP65XG5yJS4UXrqIGpYJP3rvfYFR1g"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-OrderInvoiceLambdaFunctionQualifiedArn"
@@ -10784,7 +10991,7 @@
           "RevenueReportLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RevenueReportLambdaVersione4BcftyRn34BHjfNuUy8DKYXXIodqAt16Eu3FjCHI"
+              "Ref": "RevenueReportLambdaVersionDEu4pwORoi5yq7nEHDW3OovC31KLPPorQv5k7ZN48Tw"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-RevenueReportLambdaFunctionQualifiedArn"
@@ -10793,7 +11000,7 @@
           "ProductReportLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ProductReportLambdaVersionY6Aep9q0skxKiCpLkjzdilYJ0LM3I0akRlIer1UnMkQ"
+              "Ref": "ProductReportLambdaVersionRCp9KCtHpMJHO7IQ7viihmL12cOHhzSoue4c72pk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ProductReportLambdaFunctionQualifiedArn"
@@ -10802,7 +11009,7 @@
           "GetProductXlsPresignedURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductXlsPresignedURLLambdaVersionBkidafVGyk34j56Na9D5Rv3TGD2nBfuKihJW4Xvhf8"
+              "Ref": "GetProductXlsPresignedURLLambdaVersionV8b59hyeux32ThnQm0juJPnOavz0t3GQBtfI0DI1CM"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductXlsPresignedURLLambdaFunctionQualifiedArn"
@@ -10811,7 +11018,7 @@
           "RestoreOrderLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RestoreOrderLambdaVersiontoDzHdUvW4k0BXWoLA6GCEuCnYEtCXIybTDd7Ik8"
+              "Ref": "RestoreOrderLambdaVersionZhoNg4AIYPr3joF3mRJuhtkHmRFWpz77bTTFIG7S9Q"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-RestoreOrderLambdaFunctionQualifiedArn"
@@ -10820,7 +11027,7 @@
           "PopulerProductsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "PopulerProductsLambdaVersions2avbBfqXs5g3bWgIh7XE7CvCnawJvUg5UJZ7ARdk"
+              "Ref": "PopulerProductsLambdaVersionXAh8wdKnfIH0x4GUj4a3BwOlrhdhHWrxsgPp87rsg"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-PopulerProductsLambdaFunctionQualifiedArn"
@@ -10829,7 +11036,7 @@
           "ForgotSendOtpLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ForgotSendOtpLambdaVersionBcQp4yQbx8ht7hHqMzI9PTlGB2OWKdQSLTaBOF7ifk"
+              "Ref": "ForgotSendOtpLambdaVersionlgShgn1UQkN5B3hw08X9m2gzqWzecxnhBJbqF9mRKRw"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ForgotSendOtpLambdaFunctionQualifiedArn"
@@ -10838,7 +11045,7 @@
           "ResetPasswordLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ResetPasswordLambdaVersionFw7QVk0zMa082FyVy40UwItOx5e3dYIUs81SGhOMUU"
+              "Ref": "ResetPasswordLambdaVersionK2pHW6Jrp6ggePoUNsGrXjhYZ1KBh7eBYxayM7ReU"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ResetPasswordLambdaFunctionQualifiedArn"
@@ -10847,7 +11054,7 @@
           "ContactSubmitLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ContactSubmitLambdaVersionpIExNdxJSc9ZzL9FWYTPEoGciXqzdaUlNMKuQ54jRo"
+              "Ref": "ContactSubmitLambdaVersionzvn2qQwxRiaYGVbbsbH3A2bw32Lv5th13CqxNfCCO8"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ContactSubmitLambdaFunctionQualifiedArn"
@@ -10856,7 +11063,7 @@
           "ContactListLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ContactListLambdaVersionT2yhmijoltm9F6pCfqP6W6r3QnnhWtvpwHmXmfXXlsg"
+              "Ref": "ContactListLambdaVersionvqevnwaTpUIX5ErTB05hNZJynd5D9dDKTtiuxtltyGc"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ContactListLambdaFunctionQualifiedArn"
@@ -10865,7 +11072,7 @@
           "ContactUpdateLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ContactUpdateLambdaVersionNScxIaqCkvwvWP0HJvSkaEoxwfp8BEgPYN8e8Nc5Q"
+              "Ref": "ContactUpdateLambdaVersionNUxaGKSemgHqyWj2K74bTAgybHREShinc3U6Xrk9Ns4"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ContactUpdateLambdaFunctionQualifiedArn"
@@ -10874,7 +11081,7 @@
           "GetPackagesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetPackagesLambdaVersionIBcYRI0vVtzwQ5didNH5o7dfnihx1nBJnVJqEM3R7lY"
+              "Ref": "GetPackagesLambdaVersionpJhXxXGj3PomATUWM7lHeKTCsnoCoSVHb1BhidnHU"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetPackagesLambdaFunctionQualifiedArn"
@@ -10883,10 +11090,19 @@
           "GetPackageItemsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetPackageItemsLambdaVersionmIdYV30nYhoSVbiN3Rh1kSUE92TDY6E10O0FBwQ7I"
+              "Ref": "GetPackageItemsLambdaVersionpx1xGi9BbKB7jMM13wZUJudlvRKmHVZIWKK5k0ZB2L8"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetPackageItemsLambdaFunctionQualifiedArn"
+            }
+          },
+          "AiRecommendationLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "AiRecommendationLambdaVersionnAEV6aQpINqlyfX9sESRMUeD8cuhHxjdLHiH3SUzOA"
+            },
+            "Export": {
+              "Name": "sls-cracker-backend-dev-AiRecommendationLambdaFunctionQualifiedArn"
             }
           },
           "HttpApiId": {
@@ -10950,7 +11166,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "LoginLambdaVersion2Xk3zDznzeOaV6s0ZMpGHcP8144gQGsZ7479MWxtDs"
+        "versionLogicalId": "LoginLambdaVersionGzC2SZQlu6UzDaA1HhfHUVn606GWof0MbDm0l4Du5E"
       },
       "sendOtp": {
         "handler": "src/auth/send-otp.handler",
@@ -10973,7 +11189,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "SendOtpLambdaVersion8LcUk4NJF6MpaWzGXClF07UO15e1gAHYyBnnAHh0"
+        "versionLogicalId": "SendOtpLambdaVersionLei3UpJkbY8TfSOxJqKkwYDWS71Vo8hwLmJQADpPHFo"
       },
       "register": {
         "handler": "src/auth/register.handler",
@@ -10996,7 +11212,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "RegisterLambdaVersionuTZkPhMGEVhfreYnFRDlRaIDQqP1PxQ9TeXJbcRYE"
+        "versionLogicalId": "RegisterLambdaVersion4hhVnN2Ras37q5R40Cc6E0ovYB9zn7AylrYe1tS10"
       },
       "getProfile": {
         "handler": "src/user/get-profile.main",
@@ -11019,7 +11235,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProfileLambdaVersionfik7BB5bBESHNwTZICKweMv6l3sblXsTtXmkcRFHfQ"
+        "versionLogicalId": "GetProfileLambdaVersionq4sI6WQuR6fTmNZwyqPr6u0mbjNdN7IuG4vG1SeZpE"
       },
       "updateProfile": {
         "handler": "src/user/update-profile.main",
@@ -11042,7 +11258,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "UpdateProfileLambdaVersionkNDnL3PRvB8nEAEC36RzKAMKFjBIk4X82Ww8nElBU"
+        "versionLogicalId": "UpdateProfileLambdaVersionEnjkuwt2PJPyo0qBF2oCEyttV4Eqsweccr1z3ke6Zk"
       },
       "getProducts": {
         "handler": "src/handlers/getProducts.handler",
@@ -11065,7 +11281,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductsLambdaVersiontTeKz6vHORUReVkKTAdLytNIWADIg4YDdGPu3Wzg"
+        "versionLogicalId": "GetProductsLambdaVersionDhJT1UsuAqoS5rpexvM57m401h0gQvYLOVLVqGLss"
       },
       "getProductDetails": {
         "handler": "src/handlers/getProductDetails.handler",
@@ -11088,7 +11304,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductDetailsLambdaVersionY7jUG31ZXS7QGV7EtCJhmI9EHTZtqbt7VWLpwvQ0"
+        "versionLogicalId": "GetProductDetailsLambdaVersion6sqKLyIWQvXN6vCdL5OcryKI7PyxbVpYTv66oC273q0"
       },
       "getProductsByCategory": {
         "handler": "src/handlers/getProductsByCategory.handler",
@@ -11111,7 +11327,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductsByCategoryLambdaVersionBllKcVF76TYLe9czeOP5opIkPOQPgKFK4slHHoDNo"
+        "versionLogicalId": "GetProductsByCategoryLambdaVersionAS1dZfBQL5RaMbOhSPTS4VGDpn9qgqO5rpthqnZRg"
       },
       "getProductsByBrand": {
         "handler": "src/handlers/getProductsByBrand.handler",
@@ -11134,7 +11350,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductsByBrandLambdaVersionqHzPehJcQ0nc1eGIhspF5QWIMIq95ukXJ1zC5VRlHo"
+        "versionLogicalId": "GetProductsByBrandLambdaVersionV7PVUOeira5O92HA64g8CrH8PaFupLQtLvdWfYGcn8"
       },
       "getCategories": {
         "handler": "src/handlers/getCategories.handler",
@@ -11157,7 +11373,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetCategoriesLambdaVersionib3szNtzG4QMzpI6BVCB7PRr2E1VoxYjDlNzJkZke8"
+        "versionLogicalId": "GetCategoriesLambdaVersionSDmYHlQVZ5k4AEA1wuVhCG2SSohYL74404DnF1LW8"
       },
       "getBrands": {
         "handler": "src/handlers/getBrands.handler",
@@ -11180,7 +11396,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetBrandsLambdaVersionGgKXbCKBLG2ToSOIAlZavwzgkSTL6jTmzXRfiG4QYqc"
+        "versionLogicalId": "GetBrandsLambdaVersion0zeCIcj8HCjbfuFONqo4Co4Ee883wPhsnwu2SYEUPqE"
       },
       "getCart": {
         "handler": "src/handlers/cart.getCart",
@@ -11203,7 +11419,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetCartLambdaVersiontuzYnDgFG6Hi3fSf40LfU4rSKOuFFSPPbnZO94gk"
+        "versionLogicalId": "GetCartLambdaVersionA45UMDxviJHGckbtE81dfMVGkVEHcTRP2Fvxt0nmk"
       },
       "addCartItem": {
         "handler": "src/handlers/cart.addItem",
@@ -11226,7 +11442,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AddCartItemLambdaVersionxpZcpXKVIRyPstWFWR5Z0Cj4pcN83KvFWbyOCCoLqk"
+        "versionLogicalId": "AddCartItemLambdaVersionmiDcfnZfLJCNfaofwQKAnTJD6444Tow6KQ9yUcavz8"
       },
       "removeCartItem": {
         "handler": "src/handlers/cart.removeItem",
@@ -11249,7 +11465,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "RemoveCartItemLambdaVersionxLy26OpfrHH3IL9GDbnmcokrmiAgPHDzvb4LhnuiY"
+        "versionLogicalId": "RemoveCartItemLambdaVersion5DVwAWo4LierNBGHuTt7SCvH9TCzBA0AqaB2OKWi87Q"
       },
       "clearCart": {
         "handler": "src/handlers/cart.clearCart",
@@ -11272,7 +11488,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ClearCartLambdaVersionzrk1VqT7CQ3GPbZVoc8WAYMsxTOF6GvIOxkrOuLg"
+        "versionLogicalId": "ClearCartLambdaVersionRCl4CUkeYMmv9eoUTWJxNUwjcAZXzHD9posWu7hCx6g"
       },
       "productBatch": {
         "handler": "src/handlers/productBatch.handler",
@@ -11295,7 +11511,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ProductBatchLambdaVersionIVBXEIZ4td9qC8gXBiji8kgShbjA7k1NIzLYPED4"
+        "versionLogicalId": "ProductBatchLambdaVersion37VkOWrEJsreARcFVJ0RbrLuYeBkssaBC3g6ozfJgw"
       },
       "cartMerge": {
         "handler": "src/handlers/cartMerge.handler",
@@ -11318,7 +11534,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CartMergeLambdaVersionFynAQsLe4LzEs5x84ItpNvjECMMBIJli0jmBjXUeLpk"
+        "versionLogicalId": "CartMergeLambdaVersion3hAmGiyhqOsW7lXZTu0GjIVRzQmKlcRS3Ml7GKA"
       },
       "cartSync": {
         "handler": "src/handlers/cartSync.handler",
@@ -11341,7 +11557,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CartSyncLambdaVersionSi3hlQDQKdwit3AMFXTkH0I3CizyTnNe6F9saKmps"
+        "versionLogicalId": "CartSyncLambdaVersiondrEg5DH5MKDxpfJDv0sAaAE7uWv5lHPVXzQT3MCSI"
       },
       "createOrder": {
         "handler": "src/handlers/Orders.handler",
@@ -11364,7 +11580,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CreateOrderLambdaVersion1sZcfCLbJTwFPJIx2cMbSQ0yGbdLGaNBeiEAUdWyts"
+        "versionLogicalId": "CreateOrderLambdaVersionaB6G3ST5Se4ZAZOyCkM6WBFWWZT7xXgfBoLso"
       },
       "getOrders": {
         "handler": "src/handlers/getOrders.handler",
@@ -11387,7 +11603,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetOrdersLambdaVersionS43eFu3pSnqcTq7RfliGrZjTqzslP95F3MBCOPUtBpQ"
+        "versionLogicalId": "GetOrdersLambdaVersion9fHwEYw3FEsv1lsU0EaiIcSPB4z6VagFfME2H6RbU"
       },
       "cancelOrder": {
         "handler": "src/handlers/cancelOrder.handler",
@@ -11410,7 +11626,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CancelOrderLambdaVersionb0PaJ5zew5CjIpINW36ZEGiPyNi1iB9P1rwV1CtXVPI"
+        "versionLogicalId": "CancelOrderLambdaVersionXX4t5A6AWWpljhVH9iYUpzgLLeg2wbzMbNuKOT05h0"
       },
       "adjustOrder": {
         "handler": "src/handlers/adjustOrder.handler",
@@ -11433,7 +11649,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdjustOrderLambdaVersion8klnideX2dFSvyyWBxPzBEj9Pg5ksVtODB0eickE"
+        "versionLogicalId": "AdjustOrderLambdaVersionzd5cWIBb03JScEXGTtDYhXfFhuxuyyVyaYD42CIw4"
       },
       "adminDashboard": {
         "handler": "src/handlers/adminDashboard.handler",
@@ -11456,7 +11672,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminDashboardLambdaVersionDVwJteouDYfHCpSHZlluCj7hEFR6zECT55sX6w2po"
+        "versionLogicalId": "AdminDashboardLambdaVersionzbLUjP0lO5RUWVkPW0Kto0qCTvwuk76gPhdzQybE"
       },
       "adminOrders": {
         "handler": "src/handlers/adminOrders.handler",
@@ -11479,7 +11695,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminOrdersLambdaVersionqvOdr0zjxHbzSsi2kejV60Y13tPv9kYP2bpWiDJqs"
+        "versionLogicalId": "AdminOrdersLambdaVersiontKmLbbBVMD7WBiRiWGerqh3VNhEcbo68AVjakwKJVI"
       },
       "adminOrderDetails": {
         "handler": "src/handlers/adminOrderDetails.handler",
@@ -11502,7 +11718,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminOrderDetailsLambdaVersionayowncyECWxUPIl1LHTUhwdDhKeawT7gDfq2DjDhxKQ"
+        "versionLogicalId": "AdminOrderDetailsLambdaVersionE13b8UIaiwIB9dXNr3xs9y9xFdJv7W5BvDOLspeUgk"
       },
       "adminOrderUpdate": {
         "handler": "src/handlers/adminUpdateOrder.handler",
@@ -11525,7 +11741,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminOrderUpdateLambdaVersionedCiCPh7VRXaWBZQMGmuTwUzJkRluGeBUVRjt8vCqHo"
+        "versionLogicalId": "AdminOrderUpdateLambdaVersionPFeMfAPlenZwux7EdMlSeOd09fo4ksKwqGO03PfHc8"
       },
       "adminGetProducts": {
         "handler": "src/handlers/getAdminProducts.handler",
@@ -11548,7 +11764,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminGetProductsLambdaVersionOrJ1C4oSuQgT7CFDcwPLzfy7DOBuibBWnSryqKbygY"
+        "versionLogicalId": "AdminGetProductsLambdaVersionEQ3qZbhmNpGKUthZ4T2QaPE0djeLb80wp6b74hAM0"
       },
       "adminCreateProduct": {
         "handler": "src/handlers/createAdminProduct.handler",
@@ -11571,7 +11787,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminCreateProductLambdaVersionzPdrtA7yqr2ZpDabHyRsLJodjSATrNdvMFyl5suErY"
+        "versionLogicalId": "AdminCreateProductLambdaVersiond9a2WLFbU7gLMNNp5IKOL0UXkDN8qneArM54Gd6jY"
       },
       "adminUpdateProduct": {
         "handler": "src/handlers/updateAdminProduct.handler",
@@ -11594,7 +11810,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminUpdateProductLambdaVersion1Qop52j63tyiPX9rcjQzcNDRDsCxquZXaGaThBZRY"
+        "versionLogicalId": "AdminUpdateProductLambdaVersionLNqOAxAypI1TDerPGEtaTNbGFhfLxDHxZbnSUI629Us"
       },
       "adminDeactivateProduct": {
         "handler": "src/handlers/deactivateAdminProduct.handler",
@@ -11617,7 +11833,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminDeactivateProductLambdaVersionHV7QMiLhrXgEAo0oY3OBW83WAi0NbA43jh5tfIgwc"
+        "versionLogicalId": "AdminDeactivateProductLambdaVersionfPjWYUj0TuChELWotYp1hhOJIqBEEGhB54W6Dfego"
       },
       "getPresignedURL": {
         "handler": "src/handlers/getPresignedUrls.handler",
@@ -11640,7 +11856,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetPresignedURLLambdaVersion9L9L8Y792PRyVDAN87rsi40pcBgNmftW2Gr6kPKU"
+        "versionLogicalId": "GetPresignedURLLambdaVersionHNWLjhpun68H5cQfLfvCWJBY7QAan5pPd8F0ggiNg"
       },
       "adminGetProduct": {
         "handler": "src/handlers/getAdminProduct.handler",
@@ -11663,7 +11879,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminGetProductLambdaVersion2XfAGwRbJvU7evSUYmS3TTVzXeNs611WU2O6ltdI"
+        "versionLogicalId": "AdminGetProductLambdaVersionnO0avun1mTrkMN9GCZdF9bs616xoeA2Phe3NF8lqFss"
       },
       "getProductUploadURL": {
         "handler": "src/handlers/adminGenerateImportUploadUrl.handler",
@@ -11686,7 +11902,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductUploadURLLambdaVersionhtGZHt434ZRg8tBCC8nJatZtgeIo0IpiPx4pvcEZzY"
+        "versionLogicalId": "GetProductUploadURLLambdaVersionAx7GE3t72nnasJMul5Sjmz60WcongCzYNSHPfXeWd4"
       },
       "getProductValidateURL": {
         "handler": "src/handlers/adminValidateProductImport.handler",
@@ -11709,7 +11925,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductValidateURLLambdaVersionsZtmF1z4JvP6rewKu81WNII0ZN0dCp8ClBFTm3a6vw"
+        "versionLogicalId": "GetProductValidateURLLambdaVersionxc13Q8GorNyncVLtSMt1a6CIhOe4AyJIDrK6x0jiw"
       },
       "getProductUploadConfirm": {
         "handler": "src/handlers/adminConfirmProductImport.handler",
@@ -11732,7 +11948,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductUploadConfirmLambdaVersionaE5erkfJ47I5F1u4BfrnAgVQIIWg4jZppu08uB4MEc"
+        "versionLogicalId": "GetProductUploadConfirmLambdaVersionsaxB3ax8IcFMbPCQVdOcBVUAFYtcC3RM74KjN0Cc"
       },
       "getCategoryList": {
         "handler": "src/handlers/adminListCategories.handler",
@@ -11755,7 +11971,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetCategoryListLambdaVersionWuOenFDBA8KJE8xnSVA3LsoKHJuoQIX24OjcI8CtY"
+        "versionLogicalId": "GetCategoryListLambdaVersionzHvYUCbhFfLZ8tY6BhOwukLhcRj1FtMxtk7VloIhFo"
       },
       "CreateCategory": {
         "handler": "src/handlers/adminCreateCategory.handler",
@@ -11778,7 +11994,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CreateCategoryLambdaVersionGfs27FVEHl7ggVyNdA2c2tTge3xXjnI5rsKsOa5KmE"
+        "versionLogicalId": "CreateCategoryLambdaVersionrXGUpUEZC29htSiw6RNHNsDoCDuRumWTikkR0XMBhVA"
       },
       "UpdateStatusCategory": {
         "handler": "src/handlers/adminUpdateCategoryStatus.handler",
@@ -11801,7 +12017,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "UpdateStatusCategoryLambdaVersionh65neZMRGOBqCCuJDonGJYpyq6ED7KheSs6eoESs"
+        "versionLogicalId": "UpdateStatusCategoryLambdaVersionX6G6vxRbLO1Pfyy9wJOpXaRn5OEtTPul5ub10xRdhyU"
       },
       "UpdateCategory": {
         "handler": "src/handlers/adminUpdateCategory.handler",
@@ -11824,7 +12040,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "UpdateCategoryLambdaVersionwhsxu8SbUo37XdhMYQUOMGJZs0mLpD0EUF6rahrjZI"
+        "versionLogicalId": "UpdateCategoryLambdaVersionnfAVc5Lr84mShCngN9wywIijFnBB4tNH4hpWQPfmJc"
       },
       "getCategoryById": {
         "handler": "src/handlers/adminGetCategoryById.handler",
@@ -11847,7 +12063,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetCategoryByIdLambdaVersionm6vkSgokIFrB0L5T774kWYq0JcQm2JQTK98bwSCAhA"
+        "versionLogicalId": "GetCategoryByIdLambdaVersionpYVoXzwUkGQJdRSQM6Ln2PSeCvxmVxXiaoQqXXGKfWs"
       },
       "AdminDeleteCategory": {
         "handler": "src/handlers/adminDeleteCategory.handler",
@@ -11870,7 +12086,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminDeleteCategoryLambdaVersionCB8cEhJ3QUQxyG48m9OKdPqnrgN5lEXzVRGdhhFrs"
+        "versionLogicalId": "AdminDeleteCategoryLambdaVersionaHqUHB5szIgdB5nQhxA7RRWeF18852iLKIjgOBAtcU"
       },
       "CategoryPresignUrl": {
         "handler": "src/handlers/adminPresignCategoryImage.handler",
@@ -11893,7 +12109,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CategoryPresignUrlLambdaVersionxB99KYrwyF9hA9kxXD1Ox7yqSj49jG9eHani21ZycVs"
+        "versionLogicalId": "CategoryPresignUrlLambdaVersion7jxt9pCf5xDCwSysYs0V5m3Mulyx2EMHGQA2J2MtNk"
       },
       "cleanupOrphanProductImages": {
         "handler": "src/handlers/cleanupOrphanProductImages.handler",
@@ -11915,7 +12131,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CleanupOrphanProductImagesLambdaVersionOCvsYzuj3HwLooTmpHPLChZx2AgbpYzDE0paP4X0"
+        "versionLogicalId": "CleanupOrphanProductImagesLambdaVersionLPQ6x8EKdffk7Ba84Z09VMDCuoCjpp3w5SsQC6eCPfo"
       },
       "AdminListBrands": {
         "handler": "src/handlers/adminListBrands.handler",
@@ -11938,7 +12154,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminListBrandsLambdaVersion5aTgxiUENzLwLsFvhNBSqKBvQ1cuat7ZwYOGRU9ck"
+        "versionLogicalId": "AdminListBrandsLambdaVersion5hgP58qLDBicOuxAVLRr4CjHO3E3QWNgCRUxN8bWQ"
       },
       "AdminGetBrandById": {
         "handler": "src/handlers/adminGetBrand.handler",
@@ -11961,7 +12177,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminGetBrandByIdLambdaVersion5gzYPuX950qmdkzNmfCOTJUAxJecK7nJ0fxQLY0Xakg"
+        "versionLogicalId": "AdminGetBrandByIdLambdaVersionsYt6S3pWVY3m4vAB8mxP1PsBy4XBTOugZXrtGDmH0"
       },
       "AdminCreateBrand": {
         "handler": "src/handlers/adminCreateBrand.handler",
@@ -11984,7 +12200,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminCreateBrandLambdaVersiono7ghrr9s74w4eriq9RPSmyJ9YWULirZJwRCMwcStc"
+        "versionLogicalId": "AdminCreateBrandLambdaVersionJeKsfc7lpWWRDKtp4YRDenxDay7U7PLyFaWC9bs"
       },
       "AdminUpdateBrand": {
         "handler": "src/handlers/adminUpdateBrand.handler",
@@ -12007,7 +12223,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminUpdateBrandLambdaVersionq3pI6gMBpAeX98Q0IptcoJvwdUjSN7DeHZ59Uk"
+        "versionLogicalId": "AdminUpdateBrandLambdaVersionQg5Hf3m8xC89fLW91jFAmGBVSrBUqgK63aZmOqRjI"
       },
       "AdminUpdateBrandStatus": {
         "handler": "src/handlers/adminUpdateBrandStatus.handler",
@@ -12030,7 +12246,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminUpdateBrandStatusLambdaVersionlT1P2G3yvj6tvReolc8bvyTlGgStkYUUKuh7dABTIE"
+        "versionLogicalId": "AdminUpdateBrandStatusLambdaVersionpCKf6NAm7qTa9L5vORaBSA6exSuMF0Qvk9P8Miid4"
       },
       "AdminDeleteBrand": {
         "handler": "src/handlers/adminDeleteBrand.handler",
@@ -12053,7 +12269,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminDeleteBrandLambdaVersionwleuOe8eYz2GSQ23XpzFRmk6EfTWOclQg9H9vBzVNw"
+        "versionLogicalId": "AdminDeleteBrandLambdaVersionCugvZg3QJhfZ3aN9oMU122XL0PjlmKwM8rroTbMTc"
       },
       "AdminPresignBrandLogo": {
         "handler": "src/handlers/adminPresignBrandLogo.handler",
@@ -12076,7 +12292,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminPresignBrandLogoLambdaVersionekJLSv9uAatuFbEQmWrgTZ40fqgE9raZySWbQ2k"
+        "versionLogicalId": "AdminPresignBrandLogoLambdaVersionXnoDKHyM7uzTbeAROVGluaWF98bqb2RAyxEdbLzWci8"
       },
       "adminListUsers": {
         "handler": "src/handlers/adminListUsers.handler",
@@ -12099,7 +12315,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminListUsersLambdaVersionNeXd76w6AcI3BaL6M005hTdV4SVf4GR29MgveOgM"
+        "versionLogicalId": "AdminListUsersLambdaVersionIugeIH7FmWIzRDSkVjPasoOfMPDzXrFXV2t0056eVRc"
       },
       "adminDeleteUser": {
         "handler": "src/handlers/adminDeleteUser.handler",
@@ -12122,7 +12338,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminDeleteUserLambdaVersionxdQHFai0BqrNJnYu9KjaDI0tVKeYJpK2BbY8aZbNo"
+        "versionLogicalId": "AdminDeleteUserLambdaVersion5C3GnwkxgCGgvffo0M4Q1bR5ImujvYUFO9bxnJoq80"
       },
       "deleteProduct": {
         "handler": "src/handlers/deleteProduct.handler",
@@ -12145,7 +12361,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "DeleteProductLambdaVersionnHcKVGWKXKQw39fCeWy2fD9r9Y9BZN4YMuN1QSAw0"
+        "versionLogicalId": "DeleteProductLambdaVersion2bCRMDCCokoBFRrzSuOmVzZSeeD5ooQmzqyFhVL6M"
       },
       "getConfig": {
         "handler": "src/handlers/getConfig.handler",
@@ -12168,7 +12384,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetConfigLambdaVersionCDhDsixPHe9c5qxtz04117te5esiLRWAHX4Rtu1d8c"
+        "versionLogicalId": "GetConfigLambdaVersionwwW9xO1XJcM2aW8rpeiopFuKBecieWqIDrIXuPvMg"
       },
       "updateAdminConfig": {
         "handler": "src/handlers/adminUpdateConfig.handler",
@@ -12191,7 +12407,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "UpdateAdminConfigLambdaVersionkME956k5qXjrcYtQ5GfZjT2a97Ey3RnPtqEoZyQlM"
+        "versionLogicalId": "UpdateAdminConfigLambdaVersionvjBzz9YvOw2bGDsamOERXfhxm6uuHyqBa6oaFCHMG7w"
       },
       "AdminPresignConfigLogo": {
         "handler": "src/handlers/adminConfigSliderPresign.handler",
@@ -12214,7 +12430,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminPresignConfigLogoLambdaVersionmLaTCIwpPUij9pB24QIIurWcurYyW8SkOl6zIuuvcE"
+        "versionLogicalId": "AdminPresignConfigLogoLambdaVersionfpTtvegxbD4APmGWV7n5Hd78kIGI468BlnURgsKYqNw"
       },
       "adminListDiscounts": {
         "handler": "src/handlers/adminListDiscounts.handler",
@@ -12237,7 +12453,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminListDiscountsLambdaVersionEoJzpj60RoqlpOPBm2iIPtBURGXl9lumneejIk8O8"
+        "versionLogicalId": "AdminListDiscountsLambdaVersionol2RSPwVA9chBAOzWlnT2WNUeE83S9f1QxFCtz4O60"
       },
       "adminCreateDiscount": {
         "handler": "src/handlers/adminCreateDiscount.handler",
@@ -12260,7 +12476,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminCreateDiscountLambdaVersionwqWYVuScfJVT1rZCmHXPz41S1BeMo6kz4squMDVWsbE"
+        "versionLogicalId": "AdminCreateDiscountLambdaVersionPygzFCDSF9b9DEtsIm1cmjpK0b8kQRdVotJw8F8vEeY"
       },
       "adminGetDiscountById": {
         "handler": "src/handlers/adminGetDiscountById.handler",
@@ -12283,7 +12499,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminGetDiscountByIdLambdaVersionwbfwa04WvnoULEvlEZp4O6JuHEOwM8EAnw7jSKO6C0"
+        "versionLogicalId": "AdminGetDiscountByIdLambdaVersionEUt3IerqmondoR3WiKic36bqdA7IuliSdZ9a3xFeOyY"
       },
       "adminUpdateDiscount": {
         "handler": "src/handlers/adminUpdateDiscount.handler",
@@ -12306,7 +12522,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminUpdateDiscountLambdaVersionNNqENjpjTLEDxdcCNTyu9HvU1w24nWyENBaad8GCKA"
+        "versionLogicalId": "AdminUpdateDiscountLambdaVersionoFi26K5DNnSeUkMrrjQ8YOvRegQpW40dzeAWI6IQBI"
       },
       "orderInvoice": {
         "handler": "src/handlers/orderInvoice.handler",
@@ -12329,7 +12545,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "OrderInvoiceLambdaVersioncCyiVEPsS2IPHxqO6cA3K4t2lKksZLr70KOdPTLHGk"
+        "versionLogicalId": "OrderInvoiceLambdaVersionDTu7Lyf9cBlqWuP65XG5yJS4UXrqIGpYJP3rvfYFR1g"
       },
       "revenueReport": {
         "handler": "src/handlers/getRevenueReport.handler",
@@ -12352,7 +12568,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "RevenueReportLambdaVersione4BcftyRn34BHjfNuUy8DKYXXIodqAt16Eu3FjCHI"
+        "versionLogicalId": "RevenueReportLambdaVersionDEu4pwORoi5yq7nEHDW3OovC31KLPPorQv5k7ZN48Tw"
       },
       "productReport": {
         "handler": "src/handlers/getProductReport.handler",
@@ -12375,7 +12591,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ProductReportLambdaVersionY6Aep9q0skxKiCpLkjzdilYJ0LM3I0akRlIer1UnMkQ"
+        "versionLogicalId": "ProductReportLambdaVersionRCp9KCtHpMJHO7IQ7viihmL12cOHhzSoue4c72pk"
       },
       "getProductXlsPresignedURL": {
         "handler": "src/handlers/productSampleXls.handler",
@@ -12398,7 +12614,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductXlsPresignedURLLambdaVersionBkidafVGyk34j56Na9D5Rv3TGD2nBfuKihJW4Xvhf8"
+        "versionLogicalId": "GetProductXlsPresignedURLLambdaVersionV8b59hyeux32ThnQm0juJPnOavz0t3GQBtfI0DI1CM"
       },
       "restoreOrder": {
         "handler": "src/handlers/orderRestore.handler",
@@ -12421,7 +12637,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "RestoreOrderLambdaVersiontoDzHdUvW4k0BXWoLA6GCEuCnYEtCXIybTDd7Ik8"
+        "versionLogicalId": "RestoreOrderLambdaVersionZhoNg4AIYPr3joF3mRJuhtkHmRFWpz77bTTFIG7S9Q"
       },
       "populerProducts": {
         "handler": "src/handlers/popularProducts.handler",
@@ -12444,7 +12660,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "PopulerProductsLambdaVersions2avbBfqXs5g3bWgIh7XE7CvCnawJvUg5UJZ7ARdk"
+        "versionLogicalId": "PopulerProductsLambdaVersionXAh8wdKnfIH0x4GUj4a3BwOlrhdhHWrxsgPp87rsg"
       },
       "forgotSendOtp": {
         "handler": "src/auth/forgot/send-otp.handler",
@@ -12467,7 +12683,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ForgotSendOtpLambdaVersionBcQp4yQbx8ht7hHqMzI9PTlGB2OWKdQSLTaBOF7ifk"
+        "versionLogicalId": "ForgotSendOtpLambdaVersionlgShgn1UQkN5B3hw08X9m2gzqWzecxnhBJbqF9mRKRw"
       },
       "resetPassword": {
         "handler": "src/auth/forgot/reset.handler",
@@ -12490,7 +12706,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ResetPasswordLambdaVersionFw7QVk0zMa082FyVy40UwItOx5e3dYIUs81SGhOMUU"
+        "versionLogicalId": "ResetPasswordLambdaVersionK2pHW6Jrp6ggePoUNsGrXjhYZ1KBh7eBYxayM7ReU"
       },
       "contactSubmit": {
         "handler": "src/handlers/contactSubmit.handler",
@@ -12513,7 +12729,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ContactSubmitLambdaVersionpIExNdxJSc9ZzL9FWYTPEoGciXqzdaUlNMKuQ54jRo"
+        "versionLogicalId": "ContactSubmitLambdaVersionzvn2qQwxRiaYGVbbsbH3A2bw32Lv5th13CqxNfCCO8"
       },
       "contactList": {
         "handler": "src/handlers/contactList.handler",
@@ -12536,7 +12752,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ContactListLambdaVersionT2yhmijoltm9F6pCfqP6W6r3QnnhWtvpwHmXmfXXlsg"
+        "versionLogicalId": "ContactListLambdaVersionvqevnwaTpUIX5ErTB05hNZJynd5D9dDKTtiuxtltyGc"
       },
       "contactUpdate": {
         "handler": "src/handlers/contactUpdate.handler",
@@ -12559,7 +12775,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ContactUpdateLambdaVersionNScxIaqCkvwvWP0HJvSkaEoxwfp8BEgPYN8e8Nc5Q"
+        "versionLogicalId": "ContactUpdateLambdaVersionNUxaGKSemgHqyWj2K74bTAgybHREShinc3U6Xrk9Ns4"
       },
       "getPackages": {
         "handler": "src/handlers/getPackages.handler",
@@ -12582,7 +12798,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetPackagesLambdaVersionIBcYRI0vVtzwQ5didNH5o7dfnihx1nBJnVJqEM3R7lY"
+        "versionLogicalId": "GetPackagesLambdaVersionpJhXxXGj3PomATUWM7lHeKTCsnoCoSVHb1BhidnHU"
       },
       "getPackageItems": {
         "handler": "src/handlers/getPackageDetails.handler",
@@ -12605,7 +12821,30 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetPackageItemsLambdaVersionmIdYV30nYhoSVbiN3Rh1kSUE92TDY6E10O0FBwQ7I"
+        "versionLogicalId": "GetPackageItemsLambdaVersionpx1xGi9BbKB7jMM13wZUJudlvRKmHVZIWKK5k0ZB2L8"
+      },
+      "aiRecommendation": {
+        "handler": "src/handlers/aiRecommendation.handler",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/ai-recommendation",
+              "method": "POST"
+            },
+            "resolvedMethod": "POST",
+            "resolvedPath": "/ai-recommendation"
+          }
+        ],
+        "name": "cracker-backend-dev-aiRecommendation",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs24.x",
+        "vpc": {},
+        "versionLogicalId": "AiRecommendationLambdaVersionnAEV6aQpINqlyfX9sESRMUeD8cuhHxjdLHiH3SUzOA"
       }
     },
     "resources": {
@@ -13006,7 +13245,7 @@
         "artifactsS3KeyDirname": "serverless/cracker-backend/dev/code-artifacts",
         "deploymentBucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
         "artifact": "C:\\Users\\Sakthibalan\\Desktop\\Sakthi_Projects\\cracker-backend-shop\\.serverless\\cracker-backend.zip",
-        "artifactDirectoryName": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z"
+        "artifactDirectoryName": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -13020,7 +13259,7 @@
     "layers": {}
   },
   "package": {
-    "artifactDirectoryName": "serverless/cracker-backend/dev/1780161935417-2026-05-30T17:25:35.417Z",
+    "artifactDirectoryName": "serverless/cracker-backend/dev/1780815311859-2026-06-07T06:55:11.859Z",
     "artifact": "cracker-backend.zip"
   }
 }

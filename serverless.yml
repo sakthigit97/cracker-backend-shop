@@ -22,6 +22,7 @@ provider:
     OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
     MSG91_AUTH_KEY: ${env:MSG91_AUTH_KEY}
     RECAPTCHA_SECRET: ${env:RECAPTCHA_SECRET}
+    MAX_AI_PRODUCT_QTY: 10
     REGION: ap-south-1
 
   httpApi:
@@ -608,6 +609,13 @@ functions:
       - httpApi:
           path: /packages/{packageId}
           method: GET
+
+  aiRecommendation:
+    handler: src/handlers/aiRecommendation.handler
+    events:
+      - httpApi:
+          path: /ai-recommendation
+          method: POST
 
 resources:
   Resources:

@@ -3974,6 +3974,7 @@ var AdminCreateProductService = class {
       searchText: input.searchText,
       description: input.description.trim(),
       packageTagIds: input.packageTagIds || [],
+      aiTags: input.aiTags || [],
       isActive: input.isActive ?? "true",
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
@@ -4006,7 +4007,8 @@ var handler = async (event) => {
       searchText,
       description,
       isActive,
-      packageTagIds
+      packageTagIds,
+      aiTags
     } = body;
     if (!productId || !name || !price || !brandId || !categoryId || !searchText || !description) {
       return {
@@ -4032,7 +4034,8 @@ var handler = async (event) => {
       searchText,
       description,
       isActive,
-      packageTagIds: packageTagIds || []
+      packageTagIds: packageTagIds || [],
+      aiTags: aiTags || []
     });
     return {
       statusCode: 201,
