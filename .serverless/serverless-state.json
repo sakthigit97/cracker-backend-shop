@@ -35,7 +35,10 @@
             "https://frontend-cracker-shop.vercel.app",
             "https://d1wqhtxjg6zqoo.cloudfront.net",
             "https://sivakasipyropark.co.in",
-            "https://www.sivakasipyropark.co.in"
+            "https://www.sivakasipyropark.co.in",
+            "https://dz9f4nfbnyjk1.cloudfront.net",
+            "https://www.sivakasicrackers.co.in",
+            "https://sivakasicrackers.co.in"
           ],
           "allowedHeaders": [
             "Content-Type",
@@ -653,7 +656,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/auth/login.handler",
               "Runtime": "nodejs24.x",
@@ -698,7 +701,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/auth/send-otp.handler",
               "Runtime": "nodejs24.x",
@@ -743,7 +746,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/auth/register.handler",
               "Runtime": "nodejs24.x",
@@ -788,7 +791,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/user/get-profile.main",
               "Runtime": "nodejs24.x",
@@ -833,7 +836,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/user/update-profile.main",
               "Runtime": "nodejs24.x",
@@ -878,7 +881,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProducts.handler",
               "Runtime": "nodejs24.x",
@@ -923,7 +926,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductDetails.handler",
               "Runtime": "nodejs24.x",
@@ -968,7 +971,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductsByCategory.handler",
               "Runtime": "nodejs24.x",
@@ -1013,7 +1016,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductsByBrand.handler",
               "Runtime": "nodejs24.x",
@@ -1058,7 +1061,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getCategories.handler",
               "Runtime": "nodejs24.x",
@@ -1103,7 +1106,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getBrands.handler",
               "Runtime": "nodejs24.x",
@@ -1148,7 +1151,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.getCart",
               "Runtime": "nodejs24.x",
@@ -1193,7 +1196,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.addItem",
               "Runtime": "nodejs24.x",
@@ -1238,7 +1241,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.removeItem",
               "Runtime": "nodejs24.x",
@@ -1283,7 +1286,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.clearCart",
               "Runtime": "nodejs24.x",
@@ -1328,7 +1331,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/productBatch.handler",
               "Runtime": "nodejs24.x",
@@ -1373,7 +1376,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cartMerge.handler",
               "Runtime": "nodejs24.x",
@@ -1418,7 +1421,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cartSync.handler",
               "Runtime": "nodejs24.x",
@@ -1463,7 +1466,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/Orders.handler",
               "Runtime": "nodejs24.x",
@@ -1508,7 +1511,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getOrders.handler",
               "Runtime": "nodejs24.x",
@@ -1553,7 +1556,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cancelOrder.handler",
               "Runtime": "nodejs24.x",
@@ -1598,7 +1601,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adjustOrder.handler",
               "Runtime": "nodejs24.x",
@@ -1643,7 +1646,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDashboard.handler",
               "Runtime": "nodejs24.x",
@@ -1688,7 +1691,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminOrders.handler",
               "Runtime": "nodejs24.x",
@@ -1733,7 +1736,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminOrderDetails.handler",
               "Runtime": "nodejs24.x",
@@ -1778,7 +1781,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateOrder.handler",
               "Runtime": "nodejs24.x",
@@ -1823,7 +1826,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getAdminProducts.handler",
               "Runtime": "nodejs24.x",
@@ -1868,7 +1871,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/createAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -1913,7 +1916,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/updateAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -1958,7 +1961,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/deactivateAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2003,7 +2006,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getPresignedUrls.handler",
               "Runtime": "nodejs24.x",
@@ -2048,7 +2051,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2093,7 +2096,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGenerateImportUploadUrl.handler",
               "Runtime": "nodejs24.x",
@@ -2138,7 +2141,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminValidateProductImport.handler",
               "Runtime": "nodejs24.x",
@@ -2183,7 +2186,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminConfirmProductImport.handler",
               "Runtime": "nodejs24.x",
@@ -2228,7 +2231,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListCategories.handler",
               "Runtime": "nodejs24.x",
@@ -2273,7 +2276,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminCreateCategory.handler",
               "Runtime": "nodejs24.x",
@@ -2318,7 +2321,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateCategoryStatus.handler",
               "Runtime": "nodejs24.x",
@@ -2363,7 +2366,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateCategory.handler",
               "Runtime": "nodejs24.x",
@@ -2408,7 +2411,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGetCategoryById.handler",
               "Runtime": "nodejs24.x",
@@ -2453,7 +2456,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteCategory.handler",
               "Runtime": "nodejs24.x",
@@ -2498,7 +2501,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminPresignCategoryImage.handler",
               "Runtime": "nodejs24.x",
@@ -2543,7 +2546,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cleanupOrphanProductImages.handler",
               "Runtime": "nodejs24.x",
@@ -2588,7 +2591,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListBrands.handler",
               "Runtime": "nodejs24.x",
@@ -2633,7 +2636,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGetBrand.handler",
               "Runtime": "nodejs24.x",
@@ -2678,7 +2681,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminCreateBrand.handler",
               "Runtime": "nodejs24.x",
@@ -2723,7 +2726,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateBrand.handler",
               "Runtime": "nodejs24.x",
@@ -2768,7 +2771,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateBrandStatus.handler",
               "Runtime": "nodejs24.x",
@@ -2813,7 +2816,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteBrand.handler",
               "Runtime": "nodejs24.x",
@@ -2858,7 +2861,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminPresignBrandLogo.handler",
               "Runtime": "nodejs24.x",
@@ -2903,7 +2906,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListUsers.handler",
               "Runtime": "nodejs24.x",
@@ -2948,7 +2951,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteUser.handler",
               "Runtime": "nodejs24.x",
@@ -2993,7 +2996,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/deleteProduct.handler",
               "Runtime": "nodejs24.x",
@@ -3038,7 +3041,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getConfig.handler",
               "Runtime": "nodejs24.x",
@@ -3083,7 +3086,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateConfig.handler",
               "Runtime": "nodejs24.x",
@@ -3128,7 +3131,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminConfigSliderPresign.handler",
               "Runtime": "nodejs24.x",
@@ -3173,7 +3176,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListDiscounts.handler",
               "Runtime": "nodejs24.x",
@@ -3218,7 +3221,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminCreateDiscount.handler",
               "Runtime": "nodejs24.x",
@@ -3263,7 +3266,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGetDiscountById.handler",
               "Runtime": "nodejs24.x",
@@ -3308,7 +3311,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateDiscount.handler",
               "Runtime": "nodejs24.x",
@@ -3353,7 +3356,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/orderInvoice.handler",
               "Runtime": "nodejs24.x",
@@ -3398,7 +3401,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getRevenueReport.handler",
               "Runtime": "nodejs24.x",
@@ -3443,7 +3446,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductReport.handler",
               "Runtime": "nodejs24.x",
@@ -3488,7 +3491,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/productSampleXls.handler",
               "Runtime": "nodejs24.x",
@@ -3533,7 +3536,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/orderRestore.handler",
               "Runtime": "nodejs24.x",
@@ -3578,7 +3581,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/popularProducts.handler",
               "Runtime": "nodejs24.x",
@@ -3623,7 +3626,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/auth/forgot/send-otp.handler",
               "Runtime": "nodejs24.x",
@@ -3668,7 +3671,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/auth/forgot/reset.handler",
               "Runtime": "nodejs24.x",
@@ -3713,7 +3716,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/contactSubmit.handler",
               "Runtime": "nodejs24.x",
@@ -3758,7 +3761,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/contactList.handler",
               "Runtime": "nodejs24.x",
@@ -3803,7 +3806,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/contactUpdate.handler",
               "Runtime": "nodejs24.x",
@@ -3848,7 +3851,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getPackages.handler",
               "Runtime": "nodejs24.x",
@@ -3893,7 +3896,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getPackageDetails.handler",
               "Runtime": "nodejs24.x",
@@ -3938,7 +3941,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/aiRecommendation.handler",
               "Runtime": "nodejs24.x",
@@ -3978,744 +3981,744 @@
               "AiRecommendationLogGroup"
             ]
           },
-          "LoginLambdaVersionyOCchrq4i39AnwNTe8RVqiUx2aRAhf7kQmGqoIOi2A": {
+          "LoginLambdaVersionjBS7WymaZTN4bhQDvXZyekNP4pJqnrF9p85Ys23nIA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "LoginLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "SendOtpLambdaVersioniVOX6B9xgiCVoQDcLHADxEHPRMpWmCbrzPHnhxf40": {
+          "SendOtpLambdaVersionNvUwAPdXlZJKx6zLMIFbXfnNAx3JgdtLGkdTLZqjaJ0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SendOtpLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "RegisterLambdaVersionmcL75ENiYt7ALSqaRKFqxr2n694vQGhM42xKOFZZ4ZU": {
+          "RegisterLambdaVersioneuX6jczt4EfF1qZUad8SlNZdyo9gRU78xmsFxBGB4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RegisterLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetProfileLambdaVersionFxvjTVr10A8C2q1brBn4Q8i9qNvgs9qbbWw65hih6g": {
+          "GetProfileLambdaVersionSGKeYFQZsfKcy564eiO7jCeKS4odLrAFSs22iK1jDA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProfileLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "UpdateProfileLambdaVersionJ1jnAErK5jBQ9uAwK5YOKqU650zl9ZWDYRWsnfz4": {
+          "UpdateProfileLambdaVersionlAxL4fMYcWq3JgbLbIaicRaMmfkZxGacYTyNJ9HY9U": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateProfileLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetProductsLambdaVersionwLy4wCEyMgtKRtFoljDKDK22K98BQCeeh7C0yf1z34": {
+          "GetProductsLambdaVersionZQeldEz7dxmudkwmeU5FPgmxKXnUVe9hdOWhm5ih84": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductsLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetProductDetailsLambdaVersion8LOsichRgZsbxaBAEpySx35GT1JSvDyzLtQ3HHnNghA": {
+          "GetProductDetailsLambdaVersionr97E5xTuenSa0cRR1ldpdSQeHx0StUYChDYcFV12nQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductDetailsLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetProductsByCategoryLambdaVersionkmJFefKWWvhsDDXMyC5FuyCSd9mrOAL2Ds6O80s6xk": {
+          "GetProductsByCategoryLambdaVersionLFCOR5cbMUSQP3No818SKan0ix7AeE6jj6sMBOgZTM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductsByCategoryLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetProductsByBrandLambdaVersion1MIF6hiDgzAXaN4qGfcMHio2iConr9dJFPXbCPExVQw": {
+          "GetProductsByBrandLambdaVersionSO99FrOoyc3olIBImwUILn9aqHwE6623N9YMJ6rUvQI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductsByBrandLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetCategoriesLambdaVersionECPTUvtSaCP3EFNZaaNe95o9hHxdgkCDqX67vxR8E1w": {
+          "GetCategoriesLambdaVersion4Xy3PmyLw8RMcQBKwxLfkicw9jDO64fTlXolbxcY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCategoriesLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetBrandsLambdaVersionsrpYvrrdGasmEl7LiCIINyaXSPQjOK5dxLFcFm41Ps": {
+          "GetBrandsLambdaVersionATkrAKIzKymSeyERNm6WF3p4vYEN5g5D6Lqmsdi8Ow": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetBrandsLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetCartLambdaVersionr4oIdbb010fUXvDFHsHUavbBFsQw50Lr1Z1X1NOOSto": {
+          "GetCartLambdaVersionveJKuMUEdDfU0YoQvrqvBnTojREsYwzX5SahAEXbxs": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCartLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AddCartItemLambdaVersionaLm0HJYVoSgCoHSS4Bj1NPFXX4BOrEbG8kUWZEY879o": {
+          "AddCartItemLambdaVersionxBT6QMetnC9NN4DpwXBytVyDvMknjPTs0p10bQD5ZU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AddCartItemLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "RemoveCartItemLambdaVersioncuFzlQPBcA0fQdEEsczpsIQerYiaAIaLi60J8genCE": {
+          "RemoveCartItemLambdaVersionvzXVGQHFt6HFRJ4EyqZV9phMh0u1NtSUJpuMW3TU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RemoveCartItemLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "ClearCartLambdaVersion41dUrIP3VlgPO1sZo64awIPW9kB7w3vd2Iyg34JoI": {
+          "ClearCartLambdaVersionEqO4roib4fn86iPr0N00dhnY82FvGKHr18ZQvqTOM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ClearCartLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "ProductBatchLambdaVersionXhBWYgPylEpCzfAulwoZnPvQtkwFKKxpzWx6jGopq4": {
+          "ProductBatchLambdaVersioneyg2oy5lmfHkKXoWfGKYb0bu5ivse2LlDUjppqpC06w": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ProductBatchLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "CartMergeLambdaVersionzYnvspz5WpMd8Z60PlZCYNTu0PGtDCMBv1GrMHU": {
+          "CartMergeLambdaVersionFY1lEBhWCsjmVhJgnOWYEyokaEqUVw7OIK27Gbmf7s": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CartMergeLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "CartSyncLambdaVersionlshd1YdIimjRrHkOUoRZ45ca1yh1ayzKeQXi8727C0": {
+          "CartSyncLambdaVersionz9wniJfA25Tg5gqH5tOvOqhxW78Wh6MiRtiKisyCaI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CartSyncLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "CreateOrderLambdaVersionM3uskiUD6Fmuc7f6APECuro0L3dE980VYUpDeWY": {
+          "CreateOrderLambdaVersiongYur6JyOaXj67Pby9YcrwNP3yZM0FS8PoQVAZQ7OiTw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateOrderLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetOrdersLambdaVersionf2Jw8izxCi1oTymHURjf4IYr86hfHNytwDMYgtGsn1Q": {
+          "GetOrdersLambdaVersionWMuZH5gs17EC3vHnLa3pCsydL6XI2uLjo0ULJX1lE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetOrdersLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "CancelOrderLambdaVersionYVwwIF5VCgUm3zjNVMe0MaOXOBhx7quSaoF6E2OVc": {
+          "CancelOrderLambdaVersionveYG9zQCXgl289hEhooFSTYUdIU4QLJF6DEQCV8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CancelOrderLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdjustOrderLambdaVersionvYVOXB4q2VSG5MY7eCZqO7nqauU7bbKAoWHs5T2k4": {
+          "AdjustOrderLambdaVersionc1mAKdyKhdHCwskKYKGw2Tw2ykl2WKYHf3Ndxgezo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdjustOrderLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminDashboardLambdaVersionm2dooCJHrvHP4TsjABd6sePYVeb80dOdzBJ5FQlpDqE": {
+          "AdminDashboardLambdaVersion0TPrgRvYdGDsQLB6UoDaD7cgxz0u7FAhUCtwoQauvk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminDashboardLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminOrdersLambdaVersionhoqIyvcw1VkQtwBIUzGE1TIuKv17H4rmVnH8GU59E": {
+          "AdminOrdersLambdaVersionJyNGMpKYS121poe14A6XcWAvrUikjJTOOgupHNWfAws": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminOrdersLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminOrderDetailsLambdaVersion99K1LMTJ8SjPIYtxP7gl5BnthdNxqrKd7KOxtghOws": {
+          "AdminOrderDetailsLambdaVersionMLxRXctx28tXcPBDfkuseDaeLFtywFzUoJsXbDHU9kU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminOrderDetailsLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminOrderUpdateLambdaVersionqLiuZNbrVl0fKiY8W8yergdLGx5pR0ESqJjmi4NxHM": {
+          "AdminOrderUpdateLambdaVersionN8cwZJtZgavAOyH7HEMQxSeZC7pNomxWUjpbbKe2cI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminOrderUpdateLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminGetProductsLambdaVersionHUbSBqjIin8eFUUZ7E7mQcZiQJCvu1WBhT012Ct8": {
+          "AdminGetProductsLambdaVersion2jkRBljd77ll9SW58voWx8DzdhKGc7ZFIOnxrsiugQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminGetProductsLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminCreateProductLambdaVersion11QyR5DEGXpqKao83M5gLUjc82o2dzROCwOWA1FQb4": {
+          "AdminCreateProductLambdaVersionCRZxUJMKfWwDR7jrP6tHRflNhBc3bITcRs2tApT89w": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminCreateProductLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminUpdateProductLambdaVersionlWsp50lcTxJJkyf7gwAUWULNDTIzbJchqK1qiDeK8": {
+          "AdminUpdateProductLambdaVersiona3eQVs6qsHadF1tBB6tiwlH4MZr0cGkpncWyC01gdA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminUpdateProductLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminDeactivateProductLambdaVersion2voeYcZCotoYjoLbFgDPadW8KgIVm4BYHKyFfSg": {
+          "AdminDeactivateProductLambdaVersionRynan5rHZmKTjUqtL50jR5YU0neh0hTsc4IfU2fScY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminDeactivateProductLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetPresignedURLLambdaVersionyP0BAUpH8OCDGChxmZO7HwrvDOJFGEuqZHviA2UmJg": {
+          "GetPresignedURLLambdaVersionizGmopXcHv2Azsmn9Z2OgqeRytZRDnIA01md5ztM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetPresignedURLLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminGetProductLambdaVersionDyEuOgjK2EIG85P2MSqqZBMqKAmAfDCl1rwp0gw7Sw": {
+          "AdminGetProductLambdaVersionxVz8ohgCjmxpRDbU11ylbHQudfTC9GWpJjR7HXNk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminGetProductLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetProductUploadURLLambdaVersionHqmEnuGPT291zd2g4GzhfTlV7SPelzDiejPtbfXbgo": {
+          "GetProductUploadURLLambdaVersionnpMRIIjR9rduGxgXjsI9nq5YszWsd668SatCUkwOI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductUploadURLLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetProductValidateURLLambdaVersionqPiBPhpaFuhI4IuXtTr35TBMPHG8s6rFVuVWPkIivPA": {
+          "GetProductValidateURLLambdaVersion59S25PsAo87GVuNI0xzdNa17F63vq51t3ITtFChj8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductValidateURLLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetProductUploadConfirmLambdaVersionqqqVDAqQdvJ7AG5wk7J9vPPjY2NC364tUXuM8e9sfyU": {
+          "GetProductUploadConfirmLambdaVersionv36ffYl2n8BZYsBAsCqW1YjKtlIn7tmPgSyvPvJLHE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductUploadConfirmLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetCategoryListLambdaVersionVRK2PcHvgSPj3hrgcuiObftLb4CR9UVYZQhVlmQ": {
+          "GetCategoryListLambdaVersion7KCpAXKym9etQhFCT0woO7IQu3mfk9mneCa1W82xXnk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCategoryListLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "CreateCategoryLambdaVersionT2DRG2yiL5mTNH0gXbCmPZdkc0C6wprBzQLGJuHJc": {
+          "CreateCategoryLambdaVersionYP69VeVLXdAb5jbm20WbhAuc6cQTiE0zT7sQNckRg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateCategoryLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "UpdateStatusCategoryLambdaVersionPxWkWnYocYYZUSCOrUwtqyF03dBLRGP693ymrAcaE": {
+          "UpdateStatusCategoryLambdaVersionS5IkrdHDD0UONWwZBCXWNEMUiuT7UJ42vnhiPUQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateStatusCategoryLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "UpdateCategoryLambdaVersion3odVYThRWNYNGvHDsK9HKU6Cj1TU4xyYrzYWWkPo": {
+          "UpdateCategoryLambdaVersionEi5qlRecXVc4f7JaDBgql38C4wKtK065nBHcM8t6Gec": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateCategoryLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetCategoryByIdLambdaVersion6vSYkUxHNyWd7HiVtZI03MazsPA9TCaNyZ8qbF6UFI": {
+          "GetCategoryByIdLambdaVersionwMRbJCiShmFNx808CcLYwFtaeOcQnZMiZzLXmpe7sk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCategoryByIdLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminDeleteCategoryLambdaVersionddL1oHk6xgSHNOdA0Q4DJytquuEvc4xV5iH4xiTUxA": {
+          "AdminDeleteCategoryLambdaVersion6tdlcxSDP5cFaNag7nExTxqHicAyD1d6R4UCBzf8p28": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminDeleteCategoryLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "CategoryPresignUrlLambdaVersionQ6W3dUKg35whKHd5kL3sCrAw6hcq4T8ePsGgfJIjA": {
+          "CategoryPresignUrlLambdaVersion39S7ejtRmgqKOVgtyoXbT83vpmtTDMjtZVMSgAfNxUY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CategoryPresignUrlLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "CleanupOrphanProductImagesLambdaVersion5QifNqwHM5nCyiFQ7AjzQCn46viYUqqyiNllOMT4U": {
+          "CleanupOrphanProductImagesLambdaVersion9VSt1f06CTxMMxDFFrUNqUqfb04aQPvYlWNMPp45w": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CleanupOrphanProductImagesLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminListBrandsLambdaVersionuNNNrszJMoU6qfGqOSeW150tqY2zlhARCwFoJRbJs": {
+          "AdminListBrandsLambdaVersionRB2FhLWYaHkOpyZtovjO8qUfeMfQqy0IYM15kHZrCA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminListBrandsLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminGetBrandByIdLambdaVersionB8mugCC5WuCK5OisPaTmfil3pgYTQAV8fPuV7bCkw4": {
+          "AdminGetBrandByIdLambdaVersionMgDomT2s6uFYUCfKaOlMsjBzYAacfarKKtM0IgoE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminGetBrandByIdLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminCreateBrandLambdaVersionf0uJMhxxhim9YIkvz1yXXKDKzUiXLUGawN5e8Z3fSQ": {
+          "AdminCreateBrandLambdaVersionTW1f1MKlVnVaOArZwofjWRxzQiRF9V5cqKxZ4W5U7A": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminCreateBrandLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminUpdateBrandLambdaVersionIlZRMWVlhJv7I9Nud7k5tjwjUG0dT6g8m5H0k69eA8": {
+          "AdminUpdateBrandLambdaVersionoPBB4tYKP6XOvmSO6IuBDTnZocakqPiYPdvcDOuS8E": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminUpdateBrandLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminUpdateBrandStatusLambdaVersionXy64jfOKUkpSE6ZN9vboV37V4ohrVQXLFmSUI1h8k": {
+          "AdminUpdateBrandStatusLambdaVersionSLRoBgv5h2Vajn6lxCzAN88zPGPQuArhNn4YbHAsBOE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminUpdateBrandStatusLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminDeleteBrandLambdaVersioneWriPJ9RUtb3YvaRLd4wYuiESv6z2Lx9ZPFDtqqg": {
+          "AdminDeleteBrandLambdaVersion7MWRf6eZqMcuDUONbZXPA76DsS01cCtUsmTNZ1fyss": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminDeleteBrandLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminPresignBrandLogoLambdaVersionGGFF0en1FTsUOlz9VUjQtNfesJjCQ5NGNryQhijNlGg": {
+          "AdminPresignBrandLogoLambdaVersion0ZXN2TSRkMbqhI89TeD1wr5AutMoCtVoFYFYHHoY0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminPresignBrandLogoLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminListUsersLambdaVersionScv85pGFzUTDglbZlkLYvAF8R2eDhd9vpPZ3vyBsz4": {
+          "AdminListUsersLambdaVersionKS2A1gGATNtoc0qPA6LI2dXZ5HJrt7yqdcWUGaw07s": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminListUsersLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminDeleteUserLambdaVersionlkKPSmh3yh0BJ8cpyKizxfnGHe2Lr94eECflRXL88": {
+          "AdminDeleteUserLambdaVersion6SnfszugR4a3Wes5acWtwmB16NNh8zbYMxONTwj78": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminDeleteUserLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "DeleteProductLambdaVersionSfU34llxiXZVXOeilmJq3zf9gfdZDYmYydlnT3OkA": {
+          "DeleteProductLambdaVersiono3p5zujhjmke4K9ERAVPFmtZendj4iLBN7JMrt2pw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeleteProductLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetConfigLambdaVersionrssf7vDNkwv218RhEMGEGK8MNzPXL76AxYKFDFMhd64": {
+          "GetConfigLambdaVersionUaY71Q7uYE9JzB4VC3kQNrByitALjQ7DOEDGvncVXY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetConfigLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "UpdateAdminConfigLambdaVersionpeFnIDER5ZB0Vifo1kEFgGWNSeCskzGGfMTnmWjOLAQ": {
+          "UpdateAdminConfigLambdaVersionntxjVd6lwXBjwmQEC8yhKkmM4bK7Ny7GbVLeNBxZALI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateAdminConfigLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminPresignConfigLogoLambdaVersionZSJPbxYroC7DJr3hrHWEywsjJx7rCkL97AvPFw3oLM": {
+          "AdminPresignConfigLogoLambdaVersionhct3FQRte2w47DpV8DDFmMPvgg9IkWzawK9pM3NoWT0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminPresignConfigLogoLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminListDiscountsLambdaVersionqKu5lrvBmnL86DIz4jaYJDBq3pleOHmCDNvpfBnU": {
+          "AdminListDiscountsLambdaVersionLkKaz9xnxo8yKo7lA09ydgXZegKC69eRrwV3aLiuLk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminListDiscountsLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminCreateDiscountLambdaVersion1ree97qlmlN0ULPTgJCv1OYV9AnkeCAGq1Vt9Vz38": {
+          "AdminCreateDiscountLambdaVersionp8ZrWL88mgQI7QPkqNsQEoIHrKx1a0c2U001uFdKAo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminCreateDiscountLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminGetDiscountByIdLambdaVersionb4N73jC0zavsBcRffYqKBTcJ4zefAUUZHhpogQmjzno": {
+          "AdminGetDiscountByIdLambdaVersion04Slx58ohyE2QNrSEajP2k3D1ehyY66t6femj7sk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminGetDiscountByIdLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AdminUpdateDiscountLambdaVersionPZEkgpd2ikaK2qxdgaPiaJsFD4WWC10n3c4t5rGQkis": {
+          "AdminUpdateDiscountLambdaVersionWgQWDLZ9MMV273djxSgyvuwB6rhxtWjW5rb0CJk3sEo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AdminUpdateDiscountLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "OrderInvoiceLambdaVersionsZfGePmhfNUVUZQSbqYVesvAFt9qRmYTTnhAjiBgxc": {
+          "OrderInvoiceLambdaVersionVLa2EcmRJFs3eF7E3WslmYiqfaDHKF0zU18PtXdAok": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "OrderInvoiceLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "RevenueReportLambdaVersionM09UazBxZIIybYLdDmHdC9N2GHb7BtKiba97Ac9vI": {
+          "RevenueReportLambdaVersionqngULi1LaqzKTyMRj63ESjbbZwnnyPhHdl1q7JAaA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RevenueReportLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "ProductReportLambdaVersionKsK2W0YFmBMH9C1zWuhfvMbStAqVgAf0t5860KcF6w": {
+          "ProductReportLambdaVersion1hrm3i8cIBs1qJ4jfwsJWrUKlt5Uaieor6yYdlHy4Q": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ProductReportLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetProductXlsPresignedURLLambdaVersionWmLQgHSx5dQ4IfYPx4veII58ceYrXHmk11vuoeo": {
+          "GetProductXlsPresignedURLLambdaVersionpGeBoRXFDdd9fzUJoxs6xjnwjUDdBVg1NuJdZESuV0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetProductXlsPresignedURLLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "RestoreOrderLambdaVersionZdanamgSdxarWICtbQdGjevw3bLSRp4efLjf0UQuQ": {
+          "RestoreOrderLambdaVersions9kvIFxz4pAUfHwbGw7qZiBlZJMRP8ldsQATbZqHCE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RestoreOrderLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "PopulerProductsLambdaVersionKJYdljPFMp3NnDb0mmTwYSPB54FJ6kIzNWN8fLsVoWY": {
+          "PopulerProductsLambdaVersionF7M480usqSBoK9aJv2bLGUNzNuzCe8AtqPRhxuZ7I": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "PopulerProductsLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "ForgotSendOtpLambdaVersionDlhHiv8oL8yBr515KhatfsMYcY3v6KOWxXRyEAFkc": {
+          "ForgotSendOtpLambdaVersionEduoXB3GdaIeRbN2lzpUNxDcf1zC3dgbYzRlGHY074": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ForgotSendOtpLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "ResetPasswordLambdaVersionuhxx3m63NS0jXCZ57o9dPLrbJx7yGpM1yIz4F8mL2Ik": {
+          "ResetPasswordLambdaVersion63ZvrN7sfj3MoNYdBPxjJpA4HxuE3Tj8DPkbSjtQs": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ResetPasswordLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "ContactSubmitLambdaVersion7saelekENe3dopuHV7YRDk4ZK0kI1hvjOXItpm94Kc": {
+          "ContactSubmitLambdaVersionKP13tXtsjQjfhckTyuPuWkEYfpil5dypnE3RKFbu4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ContactSubmitLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "ContactListLambdaVersionFb54vwXtvEhm7DGDKAAUitnmre8x0y2DjChdVTGinFU": {
+          "ContactListLambdaVersionHxlSXabn6SfEs1pGZ3Z4mcmLVlvV9cAqBLWpVa77OS4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ContactListLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "ContactUpdateLambdaVersionHxVBTp5HZ7GkX3TjaXv4PtI4pd4DlWpugGnSp9pFi4": {
+          "ContactUpdateLambdaVersionYC8TxA9H4GbuVys98nH3z98gH4RpMknt0dC5v0xudw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ContactUpdateLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetPackagesLambdaVersionJni4SEKyIVjFx3Apr4GLR3euGDb0vMqcFabUAUYBRU": {
+          "GetPackagesLambdaVersionYo6O8KGvEqJPbOTrZSTOBY1uvywuxEHTLnoCxxeg8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetPackagesLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "GetPackageItemsLambdaVersionX5ZJv8vDMBubxIcSaTapv7ptnTcct0dlCOGQTc53Y": {
+          "GetPackageItemsLambdaVersion3PnmrkmZ30YArEWoh9e6V6CsuOCmu5hHyTBIvwY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetPackageItemsLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
-          "AiRecommendationLambdaVersionphUanWJhpuiniPKmYCe6jmup1i4moThNel3dWwc": {
+          "AiRecommendationLambdaVersionvdRVm6syq73TmL5gXRc0QBllZWHVu6CaltR65Jdqo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AiRecommendationLambdaFunction"
               },
-              "CodeSha256": "1lBBhfTKRTtOphF7r5u6nneHIgLvEYVVKheo5YH5odc="
+              "CodeSha256": "6fCEISJqmYmBHANjYLFfKLfWMZccuuTbVDlJXjcjA78="
             }
           },
           "CleanupOrphanProductImagesEventsRuleSchedule1": {
@@ -4778,7 +4781,10 @@
                   "https://frontend-cracker-shop.vercel.app",
                   "https://d1wqhtxjg6zqoo.cloudfront.net",
                   "https://sivakasipyropark.co.in",
-                  "https://www.sivakasipyropark.co.in"
+                  "https://www.sivakasipyropark.co.in",
+                  "https://dz9f4nfbnyjk1.cloudfront.net",
+                  "https://www.sivakasicrackers.co.in",
+                  "https://sivakasicrackers.co.in"
                 ]
               }
             }
@@ -10442,7 +10448,7 @@
           "LoginLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "LoginLambdaVersionyOCchrq4i39AnwNTe8RVqiUx2aRAhf7kQmGqoIOi2A"
+              "Ref": "LoginLambdaVersionjBS7WymaZTN4bhQDvXZyekNP4pJqnrF9p85Ys23nIA"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-LoginLambdaFunctionQualifiedArn"
@@ -10451,7 +10457,7 @@
           "SendOtpLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SendOtpLambdaVersioniVOX6B9xgiCVoQDcLHADxEHPRMpWmCbrzPHnhxf40"
+              "Ref": "SendOtpLambdaVersionNvUwAPdXlZJKx6zLMIFbXfnNAx3JgdtLGkdTLZqjaJ0"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-SendOtpLambdaFunctionQualifiedArn"
@@ -10460,7 +10466,7 @@
           "RegisterLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RegisterLambdaVersionmcL75ENiYt7ALSqaRKFqxr2n694vQGhM42xKOFZZ4ZU"
+              "Ref": "RegisterLambdaVersioneuX6jczt4EfF1qZUad8SlNZdyo9gRU78xmsFxBGB4"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-RegisterLambdaFunctionQualifiedArn"
@@ -10469,7 +10475,7 @@
           "GetProfileLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProfileLambdaVersionFxvjTVr10A8C2q1brBn4Q8i9qNvgs9qbbWw65hih6g"
+              "Ref": "GetProfileLambdaVersionSGKeYFQZsfKcy564eiO7jCeKS4odLrAFSs22iK1jDA"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProfileLambdaFunctionQualifiedArn"
@@ -10478,7 +10484,7 @@
           "UpdateProfileLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateProfileLambdaVersionJ1jnAErK5jBQ9uAwK5YOKqU650zl9ZWDYRWsnfz4"
+              "Ref": "UpdateProfileLambdaVersionlAxL4fMYcWq3JgbLbIaicRaMmfkZxGacYTyNJ9HY9U"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-UpdateProfileLambdaFunctionQualifiedArn"
@@ -10487,7 +10493,7 @@
           "GetProductsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductsLambdaVersionwLy4wCEyMgtKRtFoljDKDK22K98BQCeeh7C0yf1z34"
+              "Ref": "GetProductsLambdaVersionZQeldEz7dxmudkwmeU5FPgmxKXnUVe9hdOWhm5ih84"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductsLambdaFunctionQualifiedArn"
@@ -10496,7 +10502,7 @@
           "GetProductDetailsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductDetailsLambdaVersion8LOsichRgZsbxaBAEpySx35GT1JSvDyzLtQ3HHnNghA"
+              "Ref": "GetProductDetailsLambdaVersionr97E5xTuenSa0cRR1ldpdSQeHx0StUYChDYcFV12nQ"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductDetailsLambdaFunctionQualifiedArn"
@@ -10505,7 +10511,7 @@
           "GetProductsByCategoryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductsByCategoryLambdaVersionkmJFefKWWvhsDDXMyC5FuyCSd9mrOAL2Ds6O80s6xk"
+              "Ref": "GetProductsByCategoryLambdaVersionLFCOR5cbMUSQP3No818SKan0ix7AeE6jj6sMBOgZTM"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductsByCategoryLambdaFunctionQualifiedArn"
@@ -10514,7 +10520,7 @@
           "GetProductsByBrandLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductsByBrandLambdaVersion1MIF6hiDgzAXaN4qGfcMHio2iConr9dJFPXbCPExVQw"
+              "Ref": "GetProductsByBrandLambdaVersionSO99FrOoyc3olIBImwUILn9aqHwE6623N9YMJ6rUvQI"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductsByBrandLambdaFunctionQualifiedArn"
@@ -10523,7 +10529,7 @@
           "GetCategoriesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCategoriesLambdaVersionECPTUvtSaCP3EFNZaaNe95o9hHxdgkCDqX67vxR8E1w"
+              "Ref": "GetCategoriesLambdaVersion4Xy3PmyLw8RMcQBKwxLfkicw9jDO64fTlXolbxcY"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetCategoriesLambdaFunctionQualifiedArn"
@@ -10532,7 +10538,7 @@
           "GetBrandsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetBrandsLambdaVersionsrpYvrrdGasmEl7LiCIINyaXSPQjOK5dxLFcFm41Ps"
+              "Ref": "GetBrandsLambdaVersionATkrAKIzKymSeyERNm6WF3p4vYEN5g5D6Lqmsdi8Ow"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetBrandsLambdaFunctionQualifiedArn"
@@ -10541,7 +10547,7 @@
           "GetCartLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCartLambdaVersionr4oIdbb010fUXvDFHsHUavbBFsQw50Lr1Z1X1NOOSto"
+              "Ref": "GetCartLambdaVersionveJKuMUEdDfU0YoQvrqvBnTojREsYwzX5SahAEXbxs"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetCartLambdaFunctionQualifiedArn"
@@ -10550,7 +10556,7 @@
           "AddCartItemLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AddCartItemLambdaVersionaLm0HJYVoSgCoHSS4Bj1NPFXX4BOrEbG8kUWZEY879o"
+              "Ref": "AddCartItemLambdaVersionxBT6QMetnC9NN4DpwXBytVyDvMknjPTs0p10bQD5ZU"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AddCartItemLambdaFunctionQualifiedArn"
@@ -10559,7 +10565,7 @@
           "RemoveCartItemLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RemoveCartItemLambdaVersioncuFzlQPBcA0fQdEEsczpsIQerYiaAIaLi60J8genCE"
+              "Ref": "RemoveCartItemLambdaVersionvzXVGQHFt6HFRJ4EyqZV9phMh0u1NtSUJpuMW3TU"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-RemoveCartItemLambdaFunctionQualifiedArn"
@@ -10568,7 +10574,7 @@
           "ClearCartLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ClearCartLambdaVersion41dUrIP3VlgPO1sZo64awIPW9kB7w3vd2Iyg34JoI"
+              "Ref": "ClearCartLambdaVersionEqO4roib4fn86iPr0N00dhnY82FvGKHr18ZQvqTOM"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ClearCartLambdaFunctionQualifiedArn"
@@ -10577,7 +10583,7 @@
           "ProductBatchLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ProductBatchLambdaVersionXhBWYgPylEpCzfAulwoZnPvQtkwFKKxpzWx6jGopq4"
+              "Ref": "ProductBatchLambdaVersioneyg2oy5lmfHkKXoWfGKYb0bu5ivse2LlDUjppqpC06w"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ProductBatchLambdaFunctionQualifiedArn"
@@ -10586,7 +10592,7 @@
           "CartMergeLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CartMergeLambdaVersionzYnvspz5WpMd8Z60PlZCYNTu0PGtDCMBv1GrMHU"
+              "Ref": "CartMergeLambdaVersionFY1lEBhWCsjmVhJgnOWYEyokaEqUVw7OIK27Gbmf7s"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CartMergeLambdaFunctionQualifiedArn"
@@ -10595,7 +10601,7 @@
           "CartSyncLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CartSyncLambdaVersionlshd1YdIimjRrHkOUoRZ45ca1yh1ayzKeQXi8727C0"
+              "Ref": "CartSyncLambdaVersionz9wniJfA25Tg5gqH5tOvOqhxW78Wh6MiRtiKisyCaI"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CartSyncLambdaFunctionQualifiedArn"
@@ -10604,7 +10610,7 @@
           "CreateOrderLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateOrderLambdaVersionM3uskiUD6Fmuc7f6APECuro0L3dE980VYUpDeWY"
+              "Ref": "CreateOrderLambdaVersiongYur6JyOaXj67Pby9YcrwNP3yZM0FS8PoQVAZQ7OiTw"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CreateOrderLambdaFunctionQualifiedArn"
@@ -10613,7 +10619,7 @@
           "GetOrdersLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetOrdersLambdaVersionf2Jw8izxCi1oTymHURjf4IYr86hfHNytwDMYgtGsn1Q"
+              "Ref": "GetOrdersLambdaVersionWMuZH5gs17EC3vHnLa3pCsydL6XI2uLjo0ULJX1lE"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetOrdersLambdaFunctionQualifiedArn"
@@ -10622,7 +10628,7 @@
           "CancelOrderLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CancelOrderLambdaVersionYVwwIF5VCgUm3zjNVMe0MaOXOBhx7quSaoF6E2OVc"
+              "Ref": "CancelOrderLambdaVersionveYG9zQCXgl289hEhooFSTYUdIU4QLJF6DEQCV8"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CancelOrderLambdaFunctionQualifiedArn"
@@ -10631,7 +10637,7 @@
           "AdjustOrderLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdjustOrderLambdaVersionvYVOXB4q2VSG5MY7eCZqO7nqauU7bbKAoWHs5T2k4"
+              "Ref": "AdjustOrderLambdaVersionc1mAKdyKhdHCwskKYKGw2Tw2ykl2WKYHf3Ndxgezo"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdjustOrderLambdaFunctionQualifiedArn"
@@ -10640,7 +10646,7 @@
           "AdminDashboardLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminDashboardLambdaVersionm2dooCJHrvHP4TsjABd6sePYVeb80dOdzBJ5FQlpDqE"
+              "Ref": "AdminDashboardLambdaVersion0TPrgRvYdGDsQLB6UoDaD7cgxz0u7FAhUCtwoQauvk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminDashboardLambdaFunctionQualifiedArn"
@@ -10649,7 +10655,7 @@
           "AdminOrdersLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminOrdersLambdaVersionhoqIyvcw1VkQtwBIUzGE1TIuKv17H4rmVnH8GU59E"
+              "Ref": "AdminOrdersLambdaVersionJyNGMpKYS121poe14A6XcWAvrUikjJTOOgupHNWfAws"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminOrdersLambdaFunctionQualifiedArn"
@@ -10658,7 +10664,7 @@
           "AdminOrderDetailsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminOrderDetailsLambdaVersion99K1LMTJ8SjPIYtxP7gl5BnthdNxqrKd7KOxtghOws"
+              "Ref": "AdminOrderDetailsLambdaVersionMLxRXctx28tXcPBDfkuseDaeLFtywFzUoJsXbDHU9kU"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminOrderDetailsLambdaFunctionQualifiedArn"
@@ -10667,7 +10673,7 @@
           "AdminOrderUpdateLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminOrderUpdateLambdaVersionqLiuZNbrVl0fKiY8W8yergdLGx5pR0ESqJjmi4NxHM"
+              "Ref": "AdminOrderUpdateLambdaVersionN8cwZJtZgavAOyH7HEMQxSeZC7pNomxWUjpbbKe2cI"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminOrderUpdateLambdaFunctionQualifiedArn"
@@ -10676,7 +10682,7 @@
           "AdminGetProductsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminGetProductsLambdaVersionHUbSBqjIin8eFUUZ7E7mQcZiQJCvu1WBhT012Ct8"
+              "Ref": "AdminGetProductsLambdaVersion2jkRBljd77ll9SW58voWx8DzdhKGc7ZFIOnxrsiugQ"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminGetProductsLambdaFunctionQualifiedArn"
@@ -10685,7 +10691,7 @@
           "AdminCreateProductLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminCreateProductLambdaVersion11QyR5DEGXpqKao83M5gLUjc82o2dzROCwOWA1FQb4"
+              "Ref": "AdminCreateProductLambdaVersionCRZxUJMKfWwDR7jrP6tHRflNhBc3bITcRs2tApT89w"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminCreateProductLambdaFunctionQualifiedArn"
@@ -10694,7 +10700,7 @@
           "AdminUpdateProductLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminUpdateProductLambdaVersionlWsp50lcTxJJkyf7gwAUWULNDTIzbJchqK1qiDeK8"
+              "Ref": "AdminUpdateProductLambdaVersiona3eQVs6qsHadF1tBB6tiwlH4MZr0cGkpncWyC01gdA"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminUpdateProductLambdaFunctionQualifiedArn"
@@ -10703,7 +10709,7 @@
           "AdminDeactivateProductLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminDeactivateProductLambdaVersion2voeYcZCotoYjoLbFgDPadW8KgIVm4BYHKyFfSg"
+              "Ref": "AdminDeactivateProductLambdaVersionRynan5rHZmKTjUqtL50jR5YU0neh0hTsc4IfU2fScY"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminDeactivateProductLambdaFunctionQualifiedArn"
@@ -10712,7 +10718,7 @@
           "GetPresignedURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetPresignedURLLambdaVersionyP0BAUpH8OCDGChxmZO7HwrvDOJFGEuqZHviA2UmJg"
+              "Ref": "GetPresignedURLLambdaVersionizGmopXcHv2Azsmn9Z2OgqeRytZRDnIA01md5ztM"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetPresignedURLLambdaFunctionQualifiedArn"
@@ -10721,7 +10727,7 @@
           "AdminGetProductLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminGetProductLambdaVersionDyEuOgjK2EIG85P2MSqqZBMqKAmAfDCl1rwp0gw7Sw"
+              "Ref": "AdminGetProductLambdaVersionxVz8ohgCjmxpRDbU11ylbHQudfTC9GWpJjR7HXNk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminGetProductLambdaFunctionQualifiedArn"
@@ -10730,7 +10736,7 @@
           "GetProductUploadURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductUploadURLLambdaVersionHqmEnuGPT291zd2g4GzhfTlV7SPelzDiejPtbfXbgo"
+              "Ref": "GetProductUploadURLLambdaVersionnpMRIIjR9rduGxgXjsI9nq5YszWsd668SatCUkwOI"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductUploadURLLambdaFunctionQualifiedArn"
@@ -10739,7 +10745,7 @@
           "GetProductValidateURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductValidateURLLambdaVersionqPiBPhpaFuhI4IuXtTr35TBMPHG8s6rFVuVWPkIivPA"
+              "Ref": "GetProductValidateURLLambdaVersion59S25PsAo87GVuNI0xzdNa17F63vq51t3ITtFChj8"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductValidateURLLambdaFunctionQualifiedArn"
@@ -10748,7 +10754,7 @@
           "GetProductUploadConfirmLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductUploadConfirmLambdaVersionqqqVDAqQdvJ7AG5wk7J9vPPjY2NC364tUXuM8e9sfyU"
+              "Ref": "GetProductUploadConfirmLambdaVersionv36ffYl2n8BZYsBAsCqW1YjKtlIn7tmPgSyvPvJLHE"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductUploadConfirmLambdaFunctionQualifiedArn"
@@ -10757,7 +10763,7 @@
           "GetCategoryListLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCategoryListLambdaVersionVRK2PcHvgSPj3hrgcuiObftLb4CR9UVYZQhVlmQ"
+              "Ref": "GetCategoryListLambdaVersion7KCpAXKym9etQhFCT0woO7IQu3mfk9mneCa1W82xXnk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetCategoryListLambdaFunctionQualifiedArn"
@@ -10766,7 +10772,7 @@
           "CreateCategoryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateCategoryLambdaVersionT2DRG2yiL5mTNH0gXbCmPZdkc0C6wprBzQLGJuHJc"
+              "Ref": "CreateCategoryLambdaVersionYP69VeVLXdAb5jbm20WbhAuc6cQTiE0zT7sQNckRg"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CreateCategoryLambdaFunctionQualifiedArn"
@@ -10775,7 +10781,7 @@
           "UpdateStatusCategoryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateStatusCategoryLambdaVersionPxWkWnYocYYZUSCOrUwtqyF03dBLRGP693ymrAcaE"
+              "Ref": "UpdateStatusCategoryLambdaVersionS5IkrdHDD0UONWwZBCXWNEMUiuT7UJ42vnhiPUQ"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-UpdateStatusCategoryLambdaFunctionQualifiedArn"
@@ -10784,7 +10790,7 @@
           "UpdateCategoryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateCategoryLambdaVersion3odVYThRWNYNGvHDsK9HKU6Cj1TU4xyYrzYWWkPo"
+              "Ref": "UpdateCategoryLambdaVersionEi5qlRecXVc4f7JaDBgql38C4wKtK065nBHcM8t6Gec"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-UpdateCategoryLambdaFunctionQualifiedArn"
@@ -10793,7 +10799,7 @@
           "GetCategoryByIdLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCategoryByIdLambdaVersion6vSYkUxHNyWd7HiVtZI03MazsPA9TCaNyZ8qbF6UFI"
+              "Ref": "GetCategoryByIdLambdaVersionwMRbJCiShmFNx808CcLYwFtaeOcQnZMiZzLXmpe7sk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetCategoryByIdLambdaFunctionQualifiedArn"
@@ -10802,7 +10808,7 @@
           "AdminDeleteCategoryLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminDeleteCategoryLambdaVersionddL1oHk6xgSHNOdA0Q4DJytquuEvc4xV5iH4xiTUxA"
+              "Ref": "AdminDeleteCategoryLambdaVersion6tdlcxSDP5cFaNag7nExTxqHicAyD1d6R4UCBzf8p28"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminDeleteCategoryLambdaFunctionQualifiedArn"
@@ -10811,7 +10817,7 @@
           "CategoryPresignUrlLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CategoryPresignUrlLambdaVersionQ6W3dUKg35whKHd5kL3sCrAw6hcq4T8ePsGgfJIjA"
+              "Ref": "CategoryPresignUrlLambdaVersion39S7ejtRmgqKOVgtyoXbT83vpmtTDMjtZVMSgAfNxUY"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CategoryPresignUrlLambdaFunctionQualifiedArn"
@@ -10820,7 +10826,7 @@
           "CleanupOrphanProductImagesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CleanupOrphanProductImagesLambdaVersion5QifNqwHM5nCyiFQ7AjzQCn46viYUqqyiNllOMT4U"
+              "Ref": "CleanupOrphanProductImagesLambdaVersion9VSt1f06CTxMMxDFFrUNqUqfb04aQPvYlWNMPp45w"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-CleanupOrphanProductImagesLambdaFunctionQualifiedArn"
@@ -10829,7 +10835,7 @@
           "AdminListBrandsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminListBrandsLambdaVersionuNNNrszJMoU6qfGqOSeW150tqY2zlhARCwFoJRbJs"
+              "Ref": "AdminListBrandsLambdaVersionRB2FhLWYaHkOpyZtovjO8qUfeMfQqy0IYM15kHZrCA"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminListBrandsLambdaFunctionQualifiedArn"
@@ -10838,7 +10844,7 @@
           "AdminGetBrandByIdLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminGetBrandByIdLambdaVersionB8mugCC5WuCK5OisPaTmfil3pgYTQAV8fPuV7bCkw4"
+              "Ref": "AdminGetBrandByIdLambdaVersionMgDomT2s6uFYUCfKaOlMsjBzYAacfarKKtM0IgoE"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminGetBrandByIdLambdaFunctionQualifiedArn"
@@ -10847,7 +10853,7 @@
           "AdminCreateBrandLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminCreateBrandLambdaVersionf0uJMhxxhim9YIkvz1yXXKDKzUiXLUGawN5e8Z3fSQ"
+              "Ref": "AdminCreateBrandLambdaVersionTW1f1MKlVnVaOArZwofjWRxzQiRF9V5cqKxZ4W5U7A"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminCreateBrandLambdaFunctionQualifiedArn"
@@ -10856,7 +10862,7 @@
           "AdminUpdateBrandLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminUpdateBrandLambdaVersionIlZRMWVlhJv7I9Nud7k5tjwjUG0dT6g8m5H0k69eA8"
+              "Ref": "AdminUpdateBrandLambdaVersionoPBB4tYKP6XOvmSO6IuBDTnZocakqPiYPdvcDOuS8E"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminUpdateBrandLambdaFunctionQualifiedArn"
@@ -10865,7 +10871,7 @@
           "AdminUpdateBrandStatusLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminUpdateBrandStatusLambdaVersionXy64jfOKUkpSE6ZN9vboV37V4ohrVQXLFmSUI1h8k"
+              "Ref": "AdminUpdateBrandStatusLambdaVersionSLRoBgv5h2Vajn6lxCzAN88zPGPQuArhNn4YbHAsBOE"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminUpdateBrandStatusLambdaFunctionQualifiedArn"
@@ -10874,7 +10880,7 @@
           "AdminDeleteBrandLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminDeleteBrandLambdaVersioneWriPJ9RUtb3YvaRLd4wYuiESv6z2Lx9ZPFDtqqg"
+              "Ref": "AdminDeleteBrandLambdaVersion7MWRf6eZqMcuDUONbZXPA76DsS01cCtUsmTNZ1fyss"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminDeleteBrandLambdaFunctionQualifiedArn"
@@ -10883,7 +10889,7 @@
           "AdminPresignBrandLogoLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminPresignBrandLogoLambdaVersionGGFF0en1FTsUOlz9VUjQtNfesJjCQ5NGNryQhijNlGg"
+              "Ref": "AdminPresignBrandLogoLambdaVersion0ZXN2TSRkMbqhI89TeD1wr5AutMoCtVoFYFYHHoY0"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminPresignBrandLogoLambdaFunctionQualifiedArn"
@@ -10892,7 +10898,7 @@
           "AdminListUsersLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminListUsersLambdaVersionScv85pGFzUTDglbZlkLYvAF8R2eDhd9vpPZ3vyBsz4"
+              "Ref": "AdminListUsersLambdaVersionKS2A1gGATNtoc0qPA6LI2dXZ5HJrt7yqdcWUGaw07s"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminListUsersLambdaFunctionQualifiedArn"
@@ -10901,7 +10907,7 @@
           "AdminDeleteUserLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminDeleteUserLambdaVersionlkKPSmh3yh0BJ8cpyKizxfnGHe2Lr94eECflRXL88"
+              "Ref": "AdminDeleteUserLambdaVersion6SnfszugR4a3Wes5acWtwmB16NNh8zbYMxONTwj78"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminDeleteUserLambdaFunctionQualifiedArn"
@@ -10910,7 +10916,7 @@
           "DeleteProductLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeleteProductLambdaVersionSfU34llxiXZVXOeilmJq3zf9gfdZDYmYydlnT3OkA"
+              "Ref": "DeleteProductLambdaVersiono3p5zujhjmke4K9ERAVPFmtZendj4iLBN7JMrt2pw"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-DeleteProductLambdaFunctionQualifiedArn"
@@ -10919,7 +10925,7 @@
           "GetConfigLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetConfigLambdaVersionrssf7vDNkwv218RhEMGEGK8MNzPXL76AxYKFDFMhd64"
+              "Ref": "GetConfigLambdaVersionUaY71Q7uYE9JzB4VC3kQNrByitALjQ7DOEDGvncVXY"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetConfigLambdaFunctionQualifiedArn"
@@ -10928,7 +10934,7 @@
           "UpdateAdminConfigLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateAdminConfigLambdaVersionpeFnIDER5ZB0Vifo1kEFgGWNSeCskzGGfMTnmWjOLAQ"
+              "Ref": "UpdateAdminConfigLambdaVersionntxjVd6lwXBjwmQEC8yhKkmM4bK7Ny7GbVLeNBxZALI"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-UpdateAdminConfigLambdaFunctionQualifiedArn"
@@ -10937,7 +10943,7 @@
           "AdminPresignConfigLogoLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminPresignConfigLogoLambdaVersionZSJPbxYroC7DJr3hrHWEywsjJx7rCkL97AvPFw3oLM"
+              "Ref": "AdminPresignConfigLogoLambdaVersionhct3FQRte2w47DpV8DDFmMPvgg9IkWzawK9pM3NoWT0"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminPresignConfigLogoLambdaFunctionQualifiedArn"
@@ -10946,7 +10952,7 @@
           "AdminListDiscountsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminListDiscountsLambdaVersionqKu5lrvBmnL86DIz4jaYJDBq3pleOHmCDNvpfBnU"
+              "Ref": "AdminListDiscountsLambdaVersionLkKaz9xnxo8yKo7lA09ydgXZegKC69eRrwV3aLiuLk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminListDiscountsLambdaFunctionQualifiedArn"
@@ -10955,7 +10961,7 @@
           "AdminCreateDiscountLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminCreateDiscountLambdaVersion1ree97qlmlN0ULPTgJCv1OYV9AnkeCAGq1Vt9Vz38"
+              "Ref": "AdminCreateDiscountLambdaVersionp8ZrWL88mgQI7QPkqNsQEoIHrKx1a0c2U001uFdKAo"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminCreateDiscountLambdaFunctionQualifiedArn"
@@ -10964,7 +10970,7 @@
           "AdminGetDiscountByIdLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminGetDiscountByIdLambdaVersionb4N73jC0zavsBcRffYqKBTcJ4zefAUUZHhpogQmjzno"
+              "Ref": "AdminGetDiscountByIdLambdaVersion04Slx58ohyE2QNrSEajP2k3D1ehyY66t6femj7sk"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminGetDiscountByIdLambdaFunctionQualifiedArn"
@@ -10973,7 +10979,7 @@
           "AdminUpdateDiscountLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AdminUpdateDiscountLambdaVersionPZEkgpd2ikaK2qxdgaPiaJsFD4WWC10n3c4t5rGQkis"
+              "Ref": "AdminUpdateDiscountLambdaVersionWgQWDLZ9MMV273djxSgyvuwB6rhxtWjW5rb0CJk3sEo"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AdminUpdateDiscountLambdaFunctionQualifiedArn"
@@ -10982,7 +10988,7 @@
           "OrderInvoiceLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "OrderInvoiceLambdaVersionsZfGePmhfNUVUZQSbqYVesvAFt9qRmYTTnhAjiBgxc"
+              "Ref": "OrderInvoiceLambdaVersionVLa2EcmRJFs3eF7E3WslmYiqfaDHKF0zU18PtXdAok"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-OrderInvoiceLambdaFunctionQualifiedArn"
@@ -10991,7 +10997,7 @@
           "RevenueReportLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RevenueReportLambdaVersionM09UazBxZIIybYLdDmHdC9N2GHb7BtKiba97Ac9vI"
+              "Ref": "RevenueReportLambdaVersionqngULi1LaqzKTyMRj63ESjbbZwnnyPhHdl1q7JAaA"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-RevenueReportLambdaFunctionQualifiedArn"
@@ -11000,7 +11006,7 @@
           "ProductReportLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ProductReportLambdaVersionKsK2W0YFmBMH9C1zWuhfvMbStAqVgAf0t5860KcF6w"
+              "Ref": "ProductReportLambdaVersion1hrm3i8cIBs1qJ4jfwsJWrUKlt5Uaieor6yYdlHy4Q"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ProductReportLambdaFunctionQualifiedArn"
@@ -11009,7 +11015,7 @@
           "GetProductXlsPresignedURLLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetProductXlsPresignedURLLambdaVersionWmLQgHSx5dQ4IfYPx4veII58ceYrXHmk11vuoeo"
+              "Ref": "GetProductXlsPresignedURLLambdaVersionpGeBoRXFDdd9fzUJoxs6xjnwjUDdBVg1NuJdZESuV0"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetProductXlsPresignedURLLambdaFunctionQualifiedArn"
@@ -11018,7 +11024,7 @@
           "RestoreOrderLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RestoreOrderLambdaVersionZdanamgSdxarWICtbQdGjevw3bLSRp4efLjf0UQuQ"
+              "Ref": "RestoreOrderLambdaVersions9kvIFxz4pAUfHwbGw7qZiBlZJMRP8ldsQATbZqHCE"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-RestoreOrderLambdaFunctionQualifiedArn"
@@ -11027,7 +11033,7 @@
           "PopulerProductsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "PopulerProductsLambdaVersionKJYdljPFMp3NnDb0mmTwYSPB54FJ6kIzNWN8fLsVoWY"
+              "Ref": "PopulerProductsLambdaVersionF7M480usqSBoK9aJv2bLGUNzNuzCe8AtqPRhxuZ7I"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-PopulerProductsLambdaFunctionQualifiedArn"
@@ -11036,7 +11042,7 @@
           "ForgotSendOtpLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ForgotSendOtpLambdaVersionDlhHiv8oL8yBr515KhatfsMYcY3v6KOWxXRyEAFkc"
+              "Ref": "ForgotSendOtpLambdaVersionEduoXB3GdaIeRbN2lzpUNxDcf1zC3dgbYzRlGHY074"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ForgotSendOtpLambdaFunctionQualifiedArn"
@@ -11045,7 +11051,7 @@
           "ResetPasswordLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ResetPasswordLambdaVersionuhxx3m63NS0jXCZ57o9dPLrbJx7yGpM1yIz4F8mL2Ik"
+              "Ref": "ResetPasswordLambdaVersion63ZvrN7sfj3MoNYdBPxjJpA4HxuE3Tj8DPkbSjtQs"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ResetPasswordLambdaFunctionQualifiedArn"
@@ -11054,7 +11060,7 @@
           "ContactSubmitLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ContactSubmitLambdaVersion7saelekENe3dopuHV7YRDk4ZK0kI1hvjOXItpm94Kc"
+              "Ref": "ContactSubmitLambdaVersionKP13tXtsjQjfhckTyuPuWkEYfpil5dypnE3RKFbu4"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ContactSubmitLambdaFunctionQualifiedArn"
@@ -11063,7 +11069,7 @@
           "ContactListLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ContactListLambdaVersionFb54vwXtvEhm7DGDKAAUitnmre8x0y2DjChdVTGinFU"
+              "Ref": "ContactListLambdaVersionHxlSXabn6SfEs1pGZ3Z4mcmLVlvV9cAqBLWpVa77OS4"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ContactListLambdaFunctionQualifiedArn"
@@ -11072,7 +11078,7 @@
           "ContactUpdateLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ContactUpdateLambdaVersionHxVBTp5HZ7GkX3TjaXv4PtI4pd4DlWpugGnSp9pFi4"
+              "Ref": "ContactUpdateLambdaVersionYC8TxA9H4GbuVys98nH3z98gH4RpMknt0dC5v0xudw"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-ContactUpdateLambdaFunctionQualifiedArn"
@@ -11081,7 +11087,7 @@
           "GetPackagesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetPackagesLambdaVersionJni4SEKyIVjFx3Apr4GLR3euGDb0vMqcFabUAUYBRU"
+              "Ref": "GetPackagesLambdaVersionYo6O8KGvEqJPbOTrZSTOBY1uvywuxEHTLnoCxxeg8"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetPackagesLambdaFunctionQualifiedArn"
@@ -11090,7 +11096,7 @@
           "GetPackageItemsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetPackageItemsLambdaVersionX5ZJv8vDMBubxIcSaTapv7ptnTcct0dlCOGQTc53Y"
+              "Ref": "GetPackageItemsLambdaVersion3PnmrkmZ30YArEWoh9e6V6CsuOCmu5hHyTBIvwY"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-GetPackageItemsLambdaFunctionQualifiedArn"
@@ -11099,7 +11105,7 @@
           "AiRecommendationLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AiRecommendationLambdaVersionphUanWJhpuiniPKmYCe6jmup1i4moThNel3dWwc"
+              "Ref": "AiRecommendationLambdaVersionvdRVm6syq73TmL5gXRc0QBllZWHVu6CaltR65Jdqo"
             },
             "Export": {
               "Name": "sls-cracker-backend-dev-AiRecommendationLambdaFunctionQualifiedArn"
@@ -11166,7 +11172,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "LoginLambdaVersionyOCchrq4i39AnwNTe8RVqiUx2aRAhf7kQmGqoIOi2A"
+        "versionLogicalId": "LoginLambdaVersionjBS7WymaZTN4bhQDvXZyekNP4pJqnrF9p85Ys23nIA"
       },
       "sendOtp": {
         "handler": "src/auth/send-otp.handler",
@@ -11189,7 +11195,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "SendOtpLambdaVersioniVOX6B9xgiCVoQDcLHADxEHPRMpWmCbrzPHnhxf40"
+        "versionLogicalId": "SendOtpLambdaVersionNvUwAPdXlZJKx6zLMIFbXfnNAx3JgdtLGkdTLZqjaJ0"
       },
       "register": {
         "handler": "src/auth/register.handler",
@@ -11212,7 +11218,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "RegisterLambdaVersionmcL75ENiYt7ALSqaRKFqxr2n694vQGhM42xKOFZZ4ZU"
+        "versionLogicalId": "RegisterLambdaVersioneuX6jczt4EfF1qZUad8SlNZdyo9gRU78xmsFxBGB4"
       },
       "getProfile": {
         "handler": "src/user/get-profile.main",
@@ -11235,7 +11241,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProfileLambdaVersionFxvjTVr10A8C2q1brBn4Q8i9qNvgs9qbbWw65hih6g"
+        "versionLogicalId": "GetProfileLambdaVersionSGKeYFQZsfKcy564eiO7jCeKS4odLrAFSs22iK1jDA"
       },
       "updateProfile": {
         "handler": "src/user/update-profile.main",
@@ -11258,7 +11264,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "UpdateProfileLambdaVersionJ1jnAErK5jBQ9uAwK5YOKqU650zl9ZWDYRWsnfz4"
+        "versionLogicalId": "UpdateProfileLambdaVersionlAxL4fMYcWq3JgbLbIaicRaMmfkZxGacYTyNJ9HY9U"
       },
       "getProducts": {
         "handler": "src/handlers/getProducts.handler",
@@ -11281,7 +11287,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductsLambdaVersionwLy4wCEyMgtKRtFoljDKDK22K98BQCeeh7C0yf1z34"
+        "versionLogicalId": "GetProductsLambdaVersionZQeldEz7dxmudkwmeU5FPgmxKXnUVe9hdOWhm5ih84"
       },
       "getProductDetails": {
         "handler": "src/handlers/getProductDetails.handler",
@@ -11304,7 +11310,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductDetailsLambdaVersion8LOsichRgZsbxaBAEpySx35GT1JSvDyzLtQ3HHnNghA"
+        "versionLogicalId": "GetProductDetailsLambdaVersionr97E5xTuenSa0cRR1ldpdSQeHx0StUYChDYcFV12nQ"
       },
       "getProductsByCategory": {
         "handler": "src/handlers/getProductsByCategory.handler",
@@ -11327,7 +11333,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductsByCategoryLambdaVersionkmJFefKWWvhsDDXMyC5FuyCSd9mrOAL2Ds6O80s6xk"
+        "versionLogicalId": "GetProductsByCategoryLambdaVersionLFCOR5cbMUSQP3No818SKan0ix7AeE6jj6sMBOgZTM"
       },
       "getProductsByBrand": {
         "handler": "src/handlers/getProductsByBrand.handler",
@@ -11350,7 +11356,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductsByBrandLambdaVersion1MIF6hiDgzAXaN4qGfcMHio2iConr9dJFPXbCPExVQw"
+        "versionLogicalId": "GetProductsByBrandLambdaVersionSO99FrOoyc3olIBImwUILn9aqHwE6623N9YMJ6rUvQI"
       },
       "getCategories": {
         "handler": "src/handlers/getCategories.handler",
@@ -11373,7 +11379,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetCategoriesLambdaVersionECPTUvtSaCP3EFNZaaNe95o9hHxdgkCDqX67vxR8E1w"
+        "versionLogicalId": "GetCategoriesLambdaVersion4Xy3PmyLw8RMcQBKwxLfkicw9jDO64fTlXolbxcY"
       },
       "getBrands": {
         "handler": "src/handlers/getBrands.handler",
@@ -11396,7 +11402,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetBrandsLambdaVersionsrpYvrrdGasmEl7LiCIINyaXSPQjOK5dxLFcFm41Ps"
+        "versionLogicalId": "GetBrandsLambdaVersionATkrAKIzKymSeyERNm6WF3p4vYEN5g5D6Lqmsdi8Ow"
       },
       "getCart": {
         "handler": "src/handlers/cart.getCart",
@@ -11419,7 +11425,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetCartLambdaVersionr4oIdbb010fUXvDFHsHUavbBFsQw50Lr1Z1X1NOOSto"
+        "versionLogicalId": "GetCartLambdaVersionveJKuMUEdDfU0YoQvrqvBnTojREsYwzX5SahAEXbxs"
       },
       "addCartItem": {
         "handler": "src/handlers/cart.addItem",
@@ -11442,7 +11448,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AddCartItemLambdaVersionaLm0HJYVoSgCoHSS4Bj1NPFXX4BOrEbG8kUWZEY879o"
+        "versionLogicalId": "AddCartItemLambdaVersionxBT6QMetnC9NN4DpwXBytVyDvMknjPTs0p10bQD5ZU"
       },
       "removeCartItem": {
         "handler": "src/handlers/cart.removeItem",
@@ -11465,7 +11471,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "RemoveCartItemLambdaVersioncuFzlQPBcA0fQdEEsczpsIQerYiaAIaLi60J8genCE"
+        "versionLogicalId": "RemoveCartItemLambdaVersionvzXVGQHFt6HFRJ4EyqZV9phMh0u1NtSUJpuMW3TU"
       },
       "clearCart": {
         "handler": "src/handlers/cart.clearCart",
@@ -11488,7 +11494,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ClearCartLambdaVersion41dUrIP3VlgPO1sZo64awIPW9kB7w3vd2Iyg34JoI"
+        "versionLogicalId": "ClearCartLambdaVersionEqO4roib4fn86iPr0N00dhnY82FvGKHr18ZQvqTOM"
       },
       "productBatch": {
         "handler": "src/handlers/productBatch.handler",
@@ -11511,7 +11517,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ProductBatchLambdaVersionXhBWYgPylEpCzfAulwoZnPvQtkwFKKxpzWx6jGopq4"
+        "versionLogicalId": "ProductBatchLambdaVersioneyg2oy5lmfHkKXoWfGKYb0bu5ivse2LlDUjppqpC06w"
       },
       "cartMerge": {
         "handler": "src/handlers/cartMerge.handler",
@@ -11534,7 +11540,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CartMergeLambdaVersionzYnvspz5WpMd8Z60PlZCYNTu0PGtDCMBv1GrMHU"
+        "versionLogicalId": "CartMergeLambdaVersionFY1lEBhWCsjmVhJgnOWYEyokaEqUVw7OIK27Gbmf7s"
       },
       "cartSync": {
         "handler": "src/handlers/cartSync.handler",
@@ -11557,7 +11563,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CartSyncLambdaVersionlshd1YdIimjRrHkOUoRZ45ca1yh1ayzKeQXi8727C0"
+        "versionLogicalId": "CartSyncLambdaVersionz9wniJfA25Tg5gqH5tOvOqhxW78Wh6MiRtiKisyCaI"
       },
       "createOrder": {
         "handler": "src/handlers/Orders.handler",
@@ -11580,7 +11586,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CreateOrderLambdaVersionM3uskiUD6Fmuc7f6APECuro0L3dE980VYUpDeWY"
+        "versionLogicalId": "CreateOrderLambdaVersiongYur6JyOaXj67Pby9YcrwNP3yZM0FS8PoQVAZQ7OiTw"
       },
       "getOrders": {
         "handler": "src/handlers/getOrders.handler",
@@ -11603,7 +11609,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetOrdersLambdaVersionf2Jw8izxCi1oTymHURjf4IYr86hfHNytwDMYgtGsn1Q"
+        "versionLogicalId": "GetOrdersLambdaVersionWMuZH5gs17EC3vHnLa3pCsydL6XI2uLjo0ULJX1lE"
       },
       "cancelOrder": {
         "handler": "src/handlers/cancelOrder.handler",
@@ -11626,7 +11632,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CancelOrderLambdaVersionYVwwIF5VCgUm3zjNVMe0MaOXOBhx7quSaoF6E2OVc"
+        "versionLogicalId": "CancelOrderLambdaVersionveYG9zQCXgl289hEhooFSTYUdIU4QLJF6DEQCV8"
       },
       "adjustOrder": {
         "handler": "src/handlers/adjustOrder.handler",
@@ -11649,7 +11655,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdjustOrderLambdaVersionvYVOXB4q2VSG5MY7eCZqO7nqauU7bbKAoWHs5T2k4"
+        "versionLogicalId": "AdjustOrderLambdaVersionc1mAKdyKhdHCwskKYKGw2Tw2ykl2WKYHf3Ndxgezo"
       },
       "adminDashboard": {
         "handler": "src/handlers/adminDashboard.handler",
@@ -11672,7 +11678,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminDashboardLambdaVersionm2dooCJHrvHP4TsjABd6sePYVeb80dOdzBJ5FQlpDqE"
+        "versionLogicalId": "AdminDashboardLambdaVersion0TPrgRvYdGDsQLB6UoDaD7cgxz0u7FAhUCtwoQauvk"
       },
       "adminOrders": {
         "handler": "src/handlers/adminOrders.handler",
@@ -11695,7 +11701,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminOrdersLambdaVersionhoqIyvcw1VkQtwBIUzGE1TIuKv17H4rmVnH8GU59E"
+        "versionLogicalId": "AdminOrdersLambdaVersionJyNGMpKYS121poe14A6XcWAvrUikjJTOOgupHNWfAws"
       },
       "adminOrderDetails": {
         "handler": "src/handlers/adminOrderDetails.handler",
@@ -11718,7 +11724,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminOrderDetailsLambdaVersion99K1LMTJ8SjPIYtxP7gl5BnthdNxqrKd7KOxtghOws"
+        "versionLogicalId": "AdminOrderDetailsLambdaVersionMLxRXctx28tXcPBDfkuseDaeLFtywFzUoJsXbDHU9kU"
       },
       "adminOrderUpdate": {
         "handler": "src/handlers/adminUpdateOrder.handler",
@@ -11741,7 +11747,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminOrderUpdateLambdaVersionqLiuZNbrVl0fKiY8W8yergdLGx5pR0ESqJjmi4NxHM"
+        "versionLogicalId": "AdminOrderUpdateLambdaVersionN8cwZJtZgavAOyH7HEMQxSeZC7pNomxWUjpbbKe2cI"
       },
       "adminGetProducts": {
         "handler": "src/handlers/getAdminProducts.handler",
@@ -11764,7 +11770,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminGetProductsLambdaVersionHUbSBqjIin8eFUUZ7E7mQcZiQJCvu1WBhT012Ct8"
+        "versionLogicalId": "AdminGetProductsLambdaVersion2jkRBljd77ll9SW58voWx8DzdhKGc7ZFIOnxrsiugQ"
       },
       "adminCreateProduct": {
         "handler": "src/handlers/createAdminProduct.handler",
@@ -11787,7 +11793,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminCreateProductLambdaVersion11QyR5DEGXpqKao83M5gLUjc82o2dzROCwOWA1FQb4"
+        "versionLogicalId": "AdminCreateProductLambdaVersionCRZxUJMKfWwDR7jrP6tHRflNhBc3bITcRs2tApT89w"
       },
       "adminUpdateProduct": {
         "handler": "src/handlers/updateAdminProduct.handler",
@@ -11810,7 +11816,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminUpdateProductLambdaVersionlWsp50lcTxJJkyf7gwAUWULNDTIzbJchqK1qiDeK8"
+        "versionLogicalId": "AdminUpdateProductLambdaVersiona3eQVs6qsHadF1tBB6tiwlH4MZr0cGkpncWyC01gdA"
       },
       "adminDeactivateProduct": {
         "handler": "src/handlers/deactivateAdminProduct.handler",
@@ -11833,7 +11839,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminDeactivateProductLambdaVersion2voeYcZCotoYjoLbFgDPadW8KgIVm4BYHKyFfSg"
+        "versionLogicalId": "AdminDeactivateProductLambdaVersionRynan5rHZmKTjUqtL50jR5YU0neh0hTsc4IfU2fScY"
       },
       "getPresignedURL": {
         "handler": "src/handlers/getPresignedUrls.handler",
@@ -11856,7 +11862,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetPresignedURLLambdaVersionyP0BAUpH8OCDGChxmZO7HwrvDOJFGEuqZHviA2UmJg"
+        "versionLogicalId": "GetPresignedURLLambdaVersionizGmopXcHv2Azsmn9Z2OgqeRytZRDnIA01md5ztM"
       },
       "adminGetProduct": {
         "handler": "src/handlers/getAdminProduct.handler",
@@ -11879,7 +11885,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminGetProductLambdaVersionDyEuOgjK2EIG85P2MSqqZBMqKAmAfDCl1rwp0gw7Sw"
+        "versionLogicalId": "AdminGetProductLambdaVersionxVz8ohgCjmxpRDbU11ylbHQudfTC9GWpJjR7HXNk"
       },
       "getProductUploadURL": {
         "handler": "src/handlers/adminGenerateImportUploadUrl.handler",
@@ -11902,7 +11908,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductUploadURLLambdaVersionHqmEnuGPT291zd2g4GzhfTlV7SPelzDiejPtbfXbgo"
+        "versionLogicalId": "GetProductUploadURLLambdaVersionnpMRIIjR9rduGxgXjsI9nq5YszWsd668SatCUkwOI"
       },
       "getProductValidateURL": {
         "handler": "src/handlers/adminValidateProductImport.handler",
@@ -11925,7 +11931,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductValidateURLLambdaVersionqPiBPhpaFuhI4IuXtTr35TBMPHG8s6rFVuVWPkIivPA"
+        "versionLogicalId": "GetProductValidateURLLambdaVersion59S25PsAo87GVuNI0xzdNa17F63vq51t3ITtFChj8"
       },
       "getProductUploadConfirm": {
         "handler": "src/handlers/adminConfirmProductImport.handler",
@@ -11948,7 +11954,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductUploadConfirmLambdaVersionqqqVDAqQdvJ7AG5wk7J9vPPjY2NC364tUXuM8e9sfyU"
+        "versionLogicalId": "GetProductUploadConfirmLambdaVersionv36ffYl2n8BZYsBAsCqW1YjKtlIn7tmPgSyvPvJLHE"
       },
       "getCategoryList": {
         "handler": "src/handlers/adminListCategories.handler",
@@ -11971,7 +11977,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetCategoryListLambdaVersionVRK2PcHvgSPj3hrgcuiObftLb4CR9UVYZQhVlmQ"
+        "versionLogicalId": "GetCategoryListLambdaVersion7KCpAXKym9etQhFCT0woO7IQu3mfk9mneCa1W82xXnk"
       },
       "CreateCategory": {
         "handler": "src/handlers/adminCreateCategory.handler",
@@ -11994,7 +12000,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CreateCategoryLambdaVersionT2DRG2yiL5mTNH0gXbCmPZdkc0C6wprBzQLGJuHJc"
+        "versionLogicalId": "CreateCategoryLambdaVersionYP69VeVLXdAb5jbm20WbhAuc6cQTiE0zT7sQNckRg"
       },
       "UpdateStatusCategory": {
         "handler": "src/handlers/adminUpdateCategoryStatus.handler",
@@ -12017,7 +12023,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "UpdateStatusCategoryLambdaVersionPxWkWnYocYYZUSCOrUwtqyF03dBLRGP693ymrAcaE"
+        "versionLogicalId": "UpdateStatusCategoryLambdaVersionS5IkrdHDD0UONWwZBCXWNEMUiuT7UJ42vnhiPUQ"
       },
       "UpdateCategory": {
         "handler": "src/handlers/adminUpdateCategory.handler",
@@ -12040,7 +12046,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "UpdateCategoryLambdaVersion3odVYThRWNYNGvHDsK9HKU6Cj1TU4xyYrzYWWkPo"
+        "versionLogicalId": "UpdateCategoryLambdaVersionEi5qlRecXVc4f7JaDBgql38C4wKtK065nBHcM8t6Gec"
       },
       "getCategoryById": {
         "handler": "src/handlers/adminGetCategoryById.handler",
@@ -12063,7 +12069,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetCategoryByIdLambdaVersion6vSYkUxHNyWd7HiVtZI03MazsPA9TCaNyZ8qbF6UFI"
+        "versionLogicalId": "GetCategoryByIdLambdaVersionwMRbJCiShmFNx808CcLYwFtaeOcQnZMiZzLXmpe7sk"
       },
       "AdminDeleteCategory": {
         "handler": "src/handlers/adminDeleteCategory.handler",
@@ -12086,7 +12092,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminDeleteCategoryLambdaVersionddL1oHk6xgSHNOdA0Q4DJytquuEvc4xV5iH4xiTUxA"
+        "versionLogicalId": "AdminDeleteCategoryLambdaVersion6tdlcxSDP5cFaNag7nExTxqHicAyD1d6R4UCBzf8p28"
       },
       "CategoryPresignUrl": {
         "handler": "src/handlers/adminPresignCategoryImage.handler",
@@ -12109,7 +12115,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CategoryPresignUrlLambdaVersionQ6W3dUKg35whKHd5kL3sCrAw6hcq4T8ePsGgfJIjA"
+        "versionLogicalId": "CategoryPresignUrlLambdaVersion39S7ejtRmgqKOVgtyoXbT83vpmtTDMjtZVMSgAfNxUY"
       },
       "cleanupOrphanProductImages": {
         "handler": "src/handlers/cleanupOrphanProductImages.handler",
@@ -12131,7 +12137,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "CleanupOrphanProductImagesLambdaVersion5QifNqwHM5nCyiFQ7AjzQCn46viYUqqyiNllOMT4U"
+        "versionLogicalId": "CleanupOrphanProductImagesLambdaVersion9VSt1f06CTxMMxDFFrUNqUqfb04aQPvYlWNMPp45w"
       },
       "AdminListBrands": {
         "handler": "src/handlers/adminListBrands.handler",
@@ -12154,7 +12160,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminListBrandsLambdaVersionuNNNrszJMoU6qfGqOSeW150tqY2zlhARCwFoJRbJs"
+        "versionLogicalId": "AdminListBrandsLambdaVersionRB2FhLWYaHkOpyZtovjO8qUfeMfQqy0IYM15kHZrCA"
       },
       "AdminGetBrandById": {
         "handler": "src/handlers/adminGetBrand.handler",
@@ -12177,7 +12183,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminGetBrandByIdLambdaVersionB8mugCC5WuCK5OisPaTmfil3pgYTQAV8fPuV7bCkw4"
+        "versionLogicalId": "AdminGetBrandByIdLambdaVersionMgDomT2s6uFYUCfKaOlMsjBzYAacfarKKtM0IgoE"
       },
       "AdminCreateBrand": {
         "handler": "src/handlers/adminCreateBrand.handler",
@@ -12200,7 +12206,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminCreateBrandLambdaVersionf0uJMhxxhim9YIkvz1yXXKDKzUiXLUGawN5e8Z3fSQ"
+        "versionLogicalId": "AdminCreateBrandLambdaVersionTW1f1MKlVnVaOArZwofjWRxzQiRF9V5cqKxZ4W5U7A"
       },
       "AdminUpdateBrand": {
         "handler": "src/handlers/adminUpdateBrand.handler",
@@ -12223,7 +12229,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminUpdateBrandLambdaVersionIlZRMWVlhJv7I9Nud7k5tjwjUG0dT6g8m5H0k69eA8"
+        "versionLogicalId": "AdminUpdateBrandLambdaVersionoPBB4tYKP6XOvmSO6IuBDTnZocakqPiYPdvcDOuS8E"
       },
       "AdminUpdateBrandStatus": {
         "handler": "src/handlers/adminUpdateBrandStatus.handler",
@@ -12246,7 +12252,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminUpdateBrandStatusLambdaVersionXy64jfOKUkpSE6ZN9vboV37V4ohrVQXLFmSUI1h8k"
+        "versionLogicalId": "AdminUpdateBrandStatusLambdaVersionSLRoBgv5h2Vajn6lxCzAN88zPGPQuArhNn4YbHAsBOE"
       },
       "AdminDeleteBrand": {
         "handler": "src/handlers/adminDeleteBrand.handler",
@@ -12269,7 +12275,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminDeleteBrandLambdaVersioneWriPJ9RUtb3YvaRLd4wYuiESv6z2Lx9ZPFDtqqg"
+        "versionLogicalId": "AdminDeleteBrandLambdaVersion7MWRf6eZqMcuDUONbZXPA76DsS01cCtUsmTNZ1fyss"
       },
       "AdminPresignBrandLogo": {
         "handler": "src/handlers/adminPresignBrandLogo.handler",
@@ -12292,7 +12298,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminPresignBrandLogoLambdaVersionGGFF0en1FTsUOlz9VUjQtNfesJjCQ5NGNryQhijNlGg"
+        "versionLogicalId": "AdminPresignBrandLogoLambdaVersion0ZXN2TSRkMbqhI89TeD1wr5AutMoCtVoFYFYHHoY0"
       },
       "adminListUsers": {
         "handler": "src/handlers/adminListUsers.handler",
@@ -12315,7 +12321,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminListUsersLambdaVersionScv85pGFzUTDglbZlkLYvAF8R2eDhd9vpPZ3vyBsz4"
+        "versionLogicalId": "AdminListUsersLambdaVersionKS2A1gGATNtoc0qPA6LI2dXZ5HJrt7yqdcWUGaw07s"
       },
       "adminDeleteUser": {
         "handler": "src/handlers/adminDeleteUser.handler",
@@ -12338,7 +12344,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminDeleteUserLambdaVersionlkKPSmh3yh0BJ8cpyKizxfnGHe2Lr94eECflRXL88"
+        "versionLogicalId": "AdminDeleteUserLambdaVersion6SnfszugR4a3Wes5acWtwmB16NNh8zbYMxONTwj78"
       },
       "deleteProduct": {
         "handler": "src/handlers/deleteProduct.handler",
@@ -12361,7 +12367,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "DeleteProductLambdaVersionSfU34llxiXZVXOeilmJq3zf9gfdZDYmYydlnT3OkA"
+        "versionLogicalId": "DeleteProductLambdaVersiono3p5zujhjmke4K9ERAVPFmtZendj4iLBN7JMrt2pw"
       },
       "getConfig": {
         "handler": "src/handlers/getConfig.handler",
@@ -12384,7 +12390,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetConfigLambdaVersionrssf7vDNkwv218RhEMGEGK8MNzPXL76AxYKFDFMhd64"
+        "versionLogicalId": "GetConfigLambdaVersionUaY71Q7uYE9JzB4VC3kQNrByitALjQ7DOEDGvncVXY"
       },
       "updateAdminConfig": {
         "handler": "src/handlers/adminUpdateConfig.handler",
@@ -12407,7 +12413,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "UpdateAdminConfigLambdaVersionpeFnIDER5ZB0Vifo1kEFgGWNSeCskzGGfMTnmWjOLAQ"
+        "versionLogicalId": "UpdateAdminConfigLambdaVersionntxjVd6lwXBjwmQEC8yhKkmM4bK7Ny7GbVLeNBxZALI"
       },
       "AdminPresignConfigLogo": {
         "handler": "src/handlers/adminConfigSliderPresign.handler",
@@ -12430,7 +12436,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminPresignConfigLogoLambdaVersionZSJPbxYroC7DJr3hrHWEywsjJx7rCkL97AvPFw3oLM"
+        "versionLogicalId": "AdminPresignConfigLogoLambdaVersionhct3FQRte2w47DpV8DDFmMPvgg9IkWzawK9pM3NoWT0"
       },
       "adminListDiscounts": {
         "handler": "src/handlers/adminListDiscounts.handler",
@@ -12453,7 +12459,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminListDiscountsLambdaVersionqKu5lrvBmnL86DIz4jaYJDBq3pleOHmCDNvpfBnU"
+        "versionLogicalId": "AdminListDiscountsLambdaVersionLkKaz9xnxo8yKo7lA09ydgXZegKC69eRrwV3aLiuLk"
       },
       "adminCreateDiscount": {
         "handler": "src/handlers/adminCreateDiscount.handler",
@@ -12476,7 +12482,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminCreateDiscountLambdaVersion1ree97qlmlN0ULPTgJCv1OYV9AnkeCAGq1Vt9Vz38"
+        "versionLogicalId": "AdminCreateDiscountLambdaVersionp8ZrWL88mgQI7QPkqNsQEoIHrKx1a0c2U001uFdKAo"
       },
       "adminGetDiscountById": {
         "handler": "src/handlers/adminGetDiscountById.handler",
@@ -12499,7 +12505,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminGetDiscountByIdLambdaVersionb4N73jC0zavsBcRffYqKBTcJ4zefAUUZHhpogQmjzno"
+        "versionLogicalId": "AdminGetDiscountByIdLambdaVersion04Slx58ohyE2QNrSEajP2k3D1ehyY66t6femj7sk"
       },
       "adminUpdateDiscount": {
         "handler": "src/handlers/adminUpdateDiscount.handler",
@@ -12522,7 +12528,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AdminUpdateDiscountLambdaVersionPZEkgpd2ikaK2qxdgaPiaJsFD4WWC10n3c4t5rGQkis"
+        "versionLogicalId": "AdminUpdateDiscountLambdaVersionWgQWDLZ9MMV273djxSgyvuwB6rhxtWjW5rb0CJk3sEo"
       },
       "orderInvoice": {
         "handler": "src/handlers/orderInvoice.handler",
@@ -12545,7 +12551,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "OrderInvoiceLambdaVersionsZfGePmhfNUVUZQSbqYVesvAFt9qRmYTTnhAjiBgxc"
+        "versionLogicalId": "OrderInvoiceLambdaVersionVLa2EcmRJFs3eF7E3WslmYiqfaDHKF0zU18PtXdAok"
       },
       "revenueReport": {
         "handler": "src/handlers/getRevenueReport.handler",
@@ -12568,7 +12574,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "RevenueReportLambdaVersionM09UazBxZIIybYLdDmHdC9N2GHb7BtKiba97Ac9vI"
+        "versionLogicalId": "RevenueReportLambdaVersionqngULi1LaqzKTyMRj63ESjbbZwnnyPhHdl1q7JAaA"
       },
       "productReport": {
         "handler": "src/handlers/getProductReport.handler",
@@ -12591,7 +12597,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ProductReportLambdaVersionKsK2W0YFmBMH9C1zWuhfvMbStAqVgAf0t5860KcF6w"
+        "versionLogicalId": "ProductReportLambdaVersion1hrm3i8cIBs1qJ4jfwsJWrUKlt5Uaieor6yYdlHy4Q"
       },
       "getProductXlsPresignedURL": {
         "handler": "src/handlers/productSampleXls.handler",
@@ -12614,7 +12620,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetProductXlsPresignedURLLambdaVersionWmLQgHSx5dQ4IfYPx4veII58ceYrXHmk11vuoeo"
+        "versionLogicalId": "GetProductXlsPresignedURLLambdaVersionpGeBoRXFDdd9fzUJoxs6xjnwjUDdBVg1NuJdZESuV0"
       },
       "restoreOrder": {
         "handler": "src/handlers/orderRestore.handler",
@@ -12637,7 +12643,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "RestoreOrderLambdaVersionZdanamgSdxarWICtbQdGjevw3bLSRp4efLjf0UQuQ"
+        "versionLogicalId": "RestoreOrderLambdaVersions9kvIFxz4pAUfHwbGw7qZiBlZJMRP8ldsQATbZqHCE"
       },
       "populerProducts": {
         "handler": "src/handlers/popularProducts.handler",
@@ -12660,7 +12666,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "PopulerProductsLambdaVersionKJYdljPFMp3NnDb0mmTwYSPB54FJ6kIzNWN8fLsVoWY"
+        "versionLogicalId": "PopulerProductsLambdaVersionF7M480usqSBoK9aJv2bLGUNzNuzCe8AtqPRhxuZ7I"
       },
       "forgotSendOtp": {
         "handler": "src/auth/forgot/send-otp.handler",
@@ -12683,7 +12689,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ForgotSendOtpLambdaVersionDlhHiv8oL8yBr515KhatfsMYcY3v6KOWxXRyEAFkc"
+        "versionLogicalId": "ForgotSendOtpLambdaVersionEduoXB3GdaIeRbN2lzpUNxDcf1zC3dgbYzRlGHY074"
       },
       "resetPassword": {
         "handler": "src/auth/forgot/reset.handler",
@@ -12706,7 +12712,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ResetPasswordLambdaVersionuhxx3m63NS0jXCZ57o9dPLrbJx7yGpM1yIz4F8mL2Ik"
+        "versionLogicalId": "ResetPasswordLambdaVersion63ZvrN7sfj3MoNYdBPxjJpA4HxuE3Tj8DPkbSjtQs"
       },
       "contactSubmit": {
         "handler": "src/handlers/contactSubmit.handler",
@@ -12729,7 +12735,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ContactSubmitLambdaVersion7saelekENe3dopuHV7YRDk4ZK0kI1hvjOXItpm94Kc"
+        "versionLogicalId": "ContactSubmitLambdaVersionKP13tXtsjQjfhckTyuPuWkEYfpil5dypnE3RKFbu4"
       },
       "contactList": {
         "handler": "src/handlers/contactList.handler",
@@ -12752,7 +12758,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ContactListLambdaVersionFb54vwXtvEhm7DGDKAAUitnmre8x0y2DjChdVTGinFU"
+        "versionLogicalId": "ContactListLambdaVersionHxlSXabn6SfEs1pGZ3Z4mcmLVlvV9cAqBLWpVa77OS4"
       },
       "contactUpdate": {
         "handler": "src/handlers/contactUpdate.handler",
@@ -12775,7 +12781,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "ContactUpdateLambdaVersionHxVBTp5HZ7GkX3TjaXv4PtI4pd4DlWpugGnSp9pFi4"
+        "versionLogicalId": "ContactUpdateLambdaVersionYC8TxA9H4GbuVys98nH3z98gH4RpMknt0dC5v0xudw"
       },
       "getPackages": {
         "handler": "src/handlers/getPackages.handler",
@@ -12798,7 +12804,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetPackagesLambdaVersionJni4SEKyIVjFx3Apr4GLR3euGDb0vMqcFabUAUYBRU"
+        "versionLogicalId": "GetPackagesLambdaVersionYo6O8KGvEqJPbOTrZSTOBY1uvywuxEHTLnoCxxeg8"
       },
       "getPackageItems": {
         "handler": "src/handlers/getPackageDetails.handler",
@@ -12821,7 +12827,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "GetPackageItemsLambdaVersionX5ZJv8vDMBubxIcSaTapv7ptnTcct0dlCOGQTc53Y"
+        "versionLogicalId": "GetPackageItemsLambdaVersion3PnmrkmZ30YArEWoh9e6V6CsuOCmu5hHyTBIvwY"
       },
       "aiRecommendation": {
         "handler": "src/handlers/aiRecommendation.handler",
@@ -12844,7 +12850,7 @@
         "timeout": 6,
         "runtime": "nodejs24.x",
         "vpc": {},
-        "versionLogicalId": "AiRecommendationLambdaVersionphUanWJhpuiniPKmYCe6jmup1i4moThNel3dWwc"
+        "versionLogicalId": "AiRecommendationLambdaVersionvdRVm6syq73TmL5gXRc0QBllZWHVu6CaltR65Jdqo"
       }
     },
     "resources": {
@@ -13245,7 +13251,7 @@
         "artifactsS3KeyDirname": "serverless/cracker-backend/dev/code-artifacts",
         "deploymentBucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
         "artifact": "C:\\Users\\Sakthibalan\\Desktop\\Sakthi_Projects\\cracker-backend-shop\\.serverless\\cracker-backend.zip",
-        "artifactDirectoryName": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z"
+        "artifactDirectoryName": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -13259,7 +13265,7 @@
     "layers": {}
   },
   "package": {
-    "artifactDirectoryName": "serverless/cracker-backend/dev/1781360379777-2026-06-13T14:19:39.777Z",
+    "artifactDirectoryName": "serverless/cracker-backend/dev/1781451884691-2026-06-14T15:44:44.691Z",
     "artifact": "cracker-backend.zip"
   }
 }
