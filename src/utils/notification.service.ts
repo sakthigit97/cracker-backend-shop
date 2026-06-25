@@ -32,10 +32,12 @@ export class NotificationService {
         phone?: string;
         subject?: string;
         message: string;
+        smsTemplateId?: string;
+        smsVariables?: Record<string, string | number>;
     }) {
         const config = await this.getConfig();
         const isEmailEnabled = config?.isEmailEnabled === true;
-        const isSmsEnabled = config?.isSmsEnabled === true;
+        let isSmsEnabled = config?.isSmsEnabled === true;
         if (isEmailEnabled && input.email) {
             await this.emailService.send({
                 to: input.email,
@@ -46,7 +48,8 @@ export class NotificationService {
         if (isSmsEnabled && input.phone) {
             await this.smsService.send({
                 to: input.phone,
-                message: input.message,
+                templateId: input.smsTemplateId || '',
+                variables: input.smsVariables ?? {},
             });
         }
         return { success: true };

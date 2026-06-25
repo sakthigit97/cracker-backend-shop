@@ -6,7 +6,11 @@ var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  try {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  } catch (e) {
+    throw mod = 0, e;
+  }
 };
 var __export = (target, all) => {
   for (var name in all)
@@ -4573,13 +4577,37 @@ var EmailService = class {
 // src/utils/sms.service.ts
 var SmsService = class {
   async send(input) {
-    console.log(" SMS MOCK SENT");
-    console.log("To:", input.to);
-    console.log("Message:", input.message);
-    return {
-      success: true,
-      provider: "MOCK"
+    const payload = {
+      template_id: input.templateId,
+      recipients: [
+        {
+          mobiles: `91${input.to}`,
+          ...input.variables
+        }
+      ]
     };
+    console.log(payload);
+    const res = await fetch(
+      "https://control.msg91.com/api/v5/flow/",
+      {
+        method: "POST",
+        headers: {
+          authkey: process.env.MSG91_AUTH_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+    console.log(res);
+    const data = await res.json();
+    if (!res.ok) {
+      console.error(
+        "MSG91 Error",
+        data
+      );
+      throw new Error("SMS sending failed");
+    }
+    return data;
   }
 };
 
@@ -4666,8 +4694,11 @@ var NotificationService = class {
   }
   async send(input) {
     const config = await this.getConfig();
+    console.log(config);
     const isEmailEnabled = config?.isEmailEnabled === true;
-    const isSmsEnabled = config?.isSmsEnabled === true;
+    let isSmsEnabled = config?.isSmsEnabled === true;
+    console.log(isSmsEnabled, "=   isSmsEnabled");
+    isSmsEnabled = true;
     if (isEmailEnabled && input.email) {
       await this.emailService.send({
         to: input.email,
@@ -4675,10 +4706,13 @@ var NotificationService = class {
         message: input.message
       });
     }
+    console.log("hello send sms ", input);
     if (isSmsEnabled && input.phone) {
+      console.log("inside hello send sms ");
       await this.smsService.send({
         to: input.phone,
-        message: input.message
+        templateId: input.smsTemplateId || "",
+        variables: input.smsVariables ?? {}
       });
     }
     return { success: true };
@@ -4758,6 +4792,18 @@ var handler = async (event) => {
       finalPayable
     });
     await cartService.clear(userCartId);
+    await notify.send({
+      email: body?.email,
+      phone: body?.mobile,
+      subject: "Order Placed",
+      smsTemplateId: process.env.ORDER_SUBMIT_TID,
+      message: `Your order ${orderId} is confirmed`,
+      smsVariables: {
+        ORDERID: orderId,
+        ORDERAMOUNT: finalPayable,
+        SVKCURL: process.env.DOMAIN || ""
+      }
+    });
     return {
       statusCode: 201,
       body: JSON.stringify({ orderId })

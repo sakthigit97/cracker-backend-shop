@@ -101,12 +101,18 @@ export const handler = async (event: any) => {
 
         await cartService.clear(userCartId);
 
-        // await notify.send({
-        //     email: event?.body?.email,
-        //     phone: event?.body?.mobile,
-        //     subject: "Order Placed",
-        //     message: `Your order ${orderId} is confirmed`,
-        // });
+        await notify.send({
+            email: body?.email,
+            phone: body?.mobile,
+            subject: "Order Placed",
+            smsTemplateId: process.env.ORDER_SUBMIT_TID!,
+            message: `Your order ${orderId} is confirmed`,
+            smsVariables: {
+                ORDERID: orderId,
+                ORDERAMOUNT: finalPayable,
+                SVKCURL: process.env.DOMAIN! || '',
+            },
+        });
 
         return {
             statusCode: 201,
