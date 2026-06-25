@@ -4,7 +4,6 @@
     "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
-    "outDir": "dist",
     "skipLibCheck": true
   },
   "include": ["src"]
