@@ -59,7 +59,6 @@ export class OtpService {
         );
 
         const data = await res.json();
-        console.log(data)
 
         if (!res.ok) {
             console.error(
@@ -83,8 +82,7 @@ export class OtpService {
     ) {
         const res = await dbClient.send(
             new GetItemCommand({
-                TableName:
-                    process.env.OTP_TABLE!,
+                TableName: process.env.OTP_TABLE!,
                 Key: {
                     mobile: { S: mobile },
                 },
@@ -98,7 +96,6 @@ export class OtpService {
         }
 
         const storedOtp = res.Item.otp.S;
-
         if (storedOtp !== otp) {
             throw new Error(
                 "Invalid OTP"
