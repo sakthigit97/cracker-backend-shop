@@ -4586,7 +4586,6 @@ var SmsService = class {
         }
       ]
     };
-    console.log(payload);
     const res = await fetch(
       "https://control.msg91.com/api/v5/flow/",
       {
@@ -4598,7 +4597,6 @@ var SmsService = class {
         body: JSON.stringify(payload)
       }
     );
-    console.log(res);
     const data = await res.json();
     if (!res.ok) {
       console.error(
@@ -4694,11 +4692,8 @@ var NotificationService = class {
   }
   async send(input) {
     const config = await this.getConfig();
-    console.log(config);
     const isEmailEnabled = config?.isEmailEnabled === true;
     let isSmsEnabled = config?.isSmsEnabled === true;
-    console.log(isSmsEnabled, "=   isSmsEnabled");
-    isSmsEnabled = true;
     if (isEmailEnabled && input.email) {
       await this.emailService.send({
         to: input.email,
@@ -4706,9 +4701,7 @@ var NotificationService = class {
         message: input.message
       });
     }
-    console.log("hello send sms ", input);
     if (isSmsEnabled && input.phone) {
-      console.log("inside hello send sms ");
       await this.smsService.send({
         to: input.phone,
         templateId: input.smsTemplateId || "",

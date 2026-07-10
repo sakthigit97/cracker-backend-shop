@@ -490,6 +490,13 @@ functions:
           path: /admin/config
           method: PUT
 
+  bulkAdminConfig:
+    handler: src/handlers/bulk-upload-aitags.handler
+    events:
+      - httpApi:
+          path: /admin/update-bulk-aitags
+          method: POST
+
   AdminPresignConfigLogo:
     handler: src/handlers/adminConfigSliderPresign.handler
     events:
@@ -639,6 +646,8 @@ resources:
             - AllowedOrigins:
                 - http://localhost:5173
                 - https://frontend-cracker-shop.vercel.app
+                - https://www.sivakasicrackers.co.in
+                - https://www.sivakasipyropark.co.in
               AllowedMethods:
                 - GET
                 - PUT

@@ -5,11 +5,13 @@ import { s3, ddb } from "../utils/aws";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { BatchWriteItemCommand } from "@aws-sdk/client-dynamodb";
 import { validateImportRows } from "../services/productImportValidator";
+import { AdminDiscountRepo } from "../repo/adminDiscount.repo";
 
 const BUCKET = process.env.BUCKET_NAME!;
 const PRODUCT_TABLE = process.env.PRODUCTS_TABLE!;
 const BRAND_TABLE = process.env.BRAND_TABLE!;
 const CATEGORY_TABLE = process.env.CATEGORY_TABLE!;
+const discountRepo = new AdminDiscountRepo();
 
 export const handler = async (event: any) => {
     try {
@@ -41,30 +43,95 @@ export const handler = async (event: any) => {
         }
 
         const now = new Date().toISOString();
-        const putRequests = validRows.map((item: any) => ({
-            PutRequest: {
-                Item: {
-                    productId: { S: `prod-${randomUUID()}` },
-                    name: { S: item.name },
-                    description: { S: item.description ?? "" },
-                    price: { N: String(item.price) },
-                    quantity: { N: String(item.quantity ?? 0) },
-                    brandId: { S: item.brandId },
-                    categoryId: { S: item.categoryId },
-                    searchText: {
-                        S: `${item.name} ${item.brandId} ${item.categoryId}`.toLowerCase(),
-                    },
-                    isActive: { S: String(item.isActive ?? true) },
-                    createdAt: { S: now },
-                },
-            },
-        }));
+        const productsToCreate = validRows.map((item: any) => {
+            const productId = `prod-${randomUUID()}`;
+            return {
+                productId,
+                item,
+                putRequest: {
+                    PutRequest: {
+                        Item: {
+                            productId: { S: productId },
+                            name: { S: item.name },
+                            description: { S: item.description ?? "" },
+                            price: { N: String(item.price) },
+                            quantity: { N: String(item.quantity ?? 0) },
+                            brandId: { S: item.brandId },
+                            categoryId: { S: item.categoryId },
+                            videoUrl: { S: item.videoUrl ?? "" },
+                            ...(item.packageTagIds?.length
+                                ? {
+                                    packageTagIds: {
+                                        L: item.packageTagIds.map((tag: string) => ({
+                                            S: tag,
+                                        })),
+                                    },
+                                }
+                                : {}),
 
-        await batchWriteAll(PRODUCT_TABLE, putRequests);
+                            ...(item.aiTags?.length
+                                ? {
+                                    aiTags: {
+                                        L: item.aiTags.map((tag: string) => ({
+                                            S: tag,
+                                        })),
+                                    },
+                                }
+                                : {}),
+                            searchText: {
+                                S: [
+                                    item.name,
+                                    item.brandId,
+                                    item.categoryId,
+                                    ...(item.aiTags ?? []),
+                                ]
+                                    .join(" ")
+                                    .toLowerCase(),
+                            },
+                            isActive: { S: String(item.isActive ?? true) },
+                            createdAt: { S: now },
+                        },
+                    },
+                },
+            };
+        });
+
+        await batchWriteAll(
+            PRODUCT_TABLE,
+            productsToCreate.map(p => p.putRequest)
+        );
+
+        const discountErrors: string[] = [];
+        for (const product of productsToCreate) {
+
+            if (!product.item.discountMode) {
+                continue;
+            }
+
+            try {
+                await discountRepo.createDiscount({
+                    discountMode: product.item.discountMode,
+                    discountType: "PRODUCT",
+                    discountValue: product.item.discountValue,
+                    priority: product.item.discountPriority,
+                    targetId: product.productId,
+                    isActive: product.item.discountActive,
+                });
+            } catch (err) {
+                console.error(
+                    `Discount creation failed for product ${product.productId}`,
+                    err
+                );
+
+                discountErrors.push(product.productId);
+            }
+        }
+
         return response(200, {
             importId,
-            created: putRequests.length,
-            skipped: rows.length - putRequests.length,
+            created: productsToCreate.length,
+            skipped: rows.length - productsToCreate.length,
+            discountFailures: discountErrors,
             status: "COMPLETED",
         });
     } catch (err) {

@@ -2,7 +2,11 @@ import { PRODUCT_IMPORT_SCHEMA_V1 as SCHEMA } from "../asset/productImportSchema
 import { BatchGetItemCommand } from "@aws-sdk/client-dynamodb";
 import { ddb } from "../utils/aws";
 
-type ImportFieldType = "string" | "number" | "boolean";
+type ImportFieldType =
+    | "string"
+    | "number"
+    | "boolean"
+    | "csv";
 
 interface ImportFieldRule {
     required: boolean;
@@ -80,7 +84,20 @@ export async function validateImportRows(
     const finalValidRows: any[] = [];
 
     for (const row of tempValidRows) {
+        row.packageTagIds = parseCsvArray(row.packageTagIds);
+        row.aiTags = parseCsvArray(row.aiTags);
         let hasError = false;
+        const discountError = validateDiscount(row);
+
+        if (discountError) {
+            errors.push({
+                row: row.row,
+                field: "discount",
+                message: discountError,
+            });
+
+            hasError = true;
+        }
 
         if (!validBrandIds.has(row.brandId)) {
             errors.push({
@@ -163,7 +180,68 @@ function validateType(value: any, rules: ImportFieldRule): string | null {
 }
 
 function normalizeValue(value: any, type: ImportFieldType) {
+
+    if (value === undefined || value === null || value === "") {
+        return undefined;
+    }
+
     if (type === "number") return Number(value);
-    if (type === "boolean") return value === true || value === "true";
+
+    if (type === "boolean") {
+        return value === true || value === "true";
+    }
+
     return String(value).trim();
+}
+
+
+function parseCsvArray(value: any): string[] {
+    if (!value) return [];
+
+    return String(value)
+        .split(",")
+        .map(v => v.trim())
+        .filter(Boolean);
+}
+
+function validateDiscount(row: any): string | null {
+
+    const mode = String(row.discountMode ?? "").trim().toUpperCase();
+    const value = row.discountValue;
+
+    const hasMode = mode !== "";
+    const hasValue =
+        value !== "" &&
+        value !== null &&
+        value !== undefined;
+
+    if (!hasMode && !hasValue) {
+        return null;
+    }
+
+    if (hasMode && !hasValue) {
+        return "Discount Value is required when Discount Mode is provided";
+    }
+
+    if (!hasMode && hasValue) {
+        return "Discount Mode is required when Discount Value is provided";
+    }
+
+    if (!["PERCENT", "FLAT"].includes(mode)) {
+        return "Discount Mode must be PERCENT or FLAT";
+    }
+
+    const discountValue = Number(value);
+
+    if (discountValue <= 0) {
+        return "Discount Value must be greater than 0";
+    }
+
+    if (mode === "PERCENT" && discountValue > 100) {
+        return "Percentage discount cannot exceed 100";
+    }
+
+    row.discountMode = mode;
+
+    return null;
 }

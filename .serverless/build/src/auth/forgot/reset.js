@@ -1828,7 +1828,6 @@ var OtpService = class {
       }
     );
     const data = await res.json();
-    console.log(data);
     if (!res.ok) {
       console.error(
         "MSG91 Error",

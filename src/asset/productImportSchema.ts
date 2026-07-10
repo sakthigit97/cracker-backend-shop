@@ -11,5 +11,19 @@ export const PRODUCT_IMPORT_SCHEMA_V1 = {
     brandId: { required: true, type: "string" },
     categoryId: { required: true, type: "string" },
     videoUrl: { required: false, type: "string" },
-    isActive: { required: false, type: "boolean", default: true }
+    isActive: { required: false, type: "boolean", default: true },
+    packageTagIds: { required: false, type: "string" },
+    aiTags: { required: false, type: "string" },
+    discountMode: { required: false, type: "string" },
+    discountValue: { required: false, type: "number" },
+    discountPriority: {
+        required: false,
+        type: "number",
+        default: 1,
+    },
+    discountActive: {
+        required: false,
+        type: "boolean",
+        default: true,
+    },
 } as const;

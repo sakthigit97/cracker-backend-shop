@@ -37128,7 +37128,7 @@ __export(adminConfirmProductImport_exports, {
 });
 module.exports = __toCommonJS(adminConfirmProductImport_exports);
 var XLSX = __toESM(require_xlsx());
-var import_crypto = require("crypto");
+var import_crypto2 = require("crypto");
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -37171,7 +37171,7 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(ddbClient);
 
 // src/handlers/adminConfirmProductImport.ts
 var import_client_s32 = require("@aws-sdk/client-s3");
-var import_client_dynamodb3 = require("@aws-sdk/client-dynamodb");
+var import_client_dynamodb4 = require("@aws-sdk/client-dynamodb");
 
 // src/asset/productImportSchema.ts
 var PRODUCT_IMPORT_SCHEMA_V1 = {
@@ -37187,7 +37187,21 @@ var PRODUCT_IMPORT_SCHEMA_V1 = {
   brandId: { required: true, type: "string" },
   categoryId: { required: true, type: "string" },
   videoUrl: { required: false, type: "string" },
-  isActive: { required: false, type: "boolean", default: true }
+  isActive: { required: false, type: "boolean", default: true },
+  packageTagIds: { required: false, type: "string" },
+  aiTags: { required: false, type: "string" },
+  discountMode: { required: false, type: "string" },
+  discountValue: { required: false, type: "number" },
+  discountPriority: {
+    required: false,
+    type: "number",
+    default: 1
+  },
+  discountActive: {
+    required: false,
+    type: "boolean",
+    default: true
+  }
 };
 
 // src/services/productImportValidator.ts
@@ -37240,7 +37254,18 @@ async function validateImportRows(rows, brandTable, categoryTable) {
   ]);
   const finalValidRows = [];
   for (const row of tempValidRows) {
+    row.packageTagIds = parseCsvArray(row.packageTagIds);
+    row.aiTags = parseCsvArray(row.aiTags);
     let hasError = false;
+    const discountError = validateDiscount(row);
+    if (discountError) {
+      errors.push({
+        row: row.row,
+        field: "discount",
+        message: discountError
+      });
+      hasError = true;
+    }
     if (!validBrandIds.has(row.brandId)) {
       errors.push({
         row: row.row,
@@ -37297,16 +37322,129 @@ function validateType(value, rules) {
   return null;
 }
 function normalizeValue(value, type) {
+  if (value === void 0 || value === null || value === "") {
+    return void 0;
+  }
   if (type === "number") return Number(value);
-  if (type === "boolean") return value === true || value === "true";
+  if (type === "boolean") {
+    return value === true || value === "true";
+  }
   return String(value).trim();
 }
+function parseCsvArray(value) {
+  if (!value) return [];
+  return String(value).split(",").map((v) => v.trim()).filter(Boolean);
+}
+function validateDiscount(row) {
+  const mode = String(row.discountMode ?? "").trim().toUpperCase();
+  const value = row.discountValue;
+  const hasMode = mode !== "";
+  const hasValue = value !== "" && value !== null && value !== void 0;
+  if (!hasMode && !hasValue) {
+    return null;
+  }
+  if (hasMode && !hasValue) {
+    return "Discount Value is required when Discount Mode is provided";
+  }
+  if (!hasMode && hasValue) {
+    return "Discount Mode is required when Discount Value is provided";
+  }
+  if (!["PERCENT", "FLAT"].includes(mode)) {
+    return "Discount Mode must be PERCENT or FLAT";
+  }
+  const discountValue = Number(value);
+  if (discountValue <= 0) {
+    return "Discount Value must be greater than 0";
+  }
+  if (mode === "PERCENT" && discountValue > 100) {
+    return "Percentage discount cannot exceed 100";
+  }
+  row.discountMode = mode;
+  return null;
+}
+
+// src/repo/adminDiscount.repo.ts
+var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
+
+// src/utils/dynamo.ts
+var import_client_dynamodb3 = require("@aws-sdk/client-dynamodb");
+var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
+var client = new import_client_dynamodb3.DynamoDBClient({});
+var ddb2 = import_lib_dynamodb2.DynamoDBDocumentClient.from(client, {
+  marshallOptions: {
+    removeUndefinedValues: true
+  }
+});
+
+// src/repo/adminDiscount.repo.ts
+var import_crypto = require("crypto");
+var TABLE = process.env.DISCOUNT_TABLE;
+var AdminDiscountRepo = class {
+  async listDiscounts() {
+    const res = await ddb2.send(
+      new import_lib_dynamodb3.ScanCommand({
+        TableName: TABLE
+      })
+    );
+    return res.Items || [];
+  }
+  async getDiscountById(discountId) {
+    const res = await ddb2.send(
+      new import_lib_dynamodb3.GetCommand({
+        TableName: TABLE,
+        Key: { discountId }
+      })
+    );
+    return res.Item || null;
+  }
+  async createDiscount(input) {
+    const item = {
+      discountId: `disc-${(0, import_crypto.randomUUID)()}`,
+      discountMode: input.discountMode,
+      discountType: input.discountType,
+      discountValue: input.discountValue,
+      priority: input.priority,
+      targetId: input.targetId,
+      isActive: input.isActive ?? true,
+      createdAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    await ddb2.send(
+      new import_lib_dynamodb3.PutCommand({
+        TableName: TABLE,
+        Item: item
+      })
+    );
+    return item;
+  }
+  async updateDiscount(discountId, input) {
+    await ddb2.send(
+      new import_lib_dynamodb3.UpdateCommand({
+        TableName: TABLE,
+        Key: { discountId },
+        UpdateExpression: `
+                SET discountMode = :m,
+                    discountValue = :v,
+                    priority = :p,
+                    isActive = :a
+            `,
+        ExpressionAttributeValues: {
+          ":m": input.discountMode,
+          ":v": input.discountValue,
+          ":p": input.priority,
+          ":a": input.isActive
+        }
+      })
+    );
+    return true;
+  }
+};
 
 // src/handlers/adminConfirmProductImport.ts
 var BUCKET = process.env.BUCKET_NAME;
 var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
 var BRAND_TABLE = process.env.BRAND_TABLE;
 var CATEGORY_TABLE = process.env.CATEGORY_TABLE;
+var discountRepo = new AdminDiscountRepo();
 var handler = async (event) => {
   try {
     const { userId, role } = verifyJwt(event);
@@ -37331,29 +37469,82 @@ var handler = async (event) => {
       return response(400, "No valid rows to import");
     }
     const now = (/* @__PURE__ */ new Date()).toISOString();
-    const putRequests = validRows.map((item) => ({
-      PutRequest: {
-        Item: {
-          productId: { S: `prod-${(0, import_crypto.randomUUID)()}` },
-          name: { S: item.name },
-          description: { S: item.description ?? "" },
-          price: { N: String(item.price) },
-          quantity: { N: String(item.quantity ?? 0) },
-          brandId: { S: item.brandId },
-          categoryId: { S: item.categoryId },
-          searchText: {
-            S: `${item.name} ${item.brandId} ${item.categoryId}`.toLowerCase()
-          },
-          isActive: { S: String(item.isActive ?? true) },
-          createdAt: { S: now }
+    const productsToCreate = validRows.map((item) => {
+      const productId = `prod-${(0, import_crypto2.randomUUID)()}`;
+      return {
+        productId,
+        item,
+        putRequest: {
+          PutRequest: {
+            Item: {
+              productId: { S: productId },
+              name: { S: item.name },
+              description: { S: item.description ?? "" },
+              price: { N: String(item.price) },
+              quantity: { N: String(item.quantity ?? 0) },
+              brandId: { S: item.brandId },
+              categoryId: { S: item.categoryId },
+              videoUrl: { S: item.videoUrl ?? "" },
+              ...item.packageTagIds?.length ? {
+                packageTagIds: {
+                  L: item.packageTagIds.map((tag) => ({
+                    S: tag
+                  }))
+                }
+              } : {},
+              ...item.aiTags?.length ? {
+                aiTags: {
+                  L: item.aiTags.map((tag) => ({
+                    S: tag
+                  }))
+                }
+              } : {},
+              searchText: {
+                S: [
+                  item.name,
+                  item.brandId,
+                  item.categoryId,
+                  ...item.aiTags ?? []
+                ].join(" ").toLowerCase()
+              },
+              isActive: { S: String(item.isActive ?? true) },
+              createdAt: { S: now }
+            }
+          }
         }
+      };
+    });
+    await batchWriteAll(
+      PRODUCT_TABLE,
+      productsToCreate.map((p) => p.putRequest)
+    );
+    const discountErrors = [];
+    for (const product of productsToCreate) {
+      if (!product.item.discountMode) {
+        continue;
       }
-    }));
-    await batchWriteAll(PRODUCT_TABLE, putRequests);
+      try {
+        await discountRepo.createDiscount({
+          discountMode: product.item.discountMode,
+          discountType: "PRODUCT",
+          discountValue: product.item.discountValue,
+          priority: product.item.discountPriority,
+          targetId: product.productId,
+          isActive: product.item.discountActive
+        });
+      } catch (err) {
+        console.error(
+          `Discount creation failed for product ${product.productId}`,
+          err
+        );
+        discountErrors.push(product.productId);
+      }
+    }
     return response(200, {
       importId,
-      created: putRequests.length,
-      skipped: rows.length - putRequests.length,
+      created: productsToCreate.length,
+      skipped: rows.length - productsToCreate.length,
+      discountFailures: discountErrors,
       status: "COMPLETED"
     });
   } catch (err) {
@@ -37377,7 +37568,7 @@ async function getFileFromS3(key) {
 async function batchWriteAll(table, items, batchSize = 25) {
   for (let i = 0; i < items.length; i += batchSize) {
     await ddb.send(
-      new import_client_dynamodb3.BatchWriteItemCommand({
+      new import_client_dynamodb4.BatchWriteItemCommand({
         RequestItems: {
           [table]: items.slice(i, i + batchSize)
         }
