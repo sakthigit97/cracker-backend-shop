@@ -38,6 +38,7 @@ export class GetPackageDetailsService {
                 brandId: p.brandId,
                 qty: p.qty,
                 searchText: p.searchText,
+                isComboPackage: p.isComboPackage || false,
             })
         );
 

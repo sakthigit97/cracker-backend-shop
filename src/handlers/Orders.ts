@@ -2,7 +2,6 @@ import { verifyJwt } from "../utils/auth";
 import { CartService } from "../services/cart.service";
 import { OrderService } from "../services/order.service";
 import { NotificationService } from "../utils/notification.service";
-
 const notify = new NotificationService();
 const cartService = new CartService();
 const orderService = new OrderService();
@@ -22,19 +21,15 @@ export const handler = async (event: any) => {
         }
 
         const paymentMode = body.paymentMode === "ONLINE" ? "ONLINE" : "OFFLINE";
-        const paymentStatus =
-            typeof body.paymentStatus === "string"
-                ? body.paymentStatus
-                : paymentMode === "ONLINE"
-                    ? "PENDING"
-                    : "NOT_REQUIRED";
-
-        const transactionId =
-            typeof body.transactionId === "string"
-                ? body.transactionId
-                : null;
-
+        const paymentStatus = typeof body.paymentStatus === "string" ? body.paymentStatus : paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED";
+        const transactionId = typeof body.transactionId === "string" ? body.transactionId : null;
         const subtotal = Number(body.subtotal || 0);
+        const eligibleChargeAmount = Number(
+            body.eligibleChargeAmount || 0
+        );
+        const comboAmount = Number(
+            body.comboAmount || 0
+        );
         const packagingCharge = Number(body.packagingCharge || 0);
         const gstAmount = Number(body.gstAmount || 0);
         const totalAmount = Number(body.totalAmount || 0);
@@ -58,6 +53,18 @@ export const handler = async (event: any) => {
             return {
                 statusCode: 400,
                 body: JSON.stringify({ message: "Invalid pricing data" }),
+            };
+        }
+
+        const expectedSubtotal = eligibleChargeAmount + comboAmount;
+        if (
+            expectedSubtotal !== subtotal
+        ) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({
+                    message: "Invalid pricing breakdown",
+                }),
             };
         }
 
@@ -95,6 +102,8 @@ export const handler = async (event: any) => {
             packagingCharge,
             gstAmount,
             totalAmount,
+            eligibleChargeAmount,
+            comboAmount,
             walletUsed,
             finalPayable,
         });

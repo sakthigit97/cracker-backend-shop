@@ -1,5 +1,6 @@
 import { OrderRepository } from "../repo/order.repo";
 import { ProductRepository } from "../repo/product.repo";
+import { calculateOrderPricingBreakdown } from "../utils/orderPricing";
 
 interface CreateOrderInput {
     userId: string;
@@ -14,6 +15,8 @@ interface CreateOrderInput {
     totalAmount: number;
     walletUsed: number;
     finalPayable: number;
+    eligibleChargeAmount: number,
+    comboAmount: number,
 }
 
 const CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
@@ -24,11 +27,7 @@ export class OrderService {
     async createOrder(input: CreateOrderInput): Promise<string> {
         const now = Date.now();
         const orderId = this.generateOrderId(now);
-
-        const isTamilNadu = input.address
-            .toLowerCase()
-            .includes("tamil nadu");
-
+        const isTamilNadu = input.address.toLowerCase().includes("tamil nadu");
         const days = isTamilNadu ? 5 : 10;
         const expectedDelivery = now + days * 24 * 60 * 60 * 1000;
         const items = await this.repo.buildItemsSnapshot(input.cartItems);
@@ -39,12 +38,8 @@ export class OrderService {
             throw new Error("Invalid wallet usage");
         }
 
-
         const paymentMode = input.paymentMode || "OFFLINE";
-        const paymentStatus =
-            input.paymentStatus ||
-            (paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED");
-
+        const paymentStatus = input.paymentStatus || (paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED");
         const transactionId = input.transactionId || null;
 
         const order = {
@@ -59,6 +54,8 @@ export class OrderService {
             items,
             expectedDelivery,
             subtotal: input.subtotal,
+            eligibleChargeAmount: input.eligibleChargeAmount,
+            comboAmount: input.comboAmount || 0,
             packagingCharge: input.packagingCharge,
             gstAmount: input.gstAmount,
             totalAmount: input.totalAmount,
@@ -142,7 +139,6 @@ export class OrderService {
         items: { productId: string; quantity: number }[];
     }) {
         const { userId, role, orderId, items } = input;
-
         if (!orderId) throw new Error("Order ID required");
         if (!Array.isArray(items)) throw new Error("Invalid items");
 
@@ -150,7 +146,6 @@ export class OrderService {
         if (!order) throw new Error("Order not found");
 
         const isAdmin = role === "admin";
-
         if (!isAdmin && order.userId !== userId) {
             throw new Error("Unauthorized");
         }
@@ -190,36 +185,39 @@ export class OrderService {
             if (!product) {
                 throw new Error(`Product not found: ${productId}`);
             }
-
+            const image = product.imageUrls?.[0] ?? null;
             return {
                 productId,
                 name: product.name,
                 price: product.price,
-                image:
-                    Array.isArray(product.imageUrls) && product.imageUrls.length > 0
-                        ? product.imageUrls[0]
-                        : null,
+                image,
                 quantity,
                 total: product.price * quantity,
+                isComboPackage: !!product.isComboPackage,
             };
         });
 
-        const subtotal = updatedItems.reduce(
-            (sum: number, i: any) => sum + i.total,
-            0
-        );
-
+        const {
+            subtotal,
+            eligibleChargeAmount,
+            comboAmount,
+        } = calculateOrderPricingBreakdown(updatedItems);
         const packagingCharge = Number(order.packagingCharge || 0);
         const gstAmount = Number(order.gstAmount || 0);
         const walletUsed = Number(order.walletUsed || 0);
         const totalAmount = subtotal + packagingCharge + gstAmount;
         const finalPayable = totalAmount - walletUsed;
-        const now = Date.now();
 
+        const now = Date.now();
         await this.repo.updateItems(orderId, {
             items: updatedItems,
             subtotal,
+            eligibleChargeAmount,
+            comboAmount,
+            packagingCharge,
+            gstAmount,
             totalAmount,
+            walletUsed,
             finalPayable,
             updatedAt: now,
             modifiedAt: now,

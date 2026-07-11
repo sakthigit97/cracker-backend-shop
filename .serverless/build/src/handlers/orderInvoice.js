@@ -62620,7 +62620,8 @@ var ProductService = class {
         categoryId: p.categoryId,
         brandId: p.brandId,
         qty: p.quantity,
-        searchText: p.searchText
+        searchText: p.searchText,
+        isComboPackage: p.isComboPackage || false
       };
     });
   }
@@ -62646,7 +62647,8 @@ var OrderRepository = class {
           price: p.price,
           image: p.image || null,
           originalPrice: p.originalPrice || null,
-          discountText: p.discountText || ""
+          discountText: p.discountText || "",
+          isComboPackage: p.isComboPackage || false
         }
       ])
     );
@@ -62663,7 +62665,8 @@ var OrderRepository = class {
         quantity: c.quantity,
         total: product.price * c.quantity,
         originalPrice: product.originalPrice || null,
-        discountText: product.discountText || ""
+        discountText: product.discountText || "",
+        isComboPackage: product.isComboPackage || false
       };
     });
   }
@@ -62981,6 +62984,15 @@ var handler = async (event) => {
         size: 10,
         font
       });
+      if (item.isComboPackage) {
+        page.drawText("(Combo Package)", {
+          x: left + 5,
+          y: y - 11,
+          size: 8,
+          font,
+          color: (0, import_pdf_lib.rgb)(0.1, 0.35, 0.8)
+        });
+      }
       page.drawText(String(item.quantity), {
         x: 380,
         y,
@@ -63031,7 +63043,9 @@ var handler = async (event) => {
         size: 10,
         font
       });
-      y -= item.originalPrice && item.originalPrice > item.price ? 36 : 22;
+      const hasDiscount = item.originalPrice && item.originalPrice > item.price;
+      const rowHeight = item.isComboPackage ? hasDiscount ? 46 : 34 : hasDiscount ? 36 : 22;
+      y -= rowHeight;
     });
     y -= 10;
     page.drawLine({
@@ -63042,6 +63056,10 @@ var handler = async (event) => {
     });
     y -= 25;
     const subtotal = Number(order.subtotal || 0);
+    const comboAmount = Number(order.comboAmount || 0);
+    const eligibleChargeAmount = Number(
+      order.eligibleChargeAmount || subtotal
+    );
     const packaging = Number(order.packagingCharge || 0);
     const gst = Number(order.gstAmount || 0);
     const totalAmount = Number(order.totalAmount || 0);
@@ -63049,14 +63067,53 @@ var handler = async (event) => {
     const finalPayable = Number(order.finalPayable || totalAmount);
     const labelX = 380;
     const valueX = 540;
-    page.drawText("Subtotal", { x: labelX, y, size: 11, font });
+    page.drawText("Subtotal", {
+      x: labelX,
+      y,
+      size: 11,
+      font
+    });
     drawValue2(`\u20B9${subtotal}`, y);
+    if (comboAmount > 0) {
+      y -= 18;
+      page.drawText("Combo Package Amount", {
+        x: labelX,
+        y,
+        size: 11,
+        font
+      });
+      drawValue2(`\u20B9${comboAmount}`, y);
+      y -= 18;
+      page.drawText("GST Eligible Amount", {
+        x: labelX,
+        y,
+        size: 11,
+        font
+      });
+      drawValue2(`\u20B9${eligibleChargeAmount}`, y);
+    }
     y -= 18;
-    page.drawText("Packaging Charges", { x: labelX, y, size: 11, font });
+    page.drawText(
+      comboAmount > 0 ? "Packaging (Eligible Items)" : "Packaging Charges",
+      {
+        x: labelX,
+        y,
+        size: 11,
+        font
+      }
+    );
     drawValue2(`\u20B9${packaging}`, y);
     if (gst > 0) {
       y -= 18;
-      page.drawText("GST (18%)", { x: labelX, y, size: 11, font });
+      page.drawText(
+        comboAmount > 0 ? "GST (Eligible Items)" : "GST (18%)",
+        {
+          x: labelX,
+          y,
+          size: 11,
+          font
+        }
+      );
       drawValue2(`\u20B9${gst}`, y);
     }
     y -= 18;

@@ -24,7 +24,8 @@ export class OrderRepository {
                     price: p.price,
                     image: p.image || null,
                     originalPrice: p.originalPrice || null,
-                    discountText: p.discountText || ''
+                    discountText: p.discountText || '',
+                    isComboPackage: p.isComboPackage || false,
                 },
             ])
         );
@@ -44,6 +45,7 @@ export class OrderRepository {
                 total: product.price * c.quantity,
                 originalPrice: product.originalPrice || null,
                 discountText: product.discountText || '',
+                isComboPackage: product.isComboPackage || false,
             };
         });
     }

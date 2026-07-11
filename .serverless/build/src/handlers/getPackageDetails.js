@@ -185,7 +185,8 @@ var ProductService = class {
         categoryId: p.categoryId,
         brandId: p.brandId,
         qty: p.quantity,
-        searchText: p.searchText
+        searchText: p.searchText,
+        isComboPackage: p.isComboPackage || false
       };
     });
   }
@@ -218,7 +219,8 @@ var GetPackageDetailsService = class {
         categoryId: p.categoryId,
         brandId: p.brandId,
         qty: p.qty,
-        searchText: p.searchText
+        searchText: p.searchText,
+        isComboPackage: p.isComboPackage || false
       })
     );
     return {

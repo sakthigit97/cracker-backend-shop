@@ -4116,7 +4116,8 @@ var ProductService = class {
         categoryId: p.categoryId,
         brandId: p.brandId,
         qty: p.quantity,
-        searchText: p.searchText
+        searchText: p.searchText,
+        isComboPackage: p.isComboPackage || false
       };
     });
   }
@@ -4142,7 +4143,8 @@ var OrderRepository = class {
           price: p.price,
           image: p.image || null,
           originalPrice: p.originalPrice || null,
-          discountText: p.discountText || ""
+          discountText: p.discountText || "",
+          isComboPackage: p.isComboPackage || false
         }
       ])
     );
@@ -4159,7 +4161,8 @@ var OrderRepository = class {
         quantity: c.quantity,
         total: product.price * c.quantity,
         originalPrice: product.originalPrice || null,
-        discountText: product.discountText || ""
+        discountText: product.discountText || "",
+        isComboPackage: product.isComboPackage || false
       };
     });
   }

@@ -110,6 +110,7 @@ export class ProductService {
                     brandId: p.brandId,
                     qty: p.quantity,
                     searchText: p.searchText,
+                    isComboPackage: p.isComboPackage || false,
                 };
             });
     }

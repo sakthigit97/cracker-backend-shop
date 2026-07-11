@@ -190,7 +190,8 @@ var handler = async (event) => {
         categoryId: p.categoryId,
         brandId: p.brandId,
         qty: p.quantity,
-        searchText: p.searchText
+        searchText: p.searchText,
+        isComboPackage: p.isComboPackage || false
       };
     });
     return success({

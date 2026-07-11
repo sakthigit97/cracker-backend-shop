@@ -87,6 +87,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
           brandId: p.brandId,
           qty: p.quantity,
           searchText: p.searchText,
+          isComboPackage: p.isComboPackage || false,
         };
       }) || [];
 

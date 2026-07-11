@@ -4154,7 +4154,8 @@ var ProductService = class {
         categoryId: p.categoryId,
         brandId: p.brandId,
         qty: p.quantity,
-        searchText: p.searchText
+        searchText: p.searchText,
+        isComboPackage: p.isComboPackage || false
       };
     });
   }
@@ -4180,7 +4181,8 @@ var OrderRepository = class {
           price: p.price,
           image: p.image || null,
           originalPrice: p.originalPrice || null,
-          discountText: p.discountText || ""
+          discountText: p.discountText || "",
+          isComboPackage: p.isComboPackage || false
         }
       ])
     );
@@ -4197,7 +4199,8 @@ var OrderRepository = class {
         quantity: c.quantity,
         total: product.price * c.quantity,
         originalPrice: product.originalPrice || null,
-        discountText: product.discountText || ""
+        discountText: product.discountText || "",
+        isComboPackage: product.isComboPackage || false
       };
     });
   }
@@ -4388,6 +4391,30 @@ var OrderRepository = class {
   }
 };
 
+// src/utils/orderPricing.ts
+function calculateOrderPricingBreakdown(items) {
+  let subtotal = 0;
+  let normalAmount = 0;
+  let comboAmount = 0;
+  for (const item of items) {
+    const lineTotal = item.price * item.quantity;
+    subtotal += lineTotal;
+    if (item.isComboPackage) {
+      comboAmount += lineTotal;
+    } else {
+      normalAmount += lineTotal;
+    }
+  }
+  return {
+    subtotal,
+    normalAmount,
+    comboAmount,
+    eligibleChargeAmount: normalAmount,
+    hasNormalItems: normalAmount > 0,
+    hasComboItems: comboAmount > 0
+  };
+}
+
 // src/services/order.service.ts
 var CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
 var OrderService = class {
@@ -4422,6 +4449,8 @@ var OrderService = class {
       items,
       expectedDelivery,
       subtotal: input.subtotal,
+      eligibleChargeAmount: input.eligibleChargeAmount,
+      comboAmount: input.comboAmount || 0,
       packagingCharge: input.packagingCharge,
       gstAmount: input.gstAmount,
       totalAmount: input.totalAmount,
@@ -4521,19 +4550,22 @@ var OrderService = class {
       if (!product) {
         throw new Error(`Product not found: ${productId}`);
       }
+      const image = product.imageUrls?.[0] ?? null;
       return {
         productId,
         name: product.name,
         price: product.price,
-        image: Array.isArray(product.imageUrls) && product.imageUrls.length > 0 ? product.imageUrls[0] : null,
+        image,
         quantity,
-        total: product.price * quantity
+        total: product.price * quantity,
+        isComboPackage: !!product.isComboPackage
       };
     });
-    const subtotal = updatedItems.reduce(
-      (sum, i) => sum + i.total,
-      0
-    );
+    const {
+      subtotal,
+      eligibleChargeAmount,
+      comboAmount
+    } = calculateOrderPricingBreakdown(updatedItems);
     const packagingCharge = Number(order.packagingCharge || 0);
     const gstAmount = Number(order.gstAmount || 0);
     const walletUsed = Number(order.walletUsed || 0);
@@ -4543,7 +4575,12 @@ var OrderService = class {
     await this.repo.updateItems(orderId, {
       items: updatedItems,
       subtotal,
+      eligibleChargeAmount,
+      comboAmount,
+      packagingCharge,
+      gstAmount,
       totalAmount,
+      walletUsed,
       finalPayable,
       updatedAt: now,
       modifiedAt: now,
@@ -4734,6 +4771,12 @@ var handler = async (event) => {
     const paymentStatus = typeof body.paymentStatus === "string" ? body.paymentStatus : paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED";
     const transactionId = typeof body.transactionId === "string" ? body.transactionId : null;
     const subtotal = Number(body.subtotal || 0);
+    const eligibleChargeAmount = Number(
+      body.eligibleChargeAmount || 0
+    );
+    const comboAmount = Number(
+      body.comboAmount || 0
+    );
     const packagingCharge = Number(body.packagingCharge || 0);
     const gstAmount = Number(body.gstAmount || 0);
     const totalAmount = Number(body.totalAmount || 0);
@@ -4749,6 +4792,15 @@ var handler = async (event) => {
       return {
         statusCode: 400,
         body: JSON.stringify({ message: "Invalid pricing data" })
+      };
+    }
+    const expectedSubtotal = eligibleChargeAmount + comboAmount;
+    if (expectedSubtotal !== subtotal) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Invalid pricing breakdown"
+        })
       };
     }
     const expectedTotal = subtotal + packagingCharge + gstAmount;
@@ -4782,6 +4834,8 @@ var handler = async (event) => {
       packagingCharge,
       gstAmount,
       totalAmount,
+      eligibleChargeAmount,
+      comboAmount,
       walletUsed,
       finalPayable
     });

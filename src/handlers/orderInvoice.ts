@@ -151,6 +151,16 @@ export const handler = async (event: any) => {
         font,
       });
 
+      if (item.isComboPackage) {
+        page.drawText("(Combo Package)", {
+          x: left + 5,
+          y: y - 11,
+          size: 8,
+          font,
+          color: rgb(0.1, 0.35, 0.8),
+        });
+      }
+
       page.drawText(String(item.quantity), {
         x: 380,
         y,
@@ -206,7 +216,15 @@ export const handler = async (event: any) => {
         size: 10,
         font,
       });
-      y -= item.originalPrice && item.originalPrice > item.price ? 36 : 22;
+      const hasDiscount =
+        item.originalPrice &&
+        item.originalPrice > item.price;
+      const rowHeight =
+        item.isComboPackage
+          ? (hasDiscount ? 46 : 34)
+          : (hasDiscount ? 36 : 22);
+
+      y -= rowHeight;
     });
 
     y -= 10;
@@ -221,11 +239,16 @@ export const handler = async (event: any) => {
     y -= 25;
 
     const subtotal = Number(order.subtotal || 0);
+    const comboAmount = Number(order.comboAmount || 0);
+    const eligibleChargeAmount = Number(
+      order.eligibleChargeAmount || subtotal
+    );
     const packaging = Number(order.packagingCharge || 0);
     const gst = Number(order.gstAmount || 0);
     const totalAmount = Number(order.totalAmount || 0);
     const walletUsed = Number(order.walletUsed || 0);
     const finalPayable = Number(order.finalPayable || totalAmount);
+
 
     const labelX = 380;
     const valueX = 540;
@@ -240,16 +263,69 @@ export const handler = async (event: any) => {
       });
     }
 
-    page.drawText("Subtotal", { x: labelX, y, size: 11, font });
+    page.drawText("Subtotal", {
+      x: labelX,
+      y,
+      size: 11,
+      font,
+    });
     drawValue(`₹${subtotal}`, y);
 
+    if (comboAmount > 0) {
+      y -= 18;
+
+      page.drawText("Combo Package Amount", {
+        x: labelX,
+        y,
+        size: 11,
+        font,
+      });
+
+      drawValue(`₹${comboAmount}`, y);
+
+      y -= 18;
+
+      page.drawText("GST Eligible Amount", {
+        x: labelX,
+        y,
+        size: 11,
+        font,
+      });
+
+      drawValue(`₹${eligibleChargeAmount}`, y);
+    }
+
     y -= 18;
-    page.drawText("Packaging Charges", { x: labelX, y, size: 11, font });
+
+    page.drawText(
+      comboAmount > 0
+        ? "Packaging (Eligible Items)"
+        : "Packaging Charges",
+      {
+        x: labelX,
+        y,
+        size: 11,
+        font,
+      }
+    );
+
     drawValue(`₹${packaging}`, y);
 
     if (gst > 0) {
       y -= 18;
-      page.drawText("GST (18%)", { x: labelX, y, size: 11, font });
+
+      page.drawText(
+        comboAmount > 0
+          ? "GST (Eligible Items)"
+          : "GST (18%)",
+        {
+          x: labelX,
+          y,
+          size: 11,
+          font,
+        }
+      );
+
       drawValue(`₹${gst}`, y);
     }
 
