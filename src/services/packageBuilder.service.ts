@@ -1,236 +1,668 @@
-const MAX_ITERATIONS = 1000;
-const MAX_ADDITIONAL_PRODUCTS = 20;
-const MAX_QTY_PER_PRODUCT = Number.isFinite(Number(process.env.MAX_AI_PRODUCT_QTY))
-    ? Number(process.env.MAX_AI_PRODUCT_QTY) : 10;
+import {
+    PackageItem,
+    RecommendationCandidate,
+} from "../types/aiRecommendation.types";
+
+const MAX_AI_PRODUCT_QTY =
+    Number.isFinite(
+        Number(process.env.MAX_AI_PRODUCT_QTY)
+    ) ?
+        Number(process.env.MAX_AI_PRODUCT_QTY) :
+        10;
+
+const OPTIMIZATION_POOL_SIZE = 30;
+
+export interface PackageBuildResult {
+
+    total: number;
+
+    itemCount: number;
+
+    packageItems: PackageItem[];
+
+    remainingCandidates: RecommendationCandidate[];
+
+}
+
+interface WorkingPackage {
+
+    total: number;
+
+    score: number;
+
+    items: Map<string,
+        PackageItem>;
+
+}
 
 export class PackageBuilderService {
 
     buildPackage(
+
         budget: number,
-        candidates: any[]
-    ) {
 
-        if (!candidates?.length) {
-            return {
-                total: 0,
-                itemCount: 0,
-                packageItems: [],
-                additionalProductIds: [],
-            };
-        }
+        candidates: RecommendationCandidate[]
 
-        const validProducts = candidates.filter(
-            (p) =>
-                p?.productId &&
-                Number(p.price || 0) > 0 &&
-                Number(p.quantity || 0) > 0
-        );
-        console.log(
-            "AI VALID PRODUCTS",
-            validProducts.length
-        );
-        if (!validProducts.length) {
-            return {
-                total: 0,
-                itemCount: 0,
-                packageItems: [],
-                additionalProductIds: [],
-            };
-        }
-
-        const uniqueProducts = Array.from(
-            new Map(
-                validProducts.map(
-                    (p) => [p.productId, p]
-                )
-            ).values()
-        );
-        console.log(
-            "AI UNIQUE PRODUCTS",
-            uniqueProducts.length
-        );
-
-        uniqueProducts.sort(
-            (a, b) => b.score - a.score
-        );
-        const affordableProducts = uniqueProducts.filter(
-            (p) => Number(p.price) <= budget
-        );
-
-        console.log(
-            "AI AFFORDABLE PRODUCTS",
-            affordableProducts.length
-        );
-
-        console.log(
-            "AI BUDGET",
-            budget
-        );
-
-        if (!affordableProducts.length) {
-            return {
-                total: 0,
-                itemCount: 0,
-                packageItems: [],
-                additionalProductIds: [],
-            };
-        }
-
-        const cheapestPrice = Math.min(
-            ...affordableProducts.map(
-                (p) => Number(p.price)
-            )
-        );
+    ): PackageBuildResult {
 
         if (
-            !Number.isFinite(cheapestPrice) ||
-            cheapestPrice <= 0
-        ) {
-            return {
-                total: 0,
-                itemCount: 0,
-                packageItems: [],
-                additionalProductIds: [],
-            };
-        }
-
-        const packageMap = new Map<
-            string,
-            {
-                productId: string;
-                selectedQty: number;
-            }
-        >();
-
-        let total = 0;
-        let iterations = 0;
-        let added = true;
-
-        while (
-            added &&
-            iterations < MAX_ITERATIONS
+            budget <= 0 ||
+            candidates.length === 0
         ) {
 
-            iterations++;
-            added = false;
+            return this.emptyResult();
 
-            if (
-                budget - total <
-                cheapestPrice
-            ) {
-                break;
-            }
-
-            for (const product of affordableProducts) {
-
-                console.log(
-                    "AI ADDING PRODUCT",
-                    product.productId,
-                    product.price
-                );
-                const existing = packageMap.get(
-                    product.productId
-                );
-
-                const currentQty = existing?.selectedQty || 0;
-
-                if (
-                    currentQty >=
-                    Number(product.quantity)
-                ) {
-                    continue;
-                }
-
-                const maxAllowedQty = Math.min(
-                    Number(product.quantity),
-                    MAX_QTY_PER_PRODUCT
-                );
-
-                if (
-                    currentQty >=
-                    maxAllowedQty
-                ) {
-                    continue;
-                }
-
-                if (
-                    total +
-                    Number(product.price) >
-                    budget
-                ) {
-                    continue;
-                }
-
-                packageMap.set(
-                    product.productId,
-                    {
-                        productId:
-                            product.productId,
-
-                        selectedQty:
-                            currentQty + 1,
-                    }
-                );
-
-                total += Number(product.price);
-                added = true;
-            }
         }
 
-        const packageItems = Array.from(
-            packageMap.values()
-        );
-
-        const packageIds = new Set(
-            packageItems.map(
-                (p) => p.productId
-            )
-        );
-
-        const additionalProductIds =
-            uniqueProducts.filter(
-                (p) =>
-                    !packageIds.has(
-                        p.productId
-                    )
-            ).sort(
-                (a, b) =>
-                    b.score - a.score
-            ).slice(
-                0,
-                MAX_ADDITIONAL_PRODUCTS
-            ).map(
-                (p) => p.productId
+        const rankedCandidates =
+            this.prepareCandidates(
+                budget,
+                candidates
             );
-        console.log(
-            "AI PACKAGE ITEMS",
-            JSON.stringify(packageItems)
+
+        if (
+            rankedCandidates.length === 0
+        ) {
+
+            return this.emptyResult();
+
+        }
+
+        const optimizationPool =
+            this.buildOptimizationPool(
+                rankedCandidates
+            );
+
+        const workingPackage =
+            this.optimizePackage(
+                budget,
+                optimizationPool
+            );
+
+        this.expandQuantities(
+            budget,
+            optimizationPool,
+            workingPackage
         );
 
-        console.log(
-            "AI PACKAGE TOTAL",
-            total
-        );
+        const packageItems = [...workingPackage.items.values()];
 
-        console.log(
-            "AI ADDITIONAL PRODUCTS",
-            additionalProductIds.length
+        const selectedIds =
+            new Set(
+                packageItems.map(
+                    item => item.productId
+                )
+            );
+
+        const remainingCandidates =
+            rankedCandidates.filter(
+                candidate =>
+                    !selectedIds.has(
+                        candidate.productId
+                    )
+            );
+
+        this.logPackageSummary(
+            budget,
+            workingPackage.total,
+            packageItems,
+            remainingCandidates.length
         );
 
         return {
-            total,
 
-            itemCount:
-                packageItems.reduce(
-                    (sum, item) =>
-                        sum +
-                        item.selectedQty,
-                    0
-                ),
+            total: workingPackage.total,
+
+            itemCount: packageItems.reduce(
+                (sum, item) =>
+                    sum + item.selectedQty,
+                0
+            ),
 
             packageItems,
 
-            additionalProductIds,
+            remainingCandidates,
+
         };
+
     }
+
+    private emptyResult(): PackageBuildResult {
+
+        return {
+
+            total: 0,
+
+            itemCount: 0,
+
+            packageItems: [],
+
+            remainingCandidates: [],
+
+        };
+
+    }
+
+    private prepareCandidates(
+
+        budget: number,
+
+        candidates: RecommendationCandidate[]
+
+    ): RecommendationCandidate[] {
+
+        const unique =
+            new Map<
+                string,
+                RecommendationCandidate>
+                ();
+
+        for (const candidate of candidates) {
+
+            if (
+                candidate.price <= 0 ||
+                candidate.quantity <= 0 ||
+                candidate.price > budget
+            ) {
+
+                continue;
+
+            }
+
+            const existing =
+                unique.get(
+                    candidate.productId
+                );
+
+            if (
+                !existing ||
+                candidate.score >
+                existing.score
+            ) {
+
+                unique.set(
+                    candidate.productId,
+                    candidate
+                );
+
+            }
+
+        }
+
+        return [...unique.values()]
+            .sort((a, b) => {
+
+                if (
+                    b.score !== a.score
+                ) {
+
+                    return (
+                        b.score -
+                        a.score
+                    );
+
+                }
+
+                if (
+                    a.price !==
+                    b.price
+                ) {
+
+                    return (
+                        a.price -
+                        b.price
+                    );
+
+                }
+
+                return (
+                    b.quantity -
+                    a.quantity
+                );
+
+            });
+
+    }
+
+    private buildOptimizationPool(
+
+        candidates: RecommendationCandidate[]
+
+    ): RecommendationCandidate[] {
+
+        return candidates.slice(
+            0,
+            Math.min(
+                OPTIMIZATION_POOL_SIZE,
+                candidates.length
+            )
+        );
+
+    }
+    private optimizePackage(
+
+        budget: number,
+
+        candidates: RecommendationCandidate[]
+
+    ): WorkingPackage {
+
+        const BEAM_WIDTH = 25;
+
+        let beam: WorkingPackage[] = [
+
+            {
+
+                total: 0,
+
+                score: 0,
+
+                items: new Map(),
+
+            }
+
+        ];
+
+        for (const candidate of candidates) {
+
+            const nextBeam: WorkingPackage[] = [...beam];
+
+            for (const current of beam) {
+
+                if (
+
+                    current.items.has(
+                        candidate.productId
+                    )
+
+                ) {
+
+                    continue;
+
+                }
+
+                if (
+
+                    current.total +
+                    candidate.price >
+
+                    budget
+
+                ) {
+
+                    continue;
+
+                }
+
+                const clone =
+                    this.cloneWorkingPackage(
+                        current
+                    );
+
+                clone.items.set(
+
+                    candidate.productId,
+
+                    {
+
+                        productId: candidate.productId,
+
+                        selectedQty: 1,
+
+                    }
+
+                );
+
+                clone.total +=
+                    candidate.price;
+
+                clone.score +=
+                    candidate.score;
+
+                nextBeam.push(clone);
+
+            }
+
+            const unique =
+                new Map<
+                    string,
+                    WorkingPackage>
+                    ();
+
+            for (const pkg of nextBeam) {
+
+                unique.set(
+
+                    this.packageKey(pkg),
+
+                    pkg
+
+                );
+
+            }
+
+            beam = [...unique.values()]
+
+                .sort(
+
+                    (a, b) =>
+
+                        this.packageValue(
+
+                            b,
+
+                            budget
+
+                        ) -
+
+                        this.packageValue(
+
+                            a,
+
+                            budget
+
+                        )
+
+                )
+
+                .slice(
+                    0,
+                    BEAM_WIDTH
+                );
+
+        }
+
+        const best =
+
+            beam.sort(
+
+                (a, b) =>
+
+                    this.packageValue(
+                        b,
+                        budget
+                    ) -
+
+                    this.packageValue(
+                        a,
+                        budget
+                    )
+
+            )[0];
+
+        return best;
+
+    }
+
+    private packageValue(
+
+        pkg: WorkingPackage,
+
+        budget: number
+
+    ): number {
+
+        const utilization =
+            pkg.total / budget;
+
+        return (
+
+            utilization * 5000 +
+
+            pkg.score * 500 +
+
+            pkg.items.size * 10
+
+        );
+
+    }
+
+    private cloneWorkingPackage(
+
+        pkg: WorkingPackage
+
+    ): WorkingPackage {
+
+        return {
+
+            total: pkg.total,
+
+            score: pkg.score,
+
+            items: new Map(
+
+                [...pkg.items.entries()]
+
+                    .map(
+
+                        ([key, value]) => [
+
+                            key,
+
+                            {
+
+                                ...value
+
+                            }
+
+                        ]
+
+                    )
+
+            ),
+
+        };
+
+    }
+    private packageKey(
+
+        pkg: WorkingPackage
+
+    ): string {
+
+        return [...pkg.items.keys()]
+
+            .sort()
+
+            .join("|");
+
+    }
+
+    private expandQuantities(
+
+        budget: number,
+
+        candidates: RecommendationCandidate[],
+
+        workingPackage: WorkingPackage
+
+    ): void {
+
+        while (true) {
+
+            const remainingBudget =
+                budget -
+                workingPackage.total;
+
+            if (remainingBudget <= 0) {
+
+                break;
+
+            }
+
+            let expanded = false;
+
+            for (const candidate of candidates) {
+
+                if (
+
+                    candidate.price >
+                    remainingBudget
+
+                ) {
+
+                    continue;
+
+                }
+
+                if (
+
+                    !this.canIncreaseQuantity(
+
+                        candidate,
+
+                        workingPackage
+
+                    )
+
+                ) {
+
+                    continue;
+
+                }
+
+                const item =
+                    workingPackage.items.get(
+                        candidate.productId
+                    );
+
+                if (!item) {
+
+                    continue;
+
+                }
+
+                item.selectedQty++;
+
+                workingPackage.total +=
+                    candidate.price;
+
+                workingPackage.score +=
+                    candidate.score;
+
+                expanded = true;
+
+                break;
+
+            }
+
+            if (!expanded) {
+
+                break;
+
+            }
+
+        }
+
+    }
+
+    private canIncreaseQuantity(
+
+        candidate: RecommendationCandidate,
+
+        workingPackage: WorkingPackage
+
+    ): boolean {
+
+        const item =
+            workingPackage.items.get(
+                candidate.productId
+            );
+
+        if (!item) {
+
+            return false;
+
+        }
+
+        if (
+
+            item.selectedQty >=
+            candidate.quantity
+
+        ) {
+
+            return false;
+
+        }
+
+        if (
+
+            item.selectedQty >=
+            MAX_AI_PRODUCT_QTY
+
+        ) {
+
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+    private logPackageSummary(
+
+        budget: number,
+
+        total: number,
+
+        packageItems: PackageItem[],
+
+        remainingCandidates: number
+
+    ): void {
+
+        console.log(
+
+            "AI PACKAGE SUMMARY",
+
+            JSON.stringify({
+
+                budget,
+
+                total,
+
+                utilization:
+
+                    Number(
+
+                        (
+
+                            (total / budget) *
+
+                            100
+
+                        ).toFixed(2)
+
+                    ),
+
+                uniqueProducts:
+
+                    packageItems.length,
+
+                totalItems:
+
+                    packageItems.reduce(
+
+                        (sum, item) =>
+
+                            sum +
+
+                            item.selectedQty,
+
+                        0
+
+                    ),
+
+                remainingCandidates,
+
+                packageItems,
+
+            })
+
+        );
+
+    }
+
 }

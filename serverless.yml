@@ -148,6 +148,13 @@ functions:
           path: /products
           method: get
 
+  getAllProducts:
+    handler: src/handlers/getAllProducts.handler
+    events:
+      - httpApi:
+          path: /products/all
+          method: get
+
   getProductDetails:
     handler: src/handlers/getProductDetails.handler
     events:

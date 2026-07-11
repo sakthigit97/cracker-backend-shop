@@ -51,6 +51,30 @@ export async function getActiveProducts(
     };
 }
 
+export async function getAllActiveProducts() {
+    const items: any[] = [];
+    let lastKey: any = undefined;
+
+    do {
+        const res = await ddb.send(
+            new QueryCommand({
+                TableName: PRODUCT_TABLE,
+                IndexName: "isActive-index",
+                KeyConditionExpression: "isActive = :true",
+                ExpressionAttributeValues: {
+                    ":true": "true",
+                },
+                ExclusiveStartKey: lastKey,
+            })
+        );
+
+        items.push(...(res.Items || []));
+        lastKey = res.LastEvaluatedKey;
+    } while (lastKey);
+
+    return items.filter((p) => Number(p.quantity) > 0);
+}
+
 export class ProductService {
     constructor(private repo = new ProductRepository()) { }
 

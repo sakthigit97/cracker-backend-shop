@@ -40,58 +40,6 @@ var error = (message, statusCode = 400) => ({
   })
 });
 
-// src/constants/tagSynonyms.ts
-var TAG_SYNONYMS = {
-  child: "kids",
-  children: "kids",
-  kid: "kids",
-  family: "family",
-  adult: "adults",
-  adults: "adults",
-  silent: "low-noise",
-  quiet: "low-noise",
-  lownoise: "low-noise",
-  mediumnoise: "medium-noise",
-  loud: "high-noise",
-  sound: "high-noise",
-  eco: "eco-friendly",
-  green: "eco-friendly",
-  safe: "safe",
-  affordable: "budget",
-  cheap: "budget",
-  luxury: "premium",
-  premium: "premium",
-  colourful: "colorful",
-  colorful: "colorful",
-  apartment: "apartment-friendly"
-};
-
-// src/parsers/regexIntentParser.ts
-var RegexIntentParser = class {
-  async parse(query) {
-    const normalized = query.toLowerCase();
-    const budgetMatch = normalized.match(/₹\s*(\d+)/i) || normalized.match(/rs\.?\s*(\d+)/i) || normalized.match(/under\s*(\d+)/i) || normalized.match(/below\s*(\d+)/i) || normalized.match(/budget\s*(\d+)/i) || normalized.match(/\b(\d{3,6})\b/);
-    const budget = budgetMatch ? Number(budgetMatch[1]) : null;
-    const tags = /* @__PURE__ */ new Set();
-    Object.entries(TAG_SYNONYMS).forEach(
-      ([keyword, tag]) => {
-        if (normalized.includes(keyword)) {
-          tags.add(tag);
-        }
-      }
-    );
-    const missingFields = [];
-    if (!budget) {
-      missingFields.push("budget");
-    }
-    return {
-      budget,
-      tags: Array.from(tags),
-      missingFields
-    };
-  }
-};
-
 // src/repo/recommendation.repo.ts
 var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
 
@@ -110,25 +58,25 @@ var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
 var RecommendationRepository = class {
   async getAllActiveProducts() {
     const products = [];
-    let lastKey = void 0;
+    let lastKey;
     do {
       const res = await ddb.send(
         new import_lib_dynamodb2.QueryCommand({
           TableName: PRODUCT_TABLE,
           IndexName: "isActive-index",
           KeyConditionExpression: "isActive = :true",
-          ProjectionExpression: "productId, price, quantity, categoryId, aiTags",
+          ProjectionExpression: "productId, price, quantity, categoryId, brandId, aiTags",
           ExpressionAttributeValues: {
             ":true": "true"
           },
           ExclusiveStartKey: lastKey
         })
       );
+      products.push(...res.Items ?? []);
       console.log(
         "AI ACTIVE PRODUCTS FETCHED",
         products.length
       );
-      products.push(...res.Items || []);
       lastKey = res.LastEvaluatedKey;
     } while (lastKey);
     console.log(
@@ -139,297 +87,705 @@ var RecommendationRepository = class {
   }
 };
 
-// src/services/recommendation.service.ts
-var MIN_AI_BUDGET = 3e3;
+// src/services/recommendationEngine.service.ts
 var MAX_AI_BUDGET = 5e4;
-var MIN_MATCH_PERCENTAGE = 50;
-var RecommendationService = class {
+var AI_WEIGHTS = {
+  audience: 40,
+  type: 40,
+  noise: 20,
+  time: 20,
+  feature: 10,
+  stock: 5,
+  budget: 3
+};
+var RecommendationEngineService = class {
   constructor(repo = new RecommendationRepository()) {
     this.repo = repo;
   }
-  async getRecommendations(intent) {
-    if (!intent.budget) {
-      return {
-        status: "NEEDS_BUDGET",
-        message: "Please provide your budget."
-      };
-    }
-    if (intent.budget < MIN_AI_BUDGET) {
-      return {
-        status: "INVALID_BUDGET",
-        message: `Minimum budget is \u20B9${MIN_AI_BUDGET}`
-      };
-    }
-    const budget = Math.min(
-      intent.budget,
-      MAX_AI_BUDGET
-    );
-    if (!intent.tags?.length) {
-      return {
-        status: "SUCCESS",
-        budget,
-        exactMatchFound: false,
-        candidates: []
-      };
-    }
-    const requestedTags = intent.tags.map(
-      (tag) => tag.toLowerCase().trim()
-    );
+  async getRecommendations(request) {
+    const budget = this.normalizeBudget(request.budget);
+    const normalizedRequest = this.normalizeRequest({
+      ...request,
+      budget
+    });
     const products = await this.repo.getAllActiveProducts();
     console.log(
-      "AI PRODUCTS FROM DB",
+      "AI ACTIVE PRODUCTS",
       products.length
     );
     const availableProducts = products.filter(
-      (p) => p?.productId && Number(p.price || 0) > 0 && Number(p.quantity || 0) > 0
+      (product) => Boolean(product?.productId) && Number(product.price) > 0 && Number(product.quantity) > 0
     );
-    console.log(
-      "AI AVAILABLE PRODUCTS",
-      availableProducts.length
-    );
-    if (!intent.tags?.length) {
+    if (!availableProducts.length) {
       return {
         status: "SUCCESS",
         budget,
-        exactMatchFound: false,
+        relaxationLevel: "IGNORE_TYPE",
         candidates: []
       };
     }
-    const matchedProducts = availableProducts.map((product) => {
-      const tags = Array.isArray(product.aiTags) ? product.aiTags.map(
-        (tag) => tag.toLowerCase().trim()
-      ) : [];
-      const matchedTagCount = requestedTags.filter(
-        (tag) => tags.includes(tag)
-      ).length;
-      const matchPercentage = matchedTagCount / requestedTags.length * 100;
-      return {
-        product,
-        tags,
-        matchedTagCount,
-        matchPercentage
-      };
-    }).filter((item) => item.matchPercentage >= MIN_MATCH_PERCENTAGE);
-    console.log(
-      "AI MATCHED PRODUCTS",
-      matchedProducts.length
-    );
-    if (matchedProducts.length) {
+    const relaxationFlow = [
+      "STRICT",
+      "IGNORE_FEATURE",
+      "IGNORE_TIME",
+      "IGNORE_NOISE",
+      "IGNORE_TYPE"
+    ];
+    for (const level of relaxationFlow) {
       console.log(
-        "AI FIRST MATCH",
-        JSON.stringify(
-          matchedProducts[0]
-        )
+        "AI RELAXATION LEVEL",
+        level
       );
-    }
-    const candidates = matchedProducts.map(
-      (item) => {
-        const product = item.product;
-        const matchingTagCount = item.matchedTagCount;
-        let score = 0;
-        score += matchingTagCount * 20;
-        if (matchingTagCount === requestedTags.length) {
-          score += 100;
-        }
-        const stock = Number(product.quantity || 0);
-        if (stock > 100) {
-          score += 5;
-        } else if (stock > 50) {
-          score += 3;
-        } else if (stock > 10) {
-          score += 1;
-        }
+      const candidates = this.buildCandidates(
+        availableProducts,
+        normalizedRequest,
+        level
+      );
+      if (candidates.length > 0) {
+        console.log(
+          "AI MATCH FOUND",
+          level,
+          candidates.length
+        );
         return {
-          productId: product.productId,
-          categoryId: product.categoryId,
-          price: Number(product.price),
-          quantity: Number(product.quantity),
-          score
+          status: "SUCCESS",
+          budget,
+          relaxationLevel: level,
+          candidates
         };
       }
-    );
-    console.log(
-      "AI CANDIDATES",
-      candidates.length
-    );
-    console.log(
-      "AI TOP CANDIDATES",
-      JSON.stringify(
-        candidates.slice(0, 5)
-      )
-    );
-    candidates.sort(
-      (a, b) => b.score - a.score
-    );
+    }
     return {
       status: "SUCCESS",
       budget,
-      exactMatchFound: candidates.length > 0,
-      candidates
+      relaxationLevel: "IGNORE_TYPE",
+      candidates: []
+    };
+  }
+  buildCandidates(products, request, level) {
+    const candidates = [];
+    for (const product of products) {
+      const candidate = this.scoreProduct(
+        product,
+        request,
+        level
+      );
+      if (candidate) {
+        candidates.push(candidate);
+      }
+    }
+    const unique = this.removeDuplicates(candidates);
+    const sorted = this.sortCandidates(unique);
+    this.logCandidateSummary(
+      level,
+      sorted
+    );
+    return sorted;
+  }
+  normalizeRequest(request) {
+    return {
+      budget: request.budget,
+      audiences: this.normalizeArray(
+        request.audiences
+      ),
+      crackerTypes: this.normalizeArray(
+        request.crackerTypes
+      ),
+      noiseLevels: this.normalizeArray(
+        request.noiseLevels
+      ),
+      timePreferences: this.normalizeArray(
+        request.timePreferences
+      ),
+      features: this.normalizeArray(
+        request.features
+      )
+    };
+  }
+  normalizeArray(values = []) {
+    return Array.from(
+      new Set(
+        values.filter(Boolean).map(
+          (value) => value.trim().toLowerCase()
+        )
+      )
+    );
+  }
+  normalizeBudget(budget) {
+    const normalized = Number(budget);
+    if (!Number.isFinite(normalized)) {
+      return 0;
+    }
+    return Math.min(
+      normalized,
+      MAX_AI_BUDGET
+    );
+  }
+  scoreProduct(product, request, level) {
+    const tags = this.buildTagSet(product.aiTags);
+    const matchedAudience = this.hasTagMatch(
+      tags,
+      "audience",
+      request.audiences
+    );
+    const matchedType = this.hasTagMatch(
+      tags,
+      "type",
+      request.crackerTypes
+    );
+    const matchedNoise = this.hasTagMatch(
+      tags,
+      "noise",
+      request.noiseLevels
+    );
+    const matchedTime = this.hasTagMatch(
+      tags,
+      "time",
+      request.timePreferences
+    );
+    const matchedFeatures = this.getMatchedFeatures(
+      tags,
+      request.features
+    );
+    if (!this.isEligible(
+      level,
+      request,
+      matchedAudience,
+      matchedType,
+      matchedNoise,
+      matchedTime,
+      matchedFeatures.length
+    )) {
+      return null;
+    }
+    let score = 0;
+    if (matchedAudience) {
+      score += AI_WEIGHTS.audience;
+    }
+    if (matchedType) {
+      score += AI_WEIGHTS.type;
+    }
+    if (matchedNoise) {
+      score += AI_WEIGHTS.noise;
+    }
+    if (matchedTime) {
+      score += AI_WEIGHTS.time;
+    }
+    score += matchedFeatures.length * AI_WEIGHTS.feature;
+    score += this.calculateStockBonus(
+      Number(product.quantity)
+    );
+    score += this.calculateBudgetBonus(
+      request.budget,
+      Number(product.price)
+    );
+    return {
+      productId: product.productId,
+      categoryId: product.categoryId,
+      price: Number(product.price),
+      quantity: Number(product.quantity),
+      score,
+      aiTags: [...tags],
+      matchedAudience,
+      matchedType,
+      matchedNoise,
+      matchedTime,
+      matchedFeatures
+    };
+  }
+  isEligible(level, request, matchedAudience, matchedType, matchedNoise, matchedTime, matchedFeatureCount) {
+    if (request.audiences.length && !matchedAudience) {
+      return false;
+    }
+    if (level !== "IGNORE_TYPE") {
+      if (request.crackerTypes.length && !matchedType) {
+        return false;
+      }
+    }
+    if (level !== "IGNORE_NOISE" && level !== "IGNORE_TYPE") {
+      if (request.noiseLevels.length && !matchedNoise) {
+        return false;
+      }
+    }
+    if (level === "STRICT" || level === "IGNORE_FEATURE") {
+      if (request.timePreferences.length && !matchedTime) {
+        return false;
+      }
+    }
+    if (level === "STRICT" && request.features.length && matchedFeatureCount === 0) {
+      return false;
+    }
+    return true;
+  }
+  async getActiveProducts() {
+    return this.repo.getAllActiveProducts();
+  }
+  getMatchedFeatures(tags, features) {
+    const matches = [];
+    for (const feature of features) {
+      const normalized = feature?.trim().toLowerCase();
+      if (!normalized) {
+        continue;
+      }
+      if (tags.has(
+        `feature:${normalized}`
+      ) || tags.has(
+        `visual:${normalized}`
+      )) {
+        matches.push(normalized);
+      }
+    }
+    return matches;
+  }
+  hasTagMatch(tags, prefix, values) {
+    if (!values.length) {
+      return false;
+    }
+    for (const value of values) {
+      if (tags.has(
+        `${prefix}:${value}`
+      )) {
+        return true;
+      }
+    }
+    return false;
+  }
+  buildTagSet(aiTags = []) {
+    return new Set(
+      aiTags.filter(Boolean).map(
+        (tag) => tag.trim().toLowerCase()
+      )
+    );
+  }
+  calculateStockBonus(quantity) {
+    if (quantity >= 100) {
+      return AI_WEIGHTS.stock;
+    }
+    if (quantity >= 50) {
+      return Math.floor(AI_WEIGHTS.stock * 0.6);
+    }
+    if (quantity >= 10) {
+      return Math.floor(AI_WEIGHTS.stock * 0.2);
+    }
+    return 0;
+  }
+  calculateBudgetBonus(budget, productPrice) {
+    if (budget <= 0 || productPrice <= 0) {
+      return 0;
+    }
+    const ratio = productPrice / budget;
+    if (ratio >= 0.05 && ratio <= 0.2) {
+      return 3;
+    }
+    if (ratio > 0.2 && ratio <= 0.35) {
+      return 2;
+    }
+    if (ratio > 0.35 && ratio <= 0.5) {
+      return 1;
+    }
+    return 0;
+  }
+  logCandidateSummary(level, candidates) {
+    console.log(
+      "AI ENGINE SUMMARY",
+      JSON.stringify({
+        level,
+        totalCandidates: candidates.length,
+        topCandidates: candidates.slice(0, 5).map((candidate) => ({
+          productId: candidate.productId,
+          score: candidate.score,
+          price: candidate.price,
+          quantity: candidate.quantity
+        }))
+      })
+    );
+  }
+  removeDuplicates(candidates) {
+    const map = /* @__PURE__ */ new Map();
+    for (const candidate of candidates) {
+      const existing = map.get(candidate.productId);
+      if (!existing) {
+        map.set(
+          candidate.productId,
+          candidate
+        );
+        continue;
+      }
+      if (candidate.score > existing.score) {
+        map.set(
+          candidate.productId,
+          candidate
+        );
+      }
+    }
+    return Array.from(map.values());
+  }
+  sortCandidates(candidates) {
+    return candidates.sort(
+      (a, b) => {
+        if (b.score !== a.score) {
+          return b.score - a.score;
+        }
+        if (a.price !== b.price) {
+          return a.price - b.price;
+        }
+        return b.quantity - a.quantity;
+      }
+    );
+  }
+};
+
+// src/services/fallbackRecommendation.service.ts
+var FallbackRecommendationService = class {
+  buildCandidates(budget, products) {
+    if (budget <= 0 || products.length === 0) {
+      return [];
+    }
+    const candidates = products.filter(
+      (product) => product.price > 0 && product.quantity > 0 && product.price <= budget
+    ).sort((a, b) => {
+      if (a.price !== b.price) {
+        return a.price - b.price;
+      }
+      if (b.quantity !== a.quantity) {
+        return b.quantity - a.quantity;
+      }
+      return a.productId.localeCompare(
+        b.productId
+      );
+    }).map(
+      (product) => this.toCandidate(
+        product,
+        budget
+      )
+    );
+    console.log(
+      "AI FALLBACK CANDIDATES",
+      JSON.stringify({
+        budget,
+        candidates: candidates.length
+      })
+    );
+    return candidates;
+  }
+  toCandidate(product, budget) {
+    const utilization = product.price / budget;
+    const score = utilization >= 0.5 ? 5 : utilization >= 0.3 ? 4 : utilization >= 0.15 ? 3 : utilization >= 0.05 ? 2 : 1;
+    return {
+      productId: product.productId,
+      categoryId: product.categoryId,
+      price: product.price,
+      quantity: product.quantity,
+      aiTags: product.aiTags ?? [],
+      score,
+      matchedAudience: false,
+      matchedType: false,
+      matchedNoise: false,
+      matchedTime: false,
+      matchedFeatures: []
     };
   }
 };
 
 // src/services/packageBuilder.service.ts
-var MAX_ITERATIONS = 1e3;
-var MAX_ADDITIONAL_PRODUCTS = 20;
-var MAX_QTY_PER_PRODUCT = Number.isFinite(Number(process.env.MAX_AI_PRODUCT_QTY)) ? Number(process.env.MAX_AI_PRODUCT_QTY) : 10;
+var MAX_AI_PRODUCT_QTY = Number.isFinite(
+  Number(process.env.MAX_AI_PRODUCT_QTY)
+) ? Number(process.env.MAX_AI_PRODUCT_QTY) : 10;
+var OPTIMIZATION_POOL_SIZE = 30;
 var PackageBuilderService = class {
   buildPackage(budget, candidates) {
-    if (!candidates?.length) {
-      return {
-        total: 0,
-        itemCount: 0,
-        packageItems: [],
-        additionalProductIds: []
-      };
+    if (budget <= 0 || candidates.length === 0) {
+      return this.emptyResult();
     }
-    const validProducts = candidates.filter(
-      (p) => p?.productId && Number(p.price || 0) > 0 && Number(p.quantity || 0) > 0
+    const rankedCandidates = this.prepareCandidates(
+      budget,
+      candidates
     );
-    console.log(
-      "AI VALID PRODUCTS",
-      validProducts.length
-    );
-    if (!validProducts.length) {
-      return {
-        total: 0,
-        itemCount: 0,
-        packageItems: [],
-        additionalProductIds: []
-      };
+    if (rankedCandidates.length === 0) {
+      return this.emptyResult();
     }
-    const uniqueProducts = Array.from(
-      new Map(
-        validProducts.map(
-          (p) => [p.productId, p]
-        )
-      ).values()
+    const optimizationPool = this.buildOptimizationPool(
+      rankedCandidates
     );
-    console.log(
-      "AI UNIQUE PRODUCTS",
-      uniqueProducts.length
+    const workingPackage = this.optimizePackage(
+      budget,
+      optimizationPool
     );
-    uniqueProducts.sort(
-      (a, b) => b.score - a.score
+    this.expandQuantities(
+      budget,
+      optimizationPool,
+      workingPackage
     );
-    const affordableProducts = uniqueProducts.filter(
-      (p) => Number(p.price) <= budget
-    );
-    console.log(
-      "AI AFFORDABLE PRODUCTS",
-      affordableProducts.length
-    );
-    console.log(
-      "AI BUDGET",
-      budget
-    );
-    if (!affordableProducts.length) {
-      return {
-        total: 0,
-        itemCount: 0,
-        packageItems: [],
-        additionalProductIds: []
-      };
-    }
-    const cheapestPrice = Math.min(
-      ...affordableProducts.map(
-        (p) => Number(p.price)
-      )
-    );
-    if (!Number.isFinite(cheapestPrice) || cheapestPrice <= 0) {
-      return {
-        total: 0,
-        itemCount: 0,
-        packageItems: [],
-        additionalProductIds: []
-      };
-    }
-    const packageMap = /* @__PURE__ */ new Map();
-    let total = 0;
-    let iterations = 0;
-    let added = true;
-    while (added && iterations < MAX_ITERATIONS) {
-      iterations++;
-      added = false;
-      if (budget - total < cheapestPrice) {
-        break;
-      }
-      for (const product of affordableProducts) {
-        console.log(
-          "AI ADDING PRODUCT",
-          product.productId,
-          product.price
-        );
-        const existing = packageMap.get(
-          product.productId
-        );
-        const currentQty = existing?.selectedQty || 0;
-        if (currentQty >= Number(product.quantity)) {
-          continue;
-        }
-        const maxAllowedQty = Math.min(
-          Number(product.quantity),
-          MAX_QTY_PER_PRODUCT
-        );
-        if (currentQty >= maxAllowedQty) {
-          continue;
-        }
-        if (total + Number(product.price) > budget) {
-          continue;
-        }
-        packageMap.set(
-          product.productId,
-          {
-            productId: product.productId,
-            selectedQty: currentQty + 1
-          }
-        );
-        total += Number(product.price);
-        added = true;
-      }
-    }
-    const packageItems = Array.from(
-      packageMap.values()
-    );
-    const packageIds = new Set(
+    const packageItems = [...workingPackage.items.values()];
+    const selectedIds = new Set(
       packageItems.map(
-        (p) => p.productId
+        (item) => item.productId
       )
     );
-    const additionalProductIds = uniqueProducts.filter(
-      (p) => !packageIds.has(
-        p.productId
+    const remainingCandidates = rankedCandidates.filter(
+      (candidate) => !selectedIds.has(
+        candidate.productId
       )
-    ).sort(
-      (a, b) => b.score - a.score
-    ).slice(
-      0,
-      MAX_ADDITIONAL_PRODUCTS
-    ).map(
-      (p) => p.productId
     );
-    console.log(
-      "AI PACKAGE ITEMS",
-      JSON.stringify(packageItems)
-    );
-    console.log(
-      "AI PACKAGE TOTAL",
-      total
-    );
-    console.log(
-      "AI ADDITIONAL PRODUCTS",
-      additionalProductIds.length
+    this.logPackageSummary(
+      budget,
+      workingPackage.total,
+      packageItems,
+      remainingCandidates.length
     );
     return {
-      total,
+      total: workingPackage.total,
       itemCount: packageItems.reduce(
         (sum, item) => sum + item.selectedQty,
         0
       ),
       packageItems,
-      additionalProductIds
+      remainingCandidates
     };
+  }
+  emptyResult() {
+    return {
+      total: 0,
+      itemCount: 0,
+      packageItems: [],
+      remainingCandidates: []
+    };
+  }
+  prepareCandidates(budget, candidates) {
+    const unique = /* @__PURE__ */ new Map();
+    for (const candidate of candidates) {
+      if (candidate.price <= 0 || candidate.quantity <= 0 || candidate.price > budget) {
+        continue;
+      }
+      const existing = unique.get(
+        candidate.productId
+      );
+      if (!existing || candidate.score > existing.score) {
+        unique.set(
+          candidate.productId,
+          candidate
+        );
+      }
+    }
+    return [...unique.values()].sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      if (a.price !== b.price) {
+        return a.price - b.price;
+      }
+      return b.quantity - a.quantity;
+    });
+  }
+  buildOptimizationPool(candidates) {
+    return candidates.slice(
+      0,
+      Math.min(
+        OPTIMIZATION_POOL_SIZE,
+        candidates.length
+      )
+    );
+  }
+  optimizePackage(budget, candidates) {
+    const BEAM_WIDTH = 25;
+    let beam = [
+      {
+        total: 0,
+        score: 0,
+        items: /* @__PURE__ */ new Map()
+      }
+    ];
+    for (const candidate of candidates) {
+      const nextBeam = [...beam];
+      for (const current of beam) {
+        if (current.items.has(
+          candidate.productId
+        )) {
+          continue;
+        }
+        if (current.total + candidate.price > budget) {
+          continue;
+        }
+        const clone = this.cloneWorkingPackage(
+          current
+        );
+        clone.items.set(
+          candidate.productId,
+          {
+            productId: candidate.productId,
+            selectedQty: 1
+          }
+        );
+        clone.total += candidate.price;
+        clone.score += candidate.score;
+        nextBeam.push(clone);
+      }
+      const unique = /* @__PURE__ */ new Map();
+      for (const pkg of nextBeam) {
+        unique.set(
+          this.packageKey(pkg),
+          pkg
+        );
+      }
+      beam = [...unique.values()].sort(
+        (a, b) => this.packageValue(
+          b,
+          budget
+        ) - this.packageValue(
+          a,
+          budget
+        )
+      ).slice(
+        0,
+        BEAM_WIDTH
+      );
+    }
+    const best = beam.sort(
+      (a, b) => this.packageValue(
+        b,
+        budget
+      ) - this.packageValue(
+        a,
+        budget
+      )
+    )[0];
+    return best;
+  }
+  packageValue(pkg, budget) {
+    const utilization = pkg.total / budget;
+    return utilization * 5e3 + pkg.score * 500 + pkg.items.size * 10;
+  }
+  cloneWorkingPackage(pkg) {
+    return {
+      total: pkg.total,
+      score: pkg.score,
+      items: new Map(
+        [...pkg.items.entries()].map(
+          ([key, value]) => [
+            key,
+            {
+              ...value
+            }
+          ]
+        )
+      )
+    };
+  }
+  packageKey(pkg) {
+    return [...pkg.items.keys()].sort().join("|");
+  }
+  expandQuantities(budget, candidates, workingPackage) {
+    while (true) {
+      const remainingBudget = budget - workingPackage.total;
+      if (remainingBudget <= 0) {
+        break;
+      }
+      let expanded = false;
+      for (const candidate of candidates) {
+        if (candidate.price > remainingBudget) {
+          continue;
+        }
+        if (!this.canIncreaseQuantity(
+          candidate,
+          workingPackage
+        )) {
+          continue;
+        }
+        const item = workingPackage.items.get(
+          candidate.productId
+        );
+        if (!item) {
+          continue;
+        }
+        item.selectedQty++;
+        workingPackage.total += candidate.price;
+        workingPackage.score += candidate.score;
+        expanded = true;
+        break;
+      }
+      if (!expanded) {
+        break;
+      }
+    }
+  }
+  canIncreaseQuantity(candidate, workingPackage) {
+    const item = workingPackage.items.get(
+      candidate.productId
+    );
+    if (!item) {
+      return false;
+    }
+    if (item.selectedQty >= candidate.quantity) {
+      return false;
+    }
+    if (item.selectedQty >= MAX_AI_PRODUCT_QTY) {
+      return false;
+    }
+    return true;
+  }
+  logPackageSummary(budget, total, packageItems, remainingCandidates) {
+    console.log(
+      "AI PACKAGE SUMMARY",
+      JSON.stringify({
+        budget,
+        total,
+        utilization: Number(
+          (total / budget * 100).toFixed(2)
+        ),
+        uniqueProducts: packageItems.length,
+        totalItems: packageItems.reduce(
+          (sum, item) => sum + item.selectedQty,
+          0
+        ),
+        remainingCandidates,
+        packageItems
+      })
+    );
+  }
+};
+
+// src/services/additionalRecommendation.service.ts
+var DEFAULT_LIMIT = 10;
+var AdditionalRecommendationService = class {
+  getRecommendations(packageItems, remainingCandidates, limit = DEFAULT_LIMIT) {
+    if (remainingCandidates.length === 0) {
+      return [];
+    }
+    if (limit <= 0) {
+      return [];
+    }
+    const packageIds = new Set(
+      packageItems.map(
+        (item) => item.productId
+      )
+    );
+    const recommendations = [];
+    for (const candidate of remainingCandidates) {
+      if (packageIds.has(
+        candidate.productId
+      )) {
+        continue;
+      }
+      recommendations.push(
+        candidate.productId
+      );
+      if (recommendations.length >= limit) {
+        break;
+      }
+    }
+    this.logRecommendations(
+      recommendations
+    );
+    return recommendations;
+  }
+  logRecommendations(recommendations) {
+    console.log(
+      "AI ADDITIONAL RECOMMENDATIONS",
+      JSON.stringify({
+        count: recommendations.length,
+        recommendations
+      })
+    );
   }
 };
 
@@ -612,80 +968,42 @@ var PopularProductsService = class {
 
 // src/services/aiRecommendationOrchestrator.service.ts
 var AiRecommendationOrchestratorService = class {
-  constructor(parser = new RegexIntentParser(), recommendationService = new RecommendationService(), packageBuilder = new PackageBuilderService(), productService = new ProductService(), popularProductsService = new PopularProductsService()) {
-    this.parser = parser;
-    this.recommendationService = recommendationService;
+  constructor(fallbackRecommendationService = new FallbackRecommendationService(), recommendationEngine = new RecommendationEngineService(), packageBuilder = new PackageBuilderService(), additionalRecommendationService = new AdditionalRecommendationService(), productService = new ProductService(), popularProductsService = new PopularProductsService()) {
+    this.fallbackRecommendationService = fallbackRecommendationService;
+    this.recommendationEngine = recommendationEngine;
     this.packageBuilder = packageBuilder;
+    this.additionalRecommendationService = additionalRecommendationService;
     this.productService = productService;
     this.popularProductsService = popularProductsService;
   }
-  async recommend(query) {
-    const intent = await this.parser.parse(query);
-    console.log(
-      "AI INTENT",
-      JSON.stringify(intent)
+  async recommend(request) {
+    const recommendationResult = await this.recommendationEngine.getRecommendations(
+      request
     );
-    if (intent.missingFields.includes("budget")) {
-      return {
-        status: "NEEDS_BUDGET",
-        message: "Please provide your budget so I can build a suitable cracker package.",
-        extractedIntent: intent,
-        quickBudgets: [
-          3e3,
-          5e3,
-          1e4,
-          2e4,
-          5e4
-        ]
-      };
-    }
-    const recommendation = await this.recommendationService.getRecommendations(intent);
-    console.log(
-      "AI RECOMMENDATION RESULT",
-      JSON.stringify(recommendation)
-    );
-    if (recommendation.status !== "SUCCESS") {
-      return recommendation;
-    }
-    if (!recommendation.exactMatchFound || recommendation.candidates.length === 0) {
-      return {
-        status: "NO_MATCH_FOUND",
-        message: "I couldn't find matching products for your request. Please tell me more about what you're looking for.",
-        extractedIntent: intent,
-        suggestedTags: [
-          "kids",
-          "family",
-          "adults",
-          "eco-friendly",
-          "safe",
-          "low-noise",
-          "medium-noise",
-          "high-noise",
-          "premium",
-          "budget",
-          "colorful"
-        ],
-        recommendedPackage: {
-          total: 0,
-          itemCount: 0,
-          items: []
-        },
-        additionalProducts: []
-      };
+    let recommendationCandidates = recommendationResult.candidates;
+    if (recommendationCandidates.length === 0) {
+      console.log(
+        "AI NO MATCHES FOUND - USING FALLBACK RECOMMENDATION"
+      );
+      const activeProducts = await this.recommendationEngine.getActiveProducts();
+      recommendationCandidates = this.fallbackRecommendationService.buildCandidates(
+        recommendationResult.budget,
+        activeProducts
+      );
+      console.log(
+        "AI FALLBACK GENERATED",
+        JSON.stringify({
+          candidates: recommendationCandidates.length
+        })
+      );
     }
     const packageResult = this.packageBuilder.buildPackage(
-      recommendation.budget,
-      recommendation.candidates
-    );
-    console.log(
-      "AI PACKAGE RESULT",
-      JSON.stringify(packageResult)
+      recommendationResult.budget,
+      recommendationCandidates
     );
     if (packageResult.packageItems.length === 0) {
       return {
-        status: "NO_PACKAGE_FOUND",
-        message: "Couldn't build a package within your budget.",
-        extractedIntent: intent,
+        status: "SUCCESS",
         recommendedPackage: {
           total: 0,
           itemCount: 0,
@@ -694,85 +1012,137 @@ var AiRecommendationOrchestratorService = class {
         additionalProducts: []
       };
     }
+    const additionalProductIds = this.additionalRecommendationService.getRecommendations(
+      packageResult.packageItems,
+      packageResult.remainingCandidates,
+      10
+    );
     const packageProducts = await this.productService.batchGetProducts(
       packageResult.packageItems.map(
-        (p) => p.productId
+        (item) => item.productId
       )
     );
-    console.log(
-      "AI PACKAGE PRODUCTS",
-      packageProducts.length
-    );
-    const qtyMap = new Map(
-      packageResult.packageItems.map(
-        (p) => [
-          p.productId,
-          p.selectedQty
+    const packageProductMap = new Map(
+      packageProducts.map(
+        (product) => [
+          product.productId,
+          product
         ]
       )
     );
-    const packageItems = packageProducts.map(
-      (p) => ({
-        id: p.productId,
-        name: p.name,
-        image: p.image ?? null,
-        price: p.price,
-        originalPrice: p.originalPrice,
-        discountText: p.discountText,
-        categoryId: p.categoryId,
-        brandId: p.brandId,
-        qty: qtyMap.get(p.productId) || 1
-      })
+    const packageItems = packageResult.packageItems.map((item) => {
+      const product = packageProductMap.get(
+        item.productId
+      );
+      if (!product) {
+        return null;
+      }
+      return {
+        id: product.productId,
+        name: product.name,
+        image: product.image ?? null,
+        price: product.price,
+        originalPrice: product.originalPrice,
+        discountText: product.discountText,
+        categoryId: product.categoryId,
+        brandId: product.brandId,
+        qty: item.selectedQty
+      };
+    }).filter(
+      (item) => item !== null
     );
     let additionalProducts = [];
-    if (packageResult.additionalProductIds.length) {
-      additionalProducts = await this.productService.batchGetProducts(packageResult.additionalProductIds);
-      console.log(
-        "AI ADDITIONAL PRODUCTS",
-        additionalProducts.length
+    if (additionalProductIds.length > 0) {
+      additionalProducts = await this.productService.batchGetProducts(
+        additionalProductIds
       );
     }
     if (additionalProducts.length < 10) {
       const { items } = await this.popularProductsService.getPopularProducts({
         limit: 10 - additionalProducts.length
       });
+      console.log(
+        "AI POPULAR PRODUCTS",
+        JSON.stringify({
+          count: items.length,
+          ids: items.map((p) => p.productId)
+        })
+      );
       const existingIds = new Set(
         additionalProducts.map(
-          (p) => p.productId
+          (product) => product.productId
         )
       );
       const packageIds = new Set(
         packageItems.map(
-          (p) => p.id
+          (item) => item.id
         )
       );
-      const filtered = items.filter(
-        (p) => !existingIds.has(
-          p.productId
+      const fallbackProducts = items.filter(
+        (product) => !existingIds.has(
+          product.productId
         ) && !packageIds.has(
-          p.productId
+          product.productId
         )
       );
       additionalProducts.push(
-        ...filtered
+        ...fallbackProducts
       );
     }
-    const additionalItems = additionalProducts.map(
-      (p) => ({
-        id: p.productId,
-        name: p.name,
-        image: p.image ?? null,
-        price: p.price,
-        originalPrice: p.originalPrice,
-        discountText: p.discountText,
-        categoryId: p.categoryId,
-        brandId: p.brandId,
-        qty: p.qty
+    const additionalProductMap = new Map(
+      additionalProducts.map(
+        (product) => [
+          product.productId,
+          product
+        ]
+      )
+    );
+    const additionalItems = [
+      ...additionalProductIds,
+      ...additionalProducts.map(
+        (product) => product.productId
+      ).filter(
+        (productId) => !additionalProductIds.includes(
+          productId
+        )
+      )
+    ].map((productId) => {
+      const product = additionalProductMap.get(
+        productId
+      );
+      if (!product) {
+        return null;
+      }
+      return {
+        id: product.productId,
+        name: product.name,
+        image: product.image ?? null,
+        price: product.price,
+        originalPrice: product.originalPrice,
+        discountText: product.discountText,
+        categoryId: product.categoryId,
+        brandId: product.brandId,
+        qty: product.qty
+      };
+    }).filter(
+      (item) => item !== null
+    );
+    console.log(
+      "AI RECOMMENDATION COMPLETED",
+      JSON.stringify({
+        budget: recommendationResult.budget,
+        relaxationLevel: recommendationResult.relaxationLevel,
+        candidateCount: recommendationCandidates.length,
+        packageProducts: packageItems.length,
+        additionalProducts: additionalItems.length,
+        packageTotal: packageResult.total,
+        packageItemCount: packageResult.itemCount
       })
     );
     return {
       status: "SUCCESS",
-      extractedIntent: intent,
+      budget: recommendationResult.budget,
+      relaxationLevel: recommendationResult.relaxationLevel,
       recommendedPackage: {
         total: packageResult.total,
         itemCount: packageResult.itemCount,
@@ -787,7 +1157,7 @@ var AiRecommendationOrchestratorService = class {
 var service = new AiRecommendationOrchestratorService();
 var handler = async (event) => {
   try {
-    let body = {};
+    let body;
     try {
       body = event.body ? JSON.parse(event.body) : {};
     } catch {
@@ -796,27 +1166,28 @@ var handler = async (event) => {
         400
       );
     }
-    const query = body?.query?.trim();
-    if (!query) {
+    if (!body.budget || Number(body.budget) <= 0) {
       return error(
-        "Query is required",
+        "Budget is required",
         400
       );
     }
-    if (query.length > 500) {
-      return error(
-        "Query is too long",
-        400
-      );
-    }
-    const result = await service.recommend(
-      query
+    body.budget = Number(body.budget);
+    body.audiences = Array.isArray(body.audiences) ? body.audiences : [];
+    body.crackerTypes = Array.isArray(body.crackerTypes) ? body.crackerTypes : [];
+    body.noiseLevels = Array.isArray(body.noiseLevels) ? body.noiseLevels : [];
+    body.timePreferences = Array.isArray(body.timePreferences) ? body.timePreferences : [];
+    body.features = Array.isArray(body.features) ? body.features : [];
+    console.log(
+      "AI RECOMMENDATION REQUEST",
+      JSON.stringify(body)
     );
+    const result = await service.recommend(body);
     return success(result);
   } catch (err) {
     console.error(
       "AI Recommendation Error",
-      err
+      JSON.stringify(err, Object.getOwnPropertyNames(err))
     );
     return error(
       "Failed to generate recommendations",

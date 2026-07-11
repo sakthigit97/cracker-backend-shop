@@ -1,211 +1,413 @@
-import { RegexIntentParser } from "../parsers/regexIntentParser";
-import { RecommendationService } from "./recommendation.service";
-import { PackageBuilderService } from "./packageBuilder.service";
+import { AiRecommendationRequest } from "../types/aiRecommendation.types";
+import { RecommendationEngineService } from "./recommendationEngine.service";
+import { FallbackRecommendationService } from "./fallbackRecommendation.service";
+import {
+    PackageBuilderService,
+    PackageBuildResult,
+} from "./packageBuilder.service";
+import { AdditionalRecommendationService } from "./additionalRecommendation.service";
 import { ProductService } from "./product.service";
 import { PopularProductsService } from "./popularProducts.service";
 
 export class AiRecommendationOrchestratorService {
 
     constructor(
-        private parser = new RegexIntentParser(),
-        private recommendationService = new RecommendationService(),
-        private packageBuilder = new PackageBuilderService(),
-        private productService = new ProductService(),
-        private popularProductsService = new PopularProductsService()
+
+        private readonly fallbackRecommendationService =
+            new FallbackRecommendationService(),
+
+        private readonly recommendationEngine =
+            new RecommendationEngineService(),
+
+        private readonly packageBuilder =
+            new PackageBuilderService(),
+
+        private readonly additionalRecommendationService =
+            new AdditionalRecommendationService(),
+
+        private readonly productService =
+            new ProductService(),
+
+        private readonly popularProductsService =
+            new PopularProductsService()
+
     ) { }
 
-    async recommend(query: string) {
+    async recommend(
+        request: AiRecommendationRequest
+    ) {
 
-        const intent = await this.parser.parse(query);
-        console.log(
-            "AI INTENT",
-            JSON.stringify(intent)
-        );
+        const recommendationResult =
+            await this.recommendationEngine.getRecommendations(
+                request
+            );
 
-        if (intent.missingFields.includes("budget")) {
-            return {
-                status: "NEEDS_BUDGET",
-                message: "Please provide your budget so I can build a suitable cracker package.",
-                extractedIntent: intent,
-                quickBudgets: [
-                    3000,
-                    5000,
-                    10000,
-                    20000,
-                    50000,
-                ],
-            };
-        }
 
-        const recommendation = await this.recommendationService.getRecommendations(intent);
-        console.log(
-            "AI RECOMMENDATION RESULT",
-            JSON.stringify(recommendation)
-        );
-        if (
-            recommendation.status !== "SUCCESS"
-        ) {
-            return recommendation;
-        }
+        let recommendationCandidates =
+            recommendationResult.candidates;
 
         if (
-            !recommendation.exactMatchFound ||
-            recommendation.candidates.length === 0
+            recommendationCandidates.length === 0
         ) {
 
-            return {
-                status: "NO_MATCH_FOUND",
-                message: "I couldn't find matching products for your request. Please tell me more about what you're looking for.",
-                extractedIntent: intent,
-                suggestedTags: [
-                    "kids",
-                    "family",
-                    "adults",
-                    "eco-friendly",
-                    "safe",
-                    "low-noise",
-                    "medium-noise",
-                    "high-noise",
-                    "premium",
-                    "budget",
-                    "colorful",
-                ],
-                recommendedPackage: {
-                    total: 0,
-                    itemCount: 0,
-                    items: [],
-                },
-                additionalProducts: [],
-            };
+            console.log(
+                "AI NO MATCHES FOUND - USING FALLBACK RECOMMENDATION"
+            );
+
+            const activeProducts =
+                await this.recommendationEngine.getActiveProducts();
+
+            recommendationCandidates =
+                this.fallbackRecommendationService.buildCandidates(
+
+                    recommendationResult.budget,
+
+                    activeProducts
+
+                );
+
+            console.log(
+
+                "AI FALLBACK GENERATED",
+
+                JSON.stringify({
+
+                    candidates:
+                        recommendationCandidates.length,
+
+                })
+
+            );
+
         }
 
-        const packageResult = this.packageBuilder.buildPackage(
-            recommendation.budget,
-            recommendation.candidates
-        );
-        console.log(
-            "AI PACKAGE RESULT",
-            JSON.stringify(packageResult)
-        );
+
+        const packageResult: PackageBuildResult =
+            this.packageBuilder.buildPackage(
+
+                recommendationResult.budget,
+
+                recommendationCandidates
+
+            );
 
         if (
             packageResult.packageItems.length === 0
         ) {
+
             return {
-                status: "NO_PACKAGE_FOUND",
-                message: "Couldn't build a package within your budget.",
-                extractedIntent: intent,
+
+                status: "SUCCESS",
+
                 recommendedPackage: {
+
                     total: 0,
+
                     itemCount: 0,
+
                     items: [],
+
                 },
+
                 additionalProducts: [],
+
             };
+
         }
 
-        const packageProducts = await this.productService.batchGetProducts(
-            packageResult.packageItems.map(
-                p => p.productId
-            )
-        );
-        console.log(
-            "AI PACKAGE PRODUCTS",
-            packageProducts.length
-        );
+        const additionalProductIds =
+            this.additionalRecommendationService.getRecommendations(
 
-        const qtyMap = new Map(
-            packageResult.packageItems.map(
-                p => [
-                    p.productId,
-                    p.selectedQty,
-                ]
-            )
-        );
+                packageResult.packageItems,
 
-        const packageItems = packageProducts.map(
-            (p: any) => ({
-                id: p.productId,
-                name: p.name,
-                image: p.image ?? null,
-                price: p.price,
-                originalPrice: p.originalPrice,
-                discountText: p.discountText,
-                categoryId: p.categoryId,
-                brandId: p.brandId,
-                qty: qtyMap.get(p.productId) || 1,
-            })
-        );
+                packageResult.remainingCandidates,
+
+                10
+
+            );
+
+        const packageProducts =
+            await this.productService.batchGetProducts(
+
+                packageResult.packageItems.map(
+                    item => item.productId
+                )
+
+            );
+
+        const packageProductMap =
+            new Map(
+
+                packageProducts.map(
+                    (product: any) => [
+
+                        product.productId,
+
+                        product,
+
+                    ]
+                )
+
+            );
+
+        const packageItems =
+            packageResult.packageItems
+
+                .map(item => {
+
+                    const product =
+                        packageProductMap.get(
+                            item.productId
+                        );
+
+                    if (!product) {
+
+                        return null;
+
+                    }
+
+                    return {
+
+                        id:
+                            product.productId,
+
+                        name:
+                            product.name,
+
+                        image:
+                            product.image ?? null,
+
+                        price:
+                            product.price,
+
+                        originalPrice:
+                            product.originalPrice,
+
+                        discountText:
+                            product.discountText,
+
+                        categoryId:
+                            product.categoryId,
+
+                        brandId:
+                            product.brandId,
+
+                        qty:
+                            item.selectedQty,
+
+                    };
+
+                })
+
+                .filter(
+                    (item): item is NonNullable<typeof item> =>
+                        item !== null
+                );
+
 
         let additionalProducts: any[] = [];
+
         if (
-            packageResult.additionalProductIds.length
+            additionalProductIds.length > 0
         ) {
 
-            additionalProducts = await this.productService.batchGetProducts(packageResult.additionalProductIds);
-            console.log(
-                "AI ADDITIONAL PRODUCTS",
-                additionalProducts.length
-            );
+            additionalProducts =
+                await this.productService.batchGetProducts(
+
+                    additionalProductIds
+
+                );
+
         }
+
 
         if (
             additionalProducts.length < 10
         ) {
 
-            const { items } = await this.popularProductsService.getPopularProducts({
-                limit: 10 - additionalProducts.length,
-            });
+            const { items } =
+                await this.popularProductsService.getPopularProducts({
+                    limit:
+                        10 -
+                        additionalProducts.length,
+                });
 
-            const existingIds = new Set(
-                additionalProducts.map(
-                    (p: any) => p.productId
-                )
-            );
-            const packageIds = new Set(
-                packageItems.map(
-                    p => p.id
-                )
-            );
-            const filtered = items.filter(
-                (p: any) =>
-                    !existingIds.has(
-                        p.productId
-                    ) &&
-                    !packageIds.has(
-                        p.productId
-                    )
-            );
-
-            additionalProducts.push(
-                ...filtered
-            );
-        }
-
-        const additionalItems =
-            additionalProducts.map(
-                (p: any) => ({
-                    id: p.productId,
-                    name: p.name,
-                    image: p.image ?? null,
-                    price: p.price,
-                    originalPrice: p.originalPrice,
-                    discountText: p.discountText,
-                    categoryId: p.categoryId,
-                    brandId: p.brandId,
-                    qty: p.qty,
+            console.log(
+                "AI POPULAR PRODUCTS",
+                JSON.stringify({
+                    count: items.length,
+                    ids: items.map((p: any) => p.productId),
                 })
             );
 
+            const existingIds =
+                new Set(
+
+                    additionalProducts.map(
+                        (product: any) =>
+                            product.productId
+                    )
+
+                );
+
+            const packageIds =
+                new Set(
+
+                    packageItems.map(
+                        item => item.id
+                    )
+
+                );
+
+            const fallbackProducts =
+                items.filter(
+                    (product: any) =>
+
+                        !existingIds.has(
+                            product.productId
+                        ) &&
+
+                        !packageIds.has(
+                            product.productId
+                        )
+                );
+
+            additionalProducts.push(
+                ...fallbackProducts
+            );
+
+        }
+        const additionalProductMap =
+            new Map(
+
+                additionalProducts.map(
+                    (product: any) => [
+
+                        product.productId,
+
+                        product,
+
+                    ]
+                )
+
+            );
+
+        const additionalItems = [
+
+            ...additionalProductIds,
+
+            ...additionalProducts
+
+                .map(
+                    (product: any) =>
+                        product.productId
+                )
+
+                .filter(
+                    productId =>
+
+                        !additionalProductIds.includes(
+                            productId
+                        )
+                )
+
+        ]
+
+            .map(productId => {
+
+                const product =
+                    additionalProductMap.get(
+                        productId
+                    );
+
+                if (!product) {
+
+                    return null;
+
+                }
+
+                return {
+
+                    id:
+                        product.productId,
+
+                    name:
+                        product.name,
+
+                    image:
+                        product.image ?? null,
+
+                    price:
+                        product.price,
+
+                    originalPrice:
+                        product.originalPrice,
+
+                    discountText:
+                        product.discountText,
+
+                    categoryId:
+                        product.categoryId,
+
+                    brandId:
+                        product.brandId,
+
+                    qty:
+                        product.qty,
+
+                };
+
+            })
+
+            .filter(
+                (item): item is NonNullable<typeof item> =>
+                    item !== null
+            );
+
+        console.log(
+
+            "AI RECOMMENDATION COMPLETED",
+
+            JSON.stringify({
+
+                budget:
+                    recommendationResult.budget,
+
+                relaxationLevel:
+                    recommendationResult.relaxationLevel,
+
+                candidateCount:
+                     recommendationCandidates.length,
+
+                packageProducts:
+                    packageItems.length,
+
+                additionalProducts:
+                    additionalItems.length,
+
+                packageTotal:
+                    packageResult.total,
+
+                packageItemCount:
+                    packageResult.itemCount,
+
+            })
+
+        );
+
         return {
             status: "SUCCESS",
-            extractedIntent: intent,
+            budget: recommendationResult.budget,
+            relaxationLevel: recommendationResult.relaxationLevel,
             recommendedPackage: {
                 total: packageResult.total,
                 itemCount: packageResult.itemCount,
                 items: packageItems,
+
             },
             additionalProducts: additionalItems,
         };
+
     }
+
 }
