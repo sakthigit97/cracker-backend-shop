@@ -144,7 +144,8 @@ var ProductService = class {
         discountText: priceInfo.discountText,
         categoryId: p.categoryId,
         brandId: p.brandId,
-        qty: p.quantity
+        qty: p.quantity,
+        searchText: p.searchText
       };
     });
   }
@@ -244,7 +245,8 @@ var handler = async () => {
       discountText: p.discountText,
       categoryId: p.categoryId,
       brandId: p.brandId,
-      qty: p.qty
+      qty: p.qty,
+      searchText: p.searchText
     }));
     return success({
       items: products

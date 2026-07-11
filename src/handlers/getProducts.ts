@@ -8,8 +8,8 @@ import { success, error } from "../libs/response";
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     try {
         const limit = Math.min(
-            Number(event.queryStringParameters?.limit) || 20,
-            50
+            Number(event.queryStringParameters?.limit) || 2000,
+            2000
         );
         const search = event.queryStringParameters?.search?.trim();
         const cursor = decodeCursor(
@@ -33,7 +33,8 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
                 discountText: priceInfo.discountText,
                 categoryId: p.categoryId,
                 brandId: p.brandId,
-                qty: p.quantity
+                qty: p.quantity,
+                searchText: p.searchText,
             };
         });
 

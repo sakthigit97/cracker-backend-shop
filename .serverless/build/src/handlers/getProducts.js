@@ -167,8 +167,8 @@ var error = (message, statusCode = 400) => ({
 var handler = async (event) => {
   try {
     const limit = Math.min(
-      Number(event.queryStringParameters?.limit) || 20,
-      50
+      Number(event.queryStringParameters?.limit) || 2e3,
+      2e3
     );
     const search = event.queryStringParameters?.search?.trim();
     const cursor = decodeCursor(
@@ -189,7 +189,8 @@ var handler = async (event) => {
         discountText: priceInfo.discountText,
         categoryId: p.categoryId,
         brandId: p.brandId,
-        qty: p.quantity
+        qty: p.quantity,
+        searchText: p.searchText
       };
     });
     return success({

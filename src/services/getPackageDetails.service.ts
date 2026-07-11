@@ -37,6 +37,7 @@ export class GetPackageDetailsService {
                 categoryId: p.categoryId,
                 brandId: p.brandId,
                 qty: p.qty,
+                searchText: p.searchText,
             })
         );
 

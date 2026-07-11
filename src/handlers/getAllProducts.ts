@@ -24,6 +24,7 @@ export const handler: APIGatewayProxyHandlerV2 = async () => {
                 categoryId: p.categoryId,
                 brandId: p.brandId,
                 qty: p.quantity,
+                searchText: p.searchText,
             };
         });
 

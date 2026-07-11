@@ -15,13 +15,12 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     }
 
     const limit = Math.min(
-      Number(event.queryStringParameters?.limit) || 8,
-      50
+      Number(event.queryStringParameters?.limit) || 2000,
+      2000
     );
 
     const search = event.queryStringParameters?.search?.trim();
     const searchLower = search?.toLowerCase();
-
     const cursor = decodeCursor(
       event.queryStringParameters?.cursor
     );
@@ -87,6 +86,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
           categoryId: p.categoryId,
           brandId: p.brandId,
           qty: p.quantity,
+          searchText: p.searchText,
         };
       }) || [];
 

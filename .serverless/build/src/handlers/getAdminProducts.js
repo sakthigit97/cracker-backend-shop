@@ -4066,7 +4066,7 @@ var handler = async (event) => {
       return { statusCode: 403, body: "Forbidden" };
     }
     const qs = event.queryStringParameters || {};
-    const limit = Math.min(Number(qs.limit) || 20, 25);
+    const limit = Math.min(Number(qs.limit) || 2e3, 2e3);
     const cursor = qs.cursor ? JSON.parse(Buffer.from(qs.cursor, "base64").toString("utf8")) : void 0;
     const params = {
       brandId: qs.brandId,

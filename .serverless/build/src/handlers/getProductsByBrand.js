@@ -124,8 +124,8 @@ var handler = async (event) => {
       return error("brandId is required", 400);
     }
     const limit = Math.min(
-      Number(event.queryStringParameters?.limit) || 8,
-      50
+      Number(event.queryStringParameters?.limit) || 2e3,
+      2e3
     );
     const search = event.queryStringParameters?.search?.trim();
     const searchLower = search?.toLowerCase();
@@ -184,7 +184,8 @@ var handler = async (event) => {
         discountText: priceInfo.discountText,
         categoryId: p.categoryId,
         brandId: p.brandId,
-        qty: p.quantity
+        qty: p.quantity,
+        searchText: p.searchText
       };
     }) || [];
     return success({
