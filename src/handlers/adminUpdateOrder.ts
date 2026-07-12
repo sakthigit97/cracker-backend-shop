@@ -1,10 +1,15 @@
 import { verifyJwt } from "../utils/auth";
 import { AdminUpdateOrderService } from "../services/adminUpdateOrder.service";
 import { NotificationService } from "../utils/notification.service";
+import { AdminConfigRepo } from "../repo/adminConfig.repo";
+import { AdminConfigService } from "../services/adminConfig.service";
 
 const notify = new NotificationService();
 const service = new AdminUpdateOrderService();
 export const handler = async (event: any) => {
+    const repo = new AdminConfigRepo();
+    const configservice = new AdminConfigService(repo);
+    const config = await configservice.getConfig();
     try {
         const { role, userId } = verifyJwt(event);
         if (role !== "admin") {
@@ -26,7 +31,7 @@ export const handler = async (event: any) => {
             adminId: userId,
         });
 
-        if (body.status == 'ORDER_CONFIRMED') {
+        if (body.status == 'ORDER_CONFIRMED' && (config.IsOrderConfirmSMSEnabled || false)) {
             await notify.send({
                 email: body?.email,
                 phone: mobile,
@@ -37,10 +42,43 @@ export const handler = async (event: any) => {
                     ORDERID: orderId,
                     ORDERAMOUNT: totalAmount,
                     SVKCURL: process.env.DOMAIN! || '',
+                    USERNAME: 'User'
                 },
             });
-
         }
+
+        if (body.status == 'PAYMENT_CONFIRMED' && (config.isPaidSMSEnabled || false)) {
+            await notify.send({
+                email: body?.email,
+                phone: mobile,
+                subject: "Payment Confirmed",
+                smsTemplateId: process.env.PAYMENT_CONFIRM_TID!,
+                message: `Your order ${orderId} is updated with status ${body.status}`,
+                smsVariables: {
+                    ORDERID: orderId,
+                    ORDERAMOUNT: totalAmount,
+                    SVKCURL: process.env.DOMAIN! || '',
+                    USERNAME: 'User'
+                },
+            });
+        }
+
+        if (body.status == 'DISPATCHED' && (config.isOrderDispatchSMSEnabled || false)) {
+            await notify.send({
+                email: body?.email,
+                phone: mobile,
+                subject: "Order Dispatched",
+                smsTemplateId: process.env.ORDER_DISPATCHED_TID!,
+                message: `Your order ${orderId} is updated with status ${body.status}`,
+                smsVariables: {
+                    ORDERID: orderId,
+                    ORDERAMOUNT: totalAmount,
+                    SVKCURL: process.env.DOMAIN! || '',
+                    USERNAME: 'User'
+                },
+            });
+        }
+
 
         return {
             statusCode: 200,

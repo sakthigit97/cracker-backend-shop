@@ -5,9 +5,13 @@ const service = new CartService();
 
 export const handler = async (event: any) => {
     try {
-        const decoded = verifyJwt(event);
-        const userId = decoded.userId;
-
+        const { userId, role } = verifyJwt(event);
+        if (role == 'admin') {
+            return {
+                statusCode: 200,
+                body: JSON.stringify({ message: 'This items cannot be merged to admin user' }),
+            };
+        }
         const body = JSON.parse(event.body || "{}");
         const guestItems: Record<string, number> =
             body.guestItems ?? {};

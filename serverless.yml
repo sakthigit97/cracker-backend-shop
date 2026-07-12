@@ -22,6 +22,13 @@ provider:
     OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
     CONFIRM_ORDER_TID: ${env:CONFIRM_ORDER_TID}
     ORDER_SUBMIT_TID: ${env:ORDER_SUBMIT_TID}
+    PAYMENT_CONFIRM_TID: ${env:PAYMENT_CONFIRM_TID}
+    CART_UPDATED_TID: ${env:CART_UPDATED_TID}
+    ORDER_DISPATCHED_TID: ${env:ORDER_DISPATCHED_TID}
+    MSG91_ESTIMATE_TEMPLATE: ${env:MSG91_ESTIMATE_TEMPLATE}
+    MSG91_EMAIL_FROM: ${env:MSG91_EMAIL_FROM}
+    MSG91_EMAIL_DOMAIN: ${env:MSG91_EMAIL_DOMAIN}
+    MSG91_EMAIL_FROM_NAME: ${env:MSG91_EMAIL_FROM_NAME}
     DOMAIN: ${env:DOMAIN}
     MSG91_AUTH_KEY: ${env:MSG91_AUTH_KEY}
     RECAPTCHA_SECRET: ${env:RECAPTCHA_SECRET}
@@ -635,6 +642,13 @@ functions:
     events:
       - httpApi:
           path: /ai-recommendation
+          method: POST
+
+  estimateSendEmail:
+    handler: src/handlers/estimateEmail.handler
+    events:
+      - httpApi:
+          path: /estimates/email
           method: POST
 
 resources:

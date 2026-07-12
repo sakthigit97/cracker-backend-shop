@@ -2,11 +2,16 @@ import { verifyJwt } from "../utils/auth";
 import { CartService } from "../services/cart.service";
 import { OrderService } from "../services/order.service";
 import { NotificationService } from "../utils/notification.service";
+import { AdminConfigRepo } from "../repo/adminConfig.repo";
+import { AdminConfigService } from "../services/adminConfig.service";
 const notify = new NotificationService();
 const cartService = new CartService();
 const orderService = new OrderService();
 
 export const handler = async (event: any) => {
+    const repo = new AdminConfigRepo();
+    const service = new AdminConfigService(repo);
+    const config = await service.getConfig();
     try {
         const { userId } = verifyJwt(event);
         const userCartId = `USER#${userId}`;
@@ -110,18 +115,20 @@ export const handler = async (event: any) => {
 
         await cartService.clear(userCartId);
 
-        await notify.send({
-            email: body?.email,
-            phone: body?.mobile,
-            subject: "Order Placed",
-            smsTemplateId: process.env.ORDER_SUBMIT_TID!,
-            message: `Your order ${orderId} is confirmed`,
-            smsVariables: {
-                ORDERID: orderId,
-                ORDERAMOUNT: finalPayable,
-                SVKCURL: process.env.DOMAIN! || '',
-            },
-        });
+        if (config.isOrderPlaceSMSEnabled || false) {
+            await notify.send({
+                email: body?.email,
+                phone: body?.mobile,
+                subject: "Order Placed",
+                smsTemplateId: process.env.ORDER_SUBMIT_TID!,
+                message: `Your order ${orderId} is confirmed`,
+                smsVariables: {
+                    ORDERID: orderId,
+                    ORDERAMOUNT: finalPayable,
+                    SVKCURL: process.env.DOMAIN! || '',
+                },
+            });
+        }
 
         return {
             statusCode: 201,

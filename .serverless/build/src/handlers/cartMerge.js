@@ -4047,8 +4047,13 @@ var CartService = class {
 var service = new CartService();
 var handler = async (event) => {
   try {
-    const decoded = verifyJwt(event);
-    const userId = decoded.userId;
+    const { userId, role } = verifyJwt(event);
+    if (role == "admin") {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ message: "This items cannot be merged to admin user" })
+      };
+    }
     const body = JSON.parse(event.body || "{}");
     const guestItems = body.guestItems ?? {};
     if (Object.keys(guestItems).length === 0) {
