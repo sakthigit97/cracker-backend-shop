@@ -18,6 +18,7 @@ export const handler = async (event: any) => {
 
         const body = JSON.parse(event.body || "{}");
         const items = body.items;
+        const mobile = body.mobile;
 
         const order = await orderService.adjustOrder({
             userId,
@@ -26,10 +27,10 @@ export const handler = async (event: any) => {
             items,
         });
 
-        if (iscartUpdatedSMSEnabled && body?.mobile) {
+        if (iscartUpdatedSMSEnabled && mobile) {
             await notify.send({
-                email: body?.email,
-                phone: body?.mobile,
+                email: "",
+                phone: mobile,
                 subject: "Cart Updated",
                 smsTemplateId: process.env.CART_UPDATED_TID!,
                 message: `Your cart is adjusted by ${userId}`,

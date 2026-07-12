@@ -27,7 +27,6 @@ export const handler = async (event: any) => {
 
         const s3Key = `imports/${userId}/${importId}.xlsx`;
         const fileBuffer = await getFileFromS3(s3Key);
-
         const workbook = XLSX.read(fileBuffer, { type: "buffer" });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const rows: any[] = XLSX.utils.sheet_to_json(sheet, { defval: "" });
@@ -90,6 +89,9 @@ export const handler = async (event: any) => {
                             },
                             isActive: { S: String(item.isActive ?? true) },
                             createdAt: { S: now },
+                            isComboPackage: {
+                                BOOL: Boolean(item.isComboPackage),
+                            },
                         },
                     },
                 },

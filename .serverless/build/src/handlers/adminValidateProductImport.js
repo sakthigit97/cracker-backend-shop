@@ -37199,6 +37199,11 @@ var PRODUCT_IMPORT_SCHEMA_V1 = {
     required: false,
     type: "boolean",
     default: true
+  },
+  isComboPackage: {
+    required: false,
+    type: "boolean",
+    default: false
   }
 };
 

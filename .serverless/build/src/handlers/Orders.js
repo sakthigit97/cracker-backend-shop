@@ -4804,6 +4804,9 @@ var notify = new NotificationService();
 var cartService = new CartService();
 var orderService = new OrderService();
 var handler = async (event) => {
+  const repo = new AdminConfigRepo();
+  const service = new AdminConfigService(repo);
+  const config = await service.getConfig();
   try {
     const { userId } = verifyJwt(event);
     const userCartId = `USER#${userId}`;
@@ -4889,18 +4892,20 @@ var handler = async (event) => {
       finalPayable
     });
     await cartService.clear(userCartId);
-    await notify.send({
-      email: body?.email,
-      phone: body?.mobile,
-      subject: "Order Placed",
-      smsTemplateId: process.env.ORDER_SUBMIT_TID,
-      message: `Your order ${orderId} is confirmed`,
-      smsVariables: {
-        ORDERID: orderId,
-        ORDERAMOUNT: finalPayable,
-        SVKCURL: process.env.DOMAIN || ""
-      }
-    });
+    if (config.isOrderPlaceSMSEnabled || false) {
+      await notify.send({
+        email: body?.email,
+        phone: body?.mobile,
+        subject: "Order Placed",
+        smsTemplateId: process.env.ORDER_SUBMIT_TID,
+        message: `Your order ${orderId} is confirmed`,
+        smsVariables: {
+          ORDERID: orderId,
+          ORDERAMOUNT: finalPayable,
+          SVKCURL: process.env.DOMAIN || ""
+        }
+      });
+    }
     return {
       statusCode: 201,
       body: JSON.stringify({ orderId })

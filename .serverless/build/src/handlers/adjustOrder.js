@@ -4498,20 +4498,241 @@ var OrderService = class {
   }
 };
 
+// src/utils/email.service.ts
+var EmailService = class {
+  async send(input) {
+    console.log("EMAIL MOCK SENT");
+    console.log("To:", input.to);
+    console.log("Subject:", input.subject);
+    console.log("Message:", input.message);
+    return {
+      success: true,
+      provider: "MOCK"
+    };
+  }
+  async sendEstimate(input) {
+    const body = {
+      recipients: [
+        {
+          to: [
+            {
+              email: input.to,
+              name: "Admin"
+            }
+          ],
+          variables: {
+            USERNAME: input.customerName,
+            PHONE_NUMBER: input.mobile
+          }
+        }
+      ],
+      from: {
+        name: "Sivakasi Pyro Park",
+        email: process.env.MSG91_EMAIL_FROM
+      },
+      domain: process.env.MSG91_EMAIL_DOMAIN,
+      attachments: [
+        {
+          file: `data:application/pdf;base64,${input.pdfBase64}`,
+          fileName: `Estimate-${input.customerName.replace(/\s+/g, "-")}-${input.mobile}.pdf`
+        }
+      ],
+      template_id: process.env.MSG91_ESTIMATE_TEMPLATE
+    };
+    const response = await fetch(
+      "https://control.msg91.com/api/v5/email/send",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          authkey: process.env.MSG91_AUTH_KEY
+        },
+        body: JSON.stringify(body)
+      }
+    );
+    const result = await response.json();
+    if (!response.ok) {
+      console.error(result);
+      throw new Error(result?.message || "Unable to send estimate email");
+    }
+    console.log("Estimate email sent", result);
+    return result;
+  }
+};
+
+// src/utils/sms.service.ts
+var SmsService = class {
+  async send(input) {
+    const payload = {
+      template_id: input.templateId,
+      recipients: [
+        {
+          mobiles: `91${input.to}`,
+          ...input.variables
+        }
+      ]
+    };
+    const res = await fetch(
+      "https://control.msg91.com/api/v5/flow/",
+      {
+        method: "POST",
+        headers: {
+          authkey: process.env.MSG91_AUTH_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+    const data = await res.json();
+    if (!res.ok) {
+      console.error(
+        "MSG91 Error",
+        data
+      );
+      throw new Error("SMS sending failed");
+    }
+    return data;
+  }
+};
+
+// src/repo/adminConfig.repo.ts
+var import_client_dynamodb2 = require("@aws-sdk/client-dynamodb");
+var import_lib_dynamodb6 = require("@aws-sdk/lib-dynamodb");
+var client2 = new import_client_dynamodb2.DynamoDBClient({ region: "ap-south-1" });
+var docClient = import_lib_dynamodb6.DynamoDBDocumentClient.from(client2);
+var TABLE_NAME3 = process.env.ADMIN_CONFIG_TABLE;
+var AdminConfigRepo = class {
+  async getGlobalConfig() {
+    const result = await docClient.send(
+      new import_lib_dynamodb6.GetCommand({
+        TableName: TABLE_NAME3,
+        Key: { configId: "global" }
+      })
+    );
+    return result.Item;
+  }
+  async updateGlobalConfig(payload) {
+    const existing = await this.getGlobalConfig();
+    const updatedItem = {
+      ...existing || {},
+      ...payload,
+      configId: "global",
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    await docClient.send(
+      new import_lib_dynamodb6.PutCommand({
+        TableName: TABLE_NAME3,
+        Item: updatedItem
+      })
+    );
+    return updatedItem;
+  }
+};
+
+// src/services/adminConfig.service.ts
+var AdminConfigService = class {
+  constructor(repo) {
+    this.repo = repo;
+  }
+  async getConfig() {
+    const config = await this.repo.getGlobalConfig();
+    if (!config) {
+      return {
+        isPaymentEnabled: false,
+        isEmailEnabled: false,
+        isSmsEnabled: false,
+        maintenanceMode: false,
+        sliderImages: []
+      };
+    }
+    const { configId, updatedAt, ...publicConfig } = config;
+    return publicConfig;
+  }
+  async updateConfig(payload) {
+    const updated = await this.repo.updateGlobalConfig(payload);
+    const { configId, updatedAt, ...publicConfig } = updated;
+    return publicConfig;
+  }
+};
+
+// src/utils/notification.service.ts
+var cachedConfig = null;
+var cachedAt = 0;
+var CACHE_TTL = 5 * 60 * 1e3;
+var NotificationService = class {
+  constructor() {
+    this.emailService = new EmailService();
+    this.smsService = new SmsService();
+    this.configService = new AdminConfigService(
+      new AdminConfigRepo()
+    );
+  }
+  async getConfig() {
+    const now = Date.now();
+    if (cachedConfig && now - cachedAt < CACHE_TTL) {
+      return cachedConfig;
+    }
+    cachedConfig = await this.configService.getConfig();
+    cachedAt = now;
+    return cachedConfig;
+  }
+  async send(input) {
+    const config = await this.getConfig();
+    const isEmailEnabled = config?.isEmailEnabled === true;
+    let isSmsEnabled = config?.isSmsEnabled === true;
+    if (isEmailEnabled && input.email) {
+      await this.emailService.send({
+        to: input.email,
+        subject: input.subject || "Notification",
+        message: input.message
+      });
+    }
+    if (isSmsEnabled && input.phone) {
+      await this.smsService.send({
+        to: input.phone,
+        templateId: input.smsTemplateId || "",
+        variables: input.smsVariables ?? {}
+      });
+    }
+    return { success: true };
+  }
+};
+
 // src/handlers/adjustOrder.ts
 var orderService = new OrderService();
 var handler = async (event) => {
+  const notify = new NotificationService();
+  const repo = new AdminConfigRepo();
+  const service = new AdminConfigService(repo);
+  const config = await service.getConfig();
+  const iscartUpdatedSMSEnabled = config?.isCartUpdateSMSEnabled || false;
   try {
     const { userId, role } = verifyJwt(event);
     const orderId = event.pathParameters?.orderId;
     const body = JSON.parse(event.body || "{}");
     const items = body.items;
+    const mobile = body.mobile;
     const order = await orderService.adjustOrder({
       userId,
       role,
       orderId,
       items
     });
+    if (iscartUpdatedSMSEnabled && mobile) {
+      await notify.send({
+        email: "",
+        phone: mobile,
+        subject: "Cart Updated",
+        smsTemplateId: process.env.CART_UPDATED_TID,
+        message: `Your cart is adjusted by ${userId}`,
+        smsVariables: {
+          ORDERID: orderId,
+          UPDATEDBY: userId || "",
+          SVKCURL: process.env.DOMAIN || ""
+        }
+      });
+    }
     return {
       statusCode: 200,
       body: JSON.stringify({ order })

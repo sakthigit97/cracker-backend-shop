@@ -4622,6 +4622,9 @@ var NotificationService = class {
 var notify = new NotificationService();
 var service = new AdminUpdateOrderService();
 var handler = async (event) => {
+  const repo = new AdminConfigRepo();
+  const configservice = new AdminConfigService(repo);
+  const config = await configservice.getConfig();
   try {
     const { role, userId } = verifyJwt(event);
     if (role !== "admin") {
@@ -4640,7 +4643,7 @@ var handler = async (event) => {
       adminComment: body.adminComment,
       adminId: userId
     });
-    if (body.status == "ORDER_CONFIRMED") {
+    if (body.status == "ORDER_CONFIRMED" && (config.IsOrderConfirmSMSEnabled || false)) {
       await notify.send({
         email: body?.email,
         phone: mobile,
@@ -4650,7 +4653,38 @@ var handler = async (event) => {
         smsVariables: {
           ORDERID: orderId,
           ORDERAMOUNT: totalAmount,
-          SVKCURL: process.env.DOMAIN || ""
+          SVKCURL: process.env.DOMAIN || "",
+          USERNAME: "User"
+        }
+      });
+    }
+    if (body.status == "PAYMENT_CONFIRMED" && (config.isPaidSMSEnabled || false)) {
+      await notify.send({
+        email: body?.email,
+        phone: mobile,
+        subject: "Payment Confirmed",
+        smsTemplateId: process.env.PAYMENT_CONFIRM_TID,
+        message: `Your order ${orderId} is updated with status ${body.status}`,
+        smsVariables: {
+          ORDERID: orderId,
+          ORDERAMOUNT: totalAmount,
+          SVKCURL: process.env.DOMAIN || "",
+          USERNAME: "User"
+        }
+      });
+    }
+    if (body.status == "DISPATCHED" && (config.isOrderDispatchSMSEnabled || false)) {
+      await notify.send({
+        email: body?.email,
+        phone: mobile,
+        subject: "Order Dispatched",
+        smsTemplateId: process.env.ORDER_DISPATCHED_TID,
+        message: `Your order ${orderId} is updated with status ${body.status}`,
+        smsVariables: {
+          ORDERID: orderId,
+          ORDERAMOUNT: totalAmount,
+          SVKCURL: process.env.DOMAIN || "",
+          USERNAME: "User"
         }
       });
     }

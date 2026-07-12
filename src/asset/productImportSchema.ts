@@ -26,4 +26,9 @@ export const PRODUCT_IMPORT_SCHEMA_V1 = {
         type: "boolean",
         default: true,
     },
+    isComboPackage: {
+        required: false,
+        type: "boolean",
+        default: false,
+    },
 } as const;

@@ -37201,6 +37201,11 @@ var PRODUCT_IMPORT_SCHEMA_V1 = {
     required: false,
     type: "boolean",
     default: true
+  },
+  isComboPackage: {
+    required: false,
+    type: "boolean",
+    default: false
   }
 };
 
@@ -37508,7 +37513,10 @@ var handler = async (event) => {
                 ].join(" ").toLowerCase()
               },
               isActive: { S: String(item.isActive ?? true) },
-              createdAt: { S: now }
+              createdAt: { S: now },
+              isComboPackage: {
+                BOOL: Boolean(item.isComboPackage)
+              }
             }
           }
         }
