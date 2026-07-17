@@ -4007,6 +4007,19 @@ var AdminDiscountRepo = class {
     );
     return true;
   }
+  async existsByTargetId(targetId) {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.ScanCommand({
+        TableName: TABLE,
+        FilterExpression: "targetId = :targetId",
+        ExpressionAttributeValues: {
+          ":targetId": targetId
+        },
+        ProjectionExpression: "discountId"
+      })
+    );
+    return (res.Items?.length ?? 0) > 0;
+  }
 };
 
 // src/services/adminDiscount.service.ts
@@ -4025,6 +4038,9 @@ var AdminDiscountService = class {
   }
   async updateDiscount(discountId, payload) {
     return this.repo.updateDiscount(discountId, payload);
+  }
+  async existsByTargetId(targetId) {
+    return this.repo.existsByTargetId(targetId);
   }
 };
 

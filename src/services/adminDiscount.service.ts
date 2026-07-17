@@ -18,4 +18,9 @@ export class AdminDiscountService {
     async updateDiscount(discountId: string, payload: any) {
         return this.repo.updateDiscount(discountId, payload);
     }
+
+    async existsByTargetId(targetId: string) {
+        return this.repo.existsByTargetId(targetId);
+    }
+
 }

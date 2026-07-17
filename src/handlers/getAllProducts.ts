@@ -26,6 +26,7 @@ export const handler: APIGatewayProxyHandlerV2 = async () => {
                 qty: p.quantity,
                 searchText: p.searchText,
                 isComboPackage: p.isComboPackage || false,
+                sequenceNumber: p.sequenceNumber || 0
             };
         });
 

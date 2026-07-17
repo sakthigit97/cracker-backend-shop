@@ -85,4 +85,19 @@ export class AdminDiscountRepo {
         return true;
     }
 
+    async existsByTargetId(targetId: string) {
+        const res = await ddb.send(
+            new ScanCommand({
+                TableName: TABLE,
+                FilterExpression: "targetId = :targetId",
+                ExpressionAttributeValues: {
+                    ":targetId": targetId,
+                },
+                ProjectionExpression: "discountId",
+            })
+        );
+
+        return (res.Items?.length ?? 0) > 0;
+    }
+
 }

@@ -90,8 +90,9 @@ export const handler = async (event: any) => {
                             isActive: { S: String(item.isActive ?? true) },
                             createdAt: { S: now },
                             isComboPackage: {
-                                BOOL: Boolean(item.isComboPackage),
+                                BOOL: item.isComboPackage ?? false,
                             },
+                            sequenceNumber: { N: String(item.sequenceNumber ?? 0) },
                         },
                     },
                 },

@@ -62621,7 +62621,8 @@ var ProductService = class {
         brandId: p.brandId,
         qty: p.quantity,
         searchText: p.searchText,
-        isComboPackage: p.isComboPackage || false
+        isComboPackage: p.isComboPackage || false,
+        sequenceNumber: p.sequenceNumber || 0
       };
     });
   }
@@ -62861,16 +62862,45 @@ var OrderRepository = class {
 var repo = new OrderRepository();
 var handler = async (event) => {
   try {
-    let drawValue2 = function(text, yPos, size = 11) {
-      const textWidth = font.widthOfTextAtSize(text, size);
-      page.drawText(text, {
-        x: valueX - textWidth,
-        y: yPos,
-        size,
-        font
+    let drawSummaryRow2 = function(label, value, isGreen = false) {
+      page.drawRectangle({
+        x: summaryLeft,
+        y,
+        width: summaryWidth,
+        height: rowHeight,
+        borderWidth: 0.4,
+        borderColor: border
       });
+      page.drawLine({
+        start: {
+          x: summaryLeft + 235,
+          y
+        },
+        end: {
+          x: summaryLeft + 235,
+          y: y + rowHeight
+        },
+        thickness: 0.4,
+        color: border
+      });
+      page.drawText(label, {
+        x: summaryLeft + 10,
+        y: y + 6,
+        size: 9,
+        font,
+        color: isGreen ? green : (0, import_pdf_lib.rgb)(0, 0, 0)
+      });
+      const w = font.widthOfTextAtSize(value, 9);
+      page.drawText(value, {
+        x: summaryLeft + summaryWidth - w - 10,
+        y: y + 6,
+        size: 9,
+        font,
+        color: isGreen ? green : (0, import_pdf_lib.rgb)(0, 0, 0)
+      });
+      y -= rowHeight;
     };
-    var drawValue = drawValue2;
+    var drawSummaryRow = drawSummaryRow2;
     verifyJwt(event);
     const orderId = event.pathParameters?.orderId;
     if (!orderId) {
@@ -62882,259 +62912,426 @@ var handler = async (event) => {
     }
     const pdfDoc = await import_pdf_lib.PDFDocument.create();
     pdfDoc.registerFontkit(import_fontkit.default);
+    const logoPath = import_path.default.join(process.cwd(), "assets", "icon-new.png");
+    const logoBytes = import_fs.default.readFileSync(logoPath);
+    const logoImage = await pdfDoc.embedPng(logoBytes);
     const fontPath = import_path.default.join(process.cwd(), "assets/NotoSans-Regular.ttf");
     const fontBytes = import_fs.default.readFileSync(fontPath);
     const font = await pdfDoc.embedFont(fontBytes);
     const page = pdfDoc.addPage([595, 842]);
     const { width } = page.getSize();
-    const left = 50;
-    const right = width - 50;
+    const left = 52;
+    const right = width - 52;
+    const tableLeft = 58;
+    const tableWidth = 480;
+    const colQty = 380;
+    const colPrice = 420;
+    const colOffer = 470;
+    const colTotal = 530;
     let y = 820;
-    page.drawRectangle({
-      x: 0,
-      y: 780,
-      width,
-      height: 60,
-      color: (0, import_pdf_lib.rgb)(0.95, 0.95, 0.95)
+    const navy = (0, import_pdf_lib.rgb)(0.07, 0.11, 0.2);
+    const orange = (0, import_pdf_lib.rgb)(0.96, 0.5, 0.1);
+    y = 810;
+    page.drawImage(logoImage, {
+      x: 52,
+      y: 777,
+      width: 38,
+      height: 38
     });
-    page.drawText("SIVAKASI CRACKERS", {
-      x: left,
-      y: 815,
-      size: 18,
+    page.drawText("SIVAKASI PYRO PARK", {
+      x: 110,
+      y: 805,
+      size: 21,
       font
     });
-    page.drawText("Premium quality crackers from Sivakasi", {
-      x: left,
-      y: 800,
+    page.drawText("Premium Fireworks & Crackers", {
+      x: 110,
+      y: 786,
+      size: 10,
+      font,
+      color: (0, import_pdf_lib.rgb)(0.35, 0.35, 0.35)
+    });
+    page.drawText("+91 9994252823", {
+      x: 110,
+      y: 765,
       size: 10,
       font
     });
-    page.drawText("INVOICE", {
-      x: width - 130,
-      y: 815,
-      size: 18,
+    page.drawText("svkorders@gmail.com", {
+      x: 110,
+      y: 750,
+      size: 10,
       font
     });
-    y = 760;
-    page.drawText(`Order ID: ${order.orderId}`, {
-      x: left,
-      y,
-      size: 11,
-      font
-    });
-    y -= 15;
     page.drawText(
-      `Order Date: ${new Date(order.createdAt).toLocaleDateString("en-IN")}`,
+      "5/590N, New Colony, Poolavoorani,\nSivakasi, Tamil Nadu 626189",
       {
-        x: left,
-        y,
-        size: 11,
+        x: 110,
+        y: 730,
+        size: 8,
+        lineHeight: 10,
         font
       }
     );
-    y -= 15;
-    page.drawText(`Payment Mode: ${order.paymentMode}`, {
-      x: left,
-      y,
-      size: 11,
-      font
-    });
-    y -= 25;
-    page.drawLine({
-      start: { x: left, y },
-      end: { x: right, y },
-      thickness: 1,
-      color: (0, import_pdf_lib.rgb)(0.8, 0.8, 0.8)
-    });
-    y -= 20;
-    page.drawText("Shipping Address", {
-      x: left,
-      y,
-      size: 12,
-      font
-    });
-    y -= 15;
-    const addressLines = order.address.split("\n");
-    addressLines.forEach((line) => {
-      page.drawText(line.trim(), {
-        x: left,
-        y,
-        size: 10,
-        font
-      });
-      y -= 14;
-    });
-    y -= 30;
     page.drawRectangle({
-      x: left,
-      y,
-      width: width - 100,
-      height: 25,
-      color: (0, import_pdf_lib.rgb)(0.9, 0.9, 0.9)
+      x: 430,
+      y: 765,
+      width: 112,
+      height: 52,
+      borderColor: orange,
+      borderWidth: 0.6
     });
-    page.drawText("Product", { x: left + 5, y: y + 7, size: 10, font });
-    page.drawText("Qty", { x: 370, y: y + 7, size: 10, font });
-    page.drawText("Price (\u20B9)", { x: 420, y: y + 7, size: 10, font });
-    page.drawText("Total (\u20B9)", { x: 510, y: y + 7, size: 10, font });
-    y -= 30;
-    order.items.forEach((item) => {
-      page.drawText(item.name, {
-        x: left + 5,
+    page.drawText("IMPORTANT", {
+      x: 438,
+      y: 796,
+      size: 9,
+      font,
+      color: orange
+    });
+    page.drawText("No Home Delivery", {
+      x: 438,
+      y: 783,
+      size: 7,
+      font
+    });
+    page.drawText("Transportation paid by customer", {
+      x: 438,
+      y: 773,
+      size: 7,
+      font
+    });
+    page.drawText("Min: TN-3000 | Other-5000", {
+      x: 438,
+      y: 763,
+      size: 7,
+      font
+    });
+    page.drawLine({
+      start: { x: 50, y: 730 },
+      end: { x: 545, y: 730 },
+      thickness: 0.6,
+      color: (0, import_pdf_lib.rgb)(0.85, 0.85, 0.85)
+    });
+    y = 710;
+    const address = order.address ?? order.shippingAddress ?? "";
+    const addressLines = address.split("\n").filter((x) => x.trim());
+    addressLines.forEach((line) => {
+      page.drawText(line, {
+        x: 52,
         y,
-        size: 10,
+        size: 9,
+        font,
+        color: (0, import_pdf_lib.rgb)(0.35, 0.35, 0.35)
+      });
+      y -= 11;
+    });
+    y -= 8;
+    page.drawLine({
+      start: { x: 50, y },
+      end: { x: 545, y },
+      thickness: 0.6,
+      color: (0, import_pdf_lib.rgb)(0.85, 0.85, 0.85)
+    });
+    y -= 10;
+    page.drawText(`Order ID : ${order.orderId}`, {
+      x: 52,
+      y,
+      size: 9,
+      font
+    });
+    page.drawText(
+      `Date : ${new Date(order.createdAt).toLocaleDateString("en-IN")}`,
+      {
+        x: 250,
+        y,
+        size: 9,
+        font
+      }
+    );
+    page.drawText(
+      `Payment : ${order.paymentMode}`,
+      {
+        x: 438,
+        y,
+        size: 9,
+        font
+      }
+    );
+    y -= 42;
+    const border = (0, import_pdf_lib.rgb)(0.86, 0.86, 0.86);
+    const grayText = (0, import_pdf_lib.rgb)(0.45, 0.45, 0.45);
+    const green = (0, import_pdf_lib.rgb)(0.02, 0.55, 0.18);
+    const blue = (0, import_pdf_lib.rgb)(0.08, 0.35, 0.82);
+    const rowHeight = 28;
+    page.drawRectangle({
+      x: tableLeft,
+      y,
+      width: tableWidth,
+      height: rowHeight,
+      color: navy
+    });
+    page.drawText("Product", {
+      x: tableLeft + 8,
+      y: y + 7,
+      size: 10,
+      font,
+      color: (0, import_pdf_lib.rgb)(1, 1, 1)
+    });
+    page.drawText("Qty", {
+      x: colQty,
+      y: y + 7,
+      size: 10,
+      font,
+      color: (0, import_pdf_lib.rgb)(1, 1, 1)
+    });
+    page.drawText("MRP", {
+      x: colPrice,
+      y: y + 7,
+      size: 10,
+      font,
+      color: (0, import_pdf_lib.rgb)(1, 1, 1)
+    });
+    page.drawText("Offer", {
+      x: colOffer,
+      y: y + 7,
+      size: 10,
+      font,
+      color: (0, import_pdf_lib.rgb)(1, 1, 1)
+    });
+    page.drawText("Total", {
+      x: colTotal,
+      y: y + 7,
+      size: 10,
+      font,
+      color: (0, import_pdf_lib.rgb)(1, 1, 1)
+    });
+    y -= rowHeight;
+    order.items.forEach((item) => {
+      const hasDiscount = item.originalPrice && item.originalPrice > item.price;
+      const rowHeight2 = item.isComboPackage ? hasDiscount ? 48 : 40 : hasDiscount ? 38 : 30;
+      page.drawRectangle({
+        x: tableLeft,
+        y: y - rowHeight2 + 2,
+        width: tableWidth,
+        height: rowHeight2,
+        borderColor: border,
+        borderWidth: 0.5
+      });
+      const name = item.name.length > 38 ? item.name.substring(0, 38) + "..." : item.name;
+      page.drawText(name, {
+        x: tableLeft + 8,
+        y: y - 16,
+        size: 9,
         font
       });
       if (item.isComboPackage) {
-        page.drawText("(Combo Package)", {
-          x: left + 5,
-          y: y - 11,
-          size: 8,
-          font,
-          color: (0, import_pdf_lib.rgb)(0.1, 0.35, 0.8)
-        });
+        page.drawText(
+          "(Combo Package)",
+          {
+            x: tableLeft + 8,
+            y: y - 30,
+            size: 7,
+            font,
+            color: blue
+          }
+        );
       }
-      page.drawText(String(item.quantity), {
-        x: 380,
-        y,
-        size: 10,
-        font
-      });
-      if (item.originalPrice && item.originalPrice > item.price) {
-        page.drawText(`\u20B9${item.originalPrice}`, {
-          x: 420,
-          y,
+      const qtyText = String(item.quantity);
+      const qtyWidth = font.widthOfTextAtSize(qtyText, 9);
+      page.drawText(
+        String(item.quantity),
+        {
+          x: colQty + 18 - qtyWidth / 2,
+          y: y - 16,
           size: 9,
-          font,
-          color: (0, import_pdf_lib.rgb)(0.6, 0.6, 0.6)
-        });
-        const textWidth = font.widthOfTextAtSize(`\u20B9${item.originalPrice}`, 9);
-        page.drawLine({
-          start: { x: 420, y: y + 4 },
-          end: { x: 420 + textWidth, y: y + 4 },
-          thickness: 1,
-          color: (0, import_pdf_lib.rgb)(0.6, 0.6, 0.6)
-        });
-        page.drawText(`\u20B9${item.price}`, {
-          x: 420,
-          y: y - 12,
-          size: 10,
           font
-        });
-        if (item.discountText) {
-          page.drawText(`${item.discountText}`, {
-            x: 470,
-            y: y - 12,
+        }
+      );
+      if (hasDiscount) {
+        page.drawText(
+          `\u20B9${item.originalPrice}`,
+          {
+            x: colPrice,
+            y: y - 15,
             size: 8,
             font,
-            color: (0, import_pdf_lib.rgb)(0, 0.5, 0)
-          });
+            color: grayText
+          }
+        );
+        const w = font.widthOfTextAtSize(
+          `\u20B9${item.originalPrice}`,
+          8
+        );
+        page.drawLine({
+          start: {
+            x: colPrice,
+            y: y - 9
+          },
+          end: {
+            x: colPrice + w,
+            y: y - 9
+          },
+          thickness: 0.7,
+          color: grayText
+        });
+        page.drawText(
+          `\u20B9${item.price}`,
+          {
+            x: colOffer,
+            y: y - 14,
+            size: 9,
+            font
+          }
+        );
+        if (item.discountText) {
+          page.drawText(
+            item.discountText,
+            {
+              x: colOffer,
+              y: y - 26,
+              size: 7,
+              font,
+              color: green
+            }
+          );
         }
       } else {
-        page.drawText(`\u20B9${item.price}`, {
-          x: 420,
-          y,
-          size: 10,
-          font
-        });
+        page.drawText(
+          `\u20B9${item.price}`,
+          {
+            x: colOffer,
+            y: y - 14,
+            size: 9,
+            font
+          }
+        );
       }
-      page.drawText(`\u20B9${item.total}`, {
-        x: 510,
-        y,
-        size: 10,
-        font
-      });
-      const hasDiscount = item.originalPrice && item.originalPrice > item.price;
-      const rowHeight = item.isComboPackage ? hasDiscount ? 46 : 34 : hasDiscount ? 36 : 22;
-      y -= rowHeight;
+      const totalText = `\u20B9${item.total}`;
+      const totalWidth2 = font.widthOfTextAtSize(
+        totalText,
+        9
+      );
+      page.drawText(
+        totalText,
+        {
+          x: tableLeft + tableWidth - totalWidth2 - 8,
+          y: y - 14,
+          size: 9,
+          font
+        }
+      );
+      y -= rowHeight2;
+    });
+    page.drawLine({
+      start: { x: tableLeft, y },
+      end: {
+        x: tableLeft + tableWidth,
+        y
+      },
+      thickness: 0.6,
+      color: border
     });
     y -= 10;
-    page.drawLine({
-      start: { x: left, y },
-      end: { x: right, y },
-      thickness: 1,
-      color: (0, import_pdf_lib.rgb)(0.8, 0.8, 0.8)
-    });
-    y -= 25;
     const subtotal = Number(order.subtotal || 0);
     const comboAmount = Number(order.comboAmount || 0);
-    const eligibleChargeAmount = Number(
-      order.eligibleChargeAmount || subtotal
-    );
+    const eligibleChargeAmount = Number(order.eligibleChargeAmount || subtotal);
     const packaging = Number(order.packagingCharge || 0);
     const gst = Number(order.gstAmount || 0);
     const totalAmount = Number(order.totalAmount || 0);
     const walletUsed = Number(order.walletUsed || 0);
     const finalPayable = Number(order.finalPayable || totalAmount);
-    const labelX = 380;
-    const valueX = 540;
-    page.drawText("Subtotal", {
-      x: labelX,
+    const summaryLeft = tableLeft;
+    const summaryWidth = tableWidth;
+    const summaryHeaderHeight = 22;
+    page.drawRectangle({
+      x: summaryLeft,
       y,
-      size: 11,
-      font
+      width: summaryWidth,
+      height: summaryHeaderHeight,
+      color: navy
     });
-    drawValue2(`\u20B9${subtotal}`, y);
+    const summaryTitle = "Invoice Summary";
+    const summaryTitleWidth = font.widthOfTextAtSize(summaryTitle, 10);
+    page.drawText(summaryTitle, {
+      x: summaryLeft + (summaryWidth - summaryTitleWidth) / 2,
+      y: y + 6,
+      size: 10,
+      font,
+      color: (0, import_pdf_lib.rgb)(1, 1, 1)
+    });
+    y -= summaryHeaderHeight;
+    drawSummaryRow2("Subtotal", `\u20B9${subtotal}`);
     if (comboAmount > 0) {
-      y -= 18;
-      page.drawText("Combo Package Amount", {
-        x: labelX,
-        y,
-        size: 11,
-        font
-      });
-      drawValue2(`\u20B9${comboAmount}`, y);
-      y -= 18;
-      page.drawText("GST Eligible Amount", {
-        x: labelX,
-        y,
-        size: 11,
-        font
-      });
-      drawValue2(`\u20B9${eligibleChargeAmount}`, y);
+      drawSummaryRow2(
+        "Combo Package Amount",
+        `\u20B9${comboAmount}`
+      );
+      drawSummaryRow2(
+        "GST Eligible Amount",
+        `\u20B9${eligibleChargeAmount}`
+      );
     }
-    y -= 18;
+    drawSummaryRow2(
+      comboAmount > 0 ? "Packaging" : "Packaging Charge",
+      `\u20B9${packaging}`
+    );
+    if (gst > 0) {
+      drawSummaryRow2(
+        "GST",
+        `\u20B9${gst}`
+      );
+    }
+    if (walletUsed > 0) {
+      drawSummaryRow2(
+        "Wallet Used",
+        `-\u20B9${walletUsed}`,
+        true
+      );
+    }
+    page.drawRectangle({
+      x: summaryLeft,
+      y,
+      width: summaryWidth,
+      height: 26,
+      color: navy
+    });
+    page.drawLine({
+      start: {
+        x: summaryLeft + 235,
+        y
+      },
+      end: {
+        x: summaryLeft + 235,
+        y: y + 26
+      },
+      thickness: 0.5,
+      color: (0, import_pdf_lib.rgb)(1, 1, 1)
+    });
     page.drawText(
-      comboAmount > 0 ? "Packaging (Eligible Items)" : "Packaging Charges",
+      "Grand Total",
       {
-        x: labelX,
-        y,
-        size: 11,
-        font
+        x: summaryLeft + 10,
+        y: y + 7,
+        size: 12,
+        font,
+        color: (0, import_pdf_lib.rgb)(1, 1, 1)
       }
     );
-    drawValue2(`\u20B9${packaging}`, y);
-    if (gst > 0) {
-      y -= 18;
-      page.drawText(
-        comboAmount > 0 ? "GST (Eligible Items)" : "GST (18%)",
-        {
-          x: labelX,
-          y,
-          size: 11,
-          font
-        }
-      );
-      drawValue2(`\u20B9${gst}`, y);
-    }
-    y -= 18;
-    page.drawLine({
-      start: { x: labelX, y },
-      end: { x: valueX, y },
-      thickness: 1,
-      color: (0, import_pdf_lib.rgb)(0.8, 0.8, 0.8)
-    });
-    y -= 18;
-    page.drawText("Total Amount", { x: labelX, y, size: 12, font });
-    drawValue2(`\u20B9${totalAmount}`, y, 12);
-    y -= 18;
-    if (walletUsed > 0) {
-      page.drawText("Wallet Used", { x: labelX, y, size: 11, font });
-      drawValue2(`- \u20B9${walletUsed}`, y);
-      y -= 18;
-    }
-    page.drawText("Final Payable", { x: labelX, y, size: 14, font });
-    drawValue2(`\u20B9${finalPayable}`, y, 14);
-    y -= 40;
+    const totalWidth = font.widthOfTextAtSize(
+      `\u20B9${finalPayable}`,
+      12
+    );
+    page.drawText(
+      `\u20B9${finalPayable}`,
+      {
+        x: summaryLeft + summaryWidth - totalWidth - 10,
+        y: y + 7,
+        size: 12,
+        font,
+        color: (0, import_pdf_lib.rgb)(1, 1, 1)
+      }
+    );
+    y -= 55;
     const pdfBytes = await pdfDoc.save();
     return {
       statusCode: 200,

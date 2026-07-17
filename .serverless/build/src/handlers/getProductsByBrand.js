@@ -186,7 +186,8 @@ var handler = async (event) => {
         brandId: p.brandId,
         qty: p.quantity,
         searchText: p.searchText,
-        isComboPackage: p.isComboPackage || false
+        isComboPackage: p.isComboPackage || false,
+        sequenceNumber: p.sequenceNumber || 0
       };
     }) || [];
     return success({

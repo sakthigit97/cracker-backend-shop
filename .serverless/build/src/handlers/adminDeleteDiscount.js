@@ -3899,12 +3899,12 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// src/handlers/adminListDiscounts.ts
-var adminListDiscounts_exports = {};
-__export(adminListDiscounts_exports, {
+// src/handlers/adminDeleteDiscount.ts
+var adminDeleteDiscount_exports = {};
+__export(adminDeleteDiscount_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(adminListDiscounts_exports);
+module.exports = __toCommonJS(adminDeleteDiscount_exports);
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -3933,9 +3933,6 @@ function verifyJwt(event) {
   };
 }
 
-// src/repo/adminDiscount.repo.ts
-var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
-
 // src/utils/dynamo.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
 var import_lib_dynamodb = require("@aws-sdk/lib-dynamodb");
@@ -3946,121 +3943,35 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
   }
 });
 
-// src/repo/adminDiscount.repo.ts
-var import_crypto = require("crypto");
+// src/handlers/adminDeleteDiscount.ts
+var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
 var TABLE = process.env.DISCOUNT_TABLE;
-var AdminDiscountRepo = class {
-  async listDiscounts() {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.ScanCommand({
-        TableName: TABLE
-      })
-    );
-    return res.Items || [];
-  }
-  async getDiscountById(discountId) {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.GetCommand({
-        TableName: TABLE,
-        Key: { discountId }
-      })
-    );
-    return res.Item || null;
-  }
-  async createDiscount(input) {
-    const item = {
-      discountId: `disc-${(0, import_crypto.randomUUID)()}`,
-      discountMode: input.discountMode,
-      discountType: input.discountType,
-      discountValue: input.discountValue,
-      priority: input.priority,
-      targetId: input.targetId,
-      isActive: input.isActive ?? true,
-      createdAt: (/* @__PURE__ */ new Date()).toISOString()
-    };
-    await ddb.send(
-      new import_lib_dynamodb2.PutCommand({
-        TableName: TABLE,
-        Item: item
-      })
-    );
-    return item;
-  }
-  async updateDiscount(discountId, input) {
-    await ddb.send(
-      new import_lib_dynamodb2.UpdateCommand({
-        TableName: TABLE,
-        Key: { discountId },
-        UpdateExpression: `
-                SET discountMode = :m,
-                    discountValue = :v,
-                    priority = :p,
-                    isActive = :a
-            `,
-        ExpressionAttributeValues: {
-          ":m": input.discountMode,
-          ":v": input.discountValue,
-          ":p": input.priority,
-          ":a": input.isActive
-        }
-      })
-    );
-    return true;
-  }
-  async existsByTargetId(targetId) {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.ScanCommand({
-        TableName: TABLE,
-        FilterExpression: "targetId = :targetId",
-        ExpressionAttributeValues: {
-          ":targetId": targetId
-        },
-        ProjectionExpression: "discountId"
-      })
-    );
-    return (res.Items?.length ?? 0) > 0;
-  }
-};
-
-// src/services/adminDiscount.service.ts
-var AdminDiscountService = class {
-  constructor(repo = new AdminDiscountRepo()) {
-    this.repo = repo;
-  }
-  async listDiscounts() {
-    return this.repo.listDiscounts();
-  }
-  async getDiscountById(discountId) {
-    return this.repo.getDiscountById(discountId);
-  }
-  async createDiscount(payload) {
-    return this.repo.createDiscount(payload);
-  }
-  async updateDiscount(discountId, payload) {
-    return this.repo.updateDiscount(discountId, payload);
-  }
-  async existsByTargetId(targetId) {
-    return this.repo.existsByTargetId(targetId);
-  }
-};
-
-// src/handlers/adminListDiscounts.ts
-var service = new AdminDiscountService();
 var handler = async (event) => {
   try {
     const { role } = verifyJwt(event);
     if (role !== "admin") {
       return { statusCode: 403, body: "Forbidden" };
     }
-    const items = await service.listDiscounts();
+    const discountId = event.pathParameters?.discountId;
+    if (!discountId) {
+      return { statusCode: 400, body: "discountId is required" };
+    }
+    await ddb.send(
+      new import_lib_dynamodb2.DeleteCommand({
+        TableName: TABLE,
+        Key: {
+          discountId
+        }
+      })
+    );
     return {
       statusCode: 200,
       body: JSON.stringify({
-        items
+        message: "Discount deleted successfully"
       })
     };
   } catch (err) {
-    console.error("ListDiscounts error", err);
+    console.error("AdminDeleteDiscount error", err);
     return {
       statusCode: 500,
       body: JSON.stringify({
@@ -4079,4 +3990,4 @@ var handler = async (event) => {
 safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 */
-//# sourceMappingURL=adminListDiscounts.js.map
+//# sourceMappingURL=adminDeleteDiscount.js.map

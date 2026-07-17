@@ -1,8 +1,8 @@
 import { verifyJwt } from "../utils/auth";
 import { AdminDiscountService } from "../services/adminDiscount.service";
+import { error } from "../libs/response";
 
 const service = new AdminDiscountService();
-
 export const handler = async (event: any) => {
     try {
         const { role } = verifyJwt(event);
@@ -12,7 +12,6 @@ export const handler = async (event: any) => {
         }
 
         const body = JSON.parse(event.body || "{}");
-
         if (!body.targetId || !body.discountValue) {
             return {
                 statusCode: 400,
@@ -20,8 +19,11 @@ export const handler = async (event: any) => {
             };
         }
 
+        const exists = await service.existsByTargetId(body.targetId);
+        if (exists) {
+            return error("A discount already exists for the selected target.");
+        }
         const created = await service.createDiscount(body);
-
         return {
             statusCode: 200,
             body: JSON.stringify(created),

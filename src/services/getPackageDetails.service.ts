@@ -39,6 +39,7 @@ export class GetPackageDetailsService {
                 qty: p.qty,
                 searchText: p.searchText,
                 isComboPackage: p.isComboPackage || false,
+                sequenceNumber: p.sequenceNumber || 0
             })
         );
 

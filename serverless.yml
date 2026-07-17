@@ -546,6 +546,13 @@ functions:
           path: /admin/discounts/{discountId}
           method: PUT
 
+  AdminDeleteDiscount:
+    handler: src/handlers/adminDeleteDiscount.handler
+    events:
+      - httpApi:
+          path: /admin/discounts/{discountId}
+          method: delete
+
   orderInvoice:
     handler: src/handlers/orderInvoice.handler
     events:

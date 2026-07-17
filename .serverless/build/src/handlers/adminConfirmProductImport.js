@@ -37206,6 +37206,11 @@ var PRODUCT_IMPORT_SCHEMA_V1 = {
     required: false,
     type: "boolean",
     default: false
+  },
+  sequenceNumber: {
+    required: true,
+    type: "number",
+    default: 0
   }
 };
 
@@ -37442,6 +37447,19 @@ var AdminDiscountRepo = class {
     );
     return true;
   }
+  async existsByTargetId(targetId) {
+    const res = await ddb2.send(
+      new import_lib_dynamodb3.ScanCommand({
+        TableName: TABLE,
+        FilterExpression: "targetId = :targetId",
+        ExpressionAttributeValues: {
+          ":targetId": targetId
+        },
+        ProjectionExpression: "discountId"
+      })
+    );
+    return (res.Items?.length ?? 0) > 0;
+  }
 };
 
 // src/handlers/adminConfirmProductImport.ts
@@ -37515,8 +37533,9 @@ var handler = async (event) => {
               isActive: { S: String(item.isActive ?? true) },
               createdAt: { S: now },
               isComboPackage: {
-                BOOL: Boolean(item.isComboPackage)
-              }
+                BOOL: item.isComboPackage ?? false
+              },
+              sequenceNumber: { N: String(item.sequenceNumber ?? 0) }
             }
           }
         }

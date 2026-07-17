@@ -31,4 +31,9 @@ export const PRODUCT_IMPORT_SCHEMA_V1 = {
         type: "boolean",
         default: false,
     },
+    sequenceNumber: {
+        required: true,
+        type: "number",
+        default: 0,
+    },
 } as const;

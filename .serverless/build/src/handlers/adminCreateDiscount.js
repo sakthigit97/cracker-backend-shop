@@ -834,14 +834,14 @@ var require_decode = __commonJS({
 // node_modules/jsonwebtoken/lib/JsonWebTokenError.js
 var require_JsonWebTokenError = __commonJS({
   "node_modules/jsonwebtoken/lib/JsonWebTokenError.js"(exports2, module2) {
-    var JsonWebTokenError = function(message, error) {
+    var JsonWebTokenError = function(message, error2) {
       Error.call(this, message);
       if (Error.captureStackTrace) {
         Error.captureStackTrace(this, this.constructor);
       }
       this.name = "JsonWebTokenError";
       this.message = message;
-      if (error) this.inner = error;
+      if (error2) this.inner = error2;
     };
     JsonWebTokenError.prototype = Object.create(Error.prototype);
     JsonWebTokenError.prototype.constructor = JsonWebTokenError;
@@ -3793,8 +3793,8 @@ var require_sign = __commonJS({
       } else if (isObjectPayload) {
         try {
           validatePayload(payload);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
         if (!options.mutatePayload) {
           payload = Object.assign({}, payload);
@@ -3815,14 +3815,14 @@ var require_sign = __commonJS({
       }
       try {
         validateOptions(options);
-      } catch (error) {
-        return failure(error);
+      } catch (error2) {
+        return failure(error2);
       }
       if (!options.allowInvalidAsymmetricKeyTypes) {
         try {
           validateAsymmetricKey(header.alg, secretOrPrivateKey);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
       }
       const timestamp = payload.iat || Math.floor(Date.now() / 1e3);
@@ -4007,6 +4007,19 @@ var AdminDiscountRepo = class {
     );
     return true;
   }
+  async existsByTargetId(targetId) {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.ScanCommand({
+        TableName: TABLE,
+        FilterExpression: "targetId = :targetId",
+        ExpressionAttributeValues: {
+          ":targetId": targetId
+        },
+        ProjectionExpression: "discountId"
+      })
+    );
+    return (res.Items?.length ?? 0) > 0;
+  }
 };
 
 // src/services/adminDiscount.service.ts
@@ -4026,7 +4039,19 @@ var AdminDiscountService = class {
   async updateDiscount(discountId, payload) {
     return this.repo.updateDiscount(discountId, payload);
   }
+  async existsByTargetId(targetId) {
+    return this.repo.existsByTargetId(targetId);
+  }
 };
+
+// src/libs/response.ts
+var error = (message, statusCode = 400) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: false,
+    message
+  })
+});
 
 // src/handlers/adminCreateDiscount.ts
 var service = new AdminDiscountService();
@@ -4042,6 +4067,10 @@ var handler = async (event) => {
         statusCode: 400,
         body: "Missing required fields"
       };
+    }
+    const exists = await service.existsByTargetId(body.targetId);
+    if (exists) {
+      return error("A discount already exists for the selected target.");
     }
     const created = await service.createDiscount(body);
     return {
