@@ -62858,9 +62858,72 @@ var OrderRepository = class {
   }
 };
 
+// src/services/adminConfig.service.ts
+var AdminConfigService = class {
+  constructor(repo2) {
+    this.repo = repo2;
+  }
+  async getConfig() {
+    const config = await this.repo.getGlobalConfig();
+    if (!config) {
+      return {
+        isPaymentEnabled: false,
+        isEmailEnabled: false,
+        isSmsEnabled: false,
+        maintenanceMode: false,
+        sliderImages: []
+      };
+    }
+    const { configId, updatedAt, ...publicConfig } = config;
+    return publicConfig;
+  }
+  async updateConfig(payload) {
+    const updated = await this.repo.updateGlobalConfig(payload);
+    const { configId, updatedAt, ...publicConfig } = updated;
+    return publicConfig;
+  }
+};
+
+// src/repo/adminConfig.repo.ts
+var import_client_dynamodb2 = require("@aws-sdk/client-dynamodb");
+var import_lib_dynamodb6 = require("@aws-sdk/lib-dynamodb");
+var client2 = new import_client_dynamodb2.DynamoDBClient({ region: "ap-south-1" });
+var docClient = import_lib_dynamodb6.DynamoDBDocumentClient.from(client2);
+var TABLE_NAME3 = process.env.ADMIN_CONFIG_TABLE;
+var AdminConfigRepo = class {
+  async getGlobalConfig() {
+    const result = await docClient.send(
+      new import_lib_dynamodb6.GetCommand({
+        TableName: TABLE_NAME3,
+        Key: { configId: "global" }
+      })
+    );
+    return result.Item;
+  }
+  async updateGlobalConfig(payload) {
+    const existing = await this.getGlobalConfig();
+    const updatedItem = {
+      ...existing || {},
+      ...payload,
+      configId: "global",
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    await docClient.send(
+      new import_lib_dynamodb6.PutCommand({
+        TableName: TABLE_NAME3,
+        Item: updatedItem
+      })
+    );
+    return updatedItem;
+  }
+};
+
 // src/handlers/orderInvoice.ts
 var repo = new OrderRepository();
 var handler = async (event) => {
+  const repoconfig = new AdminConfigRepo();
+  const serviceconfig = new AdminConfigService(repoconfig);
+  const config = await serviceconfig.getConfig();
   try {
     let drawSummaryRow2 = function(label, value, isGreen = false) {
       page.drawRectangle({
@@ -62885,7 +62948,7 @@ var handler = async (event) => {
       });
       page.drawText(label, {
         x: summaryLeft + 10,
-        y: y + 6,
+        y: y + 7,
         size: 9,
         font,
         color: isGreen ? green : (0, import_pdf_lib.rgb)(0, 0, 0)
@@ -62919,120 +62982,68 @@ var handler = async (event) => {
     const fontBytes = import_fs.default.readFileSync(fontPath);
     const font = await pdfDoc.embedFont(fontBytes);
     const page = pdfDoc.addPage([595, 842]);
-    const { width } = page.getSize();
-    const left = 52;
-    const right = width - 52;
-    const tableLeft = 58;
-    const tableWidth = 480;
-    const colQty = 380;
-    const colPrice = 420;
-    const colOffer = 470;
-    const colTotal = 530;
+    const tableLeft = 52;
+    const tableWidth = 490;
+    const colQty = 350;
+    const colPrice = 390;
+    const colOffer = 440;
+    const colTotal = 500;
     let y = 820;
-    const navy = (0, import_pdf_lib.rgb)(0.07, 0.11, 0.2);
+    const navy = (0, import_pdf_lib.rgb)(
+      15 / 255,
+      23 / 255,
+      42 / 255
+    );
     const orange = (0, import_pdf_lib.rgb)(0.96, 0.5, 0.1);
     y = 810;
     page.drawImage(logoImage, {
       x: 52,
-      y: 777,
-      width: 38,
-      height: 38
+      y: 775,
+      width: 42,
+      height: 42
     });
-    page.drawText("SIVAKASI PYRO PARK", {
+    page.drawText(config?.companyName || "SIVAKASI PYRO PARK", {
       x: 110,
-      y: 805,
-      size: 21,
+      y: 800,
+      size: 18,
       font
     });
     page.drawText("Premium Fireworks & Crackers", {
       x: 110,
       y: 786,
-      size: 10,
+      size: 8,
       font,
-      color: (0, import_pdf_lib.rgb)(0.35, 0.35, 0.35)
+      color: (0, import_pdf_lib.rgb)(0.42, 0.42, 0.42)
     });
-    page.drawText("+91 9994252823", {
+    page.drawText(config?.adminMobile, {
       x: 110,
       y: 765,
-      size: 10,
+      size: 8,
       font
     });
-    page.drawText("svkorders@gmail.com", {
+    page.drawText(config?.adminEmail, {
       x: 110,
       y: 750,
-      size: 10,
+      size: 8,
       font
     });
     page.drawText(
-      "5/590N, New Colony, Poolavoorani,\nSivakasi, Tamil Nadu 626189",
+      config?.adminAddress || "5/590N, New Colony, Poolavoorani,\nSivakasi, Tamil Nadu 626189",
       {
         x: 110,
         y: 730,
-        size: 8,
-        lineHeight: 10,
+        size: 7.5,
+        lineHeight: 9,
         font
       }
     );
-    page.drawRectangle({
-      x: 430,
-      y: 765,
-      width: 112,
-      height: 52,
-      borderColor: orange,
-      borderWidth: 0.6
-    });
-    page.drawText("IMPORTANT", {
-      x: 438,
-      y: 796,
-      size: 9,
-      font,
-      color: orange
-    });
-    page.drawText("No Home Delivery", {
-      x: 438,
-      y: 783,
-      size: 7,
-      font
-    });
-    page.drawText("Transportation paid by customer", {
-      x: 438,
-      y: 773,
-      size: 7,
-      font
-    });
-    page.drawText("Min: TN-3000 | Other-5000", {
-      x: 438,
-      y: 763,
-      size: 7,
-      font
-    });
     page.drawLine({
-      start: { x: 50, y: 730 },
-      end: { x: 545, y: 730 },
-      thickness: 0.6,
-      color: (0, import_pdf_lib.rgb)(0.85, 0.85, 0.85)
+      start: { x: 50, y: 710 },
+      end: { x: 545, y: 710 },
+      thickness: 0.8,
+      color: (0, import_pdf_lib.rgb)(0.78, 0.78, 0.78)
     });
-    y = 710;
-    const address = order.address ?? order.shippingAddress ?? "";
-    const addressLines = address.split("\n").filter((x) => x.trim());
-    addressLines.forEach((line) => {
-      page.drawText(line, {
-        x: 52,
-        y,
-        size: 9,
-        font,
-        color: (0, import_pdf_lib.rgb)(0.35, 0.35, 0.35)
-      });
-      y -= 11;
-    });
-    y -= 8;
-    page.drawLine({
-      start: { x: 50, y },
-      end: { x: 545, y },
-      thickness: 0.6,
-      color: (0, import_pdf_lib.rgb)(0.85, 0.85, 0.85)
-    });
-    y -= 10;
+    y = 690;
     page.drawText(`Order ID : ${order.orderId}`, {
       x: 52,
       y,
@@ -63048,74 +63059,67 @@ var handler = async (event) => {
         font
       }
     );
-    page.drawText(
-      `Payment : ${order.paymentMode}`,
-      {
-        x: 438,
-        y,
-        size: 9,
-        font
-      }
-    );
     y -= 42;
     const border = (0, import_pdf_lib.rgb)(0.86, 0.86, 0.86);
     const grayText = (0, import_pdf_lib.rgb)(0.45, 0.45, 0.45);
     const green = (0, import_pdf_lib.rgb)(0.02, 0.55, 0.18);
     const blue = (0, import_pdf_lib.rgb)(0.08, 0.35, 0.82);
-    const rowHeight = 28;
+    const headerHeight = 21;
+    const rowHeight = 26;
     page.drawRectangle({
       x: tableLeft,
       y,
       width: tableWidth,
-      height: rowHeight,
+      height: headerHeight,
       color: navy
     });
     page.drawText("Product", {
       x: tableLeft + 8,
-      y: y + 7,
+      y: y + 6,
       size: 10,
       font,
       color: (0, import_pdf_lib.rgb)(1, 1, 1)
     });
     page.drawText("Qty", {
       x: colQty,
-      y: y + 7,
+      y: y + 6,
       size: 10,
       font,
       color: (0, import_pdf_lib.rgb)(1, 1, 1)
     });
     page.drawText("MRP", {
       x: colPrice,
-      y: y + 7,
+      y: y + 6,
       size: 10,
       font,
       color: (0, import_pdf_lib.rgb)(1, 1, 1)
     });
     page.drawText("Offer", {
       x: colOffer,
-      y: y + 7,
+      y: y + 6,
       size: 10,
       font,
       color: (0, import_pdf_lib.rgb)(1, 1, 1)
     });
     page.drawText("Total", {
       x: colTotal,
-      y: y + 7,
+      y: y + 6,
       size: 10,
       font,
       color: (0, import_pdf_lib.rgb)(1, 1, 1)
     });
-    y -= rowHeight;
+    y -= headerHeight;
+    console.log("Header ends at:", y);
     order.items.forEach((item) => {
       const hasDiscount = item.originalPrice && item.originalPrice > item.price;
       const rowHeight2 = item.isComboPackage ? hasDiscount ? 48 : 40 : hasDiscount ? 38 : 30;
       page.drawRectangle({
         x: tableLeft,
-        y: y - rowHeight2 + 2,
+        y,
         width: tableWidth,
         height: rowHeight2,
         borderColor: border,
-        borderWidth: 0.5
+        borderWidth: 0.8
       });
       const name = item.name.length > 38 ? item.name.substring(0, 38) + "..." : item.name;
       page.drawText(name, {
@@ -63231,7 +63235,7 @@ var handler = async (event) => {
       thickness: 0.6,
       color: border
     });
-    y -= 10;
+    y -= 32;
     const subtotal = Number(order.subtotal || 0);
     const comboAmount = Number(order.comboAmount || 0);
     const eligibleChargeAmount = Number(order.eligibleChargeAmount || subtotal);
@@ -63242,7 +63246,7 @@ var handler = async (event) => {
     const finalPayable = Number(order.finalPayable || totalAmount);
     const summaryLeft = tableLeft;
     const summaryWidth = tableWidth;
-    const summaryHeaderHeight = 22;
+    const summaryHeaderHeight = 24;
     page.drawRectangle({
       x: summaryLeft,
       y,
@@ -63254,12 +63258,12 @@ var handler = async (event) => {
     const summaryTitleWidth = font.widthOfTextAtSize(summaryTitle, 10);
     page.drawText(summaryTitle, {
       x: summaryLeft + (summaryWidth - summaryTitleWidth) / 2,
-      y: y + 6,
-      size: 10,
+      y: y + 7,
+      size: 9,
       font,
       color: (0, import_pdf_lib.rgb)(1, 1, 1)
     });
-    y -= summaryHeaderHeight;
+    y -= summaryHeaderHeight + 3;
     drawSummaryRow2("Subtotal", `\u20B9${subtotal}`);
     if (comboAmount > 0) {
       drawSummaryRow2(

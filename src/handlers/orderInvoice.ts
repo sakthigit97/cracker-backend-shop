@@ -4,9 +4,14 @@ import fs from "fs";
 import path from "path";
 import { verifyJwt } from "../utils/auth";
 import { OrderRepository } from "../repo/order.repo";
+import { AdminConfigService } from "../services/adminConfig.service";
+import { AdminConfigRepo } from "../repo/adminConfig.repo";
 
 const repo = new OrderRepository();
 export const handler = async (event: any) => {
+  const repoconfig = new AdminConfigRepo();
+  const serviceconfig = new AdminConfigService(repoconfig);
+  const config = await serviceconfig.getConfig();
   try {
     verifyJwt(event);
 
@@ -31,149 +36,74 @@ export const handler = async (event: any) => {
     const font = await pdfDoc.embedFont(fontBytes);
 
     const page = pdfDoc.addPage([595, 842]);
-    const { width } = page.getSize();
-    const left = 52;
-    const right = width - 52;
-
-    const tableLeft = 58;
-    const tableWidth = 480;
-    const colQty = 380;
-    const colPrice = 420;
-    const colOffer = 470;
-    const colTotal = 530;
+    const tableLeft = 52;
+    const tableWidth = 490;
+    const colQty = 350;
+    const colPrice = 390;
+    const colOffer = 440;
+    const colTotal = 500;
     let y = 820;
-
-
-    const navy = rgb(0.07, 0.11, 0.20);
+    const navy = rgb(
+      15 / 255,
+      23 / 255,
+      42 / 255
+    );
     const orange = rgb(0.96, 0.50, 0.10);
-
     y = 810;
-
 
     page.drawImage(logoImage, {
       x: 52,
-      y: 777,
-      width: 38,
-      height: 38,
+      y: 775,
+      width: 42,
+      height: 42,
     });
 
-    page.drawText("SIVAKASI PYRO PARK", {
+    page.drawText(config?.companyName || "SIVAKASI PYRO PARK", {
       x: 110,
-      y: 805,
-      size: 21,
+      y: 800,
+      size: 18,
       font,
     });
 
     page.drawText("Premium Fireworks & Crackers", {
       x: 110,
       y: 786,
-      size: 10,
+      size: 8,
       font,
-      color: rgb(.35, .35, .35)
+      color: rgb(.42, .42, .42)
     });
 
-    page.drawText("+91 9994252823", {
+    page.drawText(config?.adminMobile, {
       x: 110,
       y: 765,
-      size: 10,
+      size: 8,
       font,
     });
 
-    page.drawText("svkorders@gmail.com", {
+    page.drawText(config?.adminEmail, {
       x: 110,
       y: 750,
-      size: 10,
+      size: 8,
       font,
     });
 
     page.drawText(
-      "5/590N, New Colony, Poolavoorani,\nSivakasi, Tamil Nadu 626189",
+      config?.adminAddress || "5/590N, New Colony, Poolavoorani,\nSivakasi, Tamil Nadu 626189",
       {
         x: 110,
         y: 730,
-        size: 8,
-        lineHeight: 10,
+        size: 7.5,
+        lineHeight: 9,
         font,
       });
 
-    page.drawRectangle({
-      x: 430,
-      y: 765,
-      width: 112,
-      height: 52,
-      borderColor: orange,
-      borderWidth: 0.6,
-    });
-
-    page.drawText("IMPORTANT", {
-      x: 438,
-      y: 796,
-      size: 9,
-      font,
-      color: orange,
-    });
-
-    page.drawText("No Home Delivery", {
-      x: 438,
-      y: 783,
-      size: 7,
-      font,
-    });
-
-    page.drawText("Transportation paid by customer", {
-      x: 438,
-      y: 773,
-      size: 7,
-      font,
-    });
-
-    page.drawText("Min: TN-3000 | Other-5000", {
-      x: 438,
-      y: 763,
-      size: 7,
-      font,
-    });
-
     page.drawLine({
-      start: { x: 50, y: 730 },
-      end: { x: 545, y: 730 },
-      thickness: .6,
-      color: rgb(.85, .85, .85)
+      start: { x: 50, y: 710 },
+      end: { x: 545, y: 710 },
+      thickness: .8,
+      color: rgb(.78, .78, .78)
     });
-
-    y = 710;
-
-    const address =
-      order.address ??
-      order.shippingAddress ??
-      "";
-    const addressLines = address
-      .split("\n")
-      .filter((x: string) => x.trim());
-
-    addressLines.forEach((line: string) => {
-      page.drawText(line, {
-        x: 52,
-        y,
-        size: 9,
-        font,
-        color: rgb(.35, .35, .35)
-      });
-
-      y -= 11;
-    });
-
-
-    y -= 8;
-
-    page.drawLine({
-      start: { x: 50, y },
-      end: { x: 545, y },
-      thickness: .6,
-      color: rgb(.85, .85, .85)
-    });
-
-    y -= 10;
+    y = 690;
 
     page.drawText(`Order ID : ${order.orderId}`, {
       x: 52,
@@ -191,41 +121,27 @@ export const handler = async (event: any) => {
         font,
       });
 
-    page.drawText(
-      `Payment : ${order.paymentMode}`,
-      {
-        x: 438,
-        y,
-        size: 9,
-        font,
-      });
-
     y -= 42;
-
-
-
-
-
 
 
     const border = rgb(0.86, 0.86, 0.86);
     const grayText = rgb(0.45, 0.45, 0.45);
     const green = rgb(0.02, 0.55, 0.18);
     const blue = rgb(0.08, 0.35, 0.82);
-
-    const rowHeight = 28;
+    const headerHeight = 21;
+    const rowHeight = 26;
 
     page.drawRectangle({
       x: tableLeft,
       y,
       width: tableWidth,
-      height: rowHeight,
+      height: headerHeight,
       color: navy,
     });
 
     page.drawText("Product", {
       x: tableLeft + 8,
-      y: y + 7,
+      y: y + 6,
       size: 10,
       font,
       color: rgb(1, 1, 1),
@@ -233,7 +149,7 @@ export const handler = async (event: any) => {
 
     page.drawText("Qty", {
       x: colQty,
-      y: y + 7,
+      y: y + 6,
       size: 10,
       font,
       color: rgb(1, 1, 1),
@@ -241,7 +157,7 @@ export const handler = async (event: any) => {
 
     page.drawText("MRP", {
       x: colPrice,
-      y: y + 7,
+      y: y + 6,
       size: 10,
       font,
       color: rgb(1, 1, 1),
@@ -249,7 +165,7 @@ export const handler = async (event: any) => {
 
     page.drawText("Offer", {
       x: colOffer,
-      y: y + 7,
+      y: y + 6,
       size: 10,
       font,
       color: rgb(1, 1, 1),
@@ -257,15 +173,13 @@ export const handler = async (event: any) => {
 
     page.drawText("Total", {
       x: colTotal,
-      y: y + 7,
+      y: y + 6,
       size: 10,
       font,
       color: rgb(1, 1, 1),
     });
-
-    y -= rowHeight;
-
-
+    y -= headerHeight;
+    console.log("Header ends at:", y);
     order.items.forEach((item: any) => {
 
       const hasDiscount =
@@ -279,13 +193,12 @@ export const handler = async (event: any) => {
 
       page.drawRectangle({
         x: tableLeft,
-        y: y - rowHeight + 2,
+        y,
         width: tableWidth,
         height: rowHeight,
         borderColor: border,
-        borderWidth: .5,
+        borderWidth: .8,
       });
-
       const name =
         item.name.length > 38
           ? item.name.substring(0, 38) + "..."
@@ -314,7 +227,6 @@ export const handler = async (event: any) => {
       }
 
       const qtyText = String(item.quantity);
-
       const qtyWidth = font.widthOfTextAtSize(qtyText, 9);
 
       page.drawText(
@@ -429,7 +341,7 @@ export const handler = async (event: any) => {
       color: border,
     });
 
-    y -= 10;
+    y -= 32;
 
     const subtotal = Number(order.subtotal || 0);
     const comboAmount = Number(order.comboAmount || 0);
@@ -442,9 +354,7 @@ export const handler = async (event: any) => {
 
     const summaryLeft = tableLeft;
     const summaryWidth = tableWidth;
-    const summaryHeaderHeight = 22;
-
-    /* Summary Header */
+    const summaryHeaderHeight = 24;
 
     page.drawRectangle({
       x: summaryLeft,
@@ -458,21 +368,20 @@ export const handler = async (event: any) => {
 
     page.drawText(summaryTitle, {
       x: summaryLeft + (summaryWidth - summaryTitleWidth) / 2,
-      y: y + 6,
-      size: 10,
+      y: y + 7,
+      size: 9,
       font,
       color: rgb(1, 1, 1),
     });
 
-
-    y -= summaryHeaderHeight;
-
-
+    y -= summaryHeaderHeight + 3;
     function drawSummaryRow(
       label: string,
       value: string,
       isGreen = false
     ) {
+
+
       page.drawRectangle({
         x: summaryLeft,
         y,
@@ -497,7 +406,7 @@ export const handler = async (event: any) => {
 
       page.drawText(label, {
         x: summaryLeft + 10,
-        y: y + 6,
+        y: y + 7,
         size: 9,
         font,
         color: isGreen ? green : rgb(0, 0, 0),
