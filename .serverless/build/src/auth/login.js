@@ -5649,7 +5649,7 @@ if (!JWT_SECRET) {
 }
 var generateToken = (payload) => {
   return import_jsonwebtoken.default.sign(payload, JWT_SECRET, {
-    expiresIn: "30m"
+    expiresIn: "24h"
   });
 };
 

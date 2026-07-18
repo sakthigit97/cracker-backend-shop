@@ -188,13 +188,13 @@ var RecommendationEngineService = class {
       audiences: this.normalizeArray(
         request.audiences
       ),
-      crackerTypes: this.normalizeArray(
+      crackerTypes: this.normalizeCrackerTypes(
         request.crackerTypes
       ),
-      noiseLevels: this.normalizeArray(
+      noiseLevels: this.normalizeNoiseLevels(
         request.noiseLevels
       ),
-      timePreferences: this.normalizeArray(
+      timePreferences: this.normalizeTimePreferences(
         request.timePreferences
       ),
       features: this.normalizeArray(
@@ -211,6 +211,35 @@ var RecommendationEngineService = class {
       )
     );
   }
+  normalizeNoiseLevels(values = []) {
+    const normalized = this.normalizeArray(values);
+    if (!normalized.includes("both")) {
+      return normalized;
+    }
+    return Array.from(
+      /* @__PURE__ */ new Set([
+        ...normalized.filter((value) => value !== "both"),
+        "low",
+        "high"
+      ])
+    );
+  }
+  normalizeTimePreferences(values = []) {
+    const normalized = this.normalizeArray(values);
+    if (!normalized.includes("both")) {
+      return normalized;
+    }
+    return Array.from(
+      /* @__PURE__ */ new Set([
+        ...normalized.filter((value) => value !== "both"),
+        "day",
+        "night"
+      ])
+    );
+  }
+  normalizeCrackerTypes(values = []) {
+    return this.normalizeArray(values);
+  }
   normalizeBudget(budget) {
     const normalized = Number(budget);
     if (!Number.isFinite(normalized)) {
@@ -223,26 +252,34 @@ var RecommendationEngineService = class {
   }
   scoreProduct(product, request, level) {
     const tags = this.buildTagSet(product.aiTags);
-    const matchedAudience = this.hasTagMatch(
+    const preferLowSmoke = request.crackerTypes.includes("low-smoke");
+    if (preferLowSmoke && tags.has("feature:high-smoke")) {
+      return null;
+    }
+    const audienceMatchCount = this.getMatchCount(
       tags,
       "audience",
       request.audiences
     );
-    const matchedType = this.hasTagMatch(
+    const matchedAudience = audienceMatchCount > 0;
+    const typeMatchCount = this.getMatchCount(
       tags,
       "type",
       request.crackerTypes
     );
-    const matchedNoise = this.hasTagMatch(
+    const matchedType = typeMatchCount > 0;
+    const noiseMatchCount = this.getMatchCount(
       tags,
       "noise",
       request.noiseLevels
     );
-    const matchedTime = this.hasTagMatch(
+    const matchedNoise = noiseMatchCount > 0;
+    const timeMatchCount = this.getMatchCount(
       tags,
       "time",
       request.timePreferences
     );
+    const matchedTime = timeMatchCount > 0;
     const matchedFeatures = this.getMatchedFeatures(
       tags,
       request.features
@@ -259,18 +296,28 @@ var RecommendationEngineService = class {
       return null;
     }
     let score = 0;
-    if (matchedAudience) {
-      score += AI_WEIGHTS.audience;
-    }
-    if (matchedType) {
-      score += AI_WEIGHTS.type;
-    }
-    if (matchedNoise) {
-      score += AI_WEIGHTS.noise;
-    }
-    if (matchedTime) {
-      score += AI_WEIGHTS.time;
-    }
+    score += this.calculateCategoryScore(
+      request.audiences.length,
+      audienceMatchCount,
+      AI_WEIGHTS.audience
+    );
+    score += this.calculateCategoryScore(
+      request.crackerTypes.filter(
+        (type) => type !== "low-smoke"
+      ).length,
+      typeMatchCount,
+      AI_WEIGHTS.type
+    );
+    score += this.calculateCategoryScore(
+      request.noiseLevels.length,
+      noiseMatchCount,
+      AI_WEIGHTS.noise
+    );
+    score += this.calculateCategoryScore(
+      request.timePreferences.length,
+      timeMatchCount,
+      AI_WEIGHTS.time
+    );
     score += matchedFeatures.length * AI_WEIGHTS.feature;
     score += this.calculateStockBonus(
       Number(product.quantity)
@@ -297,10 +344,11 @@ var RecommendationEngineService = class {
     if (request.audiences.length && !matchedAudience) {
       return false;
     }
-    if (level !== "IGNORE_TYPE") {
-      if (request.crackerTypes.length && !matchedType) {
-        return false;
-      }
+    const selectedTypes = request.crackerTypes.filter(
+      (type) => type !== "low-smoke"
+    );
+    if (selectedTypes.length && !matchedType) {
+      return false;
     }
     if (level !== "IGNORE_NOISE" && level !== "IGNORE_TYPE") {
       if (request.noiseLevels.length && !matchedNoise) {
@@ -337,14 +385,27 @@ var RecommendationEngineService = class {
     }
     return matches;
   }
-  hasTagMatch(tags, prefix, values) {
+  getMatchCount(tags, prefix, values) {
     if (!values.length) {
-      return false;
+      return 0;
     }
-    for (const value of values) {
-      if (tags.has(
-        `${prefix}:${value}`
-      )) {
+    const matchValues = prefix === "type" ? values.filter(
+      (value) => value !== "low-smoke"
+    ) : values;
+    let count = 0;
+    for (const value of matchValues) {
+      if (tags.has(`${prefix}:${value}`)) {
+        count++;
+      }
+    }
+    return count;
+  }
+  hasTagMatch(tags, values, prefix) {
+    const matchValues = prefix === "type" ? values.filter(
+      (value) => value !== "low-smoke"
+    ) : values;
+    for (const value of matchValues) {
+      if (tags.has(`${prefix}:${value}`)) {
         return true;
       }
     }
@@ -384,6 +445,14 @@ var RecommendationEngineService = class {
       return 1;
     }
     return 0;
+  }
+  calculateCategoryScore(totalSelections, matchedSelections, weight) {
+    if (totalSelections === 0 || matchedSelections === 0) {
+      return 0;
+    }
+    return Math.round(
+      matchedSelections / totalSelections * weight
+    );
   }
   logCandidateSummary(level, candidates) {
     console.log(
@@ -427,7 +496,7 @@ var RecommendationEngineService = class {
           return b.score - a.score;
         }
         if (a.price !== b.price) {
-          return a.price - b.price;
+          return b.price - a.price;
         }
         return b.quantity - a.quantity;
       }
@@ -497,35 +566,34 @@ var PackageBuilderService = class {
     if (budget <= 0 || candidates.length === 0) {
       return this.emptyResult();
     }
-    const rankedCandidates = this.prepareCandidates(
-      budget,
-      candidates
-    );
+    const rankedCandidates = this.prepareCandidates(budget, candidates);
+    console.log("Prepared candidates:", rankedCandidates.length);
     if (rankedCandidates.length === 0) {
       return this.emptyResult();
     }
-    const optimizationPool = this.buildOptimizationPool(
-      rankedCandidates
-    );
+    const optimizationPool = this.buildOptimizationPool(rankedCandidates);
+    console.log("Optimization pool:", optimizationPool.length);
     const workingPackage = this.optimizePackage(
       budget,
       optimizationPool
     );
-    this.expandQuantities(
+    console.log("After optimize:", workingPackage.items.size);
+    this.fillRemainingBudget(
       budget,
-      optimizationPool,
+      rankedCandidates,
       workingPackage
     );
-    const packageItems = [...workingPackage.items.values()];
-    const selectedIds = new Set(
-      packageItems.map(
-        (item) => item.productId
-      )
+    console.log("After fill:", workingPackage.items.size);
+    this.expandQuantities(
+      budget,
+      rankedCandidates,
+      workingPackage
     );
+    console.log("After quantity expansion:", workingPackage.items.size);
+    const packageItems = [...workingPackage.items.values()];
+    const selectedIds = new Set(packageItems.map((item) => item.productId));
     const remainingCandidates = rankedCandidates.filter(
-      (candidate) => !selectedIds.has(
-        candidate.productId
-      )
+      (candidate) => !selectedIds.has(candidate.productId)
     );
     this.logPackageSummary(
       budget,
@@ -533,12 +601,10 @@ var PackageBuilderService = class {
       packageItems,
       remainingCandidates.length
     );
+    console.log("Final total:", workingPackage.total);
     return {
       total: workingPackage.total,
-      itemCount: packageItems.reduce(
-        (sum, item) => sum + item.selectedQty,
-        0
-      ),
+      itemCount: packageItems.reduce((sum, item) => sum + item.selectedQty, 0),
       packageItems,
       remainingCandidates
     };
@@ -557,14 +623,9 @@ var PackageBuilderService = class {
       if (candidate.price <= 0 || candidate.quantity <= 0 || candidate.price > budget) {
         continue;
       }
-      const existing = unique.get(
-        candidate.productId
-      );
+      const existing = unique.get(candidate.productId);
       if (!existing || candidate.score > existing.score) {
-        unique.set(
-          candidate.productId,
-          candidate
-        );
+        unique.set(candidate.productId, candidate);
       }
     }
     return [...unique.values()].sort((a, b) => {
@@ -580,10 +641,7 @@ var PackageBuilderService = class {
   buildOptimizationPool(candidates) {
     return candidates.slice(
       0,
-      Math.min(
-        OPTIMIZATION_POOL_SIZE,
-        candidates.length
-      )
+      Math.min(OPTIMIZATION_POOL_SIZE, candidates.length)
     );
   }
   optimizePackage(budget, candidates) {
@@ -598,17 +656,13 @@ var PackageBuilderService = class {
     for (const candidate of candidates) {
       const nextBeam = [...beam];
       for (const current of beam) {
-        if (current.items.has(
-          candidate.productId
-        )) {
+        if (current.items.has(candidate.productId)) {
           continue;
         }
         if (current.total + candidate.price > budget) {
           continue;
         }
-        const clone = this.cloneWorkingPackage(
-          current
-        );
+        const clone = this.cloneWorkingPackage(current);
         clone.items.set(
           candidate.productId,
           {
@@ -635,19 +689,10 @@ var PackageBuilderService = class {
           a,
           budget
         )
-      ).slice(
-        0,
-        BEAM_WIDTH
-      );
+      ).slice(0, BEAM_WIDTH);
     }
     const best = beam.sort(
-      (a, b) => this.packageValue(
-        b,
-        budget
-      ) - this.packageValue(
-        a,
-        budget
-      )
+      (a, b) => this.packageValue(b, budget) - this.packageValue(a, budget)
     )[0];
     return best;
   }
@@ -660,14 +705,12 @@ var PackageBuilderService = class {
       total: pkg.total,
       score: pkg.score,
       items: new Map(
-        [...pkg.items.entries()].map(
-          ([key, value]) => [
-            key,
-            {
-              ...value
-            }
-          ]
-        )
+        [...pkg.items.entries()].map(([key, value]) => [
+          key,
+          {
+            ...value
+          }
+        ])
       )
     };
   }
@@ -691,9 +734,7 @@ var PackageBuilderService = class {
         )) {
           continue;
         }
-        const item = workingPackage.items.get(
-          candidate.productId
-        );
+        const item = workingPackage.items.get(candidate.productId);
         if (!item) {
           continue;
         }
@@ -708,10 +749,36 @@ var PackageBuilderService = class {
       }
     }
   }
+  fillRemainingBudget(budget, candidates, workingPackage) {
+    while (true) {
+      const remainingBudget = budget - workingPackage.total;
+      if (remainingBudget <= 0) {
+        return;
+      }
+      let added = false;
+      for (const candidate of candidates) {
+        if (workingPackage.items.has(candidate.productId)) {
+          continue;
+        }
+        if (candidate.price > remainingBudget) {
+          continue;
+        }
+        workingPackage.items.set(candidate.productId, {
+          productId: candidate.productId,
+          selectedQty: 1
+        });
+        workingPackage.total += candidate.price;
+        workingPackage.score += candidate.score;
+        added = true;
+        break;
+      }
+      if (!added) {
+        return;
+      }
+    }
+  }
   canIncreaseQuantity(candidate, workingPackage) {
-    const item = workingPackage.items.get(
-      candidate.productId
-    );
+    const item = workingPackage.items.get(candidate.productId);
     if (!item) {
       return false;
     }
@@ -729,9 +796,7 @@ var PackageBuilderService = class {
       JSON.stringify({
         budget,
         total,
-        utilization: Number(
-          (total / budget * 100).toFixed(2)
-        ),
+        utilization: Number((total / budget * 100).toFixed(2)),
         uniqueProducts: packageItems.length,
         totalItems: packageItems.reduce(
           (sum, item) => sum + item.selectedQty,

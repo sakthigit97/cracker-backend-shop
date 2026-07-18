@@ -5,6 +5,7 @@ provider:
   runtime: nodejs24.x
   region: ap-south-1
   stage: dev
+  timeout: 60
 
   environment:
     JWT_SECRET: ${env:JWT_SECRET}

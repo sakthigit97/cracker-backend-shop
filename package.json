@@ -19,6 +19,8 @@
     "bcryptjs": "^3.0.3",
     "fontkit": "^2.0.4",
     "jsonwebtoken": "^9.0.3",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "jwt-decode": "^4.0.0",
     "openai": "^6.39.1",
     "pdf-lib": "^1.17.1",

@@ -53,8 +53,6 @@ export interface RecommendationCandidate {
 
     matchedTime: boolean;
 
-    matchedFeatures: string[];
-
 }
 
 export interface PackageItem {

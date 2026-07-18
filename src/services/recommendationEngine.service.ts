@@ -11,14 +11,12 @@ const AI_WEIGHTS = {
     type: 40,
     noise: 20,
     time: 20,
-    feature: 10,
     stock: 5,
     budget: 3,
 };
 
 type RelaxationLevel =
     | "STRICT"
-    | "IGNORE_FEATURE"
     | "IGNORE_TIME"
     | "IGNORE_NOISE"
     | "IGNORE_TYPE";
@@ -79,7 +77,6 @@ export class RecommendationEngineService {
 
         const relaxationFlow: RelaxationLevel[] = [
             "STRICT",
-            "IGNORE_FEATURE",
             "IGNORE_TIME",
             "IGNORE_NOISE",
             "IGNORE_TYPE",
@@ -183,27 +180,22 @@ export class RecommendationEngineService {
                 ),
 
             crackerTypes:
-                this.normalizeArray(
+                this.normalizeCrackerTypes(
                     request.crackerTypes
                 ),
 
             noiseLevels:
-                this.normalizeArray(
+                this.normalizeNoiseLevels(
                     request.noiseLevels
                 ),
 
             timePreferences:
-                this.normalizeArray(
+                this.normalizeTimePreferences(
                     request.timePreferences
                 ),
 
-            features:
-                this.normalizeArray(
-                    request.features
-                ),
-
+            features: []
         };
-
     }
 
     private normalizeArray(
@@ -222,6 +214,51 @@ export class RecommendationEngineService {
             )
         );
 
+    }
+
+    private normalizeNoiseLevels(
+        values: string[] = []
+    ): string[] {
+
+        const normalized =
+            this.normalizeArray(values);
+
+        if (!normalized.includes("both")) {
+            return normalized;
+        }
+
+        return Array.from(
+            new Set([
+                ...normalized.filter(value => value !== "both"),
+                "low",
+                "high",
+            ])
+        );
+
+    }
+    private normalizeTimePreferences(
+        values: string[] = []
+    ): string[] {
+
+        const normalized = this.normalizeArray(values);
+        if (!normalized.includes("both")) {
+            return normalized;
+        }
+
+        return Array.from(
+            new Set([
+                ...normalized.filter(value => value !== "both"),
+                "day",
+                "night",
+            ])
+        );
+
+    }
+
+    private normalizeCrackerTypes(
+        values: string[] = []
+    ): string[] {
+        return this.normalizeArray(values);
     }
 
 
@@ -254,41 +291,43 @@ export class RecommendationEngineService {
     ): RecommendationCandidate | null {
 
         const tags = this.buildTagSet(product.aiTags);
-
-        const matchedAudience =
-            this.hasTagMatch(
+        const audienceMatchCount =
+            this.getMatchCount(
                 tags,
                 "audience",
                 request.audiences
             );
 
-        const matchedType =
-            this.hasTagMatch(
+        const matchedAudience = audienceMatchCount > 0;
+        const typeMatchCount =
+            this.getMatchCount(
                 tags,
                 "type",
                 request.crackerTypes
             );
 
-        const matchedNoise =
-            this.hasTagMatch(
+        const matchedType =
+            typeMatchCount > 0;
+
+        const noiseMatchCount =
+            this.getMatchCount(
                 tags,
                 "noise",
                 request.noiseLevels
             );
 
-        const matchedTime =
-            this.hasTagMatch(
+        const matchedNoise =
+            noiseMatchCount > 0;
+
+        const timeMatchCount =
+            this.getMatchCount(
                 tags,
                 "time",
                 request.timePreferences
             );
 
-        const matchedFeatures =
-            this.getMatchedFeatures(
-                tags,
-                request.features
-            );
-
+        const matchedTime =
+            timeMatchCount > 0;
 
         if (
             !this.isEligible(
@@ -297,34 +336,36 @@ export class RecommendationEngineService {
                 matchedAudience,
                 matchedType,
                 matchedNoise,
-                matchedTime,
-                matchedFeatures.length
+                matchedTime
             )
         ) {
             return null;
         }
 
         let score = 0;
+        score += this.calculateCategoryScore(
+            request.audiences.length,
+            audienceMatchCount,
+            AI_WEIGHTS.audience
+        );
 
-        if (matchedAudience) {
-            score += AI_WEIGHTS.audience;
-        }
+        score += this.calculateCategoryScore(
+            request.crackerTypes.length,
+            typeMatchCount,
+            AI_WEIGHTS.type
+        );
 
-        if (matchedType) {
-            score += AI_WEIGHTS.type;
-        }
+        score += this.calculateCategoryScore(
+            request.noiseLevels.length,
+            noiseMatchCount,
+            AI_WEIGHTS.noise
+        );
 
-        if (matchedNoise) {
-            score += AI_WEIGHTS.noise;
-        }
-
-        if (matchedTime) {
-            score += AI_WEIGHTS.time;
-        }
-
-        score +=
-            matchedFeatures.length *
-            AI_WEIGHTS.feature;
+        score += this.calculateCategoryScore(
+            request.timePreferences.length,
+            timeMatchCount,
+            AI_WEIGHTS.time
+        );
 
         score += this.calculateStockBonus(
             Number(product.quantity)
@@ -357,8 +398,6 @@ export class RecommendationEngineService {
 
             matchedTime,
 
-            matchedFeatures,
-
         };
 
     }
@@ -378,8 +417,6 @@ export class RecommendationEngineService {
 
         matchedTime: boolean,
 
-        matchedFeatureCount: number,
-
     ): boolean {
 
         if (
@@ -390,16 +427,10 @@ export class RecommendationEngineService {
         }
 
         if (
-            level !== "IGNORE_TYPE"
+            request.crackerTypes.length &&
+            !matchedType
         ) {
-
-            if (
-                request.crackerTypes.length &&
-                !matchedType
-            ) {
-                return false;
-            }
-
+            return false;
         }
 
         if (
@@ -417,8 +448,7 @@ export class RecommendationEngineService {
         }
 
         if (
-            level === "STRICT" ||
-            level === "IGNORE_FEATURE"
+            level === "STRICT"
         ) {
 
             if (
@@ -430,16 +460,6 @@ export class RecommendationEngineService {
 
         }
 
-        if (
-            level === "STRICT" &&
-            request.features.length &&
-            matchedFeatureCount === 0
-        ) {
-
-            return false;
-
-        }
-
         return true;
 
     }
@@ -448,64 +468,28 @@ export class RecommendationEngineService {
         return this.repo.getAllActiveProducts();
     }
 
-    private getMatchedFeatures(
-        tags: Set<string>,
-        features: string[]
-    ): string[] {
-
-        const matches: string[] = [];
-
-        for (const feature of features) {
-            const normalized =
-                feature
-                    ?.trim()
-                    .toLowerCase();
-
-            if (!normalized) {
-                continue;
-            }
-            if (
-                tags.has(
-                    `feature:${normalized}`
-                ) ||
-                tags.has(
-                    `visual:${normalized}`
-                )
-            ) {
-
-                matches.push(normalized);
-
-            }
-
-        }
-
-        return matches;
-
-    }
-
-    private hasTagMatch(
+    private getMatchCount(
         tags: Set<string>,
         prefix: string,
         values: string[]
-    ): boolean {
+    ): number {
 
         if (!values.length) {
-            return false;
+            return 0;
         }
 
-        for (const value of values) {
+        const matchValues = values;
+        let count = 0;
 
-            if (
-                tags.has(
-                    `${prefix}:${value}`
-                )
-            ) {
-                return true;
+        for (const value of matchValues) {
+
+            if (tags.has(`${prefix}:${value}`)) {
+                count++;
             }
 
         }
 
-        return false;
+        return count;
 
     }
 
@@ -598,6 +582,25 @@ export class RecommendationEngineService {
 
     }
 
+    private calculateCategoryScore(
+        totalSelections: number,
+        matchedSelections: number,
+        weight: number
+    ): number {
+
+        if (
+            totalSelections === 0 ||
+            matchedSelections === 0
+        ) {
+            return 0;
+        }
+
+        return Math.round(
+            (matchedSelections / totalSelections) * weight
+        );
+
+    }
+
     private logCandidateSummary(
         level: RelaxationLevel,
         candidates: RecommendationCandidate[]
@@ -682,15 +685,8 @@ export class RecommendationEngineService {
 
                 }
 
-                if (
-                    a.price !== b.price
-                ) {
-
-                    return (
-                        a.price -
-                        b.price
-                    );
-
+                if (a.price !== b.price) {
+                    return b.price - a.price;
                 }
 
                 return (

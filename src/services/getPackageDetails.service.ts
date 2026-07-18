@@ -1,12 +1,8 @@
-import { GetPackageDetailsRepository }
-    from "../repo/getPackageDetails.repo";
-
-import { ProductService }
-    from "./product.service";
+import { GetPackageDetailsRepository } from "../repo/getPackageDetails.repo";
+import { ProductService } from "./product.service";
 
 export class GetPackageDetailsService {
-    private productService =
-        new ProductService();
+    private productService = new ProductService();
 
     constructor(
         private repo =
@@ -16,15 +12,13 @@ export class GetPackageDetailsService {
     async getPackageDetails(
         packageId: string
     ) {
-        const result =
-            await this.repo.getPackageDetails(
-                packageId
-            );
+        const result = await this.repo.getPackageDetails(
+            packageId
+        );
 
-        const items =
-            await this.productService.batchGetProducts(
-                result.productIds
-            );
+        const items = await this.productService.batchGetProducts(
+            result.productIds
+        );
 
         const products = items.map(
             (p: any) => ({
