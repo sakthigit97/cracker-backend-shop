@@ -167,10 +167,8 @@ export class PackageBuilderService {
                 const clone = this.cloneWorkingPackage(current);
                 clone.items.set(
                     candidate.productId,
-
                     {
                         productId: candidate.productId,
-
                         selectedQty: 1,
                     }
                 );
@@ -213,11 +211,9 @@ export class PackageBuilderService {
 
     private packageValue(
         pkg: WorkingPackage,
-
         budget: number
     ): number {
         const utilization = pkg.total / budget;
-
         return utilization * 5000 + pkg.score * 500 + pkg.items.size * 10;
     }
 
@@ -242,6 +238,7 @@ export class PackageBuilderService {
             .join("|");
     }
 
+
     private expandQuantities(
         budget: number,
         candidates: RecommendationCandidate[],
@@ -254,41 +251,178 @@ export class PackageBuilderService {
                 break;
             }
 
-            let expanded = false;
+            const candidate = this.findBestQuantityCandidate(
+                remainingBudget,
+                candidates,
+                workingPackage
+            );
 
-            for (const candidate of candidates) {
-                if (candidate.price > remainingBudget) {
-                    continue;
-                }
-
-                if (
-                    !this.canIncreaseQuantity(
-                        candidate,
-
-                        workingPackage
-                    )
-                ) {
-                    continue;
-                }
-
-                const item = workingPackage.items.get(candidate.productId);
-
-                if (!item) {
-                    continue;
-                }
-
-                item.selectedQty++;
-                workingPackage.total += candidate.price;
-                workingPackage.score += candidate.score;
-                expanded = true;
-
+            if (!candidate) {
                 break;
             }
 
-            if (!expanded) {
-                break;
+            const item = workingPackage.items.get(candidate.productId)!;
+            item.selectedQty++;
+            workingPackage.total += candidate.price;
+            workingPackage.score += candidate.score;
+        }
+    }
+
+
+    private findBestNewCandidate(
+        remainingBudget: number,
+        candidates: RecommendationCandidate[],
+        workingPackage: WorkingPackage
+    ): RecommendationCandidate | undefined {
+        const categoryCounts = new Map<string, number>();
+        const familyCounts = new Map<string, number>();
+
+        for (const item of workingPackage.items.values()) {
+            const selected = candidates.find(
+                (c) => c.productId === item.productId
+            );
+
+            if (!selected) {
+                continue;
+            }
+
+            categoryCounts.set(
+                selected.categoryId,
+                (categoryCounts.get(selected.categoryId) ?? 0) + 1
+            );
+
+            if (selected.productFamily) {
+                familyCounts.set(
+                    selected.productFamily,
+                    (familyCounts.get(selected.productFamily) ?? 0) + 1
+                );
             }
         }
+
+        let bestCandidate: RecommendationCandidate | undefined;
+        let bestScore = Number.NEGATIVE_INFINITY;
+        for (const candidate of candidates) {
+            if (workingPackage.items.has(candidate.productId)) {
+                continue;
+            }
+
+            if (candidate.price > remainingBudget) {
+                continue;
+            }
+
+            const categoryCount = categoryCounts.get(candidate.categoryId) ?? 0;
+            const familyCount = candidate.productFamily
+                ? familyCounts.get(candidate.productFamily) ?? 0
+                : 0;
+
+            const leftover =
+                remainingBudget - candidate.price;
+
+            const adjustedScore =
+                candidate.score
+                - categoryCount
+                - familyCount
+                + this.leftoverBudgetBonus(
+                    leftover,
+                    candidates,
+                    workingPackage
+                );
+
+            if (adjustedScore > bestScore) {
+                bestScore = adjustedScore;
+                bestCandidate = candidate;
+            }
+        }
+
+        return bestCandidate;
+    }
+
+    private leftoverBudgetBonus(
+        leftover: number,
+        candidates: RecommendationCandidate[],
+        workingPackage: WorkingPackage
+    ): number {
+        if (leftover <= 0) {
+            return 0;
+        }
+
+        const cheapestRemaining = candidates
+            .filter(
+                c =>
+                    !workingPackage.items.has(c.productId)
+            )
+            .reduce(
+                (min, c) => Math.min(min, c.price),
+                Number.MAX_SAFE_INTEGER
+            );
+
+        if (cheapestRemaining === Number.MAX_SAFE_INTEGER) {
+            return 0;
+        }
+
+        if (leftover >= cheapestRemaining) {
+            return 3;
+        }
+
+        return -3;
+    }
+    private findBestQuantityCandidate(
+        remainingBudget: number,
+        candidates: RecommendationCandidate[],
+        workingPackage: WorkingPackage
+    ): RecommendationCandidate | undefined {
+        let bestCandidate: RecommendationCandidate | undefined;
+        let bestScore = Number.NEGATIVE_INFINITY;
+        const familyCounts = new Map<string, number>();
+
+        for (const item of workingPackage.items.values()) {
+            const selected = candidates.find(
+                (c) => c.productId === item.productId
+            );
+
+            if (!selected?.productFamily) {
+                continue;
+            }
+
+            familyCounts.set(
+                selected.productFamily,
+                (familyCounts.get(selected.productFamily) ?? 0) + 1
+            );
+        }
+
+        for (const candidate of candidates) {
+            if (!workingPackage.items.has(candidate.productId)) {
+                continue;
+            }
+
+            if (candidate.price > remainingBudget) {
+                continue;
+            }
+
+            if (!this.canIncreaseQuantity(candidate, workingPackage)) {
+                continue;
+            }
+
+            const item = workingPackage.items.get(candidate.productId)!;
+            const familyCount = candidate.productFamily
+                ? familyCounts.get(candidate.productFamily) ?? 0
+                : 0;
+
+            const quantityPenalty = item.selectedQty - 1;
+            const dominancePenalty = Math.floor((item.selectedQty * item.selectedQty) / 2);
+
+            const adjustedScore = candidate.score
+                - quantityPenalty
+                - familyCount
+                - dominancePenalty;
+
+            if (adjustedScore > bestScore) {
+                bestScore = adjustedScore;
+                bestCandidate = candidate;
+            }
+        }
+
+        return bestCandidate;
     }
 
     private fillRemainingBudget(
@@ -303,32 +437,23 @@ export class PackageBuilderService {
                 return;
             }
 
-            let added = false;
+            const candidate = this.findBestNewCandidate(
+                remainingBudget,
+                candidates,
+                workingPackage
+            );
 
-            for (const candidate of candidates) {
-                if (workingPackage.items.has(candidate.productId)) {
-                    continue;
-                }
-
-                if (candidate.price > remainingBudget) {
-                    continue;
-                }
-
-                workingPackage.items.set(candidate.productId, {
-                    productId: candidate.productId,
-                    selectedQty: 1,
-                });
-
-                workingPackage.total += candidate.price;
-                workingPackage.score += candidate.score;
-
-                added = true;
-                break;
-            }
-
-            if (!added) {
+            if (!candidate) {
                 return;
             }
+
+            workingPackage.items.set(candidate.productId, {
+                productId: candidate.productId,
+                selectedQty: 1,
+            });
+
+            workingPackage.total += candidate.price;
+            workingPackage.score += candidate.score;
         }
     }
 

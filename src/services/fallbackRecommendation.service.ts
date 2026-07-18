@@ -5,20 +5,15 @@ import {
 
 export class FallbackRecommendationService {
     buildCandidates(
-
         budget: number,
-
         products: AiProduct[]
-
     ): RecommendationCandidate[] {
 
         if (
             budget <= 0 ||
             products.length === 0
         ) {
-
             return [];
-
         }
 
         const candidates =
@@ -39,12 +34,7 @@ export class FallbackRecommendationService {
                     if (
                         a.price !== b.price
                     ) {
-
-                        return (
-                            a.price -
-                            b.price
-                        );
-
+                        return b.price - a.price;
                     }
 
                     if (
@@ -146,9 +136,6 @@ export class FallbackRecommendationService {
 
             matchedTime:
                 false,
-
-            matchedFeatures:
-                [],
 
         };
 

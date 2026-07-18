@@ -94,7 +94,6 @@ var AI_WEIGHTS = {
   type: 40,
   noise: 20,
   time: 20,
-  feature: 10,
   stock: 5,
   budget: 3
 };
@@ -126,7 +125,6 @@ var RecommendationEngineService = class {
     }
     const relaxationFlow = [
       "STRICT",
-      "IGNORE_FEATURE",
       "IGNORE_TIME",
       "IGNORE_NOISE",
       "IGNORE_TYPE"
@@ -197,9 +195,7 @@ var RecommendationEngineService = class {
       timePreferences: this.normalizeTimePreferences(
         request.timePreferences
       ),
-      features: this.normalizeArray(
-        request.features
-      )
+      features: []
     };
   }
   normalizeArray(values = []) {
@@ -252,10 +248,6 @@ var RecommendationEngineService = class {
   }
   scoreProduct(product, request, level) {
     const tags = this.buildTagSet(product.aiTags);
-    const preferLowSmoke = request.crackerTypes.includes("low-smoke");
-    if (preferLowSmoke && tags.has("feature:high-smoke")) {
-      return null;
-    }
     const audienceMatchCount = this.getMatchCount(
       tags,
       "audience",
@@ -280,18 +272,13 @@ var RecommendationEngineService = class {
       request.timePreferences
     );
     const matchedTime = timeMatchCount > 0;
-    const matchedFeatures = this.getMatchedFeatures(
-      tags,
-      request.features
-    );
     if (!this.isEligible(
       level,
       request,
       matchedAudience,
       matchedType,
       matchedNoise,
-      matchedTime,
-      matchedFeatures.length
+      matchedTime
     )) {
       return null;
     }
@@ -302,9 +289,7 @@ var RecommendationEngineService = class {
       AI_WEIGHTS.audience
     );
     score += this.calculateCategoryScore(
-      request.crackerTypes.filter(
-        (type) => type !== "low-smoke"
-      ).length,
+      request.crackerTypes.length,
       typeMatchCount,
       AI_WEIGHTS.type
     );
@@ -318,7 +303,6 @@ var RecommendationEngineService = class {
       timeMatchCount,
       AI_WEIGHTS.time
     );
-    score += matchedFeatures.length * AI_WEIGHTS.feature;
     score += this.calculateStockBonus(
       Number(product.quantity)
     );
@@ -336,18 +320,14 @@ var RecommendationEngineService = class {
       matchedAudience,
       matchedType,
       matchedNoise,
-      matchedTime,
-      matchedFeatures
+      matchedTime
     };
   }
-  isEligible(level, request, matchedAudience, matchedType, matchedNoise, matchedTime, matchedFeatureCount) {
+  isEligible(level, request, matchedAudience, matchedType, matchedNoise, matchedTime) {
     if (request.audiences.length && !matchedAudience) {
       return false;
     }
-    const selectedTypes = request.crackerTypes.filter(
-      (type) => type !== "low-smoke"
-    );
-    if (selectedTypes.length && !matchedType) {
+    if (request.crackerTypes.length && !matchedType) {
       return false;
     }
     if (level !== "IGNORE_NOISE" && level !== "IGNORE_TYPE") {
@@ -355,43 +335,21 @@ var RecommendationEngineService = class {
         return false;
       }
     }
-    if (level === "STRICT" || level === "IGNORE_FEATURE") {
+    if (level === "STRICT") {
       if (request.timePreferences.length && !matchedTime) {
         return false;
       }
-    }
-    if (level === "STRICT" && request.features.length && matchedFeatureCount === 0) {
-      return false;
     }
     return true;
   }
   async getActiveProducts() {
     return this.repo.getAllActiveProducts();
   }
-  getMatchedFeatures(tags, features) {
-    const matches = [];
-    for (const feature of features) {
-      const normalized = feature?.trim().toLowerCase();
-      if (!normalized) {
-        continue;
-      }
-      if (tags.has(
-        `feature:${normalized}`
-      ) || tags.has(
-        `visual:${normalized}`
-      )) {
-        matches.push(normalized);
-      }
-    }
-    return matches;
-  }
   getMatchCount(tags, prefix, values) {
     if (!values.length) {
       return 0;
     }
-    const matchValues = prefix === "type" ? values.filter(
-      (value) => value !== "low-smoke"
-    ) : values;
+    const matchValues = values;
     let count = 0;
     for (const value of matchValues) {
       if (tags.has(`${prefix}:${value}`)) {
@@ -399,17 +357,6 @@ var RecommendationEngineService = class {
       }
     }
     return count;
-  }
-  hasTagMatch(tags, values, prefix) {
-    const matchValues = prefix === "type" ? values.filter(
-      (value) => value !== "low-smoke"
-    ) : values;
-    for (const value of matchValues) {
-      if (tags.has(`${prefix}:${value}`)) {
-        return true;
-      }
-    }
-    return false;
   }
   buildTagSet(aiTags = []) {
     return new Set(
@@ -514,7 +461,7 @@ var FallbackRecommendationService = class {
       (product) => product.price > 0 && product.quantity > 0 && product.price <= budget
     ).sort((a, b) => {
       if (a.price !== b.price) {
-        return a.price - b.price;
+        return b.price - a.price;
       }
       if (b.quantity !== a.quantity) {
         return b.quantity - a.quantity;
@@ -550,8 +497,7 @@ var FallbackRecommendationService = class {
       matchedAudience: false,
       matchedType: false,
       matchedNoise: false,
-      matchedTime: false,
-      matchedFeatures: []
+      matchedTime: false
     };
   }
 };
@@ -723,31 +669,120 @@ var PackageBuilderService = class {
       if (remainingBudget <= 0) {
         break;
       }
-      let expanded = false;
-      for (const candidate of candidates) {
-        if (candidate.price > remainingBudget) {
-          continue;
-        }
-        if (!this.canIncreaseQuantity(
-          candidate,
-          workingPackage
-        )) {
-          continue;
-        }
-        const item = workingPackage.items.get(candidate.productId);
-        if (!item) {
-          continue;
-        }
-        item.selectedQty++;
-        workingPackage.total += candidate.price;
-        workingPackage.score += candidate.score;
-        expanded = true;
+      const candidate = this.findBestQuantityCandidate(
+        remainingBudget,
+        candidates,
+        workingPackage
+      );
+      if (!candidate) {
         break;
       }
-      if (!expanded) {
-        break;
+      const item = workingPackage.items.get(candidate.productId);
+      item.selectedQty++;
+      workingPackage.total += candidate.price;
+      workingPackage.score += candidate.score;
+    }
+  }
+  findBestNewCandidate(remainingBudget, candidates, workingPackage) {
+    const categoryCounts = /* @__PURE__ */ new Map();
+    const familyCounts = /* @__PURE__ */ new Map();
+    for (const item of workingPackage.items.values()) {
+      const selected = candidates.find(
+        (c) => c.productId === item.productId
+      );
+      if (!selected) {
+        continue;
+      }
+      categoryCounts.set(
+        selected.categoryId,
+        (categoryCounts.get(selected.categoryId) ?? 0) + 1
+      );
+      if (selected.productFamily) {
+        familyCounts.set(
+          selected.productFamily,
+          (familyCounts.get(selected.productFamily) ?? 0) + 1
+        );
       }
     }
+    let bestCandidate;
+    let bestScore = Number.NEGATIVE_INFINITY;
+    for (const candidate of candidates) {
+      if (workingPackage.items.has(candidate.productId)) {
+        continue;
+      }
+      if (candidate.price > remainingBudget) {
+        continue;
+      }
+      const categoryCount = categoryCounts.get(candidate.categoryId) ?? 0;
+      const familyCount = candidate.productFamily ? familyCounts.get(candidate.productFamily) ?? 0 : 0;
+      const leftover = remainingBudget - candidate.price;
+      const adjustedScore = candidate.score - categoryCount - familyCount + this.leftoverBudgetBonus(
+        leftover,
+        candidates,
+        workingPackage
+      );
+      if (adjustedScore > bestScore) {
+        bestScore = adjustedScore;
+        bestCandidate = candidate;
+      }
+    }
+    return bestCandidate;
+  }
+  leftoverBudgetBonus(leftover, candidates, workingPackage) {
+    if (leftover <= 0) {
+      return 0;
+    }
+    const cheapestRemaining = candidates.filter(
+      (c) => !workingPackage.items.has(c.productId)
+    ).reduce(
+      (min, c) => Math.min(min, c.price),
+      Number.MAX_SAFE_INTEGER
+    );
+    if (cheapestRemaining === Number.MAX_SAFE_INTEGER) {
+      return 0;
+    }
+    if (leftover >= cheapestRemaining) {
+      return 3;
+    }
+    return -3;
+  }
+  findBestQuantityCandidate(remainingBudget, candidates, workingPackage) {
+    let bestCandidate;
+    let bestScore = Number.NEGATIVE_INFINITY;
+    const familyCounts = /* @__PURE__ */ new Map();
+    for (const item of workingPackage.items.values()) {
+      const selected = candidates.find(
+        (c) => c.productId === item.productId
+      );
+      if (!selected?.productFamily) {
+        continue;
+      }
+      familyCounts.set(
+        selected.productFamily,
+        (familyCounts.get(selected.productFamily) ?? 0) + 1
+      );
+    }
+    for (const candidate of candidates) {
+      if (!workingPackage.items.has(candidate.productId)) {
+        continue;
+      }
+      if (candidate.price > remainingBudget) {
+        continue;
+      }
+      if (!this.canIncreaseQuantity(candidate, workingPackage)) {
+        continue;
+      }
+      const item = workingPackage.items.get(candidate.productId);
+      const familyCount = candidate.productFamily ? familyCounts.get(candidate.productFamily) ?? 0 : 0;
+      const quantityPenalty = item.selectedQty - 1;
+      const dominancePenalty = Math.floor(item.selectedQty * item.selectedQty / 2);
+      const adjustedScore = candidate.score - quantityPenalty - familyCount - dominancePenalty;
+      if (adjustedScore > bestScore) {
+        bestScore = adjustedScore;
+        bestCandidate = candidate;
+      }
+    }
+    return bestCandidate;
   }
   fillRemainingBudget(budget, candidates, workingPackage) {
     while (true) {
@@ -755,26 +790,20 @@ var PackageBuilderService = class {
       if (remainingBudget <= 0) {
         return;
       }
-      let added = false;
-      for (const candidate of candidates) {
-        if (workingPackage.items.has(candidate.productId)) {
-          continue;
-        }
-        if (candidate.price > remainingBudget) {
-          continue;
-        }
-        workingPackage.items.set(candidate.productId, {
-          productId: candidate.productId,
-          selectedQty: 1
-        });
-        workingPackage.total += candidate.price;
-        workingPackage.score += candidate.score;
-        added = true;
-        break;
-      }
-      if (!added) {
+      const candidate = this.findBestNewCandidate(
+        remainingBudget,
+        candidates,
+        workingPackage
+      );
+      if (!candidate) {
         return;
       }
+      workingPackage.items.set(candidate.productId, {
+        productId: candidate.productId,
+        selectedQty: 1
+      });
+      workingPackage.total += candidate.price;
+      workingPackage.score += candidate.score;
     }
   }
   canIncreaseQuantity(candidate, workingPackage) {
@@ -942,13 +971,19 @@ var ProductService = class {
   }
   async batchGetProducts(productIds) {
     const uniqueIds = [...new Set(productIds)];
-    if (uniqueIds.length > 100) {
-      throw new Error("Too many products requested");
+    const allProducts = [];
+    for (let i = 0; i < uniqueIds.length; i += 100) {
+      const chunk = uniqueIds.slice(i, i + 100);
+      const products = await this.repo.batchGet(chunk);
+      if (products?.length) {
+        allProducts.push(...products);
+      }
     }
-    const products = await this.repo.batchGet(uniqueIds);
-    if (!products || products.length === 0) return [];
+    if (allProducts.length === 0) return [];
     const discounts = await getActiveDiscounts();
-    const productMap = new Map(products.map((p) => [p.productId, p]));
+    const productMap = new Map(
+      allProducts.map((p) => [p.productId, p])
+    );
     return uniqueIds.map((id) => productMap.get(id)).filter((p) => Boolean(p)).filter((p) => p.isActive === "true" || p.isActive === true).map((p) => {
       const priceInfo = applyDiscount(p, discounts);
       return {
@@ -1069,17 +1104,6 @@ var AiRecommendationOrchestratorService = class {
       recommendationResult.budget,
       recommendationCandidates
     );
-    if (packageResult.packageItems.length === 0) {
-      return {
-        status: "SUCCESS",
-        recommendedPackage: {
-          total: 0,
-          itemCount: 0,
-          items: []
-        },
-        additionalProducts: []
-      };
-    }
     const additionalProductIds = this.additionalRecommendationService.getRecommendations(
       packageResult.packageItems,
       packageResult.remainingCandidates,
@@ -1234,21 +1258,29 @@ var handler = async (event) => {
         400
       );
     }
-    if (!body.budget || Number(body.budget) <= 0) {
+    const budget = Number(body.budget);
+    if (!Number.isFinite(budget) || budget <= 0) {
       return error(
         "Budget is required",
         400
       );
     }
-    body.budget = Number(body.budget);
+    body.budget = budget;
     body.audiences = Array.isArray(body.audiences) ? body.audiences : [];
     body.crackerTypes = Array.isArray(body.crackerTypes) ? body.crackerTypes : [];
     body.noiseLevels = Array.isArray(body.noiseLevels) ? body.noiseLevels : [];
     body.timePreferences = Array.isArray(body.timePreferences) ? body.timePreferences : [];
     body.features = Array.isArray(body.features) ? body.features : [];
     console.log(
-      "AI RECOMMENDATION REQUEST",
-      JSON.stringify(body)
+      "AI Recommendation Request",
+      {
+        budget: body.budget,
+        audiences: body.audiences,
+        crackerTypes: body.crackerTypes,
+        noiseLevels: body.noiseLevels,
+        timePreferences: body.timePreferences,
+        features: body.features
+      }
     );
     const result = await service.recommend(body);
     return success(result);

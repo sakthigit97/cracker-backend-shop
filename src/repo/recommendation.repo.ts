@@ -6,11 +6,8 @@ const PRODUCT_TABLE = process.env.PRODUCTS_TABLE!;
 export class RecommendationRepository {
 
     async getAllActiveProducts(): Promise<AiProduct[]> {
-
         const products: AiProduct[] = [];
-
         let lastKey: any;
-
         do {
 
             const res = await ddb.send(
@@ -18,8 +15,7 @@ export class RecommendationRepository {
                     TableName: PRODUCT_TABLE,
                     IndexName: "isActive-index",
                     KeyConditionExpression: "isActive = :true",
-                    ProjectionExpression:
-                        "productId, price, quantity, categoryId, brandId, aiTags",
+                    ProjectionExpression: "productId, price, quantity, categoryId, brandId, aiTags",
                     ExpressionAttributeValues: {
                         ":true": "true",
                     },
@@ -28,12 +24,10 @@ export class RecommendationRepository {
             );
 
             products.push(...((res.Items ?? []) as AiProduct[]));
-
             console.log(
                 "AI ACTIVE PRODUCTS FETCHED",
                 products.length
             );
-
             lastKey = res.LastEvaluatedKey;
 
         } while (lastKey);
@@ -42,7 +36,6 @@ export class RecommendationRepository {
             "AI TOTAL ACTIVE PRODUCTS",
             products.length
         );
-
         return products;
     }
 }

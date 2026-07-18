@@ -81,13 +81,25 @@ export class ProductService {
     async batchGetProducts(productIds: string[]) {
         const uniqueIds = [...new Set(productIds)];
 
-        if (uniqueIds.length > 100) {
-            throw new Error("Too many products requested");
+        const allProducts: any[] = [];
+
+        for (let i = 0; i < uniqueIds.length; i += 100) {
+            const chunk = uniqueIds.slice(i, i + 100);
+
+            const products = await this.repo.batchGet(chunk);
+
+            if (products?.length) {
+                allProducts.push(...products);
+            }
         }
-        const products = await this.repo.batchGet(uniqueIds);
-        if (!products || products.length === 0) return [];
+
+        if (allProducts.length === 0) return [];
+
         const discounts = await getActiveDiscounts();
-        const productMap = new Map(products.map(p => [p.productId, p]));
+
+        const productMap = new Map(
+            allProducts.map((p) => [p.productId, p])
+        );
 
         return uniqueIds
             .map((id) => productMap.get(id))
@@ -95,6 +107,7 @@ export class ProductService {
             .filter((p) => p.isActive === "true" || p.isActive === true)
             .map((p) => {
                 const priceInfo = applyDiscount(p, discounts);
+
                 return {
                     productId: p.productId,
                     name: p.name,
@@ -111,7 +124,7 @@ export class ProductService {
                     qty: p.quantity,
                     searchText: p.searchText,
                     isComboPackage: p.isComboPackage || false,
-                    sequenceNumber: p.sequenceNumber || 0
+                    sequenceNumber: p.sequenceNumber || 0,
                 };
             });
     }

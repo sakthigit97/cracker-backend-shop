@@ -163,8 +163,13 @@ export async function buildInvoicePdf(
         y += 4;
     }
 
+    if (config?.website) {
+        text(doc, config.website, LEFT, y);
+        y += 4;
+    }
+
     if (config?.adminAddress) {
-        const address = doc.splitTextToSize(config.adminAddress, 175);
+        const address = doc.splitTextToSize(config.adminAddress, 110);
         text(doc, address, LEFT, y);
         y += address.length * 3.4;
     }
@@ -253,14 +258,14 @@ export async function buildInvoicePdf(
             "Product",
             "Qty",
             "MRP",
+            "Discount",
             "Offer",
             "Total"
         ]],
-
         body: order.items.map((item: any) => [
 
             item.isComboPackage
-                ? `${item.name}  • Combo`
+                ? `${item.name} • Combo`
                 : item.name,
 
             String(item.quantity),
@@ -268,6 +273,8 @@ export async function buildInvoicePdf(
             item.originalPrice
                 ? money(item.originalPrice)
                 : "-",
+
+            item.discountText ?? "-",
 
             money(item.price),
 
@@ -331,27 +338,32 @@ export async function buildInvoicePdf(
         columnStyles: {
 
             0: {
-                cellWidth: 88,
+                cellWidth: 72,
                 halign: "left"
             },
 
             1: {
-                cellWidth: 14,
+                cellWidth: 12,
                 halign: "center"
             },
 
             2: {
-                cellWidth: 26,
+                cellWidth: 24,
                 halign: "right"
             },
 
             3: {
-                cellWidth: 28,
-                halign: "right"
+                cellWidth: 24,
+                halign: "center"
             },
 
             4: {
-                cellWidth: 30,
+                cellWidth: 24,
+                halign: "right"
+            },
+
+            5: {
+                cellWidth: 28,
                 halign: "right"
             }
 
@@ -412,6 +424,15 @@ export async function buildInvoicePdf(
                 data.section === "body" &&
                 data.column.index === 3
             ) {
+                data.cell.styles.textColor = [22, 163, 74];
+                data.cell.styles.fontStyle = "bold";
+                data.cell.styles.halign = "center";
+            }
+
+            if (
+                data.section === "body" &&
+                data.column.index === 4
+            ) {
 
                 data.cell.styles.fontStyle = "bold";
 
@@ -422,7 +443,7 @@ export async function buildInvoicePdf(
 
             if (
                 data.section === "body" &&
-                data.column.index === 4
+                data.column.index === 5
             ) {
 
                 data.cell.styles.fontStyle = "bold";

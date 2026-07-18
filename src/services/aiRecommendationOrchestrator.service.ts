@@ -91,118 +91,57 @@ export class AiRecommendationOrchestratorService {
 
             );
 
-        if (
-            packageResult.packageItems.length === 0
-        ) {
+        const additionalProductIds = this.additionalRecommendationService.getRecommendations(
+            packageResult.packageItems,
+            packageResult.remainingCandidates,
+            10
+        );
 
-            return {
-
-                status: "SUCCESS",
-
-                recommendedPackage: {
-
-                    total: 0,
-
-                    itemCount: 0,
-
-                    items: [],
-
-                },
-
-                additionalProducts: [],
-
-            };
-
-        }
-
-        const additionalProductIds =
-            this.additionalRecommendationService.getRecommendations(
-
-                packageResult.packageItems,
-
-                packageResult.remainingCandidates,
-
-                10
-
-            );
-
-        const packageProducts =
-            await this.productService.batchGetProducts(
-
-                packageResult.packageItems.map(
-                    item => item.productId
-                )
-
-            );
+        const packageProducts = await this.productService.batchGetProducts(
+            packageResult.packageItems.map(
+                item => item.productId
+            )
+        );
 
         const packageProductMap =
             new Map(
-
                 packageProducts.map(
                     (product: any) => [
-
                         product.productId,
-
                         product,
-
                     ]
                 )
-
             );
 
-        const packageItems =
-            packageResult.packageItems
+        const packageItems = packageResult.packageItems
+            .map(item => {
+                const product =
+                    packageProductMap.get(
+                        item.productId
+                    );
 
-                .map(item => {
+                if (!product) {
+                    return null;
+                }
 
-                    const product =
-                        packageProductMap.get(
-                            item.productId
-                        );
+                return {
+                    id: product.productId,
+                    name: product.name,
+                    image: product.image ?? null,
+                    price: product.price,
+                    originalPrice: product.originalPrice,
+                    discountText: product.discountText,
+                    categoryId: product.categoryId,
+                    brandId: product.brandId,
+                    qty: item.selectedQty,
+                };
 
-                    if (!product) {
+            })
 
-                        return null;
-
-                    }
-
-                    return {
-
-                        id:
-                            product.productId,
-
-                        name:
-                            product.name,
-
-                        image:
-                            product.image ?? null,
-
-                        price:
-                            product.price,
-
-                        originalPrice:
-                            product.originalPrice,
-
-                        discountText:
-                            product.discountText,
-
-                        categoryId:
-                            product.categoryId,
-
-                        brandId:
-                            product.brandId,
-
-                        qty:
-                            item.selectedQty,
-
-                    };
-
-                })
-
-                .filter(
-                    (item): item is NonNullable<typeof item> =>
-                        item !== null
-                );
+            .filter(
+                (item): item is NonNullable<typeof item> =>
+                    item !== null
+            );
 
 
         let additionalProducts: any[] = [];
@@ -377,7 +316,7 @@ export class AiRecommendationOrchestratorService {
                     recommendationResult.relaxationLevel,
 
                 candidateCount:
-                     recommendationCandidates.length,
+                    recommendationCandidates.length,
 
                 packageProducts:
                     packageItems.length,

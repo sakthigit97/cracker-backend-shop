@@ -31,24 +31,25 @@ export class GetPackageDetailsRepository {
             );
         }
 
-        const productsRes = await ddb.send(
-            new ScanCommand({
-                TableName: "Products",
-                ProjectionExpression:
-                    "productId, packageTagIds",
-            })
-        );
+        let lastKey;
+        const products: any[] = [];
 
-        const products = productsRes.Items || [];
-        const productIds = products
-            .filter((p: any) =>
-                p.packageTagIds?.includes(
-                    packageId
-                )
-            )
-            .map(
-                (p: any) => p.productId
+        do {
+            const res: any = await ddb.send(
+                new ScanCommand({
+                    TableName: "Products",
+                    ProjectionExpression: "productId, packageTagIds",
+                    ExclusiveStartKey: lastKey,
+                })
             );
+
+            products.push(...(res.Items || []));
+            lastKey = res.LastEvaluatedKey;
+        } while (lastKey);
+
+        const productIds = products
+            .filter((p: any) => p.packageTagIds?.includes(packageId))
+            .map((p: any) => p.productId);
 
         return {
             package: packageInfo,

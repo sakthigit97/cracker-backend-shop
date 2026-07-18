@@ -25,19 +25,19 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
         }
 
-        if (
-            !body.budget ||
-            Number(body.budget) <= 0
-        ) {
+        const budget = Number(body.budget);
 
+        if (
+            !Number.isFinite(budget) ||
+            budget <= 0
+        ) {
             return error(
                 "Budget is required",
                 400
             );
-
         }
-        body.budget = Number(body.budget);
 
+        body.budget = budget;
         body.audiences = Array.isArray(body.audiences)
             ? body.audiences
             : [];
@@ -59,12 +59,18 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
             : [];
 
         console.log(
-            "AI RECOMMENDATION REQUEST",
-            JSON.stringify(body)
+            "AI Recommendation Request",
+            {
+                budget: body.budget,
+                audiences: body.audiences,
+                crackerTypes: body.crackerTypes,
+                noiseLevels: body.noiseLevels,
+                timePreferences: body.timePreferences,
+                features: body.features,
+            }
         );
-        const result =
-            await service.recommend(body);
 
+        const result = await service.recommend(body);
         return success(result);
 
     } catch (err) {

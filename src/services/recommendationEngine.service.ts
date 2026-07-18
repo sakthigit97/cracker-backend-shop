@@ -171,29 +171,19 @@ export class RecommendationEngineService {
     ): AiRecommendationRequest {
 
         return {
-
             budget: request.budget,
-
-            audiences:
-                this.normalizeArray(
-                    request.audiences
-                ),
-
-            crackerTypes:
-                this.normalizeCrackerTypes(
-                    request.crackerTypes
-                ),
-
-            noiseLevels:
-                this.normalizeNoiseLevels(
-                    request.noiseLevels
-                ),
-
-            timePreferences:
-                this.normalizeTimePreferences(
-                    request.timePreferences
-                ),
-
+            audiences: this.normalizeArray(
+                request.audiences
+            ),
+            crackerTypes: this.normalizeCrackerTypes(
+                request.crackerTypes
+            ),
+            noiseLevels: this.normalizeNoiseLevels(
+                request.noiseLevels
+            ),
+            timePreferences: this.normalizeTimePreferences(
+                request.timePreferences
+            ),
             features: []
         };
     }

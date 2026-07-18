@@ -43920,13 +43920,19 @@ var ProductService = class {
   }
   async batchGetProducts(productIds) {
     const uniqueIds = [...new Set(productIds)];
-    if (uniqueIds.length > 100) {
-      throw new Error("Too many products requested");
+    const allProducts = [];
+    for (let i = 0; i < uniqueIds.length; i += 100) {
+      const chunk = uniqueIds.slice(i, i + 100);
+      const products = await this.repo.batchGet(chunk);
+      if (products?.length) {
+        allProducts.push(...products);
+      }
     }
-    const products = await this.repo.batchGet(uniqueIds);
-    if (!products || products.length === 0) return [];
+    if (allProducts.length === 0) return [];
     const discounts = await getActiveDiscounts();
-    const productMap = new Map(products.map((p) => [p.productId, p]));
+    const productMap = new Map(
+      allProducts.map((p) => [p.productId, p])
+    );
     return uniqueIds.map((id) => productMap.get(id)).filter((p) => Boolean(p)).filter((p) => p.isActive === "true" || p.isActive === true).map((p) => {
       const priceInfo = applyDiscount(p, discounts);
       return {
@@ -46289,8 +46295,12 @@ async function buildInvoicePdf(order, config) {
     text(doc, config.adminEmail, LEFT, y);
     y += 4;
   }
+  if (config?.website) {
+    text(doc, config.website, LEFT, y);
+    y += 4;
+  }
   if (config?.adminAddress) {
-    const address = doc.splitTextToSize(config.adminAddress, 175);
+    const address = doc.splitTextToSize(config.adminAddress, 110);
     text(doc, address, LEFT, y);
     y += address.length * 3.4;
   }
@@ -46365,13 +46375,15 @@ async function buildInvoicePdf(order, config) {
       "Product",
       "Qty",
       "MRP",
+      "Discount",
       "Offer",
       "Total"
     ]],
     body: order.items.map((item) => [
-      item.isComboPackage ? `${item.name}  \u2022 Combo` : item.name,
+      item.isComboPackage ? `${item.name} \u2022 Combo` : item.name,
       String(item.quantity),
       item.originalPrice ? money(item.originalPrice) : "-",
+      item.discountText ?? "-",
       money(item.price),
       money(item.total)
     ]),
@@ -46412,23 +46424,27 @@ async function buildInvoicePdf(order, config) {
     },
     columnStyles: {
       0: {
-        cellWidth: 88,
+        cellWidth: 72,
         halign: "left"
       },
       1: {
-        cellWidth: 14,
+        cellWidth: 12,
         halign: "center"
       },
       2: {
-        cellWidth: 26,
+        cellWidth: 24,
         halign: "right"
       },
       3: {
-        cellWidth: 28,
-        halign: "right"
+        cellWidth: 24,
+        halign: "center"
       },
       4: {
-        cellWidth: 30,
+        cellWidth: 24,
+        halign: "right"
+      },
+      5: {
+        cellWidth: 28,
         halign: "right"
       }
     },
@@ -46461,10 +46477,15 @@ async function buildInvoicePdf(order, config) {
         ];
       }
       if (data.section === "body" && data.column.index === 3) {
+        data.cell.styles.textColor = [22, 163, 74];
+        data.cell.styles.fontStyle = "bold";
+        data.cell.styles.halign = "center";
+      }
+      if (data.section === "body" && data.column.index === 4) {
         data.cell.styles.fontStyle = "bold";
         data.cell.styles.textColor = COLORS.primary;
       }
-      if (data.section === "body" && data.column.index === 4) {
+      if (data.section === "body" && data.column.index === 5) {
         data.cell.styles.fontStyle = "bold";
         data.cell.styles.textColor = COLORS.primary;
       }
