@@ -10,7 +10,6 @@ const MAX_AI_PRODUCT_QTY = Number.isFinite(
     : 10;
 
 const OPTIMIZATION_POOL_SIZE = 30;
-
 export interface PackageBuildResult {
     total: number;
     itemCount: number;
@@ -315,13 +314,12 @@ export class PackageBuilderService {
                 ? familyCounts.get(candidate.productFamily) ?? 0
                 : 0;
 
-            const leftover =
-                remainingBudget - candidate.price;
-
+            const leftover = remainingBudget - candidate.price;
+            const FAMILY_PENALTY = 8;
             const adjustedScore =
                 candidate.score
                 - categoryCount
-                - familyCount
+                - (familyCount * FAMILY_PENALTY)
                 + this.leftoverBudgetBonus(
                     leftover,
                     candidates,
@@ -410,10 +408,11 @@ export class PackageBuilderService {
 
             const quantityPenalty = item.selectedQty - 1;
             const dominancePenalty = Math.floor((item.selectedQty * item.selectedQty) / 2);
+            const FAMILY_PENALTY = 8;
 
             const adjustedScore = candidate.score
                 - quantityPenalty
-                - familyCount
+                - (familyCount * FAMILY_PENALTY)
                 - dominancePenalty;
 
             if (adjustedScore > bestScore) {

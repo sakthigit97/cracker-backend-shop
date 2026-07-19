@@ -65,7 +65,7 @@ var RecommendationRepository = class {
           TableName: PRODUCT_TABLE,
           IndexName: "isActive-index",
           KeyConditionExpression: "isActive = :true",
-          ProjectionExpression: "productId, price, quantity, categoryId, brandId, aiTags",
+          ProjectionExpression: "productId, price, quantity, categoryId, brandId, aiTags, productFamily",
           ExpressionAttributeValues: {
             ":true": "true"
           },
@@ -234,7 +234,11 @@ var RecommendationEngineService = class {
     );
   }
   normalizeCrackerTypes(values = []) {
-    return this.normalizeArray(values);
+    const normalized = this.normalizeArray(values);
+    if (normalized.includes("mixed")) {
+      return [];
+    }
+    return normalized;
   }
   normalizeBudget(budget) {
     const normalized = Number(budget);
@@ -315,6 +319,7 @@ var RecommendationEngineService = class {
       categoryId: product.categoryId,
       price: Number(product.price),
       quantity: Number(product.quantity),
+      productFamily: product.productFamily,
       score,
       aiTags: [...tags],
       matchedAudience,
@@ -716,7 +721,8 @@ var PackageBuilderService = class {
       const categoryCount = categoryCounts.get(candidate.categoryId) ?? 0;
       const familyCount = candidate.productFamily ? familyCounts.get(candidate.productFamily) ?? 0 : 0;
       const leftover = remainingBudget - candidate.price;
-      const adjustedScore = candidate.score - categoryCount - familyCount + this.leftoverBudgetBonus(
+      const FAMILY_PENALTY = 8;
+      const adjustedScore = candidate.score - categoryCount - familyCount * FAMILY_PENALTY + this.leftoverBudgetBonus(
         leftover,
         candidates,
         workingPackage
@@ -776,7 +782,8 @@ var PackageBuilderService = class {
       const familyCount = candidate.productFamily ? familyCounts.get(candidate.productFamily) ?? 0 : 0;
       const quantityPenalty = item.selectedQty - 1;
       const dominancePenalty = Math.floor(item.selectedQty * item.selectedQty / 2);
-      const adjustedScore = candidate.score - quantityPenalty - familyCount - dominancePenalty;
+      const FAMILY_PENALTY = 8;
+      const adjustedScore = candidate.score - quantityPenalty - familyCount * FAMILY_PENALTY - dominancePenalty;
       if (adjustedScore > bestScore) {
         bestScore = adjustedScore;
         bestCandidate = candidate;

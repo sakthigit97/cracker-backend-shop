@@ -37211,6 +37211,11 @@ var PRODUCT_IMPORT_SCHEMA_V1 = {
     required: true,
     type: "number",
     default: 0
+  },
+  productFamily: {
+    required: true,
+    type: "string",
+    default: ""
   }
 };
 
@@ -37535,7 +37540,8 @@ var handler = async (event) => {
               isComboPackage: {
                 BOOL: item.isComboPackage ?? false
               },
-              sequenceNumber: { N: String(item.sequenceNumber ?? 0) }
+              sequenceNumber: { N: String(item.sequenceNumber ?? 0) },
+              productFamily: { S: item.productFamily }
             }
           }
         }

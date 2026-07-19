@@ -93,6 +93,7 @@ export const handler = async (event: any) => {
                                 BOOL: item.isComboPackage ?? false,
                             },
                             sequenceNumber: { N: String(item.sequenceNumber ?? 0) },
+                            productFamily: { S: item.productFamily },
                         },
                     },
                 },

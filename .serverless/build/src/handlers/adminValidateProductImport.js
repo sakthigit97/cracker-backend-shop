@@ -37209,6 +37209,11 @@ var PRODUCT_IMPORT_SCHEMA_V1 = {
     required: true,
     type: "number",
     default: 0
+  },
+  productFamily: {
+    required: true,
+    type: "string",
+    default: ""
   }
 };
 

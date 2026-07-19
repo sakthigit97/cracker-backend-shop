@@ -245,10 +245,16 @@ export class RecommendationEngineService {
 
     }
 
+
     private normalizeCrackerTypes(
         values: string[] = []
     ): string[] {
-        return this.normalizeArray(values);
+
+        const normalized = this.normalizeArray(values);
+        if (normalized.includes("mixed")) {
+            return [];
+        }
+        return normalized;
     }
 
 
@@ -367,46 +373,27 @@ export class RecommendationEngineService {
         );
 
         return {
-
             productId: product.productId,
-
             categoryId: product.categoryId,
-
             price: Number(product.price),
-
             quantity: Number(product.quantity),
-
+            productFamily: product.productFamily,
             score,
-
             aiTags: [...tags],
-
             matchedAudience,
-
             matchedType,
-
             matchedNoise,
-
             matchedTime,
-
         };
-
     }
 
-
     private isEligible(
-
         level: RelaxationLevel,
-
         request: AiRecommendationRequest,
-
         matchedAudience: boolean,
-
         matchedType: boolean,
-
         matchedNoise: boolean,
-
         matchedTime: boolean,
-
     ): boolean {
 
         if (

@@ -132,12 +132,9 @@ async function batchExists(
     ids: string[]
 ): Promise<Set<string>> {
     if (ids.length === 0) return new Set();
-
     const found = new Set<string>();
-
     for (let i = 0; i < ids.length; i += 100) {
         const batch = ids.slice(i, i + 100);
-
         const res = await ddb.send(
             new BatchGetItemCommand({
                 RequestItems: {
@@ -208,7 +205,6 @@ function validateDiscount(row: any): string | null {
 
     const mode = String(row.discountMode ?? "").trim().toUpperCase();
     const value = row.discountValue;
-
     const hasMode = mode !== "";
     const hasValue =
         value !== "" &&

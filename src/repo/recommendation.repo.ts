@@ -15,7 +15,7 @@ export class RecommendationRepository {
                     TableName: PRODUCT_TABLE,
                     IndexName: "isActive-index",
                     KeyConditionExpression: "isActive = :true",
-                    ProjectionExpression: "productId, price, quantity, categoryId, brandId, aiTags",
+                    ProjectionExpression: "productId, price, quantity, categoryId, brandId, aiTags, productFamily",
                     ExpressionAttributeValues: {
                         ":true": "true",
                     },

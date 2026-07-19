@@ -36,4 +36,9 @@ export const PRODUCT_IMPORT_SCHEMA_V1 = {
         type: "number",
         default: 0,
     },
+    productFamily: {
+        required: true,
+        type: "string",
+        default: "",
+    },
 } as const;
