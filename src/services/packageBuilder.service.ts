@@ -273,12 +273,13 @@ export class PackageBuilderService {
         candidates: RecommendationCandidate[],
         workingPackage: WorkingPackage
     ): RecommendationCandidate | undefined {
+
         const categoryCounts = new Map<string, number>();
-        const familyCounts = new Map<string, number>();
+        const selectedFamilies = new Set<string>();
 
         for (const item of workingPackage.items.values()) {
             const selected = candidates.find(
-                (c) => c.productId === item.productId
+                c => c.productId === item.productId
             );
 
             if (!selected) {
@@ -290,17 +291,19 @@ export class PackageBuilderService {
                 (categoryCounts.get(selected.categoryId) ?? 0) + 1
             );
 
-            if (selected.productFamily) {
-                familyCounts.set(
-                    selected.productFamily,
-                    (familyCounts.get(selected.productFamily) ?? 0) + 1
-                );
+            const family =
+                selected.productFamily?.trim().toLowerCase();
+
+            if (family) {
+                selectedFamilies.add(family);
             }
         }
 
         let bestCandidate: RecommendationCandidate | undefined;
         let bestScore = Number.NEGATIVE_INFINITY;
+
         for (const candidate of candidates) {
+
             if (workingPackage.items.has(candidate.productId)) {
                 continue;
             }
@@ -309,17 +312,17 @@ export class PackageBuilderService {
                 continue;
             }
 
-            const categoryCount = categoryCounts.get(candidate.categoryId) ?? 0;
-            const familyCount = candidate.productFamily
-                ? familyCounts.get(candidate.productFamily) ?? 0
-                : 0;
+            const family = candidate.productFamily?.trim().toLowerCase();
 
+            if (family && selectedFamilies.has(family)) {
+                continue;
+            }
+
+            const categoryCount = categoryCounts.get(candidate.categoryId) ?? 0;
             const leftover = remainingBudget - candidate.price;
-            const FAMILY_PENALTY = 8;
             const adjustedScore =
                 candidate.score
                 - categoryCount
-                - (familyCount * FAMILY_PENALTY)
                 + this.leftoverBudgetBonus(
                     leftover,
                     candidates,

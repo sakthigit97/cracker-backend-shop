@@ -16,6 +16,8 @@ export interface AiProduct {
     quantity: number;
     aiTags: string[];
     productFamily: string;
+    originalPrice?: number | null;
+    discountText?: string | null;
 }
 
 

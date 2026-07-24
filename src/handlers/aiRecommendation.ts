@@ -2,20 +2,14 @@ import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { success, error } from "../libs/response";
 import { AiRecommendationOrchestratorService } from "../services/aiRecommendationOrchestrator.service";
 import { AiRecommendationRequest } from "../types/aiRecommendation.types";
-
 const service = new AiRecommendationOrchestratorService();
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
     try {
 
         let body: AiRecommendationRequest;
-
         try {
-
-            body = event.body
-                ? JSON.parse(event.body)
-                : {} as AiRecommendationRequest;
-
+            body = event.body ? JSON.parse(event.body) : {} as AiRecommendationRequest;
         } catch {
 
             return error(
@@ -26,7 +20,6 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
         }
 
         const budget = Number(body.budget);
-
         if (
             !Number.isFinite(budget) ||
             budget <= 0

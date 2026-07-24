@@ -4,6 +4,9 @@ import {
     AiRecommendationRequest,
     RecommendationCandidate,
 } from "../types/aiRecommendation.types";
+import { getActiveDiscounts } from "./discount.service";
+import { applyDiscount } from "./price.service";
+
 
 const MAX_AI_BUDGET = 50000;
 const AI_WEIGHTS = {
@@ -39,28 +42,33 @@ export class RecommendationEngineService {
     ): Promise<RecommendationResult> {
 
         const budget = this.normalizeBudget(request.budget);
-
         const normalizedRequest = this.normalizeRequest({
             ...request,
             budget,
         });
 
-        const products =
-            await this.repo.getAllActiveProducts();
+        const products = await this.repo.getAllActiveProducts();
+        const discounts = await getActiveDiscounts();
+        const discountedProducts: AiProduct[] = products.map(product => {
+            const priceInfo = applyDiscount(product, discounts);
+            return {
+                ...product,
+                price: priceInfo.price,
+                originalPrice: priceInfo.originalPrice,
+                discountText: priceInfo.discountText,
+            };
+        });
 
         console.log(
             "AI ACTIVE PRODUCTS",
-            products.length
+            discountedProducts.length
         );
 
         const availableProducts =
-            products.filter(
+            discountedProducts.filter(
                 (product): product is AiProduct =>
-
                     Boolean(product?.productId) &&
-
                     Number(product.price) > 0 &&
-
                     Number(product.quantity) > 0
 
             );
@@ -442,7 +450,17 @@ export class RecommendationEngineService {
     }
 
     async getActiveProducts(): Promise<AiProduct[]> {
-        return this.repo.getAllActiveProducts();
+        const products = await this.repo.getAllActiveProducts();
+        const discounts = await getActiveDiscounts();
+        return products.map(product => {
+            const priceInfo = applyDiscount(product, discounts);
+            return {
+                ...product,
+                price: priceInfo.price,
+                originalPrice: priceInfo.originalPrice,
+                discountText: priceInfo.discountText,
+            };
+        });
     }
 
     private getMatchCount(

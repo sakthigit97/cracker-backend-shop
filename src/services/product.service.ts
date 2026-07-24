@@ -80,23 +80,18 @@ export class ProductService {
 
     async batchGetProducts(productIds: string[]) {
         const uniqueIds = [...new Set(productIds)];
-
         const allProducts: any[] = [];
 
         for (let i = 0; i < uniqueIds.length; i += 100) {
             const chunk = uniqueIds.slice(i, i + 100);
-
             const products = await this.repo.batchGet(chunk);
-
             if (products?.length) {
                 allProducts.push(...products);
             }
         }
 
         if (allProducts.length === 0) return [];
-
         const discounts = await getActiveDiscounts();
-
         const productMap = new Map(
             allProducts.map((p) => [p.productId, p])
         );
@@ -107,17 +102,15 @@ export class ProductService {
             .filter((p) => p.isActive === "true" || p.isActive === true)
             .map((p) => {
                 const priceInfo = applyDiscount(p, discounts);
-
                 return {
                     productId: p.productId,
                     name: p.name,
                     description: p.description ?? null,
                     image: p.imageUrls?.[0] ?? null,
                     price: priceInfo.price,
-                    originalPrice:
-                        priceInfo.originalPrice > priceInfo.price
-                            ? priceInfo.originalPrice
-                            : undefined,
+                    originalPrice: priceInfo.originalPrice > priceInfo.price
+                        ? priceInfo.originalPrice
+                        : undefined,
                     discountText: priceInfo.discountText,
                     categoryId: p.categoryId,
                     brandId: p.brandId,

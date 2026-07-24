@@ -20,6 +20,8 @@ export class AdminCreateProductService {
     constructor(private repo = new AdminCreateProductRepository()) { }
 
     async createProduct(input: CreateProductInput) {
+
+        const sequenceNumber = await this.repo.getNextSequenceNumber(input.categoryId);
         const product = {
             productId: input.productId,
             name: input.name.trim(),
@@ -30,6 +32,7 @@ export class AdminCreateProductService {
             imageUrls: input.imageUrls,
             videoUrl: input.videoUrl || null,
             searchText: input.searchText,
+            sequenceNumber,
             description: input.description.trim(),
             packageTagIds: input.packageTagIds || [],
             aiTags: input.aiTags || [],

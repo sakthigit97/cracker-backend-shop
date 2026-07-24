@@ -12,24 +12,12 @@ import { PopularProductsService } from "./popularProducts.service";
 export class AiRecommendationOrchestratorService {
 
     constructor(
-
-        private readonly fallbackRecommendationService =
-            new FallbackRecommendationService(),
-
-        private readonly recommendationEngine =
-            new RecommendationEngineService(),
-
-        private readonly packageBuilder =
-            new PackageBuilderService(),
-
-        private readonly additionalRecommendationService =
-            new AdditionalRecommendationService(),
-
-        private readonly productService =
-            new ProductService(),
-
-        private readonly popularProductsService =
-            new PopularProductsService()
+        private readonly fallbackRecommendationService = new FallbackRecommendationService(),
+        private readonly recommendationEngine = new RecommendationEngineService(),
+        private readonly packageBuilder = new PackageBuilderService(),
+        private readonly additionalRecommendationService = new AdditionalRecommendationService(),
+        private readonly productService = new ProductService(),
+        private readonly popularProductsService = new PopularProductsService()
 
     ) { }
 
@@ -37,14 +25,11 @@ export class AiRecommendationOrchestratorService {
         request: AiRecommendationRequest
     ) {
 
-        const recommendationResult =
-            await this.recommendationEngine.getRecommendations(
-                request
-            );
+        const recommendationResult = await this.recommendationEngine.getRecommendations(
+            request
+        );
 
-
-        let recommendationCandidates =
-            recommendationResult.candidates;
+        let recommendationCandidates = recommendationResult.candidates;
 
         if (
             recommendationCandidates.length === 0
@@ -54,41 +39,26 @@ export class AiRecommendationOrchestratorService {
                 "AI NO MATCHES FOUND - USING FALLBACK RECOMMENDATION"
             );
 
-            const activeProducts =
-                await this.recommendationEngine.getActiveProducts();
+            const activeProducts = await this.recommendationEngine.getActiveProducts();
 
-            recommendationCandidates =
-                this.fallbackRecommendationService.buildCandidates(
-
-                    recommendationResult.budget,
-
-                    activeProducts
-
-                );
-
-            console.log(
-
-                "AI FALLBACK GENERATED",
-
-                JSON.stringify({
-
-                    candidates:
-                        recommendationCandidates.length,
-
-                })
-
+            recommendationCandidates = this.fallbackRecommendationService.buildCandidates(
+                recommendationResult.budget,
+                activeProducts
             );
 
+            console.log(
+                "AI FALLBACK GENERATED",
+                JSON.stringify({
+                    candidates: recommendationCandidates.length,
+                })
+            );
         }
 
 
         const packageResult: PackageBuildResult =
             this.packageBuilder.buildPackage(
-
                 recommendationResult.budget,
-
                 recommendationCandidates
-
             );
 
         const additionalProductIds = this.additionalRecommendationService.getRecommendations(

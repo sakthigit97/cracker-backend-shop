@@ -3994,12 +3994,13 @@ var AdminCategoryRepository = class {
     };
   }
   async createCategory(input) {
+    const nextSortOrder = await this.getNextSortOrder();
     const item = {
       categoryId: `cat-${(0, import_crypto.randomUUID)()}`,
       name: input.name.trim(),
       imageUrl: input.imageUrl || "",
-      sortOrder: input.sortOrder ?? 0,
-      isActive: input.isActive ? true : false,
+      sortOrder: nextSortOrder,
+      isActive: !!input.isActive,
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     await ddb.send(
@@ -4081,6 +4082,21 @@ var AdminCategoryRepository = class {
       })
     );
     return (res.Items?.length ?? 0) > 0;
+  }
+  async getNextSortOrder() {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.ScanCommand({
+        TableName: TABLE,
+        ProjectionExpression: "sortOrder"
+      })
+    );
+    const maxSortOrder = Math.max(
+      0,
+      ...(res.Items ?? []).map(
+        (x) => Number(x.sortOrder ?? 0)
+      )
+    );
+    return maxSortOrder + 1;
   }
 };
 

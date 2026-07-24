@@ -87,6 +87,55 @@ var RecommendationRepository = class {
   }
 };
 
+// src/services/discount.service.ts
+var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
+var DISCOUNT_TABLE = "Discounts";
+async function getActiveDiscounts() {
+  const res = await ddb.send(
+    new import_lib_dynamodb3.ScanCommand({
+      TableName: DISCOUNT_TABLE,
+      FilterExpression: "isActive = :true",
+      ExpressionAttributeValues: {
+        ":true": true
+      }
+    })
+  );
+  return res.Items || [];
+}
+
+// src/services/price.service.ts
+function applyDiscount(product, discounts) {
+  let applied = null;
+  applied = discounts.find(
+    (d) => d.discountType === "PRODUCT" && d.targetId === product.productId
+  ) || discounts.find(
+    (d) => d.discountType === "CATEGORY" && d.targetId === product.categoryId
+  ) || discounts.find(
+    (d) => d.discountType === "BRAND" && d.targetId === product.brandId
+  );
+  if (!applied) {
+    return {
+      price: product.price,
+      originalPrice: null,
+      discountText: null
+    };
+  }
+  let finalPrice = product.price;
+  if (applied.discountMode === "PERCENT") {
+    finalPrice = Math.round(
+      product.price - product.price * applied.discountValue / 100
+    );
+  }
+  if (applied.discountMode === "FLAT") {
+    finalPrice = product.price - applied.discountValue;
+  }
+  return {
+    price: finalPrice,
+    originalPrice: product.price,
+    discountText: applied.discountMode === "PERCENT" ? `${applied.discountValue}% OFF` : `\u20B9${applied.discountValue} OFF`
+  };
+}
+
 // src/services/recommendationEngine.service.ts
 var MAX_AI_BUDGET = 5e4;
 var AI_WEIGHTS = {
@@ -108,11 +157,21 @@ var RecommendationEngineService = class {
       budget
     });
     const products = await this.repo.getAllActiveProducts();
+    const discounts = await getActiveDiscounts();
+    const discountedProducts = products.map((product) => {
+      const priceInfo = applyDiscount(product, discounts);
+      return {
+        ...product,
+        price: priceInfo.price,
+        originalPrice: priceInfo.originalPrice,
+        discountText: priceInfo.discountText
+      };
+    });
     console.log(
       "AI ACTIVE PRODUCTS",
-      products.length
+      discountedProducts.length
     );
-    const availableProducts = products.filter(
+    const availableProducts = discountedProducts.filter(
       (product) => Boolean(product?.productId) && Number(product.price) > 0 && Number(product.quantity) > 0
     );
     if (!availableProducts.length) {
@@ -348,7 +407,17 @@ var RecommendationEngineService = class {
     return true;
   }
   async getActiveProducts() {
-    return this.repo.getAllActiveProducts();
+    const products = await this.repo.getAllActiveProducts();
+    const discounts = await getActiveDiscounts();
+    return products.map((product) => {
+      const priceInfo = applyDiscount(product, discounts);
+      return {
+        ...product,
+        price: priceInfo.price,
+        originalPrice: priceInfo.originalPrice,
+        discountText: priceInfo.discountText
+      };
+    });
   }
   getMatchCount(tags, prefix, values) {
     if (!values.length) {
@@ -690,7 +759,7 @@ var PackageBuilderService = class {
   }
   findBestNewCandidate(remainingBudget, candidates, workingPackage) {
     const categoryCounts = /* @__PURE__ */ new Map();
-    const familyCounts = /* @__PURE__ */ new Map();
+    const selectedFamilies = /* @__PURE__ */ new Set();
     for (const item of workingPackage.items.values()) {
       const selected = candidates.find(
         (c) => c.productId === item.productId
@@ -702,11 +771,9 @@ var PackageBuilderService = class {
         selected.categoryId,
         (categoryCounts.get(selected.categoryId) ?? 0) + 1
       );
-      if (selected.productFamily) {
-        familyCounts.set(
-          selected.productFamily,
-          (familyCounts.get(selected.productFamily) ?? 0) + 1
-        );
+      const family = selected.productFamily?.trim().toLowerCase();
+      if (family) {
+        selectedFamilies.add(family);
       }
     }
     let bestCandidate;
@@ -718,11 +785,13 @@ var PackageBuilderService = class {
       if (candidate.price > remainingBudget) {
         continue;
       }
+      const family = candidate.productFamily?.trim().toLowerCase();
+      if (family && selectedFamilies.has(family)) {
+        continue;
+      }
       const categoryCount = categoryCounts.get(candidate.categoryId) ?? 0;
-      const familyCount = candidate.productFamily ? familyCounts.get(candidate.productFamily) ?? 0 : 0;
       const leftover = remainingBudget - candidate.price;
-      const FAMILY_PENALTY = 8;
-      const adjustedScore = candidate.score - categoryCount - familyCount * FAMILY_PENALTY + this.leftoverBudgetBonus(
+      const adjustedScore = candidate.score - categoryCount + this.leftoverBudgetBonus(
         leftover,
         candidates,
         workingPackage
@@ -894,7 +963,7 @@ var AdditionalRecommendationService = class {
 var import_lib_dynamodb5 = require("@aws-sdk/lib-dynamodb");
 
 // src/repo/product.repo.ts
-var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
+var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
 var TABLE_NAME = process.env.PRODUCTS_TABLE;
 var ProductRepository = class {
   async batchGet(productIds) {
@@ -903,7 +972,7 @@ var ProductRepository = class {
       productId
     }));
     const res = await ddb.send(
-      new import_lib_dynamodb3.BatchGetCommand({
+      new import_lib_dynamodb4.BatchGetCommand({
         RequestItems: {
           [TABLE_NAME]: { Keys: keys }
         }
@@ -913,62 +982,13 @@ var ProductRepository = class {
   }
   async deleteProduct(productId) {
     await ddb.send(
-      new import_lib_dynamodb3.DeleteCommand({
+      new import_lib_dynamodb4.DeleteCommand({
         TableName: process.env.PRODUCTS_TABLE,
         Key: { productId }
       })
     );
   }
 };
-
-// src/services/discount.service.ts
-var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
-var DISCOUNT_TABLE = "Discounts";
-async function getActiveDiscounts() {
-  const res = await ddb.send(
-    new import_lib_dynamodb4.ScanCommand({
-      TableName: DISCOUNT_TABLE,
-      FilterExpression: "isActive = :true",
-      ExpressionAttributeValues: {
-        ":true": true
-      }
-    })
-  );
-  return res.Items || [];
-}
-
-// src/services/price.service.ts
-function applyDiscount(product, discounts) {
-  let applied = null;
-  applied = discounts.find(
-    (d) => d.discountType === "PRODUCT" && d.targetId === product.productId
-  ) || discounts.find(
-    (d) => d.discountType === "CATEGORY" && d.targetId === product.categoryId
-  ) || discounts.find(
-    (d) => d.discountType === "BRAND" && d.targetId === product.brandId
-  );
-  if (!applied) {
-    return {
-      price: product.price,
-      originalPrice: null,
-      discountText: null
-    };
-  }
-  let finalPrice = product.price;
-  if (applied.discountMode === "PERCENT") {
-    finalPrice = Math.round(
-      product.price - product.price * applied.discountValue / 100
-    );
-  }
-  if (applied.discountMode === "FLAT") {
-    finalPrice = product.price - applied.discountValue;
-  }
-  return {
-    price: finalPrice,
-    originalPrice: product.price,
-    discountText: applied.discountMode === "PERCENT" ? `${applied.discountValue}% OFF` : `\u20B9${applied.discountValue} OFF`
-  };
-}
 
 // src/services/product.service.ts
 var PRODUCT_TABLE2 = process.env.PRODUCTS_TABLE;

@@ -3949,6 +3949,25 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 // src/repo/adminCreateProduct.repo.ts
 var TABLE = process.env.PRODUCTS_TABLE;
 var AdminCreateProductRepository = class {
+  async getNextSequenceNumber(categoryId) {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.ScanCommand({
+        TableName: TABLE,
+        ProjectionExpression: "sequenceNumber",
+        FilterExpression: "categoryId = :categoryId",
+        ExpressionAttributeValues: {
+          ":categoryId": categoryId
+        }
+      })
+    );
+    const maxSequence = Math.max(
+      0,
+      ...(res.Items ?? []).map(
+        (x) => Number(x.sequenceNumber ?? 0)
+      )
+    );
+    return maxSequence + 1;
+  }
   async putProduct(item) {
     await ddb.send(
       new import_lib_dynamodb2.PutCommand({
@@ -3966,6 +3985,7 @@ var AdminCreateProductService = class {
     this.repo = repo;
   }
   async createProduct(input) {
+    const sequenceNumber = await this.repo.getNextSequenceNumber(input.categoryId);
     const product = {
       productId: input.productId,
       name: input.name.trim(),
@@ -3976,6 +3996,7 @@ var AdminCreateProductService = class {
       imageUrls: input.imageUrls,
       videoUrl: input.videoUrl || null,
       searchText: input.searchText,
+      sequenceNumber,
       description: input.description.trim(),
       packageTagIds: input.packageTagIds || [],
       aiTags: input.aiTags || [],

@@ -69,12 +69,13 @@ export class AdminCategoryRepository {
         sortOrder?: number;
         isActive: boolean;
     }) {
+        const nextSortOrder = await this.getNextSortOrder();
         const item = {
             categoryId: `cat-${randomUUID()}`,
             name: input.name.trim(),
             imageUrl: input.imageUrl || "",
-            sortOrder: input.sortOrder ?? 0,
-            isActive: input.isActive ? true : false,
+            sortOrder: nextSortOrder,
+            isActive: !!input.isActive,
             createdAt: new Date().toISOString(),
         };
 
@@ -174,5 +175,24 @@ export class AdminCategoryRepository {
             })
         );
         return (res.Items?.length ?? 0) > 0;
+    }
+
+    private async getNextSortOrder(): Promise<number> {
+        const res = await ddb.send(
+            new ScanCommand({
+                TableName: TABLE,
+                ProjectionExpression: "sortOrder",
+            })
+        );
+
+        const maxSortOrder =
+            Math.max(
+                0,
+                ...(res.Items ?? []).map(
+                    (x: any) => Number(x.sortOrder ?? 0)
+                )
+            );
+
+        return maxSortOrder + 1;
     }
 }
