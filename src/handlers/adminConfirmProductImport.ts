@@ -44,7 +44,12 @@ export const handler = async (event: any) => {
         const now = new Date().toISOString();
         const productsToCreate = validRows.map((item: any) => {
             const productId = `prod-${randomUUID()}`;
-            const isCombo = (item.IsComboPackage || item.isComboPackage) || false;
+
+            const comboValue = item.IsComboPackage ?? item.isComboPackage;
+            const isCombo = typeof comboValue === "boolean"
+                ? comboValue
+                : String(comboValue).trim().toLowerCase() === "true";
+            console.log(isCombo)
             return {
                 productId,
                 item,
@@ -112,6 +117,11 @@ export const handler = async (event: any) => {
             if (!product.item.discountMode) {
                 continue;
             }
+
+            console.log({
+                discountActive: product.item.discountActive,
+                type: typeof product.item.discountActive,
+            });
 
             try {
                 await discountRepo.createDiscount({

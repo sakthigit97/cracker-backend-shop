@@ -4001,6 +4001,7 @@ var AdminCreateProductService = class {
       packageTagIds: input.packageTagIds || [],
       aiTags: input.aiTags || [],
       isActive: input.isActive ?? "true",
+      isComboPackage: input.isComboPackage,
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     await this.repo.putProduct(product);
@@ -4033,7 +4034,8 @@ var handler = async (event) => {
       description,
       isActive,
       packageTagIds,
-      aiTags
+      aiTags,
+      isComboPackage
     } = body;
     if (!productId || !name || !price || !brandId || !categoryId || !searchText || !description) {
       return {
@@ -4060,7 +4062,8 @@ var handler = async (event) => {
       description,
       isActive,
       packageTagIds: packageTagIds || [],
-      aiTags: aiTags || []
+      aiTags: aiTags || [],
+      isComboPackage: false
     });
     return {
       statusCode: 201,

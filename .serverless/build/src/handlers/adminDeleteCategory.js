@@ -3957,40 +3957,35 @@ var AdminCategoryRepository = class {
     search,
     isActive
   }) {
-    const params = {
-      TableName: TABLE,
-      Limit: limit
-    };
-    if (cursor) {
-      params.ExclusiveStartKey = JSON.parse(
-        Buffer.from(cursor, "base64").toString()
-      );
-    }
-    if (isActive === "true") {
-      params.FilterExpression = "isActive = :isActive";
-      params.ExpressionAttributeValues = {
-        ":isActive": true
+    let items = [];
+    let lastEvaluatedKey = cursor ? JSON.parse(Buffer.from(cursor, "base64").toString()) : void 0;
+    do {
+      const params = {
+        TableName: TABLE,
+        ExclusiveStartKey: lastEvaluatedKey
       };
+      const res = await ddb.send(new import_lib_dynamodb2.ScanCommand(params));
+      items.push(...res.Items ?? []);
+      lastEvaluatedKey = res.LastEvaluatedKey;
+    } while (lastEvaluatedKey);
+    if (isActive === "true") {
+      items = items.filter((c) => c.isActive === true);
     }
     if (isActive === "false") {
-      params.FilterExpression = "isActive = :isActive";
-      params.ExpressionAttributeValues = {
-        ":isActive": false
-      };
+      items = items.filter((c) => c.isActive === false);
     }
-    const res = await ddb.send(new import_lib_dynamodb2.ScanCommand(params));
-    let items = res.Items || [];
     if (search) {
       const q = search.toLowerCase();
       items = items.filter(
         (c) => c.name?.toLowerCase().includes(q)
       );
     }
+    items.sort(
+      (a, b) => Number(a.sortOrder ?? Number.MAX_SAFE_INTEGER) - Number(b.sortOrder ?? Number.MAX_SAFE_INTEGER)
+    );
     return {
       items,
-      nextCursor: res.LastEvaluatedKey ? Buffer.from(JSON.stringify(res.LastEvaluatedKey)).toString(
-        "base64"
-      ) : void 0
+      nextCursor: void 0
     };
   }
   async createCategory(input) {
@@ -4084,17 +4079,22 @@ var AdminCategoryRepository = class {
     return (res.Items?.length ?? 0) > 0;
   }
   async getNextSortOrder() {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.ScanCommand({
-        TableName: TABLE,
-        ProjectionExpression: "sortOrder"
-      })
-    );
+    let items = [];
+    let lastEvaluatedKey;
+    do {
+      const res = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand({
+          TableName: TABLE,
+          ProjectionExpression: "sortOrder",
+          ExclusiveStartKey: lastEvaluatedKey
+        })
+      );
+      items.push(...res.Items ?? []);
+      lastEvaluatedKey = res.LastEvaluatedKey;
+    } while (lastEvaluatedKey);
     const maxSortOrder = Math.max(
       0,
-      ...(res.Items ?? []).map(
-        (x) => Number(x.sortOrder ?? 0)
-      )
+      ...items.map((x) => Number(x.sortOrder ?? 0))
     );
     return maxSortOrder + 1;
   }

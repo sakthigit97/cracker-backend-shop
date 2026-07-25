@@ -14,6 +14,7 @@ interface CreateProductInput {
     description: string;
     packageTagIds?: string[];
     aiTags?: string[];
+    isComboPackage?: boolean;
 }
 
 export class AdminCreateProductService {
@@ -37,6 +38,7 @@ export class AdminCreateProductService {
             packageTagIds: input.packageTagIds || [],
             aiTags: input.aiTags || [],
             isActive: input.isActive ?? "true",
+            isComboPackage: input.isComboPackage,
             createdAt: new Date().toISOString(),
         };
 

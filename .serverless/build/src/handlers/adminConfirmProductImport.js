@@ -37202,7 +37202,7 @@ var PRODUCT_IMPORT_SCHEMA_V1 = {
     type: "boolean",
     default: true
   },
-  isComboPackage: {
+  IsComboPackage: {
     required: false,
     type: "boolean",
     default: false
@@ -37499,7 +37499,9 @@ var handler = async (event) => {
     const now = (/* @__PURE__ */ new Date()).toISOString();
     const productsToCreate = validRows.map((item) => {
       const productId = `prod-${(0, import_crypto2.randomUUID)()}`;
-      const isCombo = item.IsComboPackage || item.isComboPackage || false;
+      const comboValue = item.IsComboPackage ?? item.isComboPackage;
+      const isCombo = typeof comboValue === "boolean" ? comboValue : String(comboValue).trim().toLowerCase() === "true";
+      console.log(isCombo);
       return {
         productId,
         item,
@@ -37557,6 +37559,10 @@ var handler = async (event) => {
       if (!product.item.discountMode) {
         continue;
       }
+      console.log({
+        discountActive: product.item.discountActive,
+        type: typeof product.item.discountActive
+      });
       try {
         await discountRepo.createDiscount({
           discountMode: product.item.discountMode,

@@ -29,6 +29,7 @@ export const handler = async (event: any) => {
             isActive,
             packageTagIds,
             aiTags,
+            isComboPackage,
         } = body;
 
         if (
@@ -67,7 +68,8 @@ export const handler = async (event: any) => {
             description,
             isActive,
             packageTagIds: packageTagIds || [],
-            aiTags: aiTags || []
+            aiTags: aiTags || [],
+            isComboPackage: false
         });
 
         return {

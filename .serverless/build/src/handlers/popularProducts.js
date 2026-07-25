@@ -242,7 +242,7 @@ var error = (message, statusCode = 400) => ({
 var service = new PopularProductsService();
 var handler = async () => {
   try {
-    const limit = 10;
+    const limit = 20;
     const { items } = await service.getPopularProducts({ limit });
     const products = items.map((p) => ({
       id: p.productId,

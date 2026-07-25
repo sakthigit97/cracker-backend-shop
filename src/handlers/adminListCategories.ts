@@ -10,7 +10,7 @@ export const handler = async (event: any) => {
         }
 
         const qs = event.queryStringParameters || {};
-        const limit = Number(qs.limit) || 20;
+        const limit = Number(qs.limit) || 200;
         const cursor = qs.cursor;
         const search = qs.search || "";
         const isActive = qs.isActive;

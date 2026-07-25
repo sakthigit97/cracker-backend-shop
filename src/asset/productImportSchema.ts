@@ -26,7 +26,7 @@ export const PRODUCT_IMPORT_SCHEMA_V1 = {
         type: "boolean",
         default: true,
     },
-    isComboPackage: {
+    IsComboPackage: {
         required: false,
         type: "boolean",
         default: false,

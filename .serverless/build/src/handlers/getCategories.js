@@ -54,24 +54,31 @@ var error = (message, statusCode = 400) => ({
 // src/handlers/getCategories.ts
 var handler = async () => {
   try {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.ScanCommand({
-        TableName: "Categories",
-        FilterExpression: "isActive = :active",
-        ExpressionAttributeValues: {
-          ":active": true
-        }
-      })
-    );
-    const items = res.Items?.sort(
+    let items = [];
+    let lastEvaluatedKey;
+    do {
+      const res = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand({
+          TableName: "Categories",
+          FilterExpression: "isActive = :active",
+          ExpressionAttributeValues: {
+            ":active": true
+          },
+          ExclusiveStartKey: lastEvaluatedKey
+        })
+      );
+      items.push(...res.Items ?? []);
+      lastEvaluatedKey = res.LastEvaluatedKey;
+    } while (lastEvaluatedKey);
+    const categories = items.sort(
       (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
     ).map((c) => ({
       id: c.categoryId,
       name: c.name,
       image: c.imageUrl,
       sortOrder: c.sortOrder ?? 0
-    })) || [];
-    return success({ items });
+    }));
+    return success({ items: categories });
   } catch (err) {
     console.error("getCategories error:", err);
     return error("Failed to fetch categories", 500);

@@ -12,39 +12,39 @@ interface ListCategoryInput {
 }
 
 export class AdminCategoryRepository {
+
     async listCategories({
         limit,
         cursor,
         search,
         isActive,
     }: ListCategoryInput) {
-        const params: any = {
-            TableName: TABLE,
-            Limit: limit,
-        };
 
-        if (cursor) {
-            params.ExclusiveStartKey = JSON.parse(
-                Buffer.from(cursor, "base64").toString()
-            );
-        }
+        let items: any[] = [];
+        let lastEvaluatedKey: any = cursor
+            ? JSON.parse(Buffer.from(cursor, "base64").toString())
+            : undefined;
+
+        do {
+            const params: any = {
+                TableName: TABLE,
+                ExclusiveStartKey: lastEvaluatedKey,
+            };
+
+            const res = await ddb.send(new ScanCommand(params));
+
+            items.push(...(res.Items ?? []));
+
+            lastEvaluatedKey = res.LastEvaluatedKey;
+        } while (lastEvaluatedKey);
 
         if (isActive === "true") {
-            params.FilterExpression = "isActive = :isActive";
-            params.ExpressionAttributeValues = {
-                ":isActive": true,
-            };
+            items = items.filter(c => c.isActive === true);
         }
 
         if (isActive === "false") {
-            params.FilterExpression = "isActive = :isActive";
-            params.ExpressionAttributeValues = {
-                ":isActive": false,
-            };
+            items = items.filter(c => c.isActive === false);
         }
-
-        const res = await ddb.send(new ScanCommand(params));
-        let items = res.Items || [];
 
         if (search) {
             const q = search.toLowerCase();
@@ -53,13 +53,15 @@ export class AdminCategoryRepository {
             );
         }
 
+        items.sort(
+            (a: any, b: any) =>
+                Number(a.sortOrder ?? Number.MAX_SAFE_INTEGER) -
+                Number(b.sortOrder ?? Number.MAX_SAFE_INTEGER)
+        );
+
         return {
             items,
-            nextCursor: res.LastEvaluatedKey
-                ? Buffer.from(JSON.stringify(res.LastEvaluatedKey)).toString(
-                    "base64"
-                )
-                : undefined,
+            nextCursor: undefined,
         };
     }
 
@@ -178,20 +180,28 @@ export class AdminCategoryRepository {
     }
 
     private async getNextSortOrder(): Promise<number> {
-        const res = await ddb.send(
-            new ScanCommand({
-                TableName: TABLE,
-                ProjectionExpression: "sortOrder",
-            })
-        );
 
-        const maxSortOrder =
-            Math.max(
-                0,
-                ...(res.Items ?? []).map(
-                    (x: any) => Number(x.sortOrder ?? 0)
-                )
+        let items: any[] = [];
+        let lastEvaluatedKey: any;
+
+        do {
+            const res = await ddb.send(
+                new ScanCommand({
+                    TableName: TABLE,
+                    ProjectionExpression: "sortOrder",
+                    ExclusiveStartKey: lastEvaluatedKey,
+                })
             );
+
+            items.push(...(res.Items ?? []));
+            lastEvaluatedKey = res.LastEvaluatedKey;
+
+        } while (lastEvaluatedKey);
+
+        const maxSortOrder = Math.max(
+            0,
+            ...items.map((x: any) => Number(x.sortOrder ?? 0))
+        );
 
         return maxSortOrder + 1;
     }
