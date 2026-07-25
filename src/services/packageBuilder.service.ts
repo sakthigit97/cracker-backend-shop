@@ -9,7 +9,8 @@ const MAX_AI_PRODUCT_QTY = Number.isFinite(
     ? Number(process.env.MAX_AI_PRODUCT_QTY)
     : 10;
 
-const OPTIMIZATION_POOL_SIZE = 30;
+const MIN_OPTIMIZATION_POOL = 30;
+const MAX_OPTIMIZATION_POOL = 300;
 export interface PackageBuildResult {
     total: number;
     itemCount: number;
@@ -28,6 +29,7 @@ export class PackageBuilderService {
         budget: number,
         candidates: RecommendationCandidate[]
     ): PackageBuildResult {
+
         if (budget <= 0 || candidates.length === 0) {
             return this.emptyResult();
         }
@@ -38,8 +40,11 @@ export class PackageBuilderService {
         if (rankedCandidates.length === 0) {
             return this.emptyResult();
         }
-
-        const optimizationPool = this.buildOptimizationPool(rankedCandidates);
+        const optimizationPool =
+            this.buildOptimizationPool(
+                budget,
+                rankedCandidates
+            );
         console.log("Optimization pool:", optimizationPool.length);
 
         const workingPackage =
@@ -128,11 +133,27 @@ export class PackageBuilderService {
     }
 
     private buildOptimizationPool(
+        budget: number,
         candidates: RecommendationCandidate[]
     ): RecommendationCandidate[] {
+
+        let poolSize = MIN_OPTIMIZATION_POOL;
+
+        if (budget >= 5000) {
+            poolSize = 60;
+        }
+
+        if (budget >= 10000) {
+            poolSize = 90;
+        }
+
+        if (budget >= 20000) {
+            poolSize = MAX_OPTIMIZATION_POOL;
+        }
+
         return candidates.slice(
             0,
-            Math.min(OPTIMIZATION_POOL_SIZE, candidates.length)
+            Math.min(poolSize, candidates.length)
         );
     }
 
@@ -141,7 +162,28 @@ export class PackageBuilderService {
 
         candidates: RecommendationCandidate[]
     ): WorkingPackage {
-        const BEAM_WIDTH = 25;
+        let beamWidth = 25;
+        let maxProductsPerCategory = 3;
+
+        if (budget >= 10000) {
+            maxProductsPerCategory = 5;
+        }
+
+        if (budget >= 20000) {
+            maxProductsPerCategory = 8;
+        }
+
+        if (budget >= 5000) {
+            beamWidth = 40;
+        }
+
+        if (budget >= 10000) {
+            beamWidth = 60;
+        }
+
+        if (budget >= 20000) {
+            beamWidth = 100;
+        }
 
         let beam: WorkingPackage[] = [
             {
@@ -157,6 +199,42 @@ export class PackageBuilderService {
             for (const current of beam) {
                 if (current.items.has(candidate.productId)) {
                     continue;
+                }
+
+                const categoryCount =
+                    [...current.items.keys()]
+                        .map(id => {
+                            const selected = candidates.find(c => c.productId === id);
+                            return selected?.categoryId;
+                        })
+                        .filter(categoryId => categoryId === candidate.categoryId)
+                        .length;
+
+                if (categoryCount >= maxProductsPerCategory) {
+                    continue;
+                }
+
+                const candidateFamily = candidate.productFamily?.trim().toLowerCase();
+                if (candidateFamily) {
+
+                    const hasSameFamily =
+                        [...current.items.keys()].some(productId => {
+
+                            const selected =
+                                candidates.find(
+                                    c => c.productId === productId
+                                );
+
+                            return (
+                                selected?.productFamily
+                                    ?.trim()
+                                    .toLowerCase() === candidateFamily
+                            );
+                        });
+
+                    if (hasSameFamily) {
+                        continue;
+                    }
                 }
 
                 if (current.total + candidate.price > budget) {
@@ -198,7 +276,7 @@ export class PackageBuilderService {
                             budget
                         )
                 )
-                .slice(0, BEAM_WIDTH);
+                .slice(0, beamWidth);
         }
 
         const best = beam.sort(
@@ -212,8 +290,14 @@ export class PackageBuilderService {
         pkg: WorkingPackage,
         budget: number
     ): number {
+
         const utilization = pkg.total / budget;
-        return utilization * 5000 + pkg.score * 500 + pkg.items.size * 10;
+        const uniqueProducts = pkg.items.size;
+        return (
+            utilization * 3500 +
+            pkg.score * 400 +
+            uniqueProducts * 150
+        );
     }
 
     private cloneWorkingPackage(pkg: WorkingPackage): WorkingPackage {
@@ -271,12 +355,12 @@ export class PackageBuilderService {
     private findBestNewCandidate(
         remainingBudget: number,
         candidates: RecommendationCandidate[],
-        workingPackage: WorkingPackage
+        workingPackage: WorkingPackage,
+        budget: number
     ): RecommendationCandidate | undefined {
 
         const categoryCounts = new Map<string, number>();
         const selectedFamilies = new Set<string>();
-
         for (const item of workingPackage.items.values()) {
             const selected = candidates.find(
                 c => c.productId === item.productId
@@ -313,16 +397,24 @@ export class PackageBuilderService {
             }
 
             const family = candidate.productFamily?.trim().toLowerCase();
-
             if (family && selectedFamilies.has(family)) {
                 continue;
             }
 
             const categoryCount = categoryCounts.get(candidate.categoryId) ?? 0;
             const leftover = remainingBudget - candidate.price;
+            let priceBonus = 0;
+            const utilization = candidate.price / budget;
+
+            if (utilization >= 0.08 && utilization <= 0.20) {
+                priceBonus = 2;
+            }
+            const utilizationBonus = candidate.price / remainingBudget;
             const adjustedScore =
                 candidate.score
                 - categoryCount
+                + utilizationBonus * 2
+                + priceBonus
                 + this.leftoverBudgetBonus(
                     leftover,
                     candidates,
@@ -442,7 +534,8 @@ export class PackageBuilderService {
             const candidate = this.findBestNewCandidate(
                 remainingBudget,
                 candidates,
-                workingPackage
+                workingPackage,
+                budget
             );
 
             if (!candidate) {

@@ -519,6 +519,13 @@ functions:
           path: /admin/config/slider-presign
           method: POST
 
+  deleteProductImages:
+    handler: src/handlers/deleteProductImages.handler
+    events:
+      - httpApi:
+          path: /admin/products/delete-images
+          method: post
+
   adminListDiscounts:
     handler: src/handlers/adminListDiscounts.handler
     events:

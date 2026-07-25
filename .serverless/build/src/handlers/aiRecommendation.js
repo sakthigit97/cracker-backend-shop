@@ -580,7 +580,8 @@ var FallbackRecommendationService = class {
 var MAX_AI_PRODUCT_QTY = Number.isFinite(
   Number(process.env.MAX_AI_PRODUCT_QTY)
 ) ? Number(process.env.MAX_AI_PRODUCT_QTY) : 10;
-var OPTIMIZATION_POOL_SIZE = 30;
+var MIN_OPTIMIZATION_POOL = 30;
+var MAX_OPTIMIZATION_POOL = 300;
 var PackageBuilderService = class {
   buildPackage(budget, candidates) {
     if (budget <= 0 || candidates.length === 0) {
@@ -591,7 +592,10 @@ var PackageBuilderService = class {
     if (rankedCandidates.length === 0) {
       return this.emptyResult();
     }
-    const optimizationPool = this.buildOptimizationPool(rankedCandidates);
+    const optimizationPool = this.buildOptimizationPool(
+      budget,
+      rankedCandidates
+    );
     console.log("Optimization pool:", optimizationPool.length);
     const workingPackage = this.optimizePackage(
       budget,
@@ -658,14 +662,40 @@ var PackageBuilderService = class {
       return b.quantity - a.quantity;
     });
   }
-  buildOptimizationPool(candidates) {
+  buildOptimizationPool(budget, candidates) {
+    let poolSize = MIN_OPTIMIZATION_POOL;
+    if (budget >= 5e3) {
+      poolSize = 60;
+    }
+    if (budget >= 1e4) {
+      poolSize = 90;
+    }
+    if (budget >= 2e4) {
+      poolSize = MAX_OPTIMIZATION_POOL;
+    }
     return candidates.slice(
       0,
-      Math.min(OPTIMIZATION_POOL_SIZE, candidates.length)
+      Math.min(poolSize, candidates.length)
     );
   }
   optimizePackage(budget, candidates) {
-    const BEAM_WIDTH = 25;
+    let beamWidth = 25;
+    let maxProductsPerCategory = 3;
+    if (budget >= 1e4) {
+      maxProductsPerCategory = 5;
+    }
+    if (budget >= 2e4) {
+      maxProductsPerCategory = 8;
+    }
+    if (budget >= 5e3) {
+      beamWidth = 40;
+    }
+    if (budget >= 1e4) {
+      beamWidth = 60;
+    }
+    if (budget >= 2e4) {
+      beamWidth = 100;
+    }
     let beam = [
       {
         total: 0,
@@ -678,6 +708,25 @@ var PackageBuilderService = class {
       for (const current of beam) {
         if (current.items.has(candidate.productId)) {
           continue;
+        }
+        const categoryCount = [...current.items.keys()].map((id) => {
+          const selected = candidates.find((c) => c.productId === id);
+          return selected?.categoryId;
+        }).filter((categoryId) => categoryId === candidate.categoryId).length;
+        if (categoryCount >= maxProductsPerCategory) {
+          continue;
+        }
+        const candidateFamily = candidate.productFamily?.trim().toLowerCase();
+        if (candidateFamily) {
+          const hasSameFamily = [...current.items.keys()].some((productId) => {
+            const selected = candidates.find(
+              (c) => c.productId === productId
+            );
+            return selected?.productFamily?.trim().toLowerCase() === candidateFamily;
+          });
+          if (hasSameFamily) {
+            continue;
+          }
         }
         if (current.total + candidate.price > budget) {
           continue;
@@ -709,7 +758,7 @@ var PackageBuilderService = class {
           a,
           budget
         )
-      ).slice(0, BEAM_WIDTH);
+      ).slice(0, beamWidth);
     }
     const best = beam.sort(
       (a, b) => this.packageValue(b, budget) - this.packageValue(a, budget)
@@ -718,7 +767,8 @@ var PackageBuilderService = class {
   }
   packageValue(pkg, budget) {
     const utilization = pkg.total / budget;
-    return utilization * 5e3 + pkg.score * 500 + pkg.items.size * 10;
+    const uniqueProducts = pkg.items.size;
+    return utilization * 3500 + pkg.score * 400 + uniqueProducts * 150;
   }
   cloneWorkingPackage(pkg) {
     return {
@@ -757,7 +807,7 @@ var PackageBuilderService = class {
       workingPackage.score += candidate.score;
     }
   }
-  findBestNewCandidate(remainingBudget, candidates, workingPackage) {
+  findBestNewCandidate(remainingBudget, candidates, workingPackage, budget) {
     const categoryCounts = /* @__PURE__ */ new Map();
     const selectedFamilies = /* @__PURE__ */ new Set();
     for (const item of workingPackage.items.values()) {
@@ -791,7 +841,13 @@ var PackageBuilderService = class {
       }
       const categoryCount = categoryCounts.get(candidate.categoryId) ?? 0;
       const leftover = remainingBudget - candidate.price;
-      const adjustedScore = candidate.score - categoryCount + this.leftoverBudgetBonus(
+      let priceBonus = 0;
+      const utilization = candidate.price / budget;
+      if (utilization >= 0.08 && utilization <= 0.2) {
+        priceBonus = 2;
+      }
+      const utilizationBonus = candidate.price / remainingBudget;
+      const adjustedScore = candidate.score - categoryCount + utilizationBonus * 2 + priceBonus + this.leftoverBudgetBonus(
         leftover,
         candidates,
         workingPackage
@@ -869,7 +925,8 @@ var PackageBuilderService = class {
       const candidate = this.findBestNewCandidate(
         remainingBudget,
         candidates,
-        workingPackage
+        workingPackage,
+        budget
       );
       if (!candidate) {
         return;

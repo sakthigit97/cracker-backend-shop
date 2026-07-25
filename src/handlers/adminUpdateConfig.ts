@@ -5,7 +5,6 @@ import { AdminConfigService } from "../services/adminConfig.service";
 export const handler = async (event: any) => {
     try {
         const { role } = verifyJwt(event);
-
         if (role !== "admin") {
             return {
                 statusCode: 403,

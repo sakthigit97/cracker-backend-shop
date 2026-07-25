@@ -3,11 +3,9 @@ import { PopularProductsService } from "../services/popularProducts.service";
 import { success, error } from "../libs/response";
 
 const service = new PopularProductsService();
-
 export const handler: APIGatewayProxyHandlerV2 = async () => {
     try {
-        const limit = 10;
-
+        const limit = 20;
         const { items } = await service.getPopularProducts({ limit });
         const products = items.map((p: any) => ({
             id: p.productId,

@@ -44,6 +44,7 @@ export const handler = async (event: any) => {
         const now = new Date().toISOString();
         const productsToCreate = validRows.map((item: any) => {
             const productId = `prod-${randomUUID()}`;
+            const isCombo = (item.IsComboPackage || item.isComboPackage) || false;
             return {
                 productId,
                 item,
@@ -90,7 +91,7 @@ export const handler = async (event: any) => {
                             isActive: { S: String(item.isActive ?? true) },
                             createdAt: { S: now },
                             isComboPackage: {
-                                BOOL: item.isComboPackage ?? false,
+                                BOOL: isCombo ?? false,
                             },
                             sequenceNumber: { N: String(item.sequenceNumber ?? 0) },
                             productFamily: { S: item.productFamily },
