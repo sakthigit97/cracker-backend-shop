@@ -15,16 +15,13 @@ export const handler = async (event: any) => {
     try {
         const { userId, role } = verifyJwt(event);
         const orderId = event.pathParameters?.orderId;
-
         const body = JSON.parse(event.body || "{}");
-        const items = body.items;
-        const mobile = body.mobile;
-
+        const { mobile, ...request } = body;
         const order = await orderService.adjustOrder({
             userId,
             role,
             orderId,
-            items,
+            ...request,
         });
 
         if (iscartUpdatedSMSEnabled && mobile) {

@@ -3968,7 +3968,17 @@ var AdminUpdateOrderRepository = class {
       ":now": Date.now(),
       ":by": `ADMIN#${input.adminId}`,
       ":cancelled": "CANCELLED",
-      ":dispatched": "DISPATCHED"
+      ":dispatched": "DISPATCHED",
+      ":emptyHistory": [],
+      ":history": [
+        {
+          fromStatus: input.previousStatus,
+          toStatus: input.status ?? input.previousStatus,
+          comment: input.adminComment ?? "",
+          changedBy: `ADMIN#${input.adminId}`,
+          changedAt: Date.now()
+        }
+      ]
     };
     const names = {
       "#status": "status"
@@ -3984,6 +3994,23 @@ var AdminUpdateOrderRepository = class {
     if (input.adminComment !== void 0) {
       updates.push("adminComment = :comment");
       values[":comment"] = input.adminComment;
+    }
+    const hasStatusChange = input.status !== void 0 && input.status !== input.previousStatus;
+    const hasCommentChange = input.adminComment !== void 0;
+    if (hasStatusChange || hasCommentChange) {
+      values[":history"] = [
+        {
+          action: hasStatusChange ? "STATUS_UPDATED" : "COMMENT_UPDATED",
+          fromStatus: input.previousStatus,
+          toStatus: input.status ?? input.previousStatus,
+          comment: input.adminComment ?? "",
+          changedBy: `ADMIN#${input.adminId}`,
+          changedAt: values[":now"]
+        }
+      ];
+      updates.push(
+        "statusHistory = list_append(if_not_exists(statusHistory, :emptyHistory), :history)"
+      );
     }
     updates.push("modifiedAt = :now");
     updates.push("modifiedBy = :by");
@@ -4142,6 +4169,9 @@ var OrderRepository = class {
   async buildItemsSnapshot(cartItems) {
     const productIds = cartItems.map((c) => c.itemId);
     const products = await this.productService.batchGetProducts(productIds);
+    console.log(
+      JSON.stringify(products, null, 2)
+    );
     const map = new Map(
       products.map((p) => [
         p.productId,
@@ -4155,23 +4185,21 @@ var OrderRepository = class {
         }
       ])
     );
-    return cartItems.map((c) => {
+    const snapshot = cartItems.map((c) => {
       const product = map.get(c.itemId);
-      if (!product) {
-        throw new Error(`Product not found or inactive: ${c.itemId}`);
-      }
       return {
         productId: c.itemId,
         name: product.name,
+        image: product.image,
         price: product.price,
-        image: product.image || null,
         quantity: c.quantity,
         total: product.price * c.quantity,
-        originalPrice: product.originalPrice || null,
-        discountText: product.discountText || "",
-        isComboPackage: product.isComboPackage || false
+        originalPrice: product.originalPrice,
+        discountText: product.discountText,
+        isComboPackage: product.isComboPackage
       };
     });
+    return snapshot;
   }
   async create(order) {
     await ddb.send(
@@ -4332,10 +4360,21 @@ var OrderRepository = class {
           meta: "ORDER"
         },
         UpdateExpression: `
-                SET 
+                SET
                     #items = :items,
                     subtotal = :subtotal,
-                    totalAmount = :totalAmount,
+                    nonComboProductTotal = :nonComboProductTotal,
+                    comboPackageTotal = :comboPackageTotal,
+                    couponCode = :couponCode,
+                    couponType = :couponType,
+                    couponValue = :couponValue,
+                    couponDiscount = :couponDiscount,
+                    packagingCharge = :packagingCharge,
+                    amountBeforeDiscount = :amountBeforeDiscount,
+                    amountAfterDiscount = :amountAfterDiscount,
+                    gstAmount = :gstAmount,
+                    grandTotal = :grandTotal,
+                    walletUsed = :walletUsed,
                     finalPayable = :finalPayable,
                     updatedAt = :updatedAt,
                     modifiedAt = :modifiedAt,
@@ -4348,7 +4387,18 @@ var OrderRepository = class {
         ExpressionAttributeValues: {
           ":items": data.items,
           ":subtotal": data.subtotal,
-          ":totalAmount": data.totalAmount,
+          ":nonComboProductTotal": data.nonComboProductTotal,
+          ":comboPackageTotal": data.comboPackageTotal,
+          ":couponCode": data.couponCode ?? null,
+          ":couponType": data.couponType ?? null,
+          ":couponValue": data.couponValue ?? null,
+          ":couponDiscount": data.couponDiscount ?? 0,
+          ":packagingCharge": data.packagingCharge,
+          ":amountBeforeDiscount": data.amountBeforeDiscount,
+          ":amountAfterDiscount": data.amountAfterDiscount,
+          ":gstAmount": data.gstAmount,
+          ":grandTotal": data.grandTotal,
+          ":walletUsed": data.walletUsed,
           ":finalPayable": data.finalPayable,
           ":updatedAt": data.updatedAt,
           ":modifiedAt": data.modifiedAt,
@@ -4398,7 +4448,8 @@ var AdminUpdateOrderService = class {
       orderId: input.orderId,
       status: input.status,
       adminComment: input.adminComment,
-      adminId: input.adminId
+      adminId: input.adminId,
+      previousStatus: existing.status
     });
     if (input.status === "DISPATCHED") {
       await this.handleReferralReward(existing.userId);

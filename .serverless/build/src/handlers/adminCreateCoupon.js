@@ -3899,12 +3899,149 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// src/handlers/getOrders.ts
-var getOrders_exports = {};
-__export(getOrders_exports, {
+// src/handlers/adminCreateCoupon.ts
+var adminCreateCoupon_exports = {};
+__export(adminCreateCoupon_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(getOrders_exports);
+module.exports = __toCommonJS(adminCreateCoupon_exports);
+
+// src/repo/coupon.repo.ts
+var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
+
+// src/utils/dynamo.ts
+var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
+var import_lib_dynamodb = require("@aws-sdk/lib-dynamodb");
+var client = new import_client_dynamodb.DynamoDBClient({});
+var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
+  marshallOptions: {
+    removeUndefinedValues: true
+  }
+});
+
+// src/repo/coupon.repo.ts
+var TABLE = process.env.COUPONS_TABLE;
+var CouponRepository = class {
+  async getCoupon(code) {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.GetCommand({
+        TableName: TABLE,
+        Key: {
+          couponCode: code
+        }
+      })
+    );
+    return result.Item;
+  }
+  async createCoupon(coupon) {
+    await ddb.send(
+      new import_lib_dynamodb2.PutCommand({
+        TableName: TABLE,
+        Item: coupon,
+        ConditionExpression: "attribute_not_exists(couponCode)"
+      })
+    );
+    return coupon;
+  }
+  async listCoupons() {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.ScanCommand({
+        TableName: TABLE
+      })
+    );
+    return result.Items ?? [];
+  }
+  async deleteCoupon(couponCode) {
+    await ddb.send(
+      new import_lib_dynamodb2.DeleteCommand({
+        TableName: TABLE,
+        Key: {
+          couponCode
+        }
+      })
+    );
+  }
+};
+
+// src/services/coupon.service.ts
+var CouponService = class {
+  constructor() {
+    this.repo = new CouponRepository();
+  }
+  async createCoupon(payload) {
+    if (!payload.type) {
+      throw new Error("Coupon type is required");
+    }
+    if (payload.value === void 0 || payload.value === null || payload.value <= 0) {
+      throw new Error("Coupon value must be greater than zero");
+    }
+    if (payload.type === "PERCENTAGE" && payload.value > 100) {
+      throw new Error("Percentage cannot exceed 100");
+    }
+    if (!payload.expiryDate) {
+      throw new Error("Expiry Date is required");
+    }
+    if (new Date(payload.expiryDate) <= /* @__PURE__ */ new Date()) {
+      throw new Error("Expiry Date must be a future date");
+    }
+    const couponCode = payload.couponCode?.trim().toUpperCase();
+    if (!couponCode) {
+      throw new Error("Coupon Code is required");
+    }
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const coupon = {
+      couponCode,
+      description: payload.description ?? "",
+      type: payload.type,
+      value: payload.value,
+      expiryDate: payload.expiryDate,
+      createdAt: now,
+      updatedAt: now
+    };
+    return await this.repo.createCoupon(coupon);
+  }
+  async getCoupons() {
+    const coupons = await this.repo.listCoupons();
+    return coupons.sort(
+      (a, b) => b.createdAt.localeCompare(a.createdAt)
+    );
+  }
+  async deleteCoupon(couponCode) {
+    if (!couponCode) {
+      throw new Error("Coupon code is required");
+    }
+    await this.repo.deleteCoupon(couponCode);
+  }
+  async validateCoupon(couponCode, orderAmount) {
+    if (!couponCode) {
+      throw new Error("Coupon Code is required");
+    }
+    const coupon = await this.repo.getCoupon(
+      couponCode.trim().toUpperCase()
+    );
+    if (!coupon) {
+      throw new Error("Invalid Coupon Code");
+    }
+    if (new Date(coupon.expiryDate) <= /* @__PURE__ */ new Date()) {
+      throw new Error("Coupon Expired");
+    }
+    let discount = 0;
+    if (coupon.type === "FLAT") {
+      discount = Math.min(coupon.value, orderAmount);
+    } else {
+      discount = orderAmount * coupon.value / 100;
+    }
+    discount = Math.round(discount);
+    const payable = Math.max(0, orderAmount - discount);
+    return {
+      couponCode: coupon.couponCode,
+      couponType: coupon.type,
+      couponValue: coupon.value,
+      couponDiscount: discount,
+      payable
+    };
+  }
+};
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -3933,695 +4070,26 @@ function verifyJwt(event) {
   };
 }
 
-// src/repo/order.repo.ts
-var import_lib_dynamodb5 = require("@aws-sdk/lib-dynamodb");
-
-// src/utils/dynamo.ts
-var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
-var import_lib_dynamodb = require("@aws-sdk/lib-dynamodb");
-var client = new import_client_dynamodb.DynamoDBClient({});
-var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
-  marshallOptions: {
-    removeUndefinedValues: true
-  }
-});
-
-// src/services/product.service.ts
-var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
-
-// src/repo/product.repo.ts
-var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
-var TABLE_NAME = process.env.PRODUCTS_TABLE;
-var ProductRepository = class {
-  async batchGet(productIds) {
-    if (productIds.length === 0) return [];
-    const keys = productIds.map((productId) => ({
-      productId
-    }));
-    const res = await ddb.send(
-      new import_lib_dynamodb2.BatchGetCommand({
-        RequestItems: {
-          [TABLE_NAME]: { Keys: keys }
-        }
-      })
-    );
-    return res.Responses?.[TABLE_NAME] ?? [];
-  }
-  async deleteProduct(productId) {
-    await ddb.send(
-      new import_lib_dynamodb2.DeleteCommand({
-        TableName: process.env.PRODUCTS_TABLE,
-        Key: { productId }
-      })
-    );
-  }
-};
-
-// src/services/discount.service.ts
-var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
-var DISCOUNT_TABLE = "Discounts";
-async function getActiveDiscounts() {
-  const res = await ddb.send(
-    new import_lib_dynamodb3.ScanCommand({
-      TableName: DISCOUNT_TABLE,
-      FilterExpression: "isActive = :true",
-      ExpressionAttributeValues: {
-        ":true": true
-      }
-    })
-  );
-  return res.Items || [];
-}
-
-// src/services/price.service.ts
-function applyDiscount(product, discounts) {
-  let applied = null;
-  applied = discounts.find(
-    (d) => d.discountType === "PRODUCT" && d.targetId === product.productId
-  ) || discounts.find(
-    (d) => d.discountType === "CATEGORY" && d.targetId === product.categoryId
-  ) || discounts.find(
-    (d) => d.discountType === "BRAND" && d.targetId === product.brandId
-  );
-  if (!applied) {
-    return {
-      price: product.price,
-      originalPrice: null,
-      discountText: null
-    };
-  }
-  let finalPrice = product.price;
-  if (applied.discountMode === "PERCENT") {
-    finalPrice = Math.round(
-      product.price - product.price * applied.discountValue / 100
-    );
-  }
-  if (applied.discountMode === "FLAT") {
-    finalPrice = product.price - applied.discountValue;
-  }
-  return {
-    price: finalPrice,
-    originalPrice: product.price,
-    discountText: applied.discountMode === "PERCENT" ? `${applied.discountValue}% OFF` : `\u20B9${applied.discountValue} OFF`
-  };
-}
-
-// src/services/product.service.ts
-var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
-var ProductService = class {
-  constructor(repo = new ProductRepository()) {
-    this.repo = repo;
-  }
-  async batchGetProducts(productIds) {
-    const uniqueIds = [...new Set(productIds)];
-    const allProducts = [];
-    for (let i = 0; i < uniqueIds.length; i += 100) {
-      const chunk = uniqueIds.slice(i, i + 100);
-      const products = await this.repo.batchGet(chunk);
-      if (products?.length) {
-        allProducts.push(...products);
-      }
-    }
-    if (allProducts.length === 0) return [];
-    const discounts = await getActiveDiscounts();
-    const productMap = new Map(
-      allProducts.map((p) => [p.productId, p])
-    );
-    return uniqueIds.map((id) => productMap.get(id)).filter((p) => Boolean(p)).filter((p) => p.isActive === "true" || p.isActive === true).map((p) => {
-      const priceInfo = applyDiscount(p, discounts);
-      return {
-        productId: p.productId,
-        name: p.name,
-        description: p.description ?? null,
-        image: p.imageUrls?.[0] ?? null,
-        price: priceInfo.price,
-        originalPrice: priceInfo.originalPrice > priceInfo.price ? priceInfo.originalPrice : void 0,
-        discountText: priceInfo.discountText,
-        categoryId: p.categoryId,
-        brandId: p.brandId,
-        qty: p.quantity,
-        searchText: p.searchText,
-        isComboPackage: p.isComboPackage || false,
-        sequenceNumber: p.sequenceNumber || 0
-      };
-    });
-  }
-  async deleteProduct(productId) {
-    return this.repo.deleteProduct(productId);
-  }
-};
-
-// src/repo/order.repo.ts
-var TABLE_NAME2 = process.env.ORDERS_TABLE || "Orders";
-var OrderRepository = class {
-  constructor() {
-    this.productService = new ProductService();
-  }
-  async buildItemsSnapshot(cartItems) {
-    const productIds = cartItems.map((c) => c.itemId);
-    const products = await this.productService.batchGetProducts(productIds);
-    console.log(
-      JSON.stringify(products, null, 2)
-    );
-    const map = new Map(
-      products.map((p) => [
-        p.productId,
-        {
-          name: p.name,
-          price: p.price,
-          image: p.image || null,
-          originalPrice: p.originalPrice || null,
-          discountText: p.discountText || "",
-          isComboPackage: p.isComboPackage || false
-        }
-      ])
-    );
-    const snapshot = cartItems.map((c) => {
-      const product = map.get(c.itemId);
-      return {
-        productId: c.itemId,
-        name: product.name,
-        image: product.image,
-        price: product.price,
-        quantity: c.quantity,
-        total: product.price * c.quantity,
-        originalPrice: product.originalPrice,
-        discountText: product.discountText,
-        isComboPackage: product.isComboPackage
-      };
-    });
-    return snapshot;
-  }
-  async create(order) {
-    await ddb.send(
-      new import_lib_dynamodb5.PutCommand({
-        TableName: TABLE_NAME2,
-        Item: order
-      })
-    );
-  }
-  async getOrdersByUser(userId, limit, cursor) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.QueryCommand({
-        TableName: TABLE_NAME2,
-        IndexName: "userId-createdAt-index",
-        KeyConditionExpression: "userId = :uid",
-        ExpressionAttributeValues: {
-          ":uid": userId
-        },
-        ScanIndexForward: false,
-        Limit: limit,
-        ExclusiveStartKey: cursor
-      })
-    );
-    return {
-      items: res.Items || [],
-      nextCursor: res.LastEvaluatedKey || null
-    };
-  }
-  async getById(orderId) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: TABLE_NAME2,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        }
-      })
-    );
-    return res.Item;
-  }
-  async updateStatus(orderId, data) {
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: TABLE_NAME2,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        },
-        UpdateExpression: `
-                SET 
-                    #status = :status,
-                    updatedAt = :updatedAt,
-                    modifiedAt = :modifiedAt,
-                    modifiedBy = :modifiedBy,
-                    statusHistory = :statusHistory
-                `,
-        ExpressionAttributeNames: {
-          "#status": "status"
-        },
-        ExpressionAttributeValues: {
-          ":status": data.status,
-          ":updatedAt": data.updatedAt,
-          ":modifiedAt": data.modifiedAt,
-          ":modifiedBy": data.modifiedBy,
-          ":statusHistory": data.statusHistory
-        }
-      })
-    );
-  }
-  async getUserByMobile(mobile) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: "Users",
-        Key: { mobile }
-      })
-    );
-    return res.Item || null;
-  }
-  async deductWalletCredit(mobile, usedAmount) {
-    if (usedAmount <= 0) return;
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: "Users",
-        Key: { mobile },
-        UpdateExpression: "SET walletCredit = walletCredit - :amt",
-        ConditionExpression: "walletCredit >= :amt",
-        ExpressionAttributeValues: {
-          ":amt": usedAmount
-        }
-      })
-    );
-  }
-  async markReferralRewarded(mobile) {
-    try {
-      await ddb.send(
-        new import_lib_dynamodb5.UpdateCommand({
-          TableName: "Users",
-          Key: { mobile },
-          UpdateExpression: "SET referralRewarded = :t",
-          ConditionExpression: "referralRewarded = :f",
-          ExpressionAttributeValues: {
-            ":t": true,
-            ":f": false
-          }
-        })
-      );
-      return true;
-    } catch (err) {
-      if (err.name === "ConditionalCheckFailedException") {
-        return false;
-      }
-      throw err;
-    }
-  }
-  async addWalletCreditByReferralCode(referralCode, amount) {
-    if (!referralCode || amount <= 0) return;
-    const scanRes = await ddb.send(
-      new import_lib_dynamodb5.ScanCommand({
-        TableName: "Users",
-        FilterExpression: "referralCode = :c",
-        ExpressionAttributeValues: {
-          ":c": referralCode
-        },
-        Limit: 1
-      })
-    );
-    const refUser = scanRes.Items?.[0];
-    if (!refUser) return;
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: "Users",
-        Key: { mobile: refUser.mobile },
-        UpdateExpression: "SET walletCredit = if_not_exists(walletCredit, :z) + :amt",
-        ExpressionAttributeValues: {
-          ":amt": amount,
-          ":z": 0
-        }
-      })
-    );
-  }
-  async getAdminConfig() {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: "AdminConfig",
-        Key: {
-          configId: "global"
-        }
-      })
-    );
-    return res.Item || {};
-  }
-  async updateItems(orderId, data) {
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: TABLE_NAME2,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        },
-        UpdateExpression: `
-                SET
-                    #items = :items,
-                    subtotal = :subtotal,
-                    nonComboProductTotal = :nonComboProductTotal,
-                    comboPackageTotal = :comboPackageTotal,
-                    couponCode = :couponCode,
-                    couponType = :couponType,
-                    couponValue = :couponValue,
-                    couponDiscount = :couponDiscount,
-                    packagingCharge = :packagingCharge,
-                    amountBeforeDiscount = :amountBeforeDiscount,
-                    amountAfterDiscount = :amountAfterDiscount,
-                    gstAmount = :gstAmount,
-                    grandTotal = :grandTotal,
-                    walletUsed = :walletUsed,
-                    finalPayable = :finalPayable,
-                    updatedAt = :updatedAt,
-                    modifiedAt = :modifiedAt,
-                    modifiedBy = :modifiedBy,
-                    statusHistory = :statusHistory
-            `,
-        ExpressionAttributeNames: {
-          "#items": "items"
-        },
-        ExpressionAttributeValues: {
-          ":items": data.items,
-          ":subtotal": data.subtotal,
-          ":nonComboProductTotal": data.nonComboProductTotal,
-          ":comboPackageTotal": data.comboPackageTotal,
-          ":couponCode": data.couponCode ?? null,
-          ":couponType": data.couponType ?? null,
-          ":couponValue": data.couponValue ?? null,
-          ":couponDiscount": data.couponDiscount ?? 0,
-          ":packagingCharge": data.packagingCharge,
-          ":amountBeforeDiscount": data.amountBeforeDiscount,
-          ":amountAfterDiscount": data.amountAfterDiscount,
-          ":gstAmount": data.gstAmount,
-          ":grandTotal": data.grandTotal,
-          ":walletUsed": data.walletUsed,
-          ":finalPayable": data.finalPayable,
-          ":updatedAt": data.updatedAt,
-          ":modifiedAt": data.modifiedAt,
-          ":modifiedBy": data.modifiedBy,
-          ":statusHistory": data.statusHistory
-        }
-      })
-    );
-  }
-};
-
-// src/repo/coupon.repo.ts
-var import_lib_dynamodb6 = require("@aws-sdk/lib-dynamodb");
-var TABLE = process.env.COUPONS_TABLE;
-var CouponRepository = class {
-  async getCoupon(code) {
-    const result = await ddb.send(
-      new import_lib_dynamodb6.GetCommand({
-        TableName: TABLE,
-        Key: {
-          couponCode: code
-        }
-      })
-    );
-    return result.Item;
-  }
-  async createCoupon(coupon) {
-    await ddb.send(
-      new import_lib_dynamodb6.PutCommand({
-        TableName: TABLE,
-        Item: coupon,
-        ConditionExpression: "attribute_not_exists(couponCode)"
-      })
-    );
-    return coupon;
-  }
-  async listCoupons() {
-    const result = await ddb.send(
-      new import_lib_dynamodb6.ScanCommand({
-        TableName: TABLE
-      })
-    );
-    return result.Items ?? [];
-  }
-  async deleteCoupon(couponCode) {
-    await ddb.send(
-      new import_lib_dynamodb6.DeleteCommand({
-        TableName: TABLE,
-        Key: {
-          couponCode
-        }
-      })
-    );
-  }
-};
-
-// src/services/order.service.ts
-var CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
-var OrderService = class {
-  constructor(repo = new OrderRepository()) {
-    this.repo = repo;
-    this.couponRepo = new CouponRepository();
-    this.productRepo = new ProductRepository();
-  }
-  async createOrder(input) {
-    const now = Date.now();
-    const orderId = this.generateOrderId(now);
-    const isTamilNadu = input.address.toLowerCase().includes("tamil nadu");
-    const deliveryDays = isTamilNadu ? 5 : 10;
-    const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1e3;
-    const items = await this.repo.buildItemsSnapshot(
-      input.cartItems
-    );
-    const user = await this.repo.getUserByMobile(input.userId);
-    const availableCredit = Number(
-      user?.walletCredit || 0
-    );
-    if (input.walletUsed > availableCredit) {
-      throw new Error("Invalid wallet usage");
-    }
-    const paymentMode = input.paymentMode ?? "OFFLINE";
-    const paymentStatus = input.paymentStatus ?? (paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED");
-    const transactionId = input.transactionId ?? null;
-    const order = {
-      meta: "ORDER",
-      orderId,
-      userId: input.userId,
-      address: input.address,
-      status: "ORDER_PLACED",
-      paymentMode,
-      paymentStatus,
-      transactionId,
-      items,
-      expectedDelivery,
-      subtotal: input.subtotal,
-      nonComboProductTotal: input.nonComboProductTotal,
-      comboPackageTotal: input.comboPackageTotal,
-      couponCode: input.couponCode ?? null,
-      couponType: input.couponType ?? null,
-      couponValue: input.couponValue ?? null,
-      couponDiscount: input.couponDiscount ?? 0,
-      packagingCharge: input.packagingCharge,
-      amountBeforeDiscount: input.amountBeforeDiscount,
-      amountAfterDiscount: input.amountAfterDiscount,
-      gstAmount: input.gstAmount,
-      grandTotal: input.grandTotal,
-      walletUsed: input.walletUsed,
-      finalPayable: input.finalPayable,
-      statusHistory: [
-        {
-          status: "ORDER_PLACED",
-          at: now,
-          by: `USER#${input.userId}`
-        }
-      ],
-      createdAt: now,
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: `USER#${input.userId}`,
-      adminComment: ""
-    };
-    await this.repo.create(order);
-    if (input.walletUsed > 0) {
-      await this.repo.deductWalletCredit(
-        input.userId,
-        input.walletUsed
-      );
-    }
-    if (input.couponCode?.trim()) {
-      await this.couponRepo.deleteCoupon(
-        input.couponCode
-      );
-    }
-    return orderId;
-  }
-  generateOrderId(now) {
-    const d = new Date(now);
-    const ymd = d.getFullYear().toString() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
-    const rand = Math.floor(1e3 + Math.random() * 9e3);
-    return `ORD-${ymd}-${rand}`;
-  }
-  async getUserOrders(userId, limit, cursor) {
-    return this.repo.getOrdersByUser(userId, limit, cursor);
-  }
-  async cancelOrder(orderId, userId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) throw new Error("Order not found");
-    if (order.userId !== userId) throw new Error("Unauthorized");
-    if (!CANCELLABLE_STATUSES.includes(order.status)) {
-      throw new Error("Order cannot be cancelled at this stage");
-    }
-    const now = Date.now();
-    await this.repo.updateStatus(orderId, {
-      status: "CANCELLED",
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: `USER#${userId}`,
-      statusHistory: [
-        ...order.statusHistory || [],
-        {
-          status: "CANCELLED",
-          at: now,
-          by: `USER#${userId}`
-        }
-      ]
-    });
-  }
-  async getOrderById(orderId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) throw new Error("Order not found");
-    return order;
-  }
-  async adjustOrder(input) {
-    const {
-      userId,
-      role,
-      orderId,
-      items,
-      subtotal,
-      nonComboProductTotal,
-      comboPackageTotal,
-      couponCode,
-      couponType,
-      couponValue,
-      couponDiscount,
-      packagingCharge,
-      amountBeforeDiscount,
-      amountAfterDiscount,
-      gstAmount,
-      grandTotal,
-      walletUsed,
-      finalPayable
-    } = input;
-    if (!orderId) {
-      throw new Error("Order ID required");
-    }
-    if (!Array.isArray(items)) {
-      throw new Error("Invalid items");
-    }
-    const order = await this.repo.getById(orderId);
-    if (!order) {
-      throw new Error("Order not found");
-    }
-    const isAdmin = role === "admin";
-    if (!isAdmin && order.userId !== userId) {
-      throw new Error("Unauthorized");
-    }
-    const blockedStatuses = ["DISPATCHED", "CANCELLED"];
-    if (blockedStatuses.includes(order.status)) {
-      throw new Error("Order cannot be adjusted at this stage");
-    }
-    if (items.length === 0) {
-      throw new Error("Order cannot be empty");
-    }
-    for (const item of items) {
-      if (!item.productId) {
-        throw new Error("Invalid productId");
-      }
-      if (!Number.isInteger(item.quantity) || item.quantity <= 0) {
-        throw new Error("Quantity must be a positive integer");
-      }
-    }
-    const productIds = items.map((i) => i.productId);
-    const products = await this.productRepo.batchGet(productIds);
-    if (products.length !== productIds.length) {
-      throw new Error("One or more products not found");
-    }
-    const productMap = new Map(
-      products.map((p) => [p.productId, p])
-    );
-    const updatedItems = items.map(({ productId, quantity }) => {
-      const product = productMap.get(productId);
-      if (!product) {
-        throw new Error(`Product not found: ${productId}`);
-      }
-      return {
-        productId,
-        name: product.name,
-        image: product.imageUrls?.[0] ?? null,
-        price: product.price,
-        quantity,
-        total: product.price * quantity,
-        originalPrice: product.originalPrice ?? null,
-        discountText: product.discountText ?? "",
-        isComboPackage: !!product.isComboPackage
-      };
-    });
-    const now = Date.now();
-    await this.repo.updateItems(orderId, {
-      items: updatedItems,
-      subtotal,
-      nonComboProductTotal,
-      comboPackageTotal,
-      couponCode,
-      couponType,
-      couponValue,
-      couponDiscount,
-      packagingCharge,
-      amountBeforeDiscount,
-      amountAfterDiscount,
-      gstAmount,
-      grandTotal,
-      walletUsed,
-      finalPayable,
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: isAdmin ? "ADMIN" : `USER#${userId}`,
-      statusHistory: [
-        ...order.statusHistory || [],
-        {
-          status: "ORDER_ADJUSTED",
-          at: now,
-          by: isAdmin ? "ADMIN" : `USER#${userId}`
-        }
-      ]
-    });
-    return await this.repo.getById(orderId);
-  }
-};
-
-// src/handlers/getOrders.ts
-var service = new OrderService();
+// src/handlers/adminCreateCoupon.ts
+var service = new CouponService();
 var handler = async (event) => {
   try {
-    const { userId } = verifyJwt(event);
-    const limit = Number(event.queryStringParameters?.limit || 10);
-    const cursor = event.queryStringParameters?.cursor ? JSON.parse(
-      Buffer.from(
-        event.queryStringParameters.cursor,
-        "base64"
-      ).toString("utf-8")
-    ) : void 0;
-    const result = await service.getUserOrders(
-      userId,
-      limit,
-      cursor
-    );
+    verifyJwt(event);
+    const body = JSON.parse(event.body ?? "{}");
+    const coupon = await service.createCoupon(body);
     return {
-      statusCode: 200,
+      statusCode: 201,
       body: JSON.stringify({
-        items: result.items,
-        nextCursor: result.nextCursor ? Buffer.from(
-          JSON.stringify(result.nextCursor)
-        ).toString("base64") : null
+        success: true,
+        data: coupon
       })
     };
   } catch (err) {
-    console.error("Get orders failed", err);
     return {
-      statusCode: 401,
+      statusCode: 400,
       body: JSON.stringify({
-        message: err.message || "Unauthorized"
+        success: false,
+        message: err.message
       })
     };
   }
@@ -4635,4 +4103,4 @@ var handler = async (event) => {
 safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 */
-//# sourceMappingURL=getOrders.js.map
+//# sourceMappingURL=adminCreateCoupon.js.map

@@ -43966,6 +43966,9 @@ var OrderRepository = class {
   async buildItemsSnapshot(cartItems) {
     const productIds = cartItems.map((c) => c.itemId);
     const products = await this.productService.batchGetProducts(productIds);
+    console.log(
+      JSON.stringify(products, null, 2)
+    );
     const map = new Map(
       products.map((p) => [
         p.productId,
@@ -43979,23 +43982,21 @@ var OrderRepository = class {
         }
       ])
     );
-    return cartItems.map((c) => {
+    const snapshot = cartItems.map((c) => {
       const product = map.get(c.itemId);
-      if (!product) {
-        throw new Error(`Product not found or inactive: ${c.itemId}`);
-      }
       return {
         productId: c.itemId,
         name: product.name,
+        image: product.image,
         price: product.price,
-        image: product.image || null,
         quantity: c.quantity,
         total: product.price * c.quantity,
-        originalPrice: product.originalPrice || null,
-        discountText: product.discountText || "",
-        isComboPackage: product.isComboPackage || false
+        originalPrice: product.originalPrice,
+        discountText: product.discountText,
+        isComboPackage: product.isComboPackage
       };
     });
+    return snapshot;
   }
   async create(order) {
     await ddb.send(
@@ -44156,10 +44157,21 @@ var OrderRepository = class {
           meta: "ORDER"
         },
         UpdateExpression: `
-                SET 
+                SET
                     #items = :items,
                     subtotal = :subtotal,
-                    totalAmount = :totalAmount,
+                    nonComboProductTotal = :nonComboProductTotal,
+                    comboPackageTotal = :comboPackageTotal,
+                    couponCode = :couponCode,
+                    couponType = :couponType,
+                    couponValue = :couponValue,
+                    couponDiscount = :couponDiscount,
+                    packagingCharge = :packagingCharge,
+                    amountBeforeDiscount = :amountBeforeDiscount,
+                    amountAfterDiscount = :amountAfterDiscount,
+                    gstAmount = :gstAmount,
+                    grandTotal = :grandTotal,
+                    walletUsed = :walletUsed,
                     finalPayable = :finalPayable,
                     updatedAt = :updatedAt,
                     modifiedAt = :modifiedAt,
@@ -44172,7 +44184,18 @@ var OrderRepository = class {
         ExpressionAttributeValues: {
           ":items": data.items,
           ":subtotal": data.subtotal,
-          ":totalAmount": data.totalAmount,
+          ":nonComboProductTotal": data.nonComboProductTotal,
+          ":comboPackageTotal": data.comboPackageTotal,
+          ":couponCode": data.couponCode ?? null,
+          ":couponType": data.couponType ?? null,
+          ":couponValue": data.couponValue ?? null,
+          ":couponDiscount": data.couponDiscount ?? 0,
+          ":packagingCharge": data.packagingCharge,
+          ":amountBeforeDiscount": data.amountBeforeDiscount,
+          ":amountAfterDiscount": data.amountAfterDiscount,
+          ":gstAmount": data.gstAmount,
+          ":grandTotal": data.grandTotal,
+          ":walletUsed": data.walletUsed,
           ":finalPayable": data.finalPayable,
           ":updatedAt": data.updatedAt,
           ":modifiedAt": data.modifiedAt,

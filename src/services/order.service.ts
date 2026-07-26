@@ -1,47 +1,71 @@
 import { OrderRepository } from "../repo/order.repo";
 import { ProductRepository } from "../repo/product.repo";
-import { calculateOrderPricingBreakdown } from "../utils/orderPricing";
+import { CouponRepository } from "../repo/coupon.repo";
 
 interface CreateOrderInput {
     userId: string;
     address: string;
-    cartItems: { itemId: string; quantity: number }[];
+    cartItems: {
+        itemId: string;
+        quantity: number;
+    }[];
     paymentMode?: string;
     paymentStatus?: string;
     transactionId?: string | null;
     subtotal: number;
+    nonComboProductTotal: number;
+    comboPackageTotal: number;
+    couponCode?: string;
+    couponType?: "FLAT" | "PERCENTAGE";
+    couponValue?: number;
+    couponDiscount?: number;
     packagingCharge: number;
+    amountBeforeDiscount: number;
+    amountAfterDiscount: number;
     gstAmount: number;
-    totalAmount: number;
+    grandTotal: number;
     walletUsed: number;
     finalPayable: number;
-    eligibleChargeAmount: number,
-    comboAmount: number,
 }
 
 const CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
 export class OrderService {
+    private couponRepo = new CouponRepository();
     constructor(private repo = new OrderRepository()) { }
     private productRepo = new ProductRepository();
+
 
     async createOrder(input: CreateOrderInput): Promise<string> {
         const now = Date.now();
         const orderId = this.generateOrderId(now);
-        const isTamilNadu = input.address.toLowerCase().includes("tamil nadu");
-        const days = isTamilNadu ? 5 : 10;
-        const expectedDelivery = now + days * 24 * 60 * 60 * 1000;
-        const items = await this.repo.buildItemsSnapshot(input.cartItems);
+
+        const isTamilNadu = input.address
+            .toLowerCase()
+            .includes("tamil nadu");
+
+        const deliveryDays = isTamilNadu ? 5 : 10;
+        const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1000;
+        const items = await this.repo.buildItemsSnapshot(
+            input.cartItems
+        );
+
         const user = await this.repo.getUserByMobile(input.userId);
-        const availableCredit = Number(user?.walletCredit || 0);
+        const availableCredit = Number(
+            user?.walletCredit || 0
+        );
 
         if (input.walletUsed > availableCredit) {
             throw new Error("Invalid wallet usage");
         }
 
-        const paymentMode = input.paymentMode || "OFFLINE";
-        const paymentStatus = input.paymentStatus || (paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED");
-        const transactionId = input.transactionId || null;
+        const paymentMode = input.paymentMode ?? "OFFLINE";
+        const paymentStatus =
+            input.paymentStatus ??
+            (paymentMode === "ONLINE"
+                ? "PENDING"
+                : "NOT_REQUIRED");
 
+        const transactionId = input.transactionId ?? null;
         const order = {
             meta: "ORDER",
             orderId,
@@ -54,11 +78,17 @@ export class OrderService {
             items,
             expectedDelivery,
             subtotal: input.subtotal,
-            eligibleChargeAmount: input.eligibleChargeAmount,
-            comboAmount: input.comboAmount || 0,
+            nonComboProductTotal: input.nonComboProductTotal,
+            comboPackageTotal: input.comboPackageTotal,
+            couponCode: input.couponCode ?? null,
+            couponType: input.couponType ?? null,
+            couponValue: input.couponValue ?? null,
+            couponDiscount: input.couponDiscount ?? 0,
             packagingCharge: input.packagingCharge,
+            amountBeforeDiscount: input.amountBeforeDiscount,
+            amountAfterDiscount: input.amountAfterDiscount,
             gstAmount: input.gstAmount,
-            totalAmount: input.totalAmount,
+            grandTotal: input.grandTotal,
             walletUsed: input.walletUsed,
             finalPayable: input.finalPayable,
             statusHistory: [
@@ -77,8 +107,18 @@ export class OrderService {
 
         await this.repo.create(order);
         if (input.walletUsed > 0) {
-            await this.repo.deductWalletCredit(input.userId, input.walletUsed);
+            await this.repo.deductWalletCredit(
+                input.userId,
+                input.walletUsed
+            );
         }
+
+        if (input.couponCode?.trim()) {
+            await this.couponRepo.deleteCoupon(
+                input.couponCode
+            );
+        }
+
         return orderId;
     }
 
@@ -136,21 +176,68 @@ export class OrderService {
         userId: string;
         role: string;
         orderId: string;
-        items: { productId: string; quantity: number }[];
+        items: {
+            productId: string;
+            quantity: number;
+        }[];
+        subtotal: number;
+        nonComboProductTotal: number;
+        comboPackageTotal: number;
+        couponCode?: string | null;
+        couponType?: "FLAT" | "PERCENTAGE" | null;
+        couponValue?: number | null;
+        couponDiscount: number;
+        packagingCharge: number;
+        amountBeforeDiscount: number;
+        amountAfterDiscount: number;
+        gstAmount: number;
+        grandTotal: number;
+        walletUsed: number;
+        finalPayable: number;
     }) {
-        const { userId, role, orderId, items } = input;
-        if (!orderId) throw new Error("Order ID required");
-        if (!Array.isArray(items)) throw new Error("Invalid items");
+        const {
+            userId,
+            role,
+            orderId,
+            items,
+            subtotal,
+            nonComboProductTotal,
+            comboPackageTotal,
+            couponCode,
+            couponType,
+            couponValue,
+            couponDiscount,
+            packagingCharge,
+            amountBeforeDiscount,
+            amountAfterDiscount,
+            gstAmount,
+            grandTotal,
+            walletUsed,
+            finalPayable,
+        } = input;
+
+        if (!orderId) {
+            throw new Error("Order ID required");
+        }
+
+        if (!Array.isArray(items)) {
+            throw new Error("Invalid items");
+        }
 
         const order = await this.repo.getById(orderId);
-        if (!order) throw new Error("Order not found");
+
+        if (!order) {
+            throw new Error("Order not found");
+        }
 
         const isAdmin = role === "admin";
+
         if (!isAdmin && order.userId !== userId) {
             throw new Error("Unauthorized");
         }
 
         const blockedStatuses = ["DISPATCHED", "CANCELLED"];
+
         if (blockedStatuses.includes(order.status)) {
             throw new Error("Order cannot be adjusted at this stage");
         }
@@ -163,14 +250,14 @@ export class OrderService {
             if (!item.productId) {
                 throw new Error("Invalid productId");
             }
+
             if (!Number.isInteger(item.quantity) || item.quantity <= 0) {
                 throw new Error("Quantity must be a positive integer");
             }
         }
 
-        const productIds = items.map((i) => i.productId);
+        const productIds = items.map(i => i.productId);
         const products = await this.productRepo.batchGet(productIds);
-
         if (products.length !== productIds.length) {
             throw new Error("One or more products not found");
         }
@@ -185,38 +272,35 @@ export class OrderService {
             if (!product) {
                 throw new Error(`Product not found: ${productId}`);
             }
-            const image = product.imageUrls?.[0] ?? null;
+
             return {
                 productId,
                 name: product.name,
+                image: product.imageUrls?.[0] ?? null,
                 price: product.price,
-                image,
                 quantity,
                 total: product.price * quantity,
+                originalPrice: product.originalPrice ?? null,
+                discountText: product.discountText ?? "",
                 isComboPackage: !!product.isComboPackage,
             };
         });
-
-        const {
-            subtotal,
-            eligibleChargeAmount,
-            comboAmount,
-        } = calculateOrderPricingBreakdown(updatedItems);
-        const packagingCharge = Number(order.packagingCharge || 0);
-        const gstAmount = Number(order.gstAmount || 0);
-        const walletUsed = Number(order.walletUsed || 0);
-        const totalAmount = subtotal + packagingCharge + gstAmount;
-        const finalPayable = totalAmount - walletUsed;
 
         const now = Date.now();
         await this.repo.updateItems(orderId, {
             items: updatedItems,
             subtotal,
-            eligibleChargeAmount,
-            comboAmount,
+            nonComboProductTotal,
+            comboPackageTotal,
+            couponCode,
+            couponType,
+            couponValue,
+            couponDiscount,
             packagingCharge,
+            amountBeforeDiscount,
+            amountAfterDiscount,
             gstAmount,
-            totalAmount,
+            grandTotal,
             walletUsed,
             finalPayable,
             updatedAt: now,
@@ -227,11 +311,14 @@ export class OrderService {
                 {
                     status: "ORDER_ADJUSTED",
                     at: now,
-                    by: isAdmin ? "ADMIN" : `USER#${userId}`,
+                    by: isAdmin
+                        ? "ADMIN"
+                        : `USER#${userId}`,
                 },
             ],
         });
 
         return await this.repo.getById(orderId);
     }
+
 }

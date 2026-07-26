@@ -19,11 +19,13 @@ export class AdminUpdateOrderRepository {
         return res.Items?.[0] || null;
     }
 
+
     async updateOrder(input: {
         orderId: string;
         status?: string;
         adminComment?: string;
         adminId: string;
+        previousStatus: string;
     }) {
         const updates: string[] = [];
 
@@ -32,6 +34,16 @@ export class AdminUpdateOrderRepository {
             ":by": `ADMIN#${input.adminId}`,
             ":cancelled": "CANCELLED",
             ":dispatched": "DISPATCHED",
+            ":emptyHistory": [],
+            ":history": [
+                {
+                    fromStatus: input.previousStatus,
+                    toStatus: input.status ?? input.previousStatus,
+                    comment: input.adminComment ?? "",
+                    changedBy: `ADMIN#${input.adminId}`,
+                    changedAt: Date.now(),
+                },
+            ],
         };
 
         const names: Record<string, string> = {
@@ -51,6 +63,31 @@ export class AdminUpdateOrderRepository {
         if (input.adminComment !== undefined) {
             updates.push("adminComment = :comment");
             values[":comment"] = input.adminComment;
+        }
+
+        const hasStatusChange = input.status !== undefined &&
+            input.status !== input.previousStatus;
+
+        const hasCommentChange =
+            input.adminComment !== undefined;
+
+        if (hasStatusChange || hasCommentChange) {
+            values[":history"] = [
+                {
+                    action: hasStatusChange
+                        ? "STATUS_UPDATED"
+                        : "COMMENT_UPDATED",
+                    fromStatus: input.previousStatus,
+                    toStatus: input.status ?? input.previousStatus,
+                    comment: input.adminComment ?? "",
+                    changedBy: `ADMIN#${input.adminId}`,
+                    changedAt: values[":now"],
+                },
+            ];
+
+            updates.push(
+                "statusHistory = list_append(if_not_exists(statusHistory, :emptyHistory), :history)"
+            );
         }
 
         updates.push("modifiedAt = :now");

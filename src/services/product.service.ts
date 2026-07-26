@@ -108,9 +108,7 @@ export class ProductService {
                     description: p.description ?? null,
                     image: p.imageUrls?.[0] ?? null,
                     price: priceInfo.price,
-                    originalPrice: priceInfo.originalPrice > priceInfo.price
-                        ? priceInfo.originalPrice
-                        : undefined,
+                    originalPrice: priceInfo.originalPrice > priceInfo.price ? priceInfo.originalPrice : undefined,
                     discountText: priceInfo.discountText,
                     categoryId: p.categoryId,
                     brandId: p.brandId,

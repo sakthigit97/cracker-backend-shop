@@ -49,6 +49,7 @@ export class AdminUpdateOrderService {
             status: input.status,
             adminComment: input.adminComment,
             adminId: input.adminId,
+            previousStatus: existing.status,
         });
 
         if (input.status === "DISPATCHED") {
