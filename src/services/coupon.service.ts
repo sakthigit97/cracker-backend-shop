@@ -5,7 +5,6 @@ import { CouponRepository } from "../repo/coupon.repo";
 export class CouponService {
 
     private repo = new CouponRepository();
-
     async createCoupon(payload: Partial<Coupon>) {
         if (!payload.type) {
             throw new Error("Coupon type is required");
@@ -41,20 +40,13 @@ export class CouponService {
         }
 
         const now = new Date().toISOString();
-
         const coupon: Coupon = {
-
             couponCode,
-
             description: payload.description ?? "",
-
             type: payload.type,
-
             value: payload.value,
             expiryDate: payload.expiryDate,
-
             createdAt: now,
-
             updatedAt: now,
         };
 
@@ -62,9 +54,7 @@ export class CouponService {
     }
 
     async getCoupons() {
-
         const coupons = await this.repo.listCoupons();
-
         return coupons.sort((a, b) =>
             b.createdAt.localeCompare(a.createdAt)
         );
@@ -104,7 +94,6 @@ export class CouponService {
         }
 
         let discount = 0;
-
         if (coupon.type === "FLAT") {
             discount = Math.min(coupon.value, orderAmount);
         } else {
@@ -121,5 +110,4 @@ export class CouponService {
             payable,
         };
     }
-
 }

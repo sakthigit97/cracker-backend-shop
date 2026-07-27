@@ -564,13 +564,6 @@ functions:
           path: /admin/discounts/{discountId}
           method: delete
 
-  orderInvoice:
-    handler: src/handlers/orderInvoice.handler
-    events:
-      - httpApi:
-          path: /orders/{orderId}/invoice
-          method: GET
-
   revenueReport:
     handler: src/handlers/getRevenueReport.handler
     events:

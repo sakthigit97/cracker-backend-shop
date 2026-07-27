@@ -4273,7 +4273,7 @@ var OrderRepository = class {
         UpdateExpression: `
                 SET
                     #items = :items,
-                    subtotal = :subtotal,
+                    totalProductAmount = :totalProductAmount,
                     nonComboProductTotal = :nonComboProductTotal,
                     comboPackageTotal = :comboPackageTotal,
                     couponCode = :couponCode,
@@ -4297,7 +4297,7 @@ var OrderRepository = class {
         },
         ExpressionAttributeValues: {
           ":items": data.items,
-          ":subtotal": data.subtotal,
+          ":totalProductAmount": data.totalProductAmount,
           ":nonComboProductTotal": data.nonComboProductTotal,
           ":comboPackageTotal": data.comboPackageTotal,
           ":couponCode": data.couponCode ?? null,
@@ -4318,6 +4318,110 @@ var OrderRepository = class {
         }
       })
     );
+  }
+};
+
+// src/services/orderPricing.service.ts
+var OrderPricingService = class {
+  calculateProductTotals(items) {
+    let totalProductAmount = 0;
+    let nonComboProductTotal = 0;
+    let comboPackageTotal = 0;
+    for (const item of items) {
+      totalProductAmount += item.total;
+      if (item.isComboPackage) {
+        comboPackageTotal += item.total;
+      } else {
+        nonComboProductTotal += item.total;
+      }
+    }
+    return {
+      totalProductAmount,
+      nonComboProductTotal,
+      comboPackageTotal
+    };
+  }
+  calculatePackaging(nonComboProductTotal, config) {
+    if (config.enablePackagingCharge === false || config.packagingPercent <= 0) {
+      return 0;
+    }
+    return Math.round(
+      nonComboProductTotal * config.packagingPercent / 100
+    );
+  }
+  calculateGST(discountedGrossTotal, state, config) {
+    if (config.enableGst === false) {
+      return 0;
+    }
+    const isTamilNadu = state?.toLowerCase().includes("tamil nadu");
+    if (isTamilNadu && config.disableGstForTN) {
+      return 0;
+    }
+    const effectivePercent = config.gstPercent / 2;
+    return Math.round(
+      discountedGrossTotal * effectivePercent / 100
+    );
+  }
+  calculateFinalPayable(grandTotal, walletUsed) {
+    return Math.max(
+      0,
+      grandTotal - walletUsed
+    );
+  }
+  calculateAmountBeforeDiscount(items, config) {
+    const totals = this.calculateProductTotals(items);
+    const packagingCharge = this.calculatePackaging(
+      totals.nonComboProductTotal,
+      config
+    );
+    return totals.totalProductAmount + packagingCharge;
+  }
+  calculate(input) {
+    const totals = this.calculateProductTotals(input.items);
+    const packagingCharge = this.calculatePackaging(
+      totals.nonComboProductTotal,
+      input.config
+    );
+    const amountBeforeDiscount = totals.totalProductAmount + packagingCharge;
+    const couponCode = input.couponResult?.couponCode ?? null;
+    const couponType = input.couponResult?.couponType ?? null;
+    const couponValue = input.couponResult?.couponValue ?? null;
+    let couponDiscount = 0;
+    if (couponCode && couponType && couponValue != null) {
+      if (couponType === "PERCENTAGE") {
+        couponDiscount = Math.round(
+          amountBeforeDiscount * couponValue / 100
+        );
+      } else {
+        couponDiscount = couponValue;
+      }
+      couponDiscount = Math.min(couponDiscount, amountBeforeDiscount);
+    }
+    const amountAfterDiscount = amountBeforeDiscount - couponDiscount;
+    const gstAmount = this.calculateGST(
+      amountAfterDiscount,
+      input.state,
+      input.config
+    );
+    const grandTotal = amountAfterDiscount + gstAmount;
+    const appliedWallet = Math.min(input.walletUsed, grandTotal);
+    const finalPayable = this.calculateFinalPayable(grandTotal, appliedWallet);
+    return {
+      totalProductAmount: totals.totalProductAmount,
+      nonComboProductTotal: totals.nonComboProductTotal,
+      comboPackageTotal: totals.comboPackageTotal,
+      packagingCharge,
+      amountBeforeDiscount,
+      couponCode,
+      couponType,
+      couponValue,
+      couponDiscount,
+      amountAfterDiscount,
+      gstAmount,
+      grandTotal,
+      walletUsed: appliedWallet,
+      finalPayable
+    };
   }
 };
 
@@ -4366,12 +4470,93 @@ var CouponRepository = class {
   }
 };
 
+// src/services/coupon.service.ts
+var CouponService = class {
+  constructor() {
+    this.repo = new CouponRepository();
+  }
+  async createCoupon(payload) {
+    if (!payload.type) {
+      throw new Error("Coupon type is required");
+    }
+    if (payload.value === void 0 || payload.value === null || payload.value <= 0) {
+      throw new Error("Coupon value must be greater than zero");
+    }
+    if (payload.type === "PERCENTAGE" && payload.value > 100) {
+      throw new Error("Percentage cannot exceed 100");
+    }
+    if (!payload.expiryDate) {
+      throw new Error("Expiry Date is required");
+    }
+    if (new Date(payload.expiryDate) <= /* @__PURE__ */ new Date()) {
+      throw new Error("Expiry Date must be a future date");
+    }
+    const couponCode = payload.couponCode?.trim().toUpperCase();
+    if (!couponCode) {
+      throw new Error("Coupon Code is required");
+    }
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const coupon = {
+      couponCode,
+      description: payload.description ?? "",
+      type: payload.type,
+      value: payload.value,
+      expiryDate: payload.expiryDate,
+      createdAt: now,
+      updatedAt: now
+    };
+    return await this.repo.createCoupon(coupon);
+  }
+  async getCoupons() {
+    const coupons = await this.repo.listCoupons();
+    return coupons.sort(
+      (a, b) => b.createdAt.localeCompare(a.createdAt)
+    );
+  }
+  async deleteCoupon(couponCode) {
+    if (!couponCode) {
+      throw new Error("Coupon code is required");
+    }
+    await this.repo.deleteCoupon(couponCode);
+  }
+  async validateCoupon(couponCode, orderAmount) {
+    if (!couponCode) {
+      throw new Error("Coupon Code is required");
+    }
+    const coupon = await this.repo.getCoupon(
+      couponCode.trim().toUpperCase()
+    );
+    if (!coupon) {
+      throw new Error("Invalid Coupon Code");
+    }
+    if (new Date(coupon.expiryDate) <= /* @__PURE__ */ new Date()) {
+      throw new Error("Coupon Expired");
+    }
+    let discount = 0;
+    if (coupon.type === "FLAT") {
+      discount = Math.min(coupon.value, orderAmount);
+    } else {
+      discount = orderAmount * coupon.value / 100;
+    }
+    discount = Math.round(discount);
+    const payable = Math.max(0, orderAmount - discount);
+    return {
+      couponCode: coupon.couponCode,
+      couponType: coupon.type,
+      couponValue: coupon.value,
+      couponDiscount: discount,
+      payable
+    };
+  }
+};
+
 // src/services/order.service.ts
 var CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
 var OrderService = class {
   constructor(repo = new OrderRepository()) {
     this.repo = repo;
-    this.couponRepo = new CouponRepository();
+    this.couponService = new CouponService();
+    this.pricingService = new OrderPricingService();
     this.productRepo = new ProductRepository();
   }
   async createOrder(input) {
@@ -4383,10 +4568,27 @@ var OrderService = class {
     const items = await this.repo.buildItemsSnapshot(
       input.cartItems
     );
-    const user = await this.repo.getUserByMobile(input.userId);
-    const availableCredit = Number(
-      user?.walletCredit || 0
+    const config = await this.repo.getAdminConfig();
+    const amountBeforeDiscount = this.pricingService.calculateAmountBeforeDiscount(
+      items,
+      config
     );
+    let couponResult;
+    if (input.couponCode) {
+      couponResult = await this.couponService.validateCoupon(
+        input.couponCode,
+        amountBeforeDiscount
+      );
+    }
+    const pricing = this.pricingService.calculate({
+      items,
+      walletUsed: input.walletUsed,
+      state: input.address,
+      config,
+      couponResult
+    });
+    const user = await this.repo.getUserByMobile(input.userId);
+    const availableCredit = Number(user?.walletCredit || 0);
     if (input.walletUsed > availableCredit) {
       throw new Error("Invalid wallet usage");
     }
@@ -4394,56 +4596,56 @@ var OrderService = class {
     const paymentStatus = input.paymentStatus ?? (paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED");
     const transactionId = input.transactionId ?? null;
     const order = {
-      meta: "ORDER",
       orderId,
+      meta: "ORDER",
       userId: input.userId,
       address: input.address,
+      items,
       status: "ORDER_PLACED",
+      totalProductAmount: pricing.totalProductAmount,
+      nonComboProductTotal: pricing.nonComboProductTotal,
+      comboPackageTotal: pricing.comboPackageTotal,
+      packagingCharge: pricing.packagingCharge,
+      amountBeforeDiscount: pricing.amountBeforeDiscount,
+      couponCode: pricing.couponCode,
+      couponType: pricing.couponType,
+      couponValue: pricing.couponValue,
+      couponDiscount: pricing.couponDiscount,
+      amountAfterDiscount: pricing.amountAfterDiscount,
+      gstAmount: pricing.gstAmount,
+      grandTotal: pricing.grandTotal,
+      walletUsed: pricing.walletUsed,
+      finalPayable: pricing.finalPayable,
       paymentMode,
       paymentStatus,
       transactionId,
-      items,
       expectedDelivery,
-      subtotal: input.subtotal,
-      nonComboProductTotal: input.nonComboProductTotal,
-      comboPackageTotal: input.comboPackageTotal,
-      couponCode: input.couponCode ?? null,
-      couponType: input.couponType ?? null,
-      couponValue: input.couponValue ?? null,
-      couponDiscount: input.couponDiscount ?? 0,
-      packagingCharge: input.packagingCharge,
-      amountBeforeDiscount: input.amountBeforeDiscount,
-      amountAfterDiscount: input.amountAfterDiscount,
-      gstAmount: input.gstAmount,
-      grandTotal: input.grandTotal,
-      walletUsed: input.walletUsed,
-      finalPayable: input.finalPayable,
+      createdAt: now,
+      updatedAt: now,
       statusHistory: [
         {
           status: "ORDER_PLACED",
           at: now,
           by: `USER#${input.userId}`
         }
-      ],
-      createdAt: now,
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: `USER#${input.userId}`,
-      adminComment: ""
+      ]
     };
     await this.repo.create(order);
     if (input.walletUsed > 0) {
       await this.repo.deductWalletCredit(
         input.userId,
-        input.walletUsed
+        pricing.walletUsed
       );
     }
-    if (input.couponCode?.trim()) {
-      await this.couponRepo.deleteCoupon(
-        input.couponCode
+    if (pricing.couponCode) {
+      await this.couponService.deleteCoupon(
+        pricing.couponCode
       );
     }
-    return orderId;
+    return {
+      orderId,
+      pricing
+    };
   }
   generateOrderId(now) {
     const d = new Date(now);
@@ -4488,20 +4690,7 @@ var OrderService = class {
       role,
       orderId,
       items,
-      subtotal,
-      nonComboProductTotal,
-      comboPackageTotal,
-      couponCode,
-      couponType,
-      couponValue,
-      couponDiscount,
-      packagingCharge,
-      amountBeforeDiscount,
-      amountAfterDiscount,
-      gstAmount,
-      grandTotal,
-      walletUsed,
-      finalPayable
+      walletUsed
     } = input;
     if (!orderId) {
       throw new Error("Order ID required");
@@ -4532,48 +4721,45 @@ var OrderService = class {
         throw new Error("Quantity must be a positive integer");
       }
     }
-    const productIds = items.map((i) => i.productId);
-    const products = await this.productRepo.batchGet(productIds);
-    if (products.length !== productIds.length) {
-      throw new Error("One or more products not found");
-    }
-    const productMap = new Map(
-      products.map((p) => [p.productId, p])
-    );
-    const updatedItems = items.map(({ productId, quantity }) => {
-      const product = productMap.get(productId);
-      if (!product) {
-        throw new Error(`Product not found: ${productId}`);
-      }
-      return {
-        productId,
-        name: product.name,
-        image: product.imageUrls?.[0] ?? null,
-        price: product.price,
-        quantity,
-        total: product.price * quantity,
-        originalPrice: product.originalPrice ?? null,
-        discountText: product.discountText ?? "",
-        isComboPackage: !!product.isComboPackage
+    const cartItems = items.map((item) => ({
+      itemId: item.productId,
+      quantity: item.quantity
+    }));
+    const updatedItems = await this.repo.buildItemsSnapshot(cartItems);
+    const config = await this.repo.getAdminConfig();
+    let couponResult;
+    if (order.couponCode) {
+      couponResult = {
+        couponCode: order.couponCode,
+        couponType: order.couponType,
+        couponValue: Number(order.couponValue ?? 0),
+        couponDiscount: Number(order.couponDiscount ?? 0)
       };
+    }
+    const pricing = this.pricingService.calculate({
+      items: updatedItems,
+      walletUsed,
+      state: order.address,
+      config,
+      couponResult
     });
     const now = Date.now();
     await this.repo.updateItems(orderId, {
       items: updatedItems,
-      subtotal,
-      nonComboProductTotal,
-      comboPackageTotal,
-      couponCode,
-      couponType,
-      couponValue,
-      couponDiscount,
-      packagingCharge,
-      amountBeforeDiscount,
-      amountAfterDiscount,
-      gstAmount,
-      grandTotal,
-      walletUsed,
-      finalPayable,
+      totalProductAmount: pricing.totalProductAmount,
+      nonComboProductTotal: pricing.nonComboProductTotal,
+      comboPackageTotal: pricing.comboPackageTotal,
+      packagingCharge: pricing.packagingCharge,
+      amountBeforeDiscount: pricing.amountBeforeDiscount,
+      couponCode: pricing.couponCode,
+      couponType: pricing.couponType,
+      couponValue: pricing.couponValue,
+      couponDiscount: pricing.couponDiscount,
+      amountAfterDiscount: pricing.amountAfterDiscount,
+      gstAmount: pricing.gstAmount,
+      grandTotal: pricing.grandTotal,
+      walletUsed: pricing.walletUsed,
+      finalPayable: pricing.finalPayable,
       updatedAt: now,
       modifiedAt: now,
       modifiedBy: isAdmin ? "ADMIN" : `USER#${userId}`,

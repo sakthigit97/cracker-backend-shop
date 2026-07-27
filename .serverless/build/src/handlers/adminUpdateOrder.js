@@ -4362,7 +4362,7 @@ var OrderRepository = class {
         UpdateExpression: `
                 SET
                     #items = :items,
-                    subtotal = :subtotal,
+                    totalProductAmount = :totalProductAmount,
                     nonComboProductTotal = :nonComboProductTotal,
                     comboPackageTotal = :comboPackageTotal,
                     couponCode = :couponCode,
@@ -4386,7 +4386,7 @@ var OrderRepository = class {
         },
         ExpressionAttributeValues: {
           ":items": data.items,
-          ":subtotal": data.subtotal,
+          ":totalProductAmount": data.totalProductAmount,
           ":nonComboProductTotal": data.nonComboProductTotal,
           ":comboPackageTotal": data.comboPackageTotal,
           ":couponCode": data.couponCode ?? null,

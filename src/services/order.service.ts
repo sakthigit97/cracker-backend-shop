@@ -1,6 +1,7 @@
 import { OrderRepository } from "../repo/order.repo";
 import { ProductRepository } from "../repo/product.repo";
-import { CouponRepository } from "../repo/coupon.repo";
+import { OrderPricingService } from "./orderPricing.service";
+import { CouponService } from "./coupon.service";
 
 interface CreateOrderInput {
     userId: string;
@@ -12,48 +13,51 @@ interface CreateOrderInput {
     paymentMode?: string;
     paymentStatus?: string;
     transactionId?: string | null;
-    subtotal: number;
-    nonComboProductTotal: number;
-    comboPackageTotal: number;
-    couponCode?: string;
-    couponType?: "FLAT" | "PERCENTAGE";
-    couponValue?: number;
-    couponDiscount?: number;
-    packagingCharge: number;
-    amountBeforeDiscount: number;
-    amountAfterDiscount: number;
-    gstAmount: number;
-    grandTotal: number;
+    couponCode?: string | null;
     walletUsed: number;
-    finalPayable: number;
 }
 
 const CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
+
 export class OrderService {
-    private couponRepo = new CouponRepository();
+    private couponService = new CouponService();
+    private pricingService = new OrderPricingService();
     constructor(private repo = new OrderRepository()) { }
     private productRepo = new ProductRepository();
 
-
-    async createOrder(input: CreateOrderInput): Promise<string> {
+    async createOrder(input: CreateOrderInput): Promise<any> {
         const now = Date.now();
         const orderId = this.generateOrderId(now);
-
-        const isTamilNadu = input.address
-            .toLowerCase()
-            .includes("tamil nadu");
-
+        const isTamilNadu = input.address.toLowerCase().includes("tamil nadu");
         const deliveryDays = isTamilNadu ? 5 : 10;
         const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1000;
         const items = await this.repo.buildItemsSnapshot(
             input.cartItems
         );
-
-        const user = await this.repo.getUserByMobile(input.userId);
-        const availableCredit = Number(
-            user?.walletCredit || 0
+        const config = await this.repo.getAdminConfig();
+        const amountBeforeDiscount = this.pricingService.calculateAmountBeforeDiscount(
+            items,
+            config
         );
 
+        let couponResult;
+        if (input.couponCode) {
+            couponResult = await this.couponService.validateCoupon(
+                input.couponCode,
+                amountBeforeDiscount
+            );
+        }
+
+        const pricing = this.pricingService.calculate({
+            items,
+            walletUsed: input.walletUsed,
+            state: input.address,
+            config,
+            couponResult,
+        });
+
+        const user = await this.repo.getUserByMobile(input.userId);
+        const availableCredit = Number(user?.walletCredit || 0);
         if (input.walletUsed > availableCredit) {
             throw new Error("Invalid wallet usage");
         }
@@ -64,33 +68,35 @@ export class OrderService {
             (paymentMode === "ONLINE"
                 ? "PENDING"
                 : "NOT_REQUIRED");
-
         const transactionId = input.transactionId ?? null;
+
         const order = {
-            meta: "ORDER",
             orderId,
+            meta: "ORDER",
             userId: input.userId,
             address: input.address,
+            items,
             status: "ORDER_PLACED",
+            totalProductAmount: pricing.totalProductAmount,
+            nonComboProductTotal: pricing.nonComboProductTotal,
+            comboPackageTotal: pricing.comboPackageTotal,
+            packagingCharge: pricing.packagingCharge,
+            amountBeforeDiscount: pricing.amountBeforeDiscount,
+            couponCode: pricing.couponCode,
+            couponType: pricing.couponType,
+            couponValue: pricing.couponValue,
+            couponDiscount: pricing.couponDiscount,
+            amountAfterDiscount: pricing.amountAfterDiscount,
+            gstAmount: pricing.gstAmount,
+            grandTotal: pricing.grandTotal,
+            walletUsed: pricing.walletUsed,
+            finalPayable: pricing.finalPayable,
             paymentMode,
             paymentStatus,
             transactionId,
-            items,
             expectedDelivery,
-            subtotal: input.subtotal,
-            nonComboProductTotal: input.nonComboProductTotal,
-            comboPackageTotal: input.comboPackageTotal,
-            couponCode: input.couponCode ?? null,
-            couponType: input.couponType ?? null,
-            couponValue: input.couponValue ?? null,
-            couponDiscount: input.couponDiscount ?? 0,
-            packagingCharge: input.packagingCharge,
-            amountBeforeDiscount: input.amountBeforeDiscount,
-            amountAfterDiscount: input.amountAfterDiscount,
-            gstAmount: input.gstAmount,
-            grandTotal: input.grandTotal,
-            walletUsed: input.walletUsed,
-            finalPayable: input.finalPayable,
+            createdAt: now,
+            updatedAt: now,
             statusHistory: [
                 {
                     status: "ORDER_PLACED",
@@ -98,28 +104,26 @@ export class OrderService {
                     by: `USER#${input.userId}`,
                 },
             ],
-            createdAt: now,
-            updatedAt: now,
-            modifiedAt: now,
-            modifiedBy: `USER#${input.userId}`,
-            adminComment: "",
         };
 
         await this.repo.create(order);
         if (input.walletUsed > 0) {
             await this.repo.deductWalletCredit(
                 input.userId,
-                input.walletUsed
+                pricing.walletUsed
             );
         }
 
-        if (input.couponCode?.trim()) {
-            await this.couponRepo.deleteCoupon(
-                input.couponCode
+        if (pricing.couponCode) {
+            await this.couponService.deleteCoupon(
+                pricing.couponCode
             );
         }
 
-        return orderId;
+        return {
+            orderId,
+            pricing
+        };
     }
 
     private generateOrderId(now: number): string {
@@ -180,40 +184,15 @@ export class OrderService {
             productId: string;
             quantity: number;
         }[];
-        subtotal: number;
-        nonComboProductTotal: number;
-        comboPackageTotal: number;
         couponCode?: string | null;
-        couponType?: "FLAT" | "PERCENTAGE" | null;
-        couponValue?: number | null;
-        couponDiscount: number;
-        packagingCharge: number;
-        amountBeforeDiscount: number;
-        amountAfterDiscount: number;
-        gstAmount: number;
-        grandTotal: number;
         walletUsed: number;
-        finalPayable: number;
     }) {
         const {
             userId,
             role,
             orderId,
             items,
-            subtotal,
-            nonComboProductTotal,
-            comboPackageTotal,
-            couponCode,
-            couponType,
-            couponValue,
-            couponDiscount,
-            packagingCharge,
-            amountBeforeDiscount,
-            amountAfterDiscount,
-            gstAmount,
-            grandTotal,
             walletUsed,
-            finalPayable,
         } = input;
 
         if (!orderId) {
@@ -225,19 +204,16 @@ export class OrderService {
         }
 
         const order = await this.repo.getById(orderId);
-
         if (!order) {
             throw new Error("Order not found");
         }
 
         const isAdmin = role === "admin";
-
         if (!isAdmin && order.userId !== userId) {
             throw new Error("Unauthorized");
         }
 
         const blockedStatuses = ["DISPATCHED", "CANCELLED"];
-
         if (blockedStatuses.includes(order.status)) {
             throw new Error("Order cannot be adjusted at this stage");
         }
@@ -256,53 +232,46 @@ export class OrderService {
             }
         }
 
-        const productIds = items.map(i => i.productId);
-        const products = await this.productRepo.batchGet(productIds);
-        if (products.length !== productIds.length) {
-            throw new Error("One or more products not found");
-        }
-
-        const productMap = new Map(
-            products.map((p: any) => [p.productId, p])
-        );
-
-        const updatedItems = items.map(({ productId, quantity }) => {
-            const product = productMap.get(productId);
-
-            if (!product) {
-                throw new Error(`Product not found: ${productId}`);
-            }
-
-            return {
-                productId,
-                name: product.name,
-                image: product.imageUrls?.[0] ?? null,
-                price: product.price,
-                quantity,
-                total: product.price * quantity,
-                originalPrice: product.originalPrice ?? null,
-                discountText: product.discountText ?? "",
-                isComboPackage: !!product.isComboPackage,
+        const cartItems = items.map(item => ({
+            itemId: item.productId,
+            quantity: item.quantity,
+        }));
+        const updatedItems = await this.repo.buildItemsSnapshot(cartItems);
+        const config = await this.repo.getAdminConfig();
+        let couponResult;
+        if (order.couponCode) {
+            couponResult = {
+                couponCode: order.couponCode,
+                couponType: order.couponType,
+                couponValue: Number(order.couponValue ?? 0),
+                couponDiscount: Number(order.couponDiscount ?? 0),
             };
+        }
+        const pricing = this.pricingService.calculate({
+            items: updatedItems,
+            walletUsed,
+            state: order.address,
+            config,
+            couponResult,
         });
 
         const now = Date.now();
         await this.repo.updateItems(orderId, {
             items: updatedItems,
-            subtotal,
-            nonComboProductTotal,
-            comboPackageTotal,
-            couponCode,
-            couponType,
-            couponValue,
-            couponDiscount,
-            packagingCharge,
-            amountBeforeDiscount,
-            amountAfterDiscount,
-            gstAmount,
-            grandTotal,
-            walletUsed,
-            finalPayable,
+            totalProductAmount: pricing.totalProductAmount,
+            nonComboProductTotal: pricing.nonComboProductTotal,
+            comboPackageTotal: pricing.comboPackageTotal,
+            packagingCharge: pricing.packagingCharge,
+            amountBeforeDiscount: pricing.amountBeforeDiscount,
+            couponCode: pricing.couponCode,
+            couponType: pricing.couponType,
+            couponValue: pricing.couponValue,
+            couponDiscount: pricing.couponDiscount,
+            amountAfterDiscount: pricing.amountAfterDiscount,
+            gstAmount: pricing.gstAmount,
+            grandTotal: pricing.grandTotal,
+            walletUsed: pricing.walletUsed,
+            finalPayable: pricing.finalPayable,
             updatedAt: now,
             modifiedAt: now,
             modifiedBy: isAdmin ? "ADMIN" : `USER#${userId}`,
@@ -311,9 +280,7 @@ export class OrderService {
                 {
                     status: "ORDER_ADJUSTED",
                     at: now,
-                    by: isAdmin
-                        ? "ADMIN"
-                        : `USER#${userId}`,
+                    by: isAdmin ? "ADMIN" : `USER#${userId}`,
                 },
             ],
         });

@@ -16,9 +16,6 @@ export class OrderRepository {
     async buildItemsSnapshot(cartItems: { itemId: string; quantity: number }[]) {
         const productIds = cartItems.map((c) => c.itemId);
         const products = await this.productService.batchGetProducts(productIds);
-        console.log(
-            JSON.stringify(products, null, 2)
-        );
         const map = new Map(
             products.map((p: any) => [
                 p.productId,
@@ -226,7 +223,7 @@ export class OrderRepository {
                 UpdateExpression: `
                 SET
                     #items = :items,
-                    subtotal = :subtotal,
+                    totalProductAmount = :totalProductAmount,
                     nonComboProductTotal = :nonComboProductTotal,
                     comboPackageTotal = :comboPackageTotal,
                     couponCode = :couponCode,
@@ -250,7 +247,7 @@ export class OrderRepository {
                 },
                 ExpressionAttributeValues: {
                     ":items": data.items,
-                    ":subtotal": data.subtotal,
+                    ":totalProductAmount": data.totalProductAmount,
                     ":nonComboProductTotal": data.nonComboProductTotal,
                     ":comboPackageTotal": data.comboPackageTotal,
                     ":couponCode": data.couponCode ?? null,
