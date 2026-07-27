@@ -10,6 +10,7 @@ const handler = async (event: any) => {
   const {
     name,
     address,
+    email,
     city,
     state,
     pincode,
@@ -30,6 +31,7 @@ const handler = async (event: any) => {
           #name = :name,
           address = :address,
           city = :city,
+          email = :email,
           #state = :state,
           pincode = :pincode
       `,
@@ -42,6 +44,7 @@ const handler = async (event: any) => {
         ":address": { S: address },
         ":city": { S: city || "" },
         ":state": { S: state || "" },
+        ":email": { S: email || "" },
         ":pincode": { S: pincode || "" },
       },
     })

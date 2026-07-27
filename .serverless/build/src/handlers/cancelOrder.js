@@ -4080,9 +4080,6 @@ var OrderRepository = class {
   async buildItemsSnapshot(cartItems) {
     const productIds = cartItems.map((c) => c.itemId);
     const products = await this.productService.batchGetProducts(productIds);
-    console.log(
-      JSON.stringify(products, null, 2)
-    );
     const map = new Map(
       products.map((p) => [
         p.productId,

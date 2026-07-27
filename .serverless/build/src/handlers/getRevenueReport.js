@@ -3971,7 +3971,7 @@ var RevenueService = class {
     ]);
     items.forEach((item) => {
       const status = item.status?.S;
-      const amount = Number(item.totalAmount?.N || 0);
+      const amount = Number(item.grandTotal?.N || 0);
       const createdAt = Number(item.createdAt?.N);
       if (!validStatuses.has(status)) return;
       if (createdAt < fromTime || createdAt > toTime) return;

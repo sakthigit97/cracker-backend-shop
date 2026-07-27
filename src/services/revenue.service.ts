@@ -42,7 +42,6 @@ export class RevenueService {
 
         const yesterdayStart = new Date(todayStart);
         yesterdayStart.setDate(todayStart.getDate() - 1);
-
         const trendMap: Record<string, number> = {};
 
         const validStatuses = new Set([
@@ -53,7 +52,7 @@ export class RevenueService {
 
         items.forEach((item: any) => {
             const status = item.status?.S;
-            const amount = Number(item.totalAmount?.N || 0);
+            const amount = Number(item.grandTotal?.N || 0);
             const createdAt = Number(item.createdAt?.N);
 
             if (!validStatuses.has(status)) return;
