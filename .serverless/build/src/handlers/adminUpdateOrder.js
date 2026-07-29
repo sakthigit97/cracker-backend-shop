@@ -4448,21 +4448,32 @@ var AdminUpdateOrderService = class {
       adminId: input.adminId,
       previousStatus: existing.status
     });
-    if (input.status === "DISPATCHED") {
-      await this.handleReferralReward(existing.userId);
+    if (input.status === "DISPATCHED" && existing.status !== "DISPATCHED") {
+      await this.handleReferralReward(updatedOrder);
     }
     return updatedOrder;
   }
-  async handleReferralReward(userId) {
+  async handleReferralReward(order) {
+    const config = await this.orderRepo.getAdminConfig();
+    const isReferralEnabled = config.isReferralEnabled === true;
+    if (!isReferralEnabled) return;
+    const userId = order.userId;
     if (!userId) return;
     const user = await this.orderRepo.getUserByMobile(userId);
     if (!user) return;
     if (!user.referredBy || user.referredBy === "") return;
     if (user.referralRewarded === true) return;
-    const config = await this.orderRepo.getAdminConfig();
-    const isReferralEnabled = config.isReferralEnabled === true;
-    const rewardAmount = Number(config.referralRewardAmount) || 0;
-    if (!isReferralEnabled || rewardAmount <= 0) return;
+    let rewardAmount = Number(config.referralRewardAmount) || 0;
+    if (rewardAmount <= 0) return;
+    if (config.referralRewardType === "PERCENT") {
+      const orderAmount = Number(
+        order.eligibleChargeAmount ?? order.amountAfterDiscount ?? order.totalAmount ?? 0
+      );
+      rewardAmount = Math.round(
+        orderAmount * rewardAmount / 100
+      );
+      if (rewardAmount <= 0) return;
+    }
     const updated = await this.orderRepo.markReferralRewarded(userId);
     if (!updated) return;
     await this.orderRepo.addWalletCreditByReferralCode(

@@ -52,27 +52,46 @@ export class AdminUpdateOrderService {
             previousStatus: existing.status,
         });
 
-        if (input.status === "DISPATCHED") {
-            await this.handleReferralReward(existing.userId);
+        if (
+            input.status === "DISPATCHED" &&
+            existing.status !== "DISPATCHED"
+        ) {
+            await this.handleReferralReward(updatedOrder);
         }
 
         return updatedOrder;
     }
 
-    private async handleReferralReward(userId: string) {
-        if (!userId) return;
-
-        const user = await this.orderRepo.getUserByMobile(userId);
-        if (!user) return;
-
-        if (!user.referredBy || user.referredBy === "") return;
-        if (user.referralRewarded === true) return;
+    private async handleReferralReward(order: any) {
 
         const config = await this.orderRepo.getAdminConfig();
         const isReferralEnabled = config.isReferralEnabled === true;
-        const rewardAmount = Number(config.referralRewardAmount) || 0;
 
-        if (!isReferralEnabled || rewardAmount <= 0) return;
+        if (!isReferralEnabled) return;
+
+        const userId = order.userId;
+        if (!userId) return;
+        const user = await this.orderRepo.getUserByMobile(userId);
+        if (!user) return;
+        if (!user.referredBy || user.referredBy === "") return;
+        if (user.referralRewarded === true) return;
+        let rewardAmount = Number(config.referralRewardAmount) || 0;
+        if (rewardAmount <= 0) return;
+
+        if (config.referralRewardType === "PERCENT") {
+            const orderAmount = Number(
+                order.eligibleChargeAmount ??
+                order.amountAfterDiscount ??
+                order.totalAmount ??
+                0
+            );
+
+            rewardAmount = Math.round(
+                (orderAmount * rewardAmount) / 100
+            );
+
+            if (rewardAmount <= 0) return;
+        }
 
         const updated = await this.orderRepo.markReferralRewarded(userId);
         if (!updated) return;
