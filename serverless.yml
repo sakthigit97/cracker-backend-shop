@@ -693,6 +693,55 @@ functions:
           path: /coupon/validate
           method: POST
 
+  bulkCreateOrder:
+    handler: src/handlers/bulkOrder.handler
+    events:
+      - httpApi:
+          path: /bulk-order
+          method: POST
+
+  getBulkOrder:
+    handler: src/handlers/getBulkOrders.handler
+    events:
+      - httpApi:
+          path: /bulk-order
+          method: GET
+
+  bulkGetOrder:
+    handler: src/handlers/getDetailedBulkOrder.handler
+    events:
+      - httpApi:
+          path: /bulk-order/{orderId}
+          method: GET
+
+  adminBulkGetOrders:
+    handler: src/handlers/adminBulkOrder.handler
+    events:
+      - httpApi:
+          path: /admin/bulk-orders
+          method: GET
+
+  adminBulkOrderDetails:
+    handler: src/handlers/adminBulkOrderDetails.handler
+    events:
+      - httpApi:
+          path: /admin/bulk-orders/{orderId}
+          method: GET
+
+  adminBulkUpdateStatus:
+    handler: src/handlers/adminBulkOrderStatusUpdate.handler
+    events:
+      - httpApi:
+          path: /admin/bulk-orders/{orderId}/status
+          method: PUT
+
+  bulkCancelOrder:
+    handler: src/handlers/cancelBulkOrder.handler
+    events:
+      - httpApi:
+          path: /bulk-order/{orderId}/cancel
+          method: PUT
+
 resources:
   Resources:
     ProductImagesBucket:

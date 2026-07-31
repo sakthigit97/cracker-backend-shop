@@ -494,6 +494,48 @@
         "LogGroupName": "/aws/lambda/cracker-backend-dev-validateCoupon"
       }
     },
+    "BulkCreateOrderLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/cracker-backend-dev-bulkCreateOrder"
+      }
+    },
+    "GetBulkOrderLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/cracker-backend-dev-getBulkOrder"
+      }
+    },
+    "BulkGetOrderLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/cracker-backend-dev-bulkGetOrder"
+      }
+    },
+    "AdminBulkGetOrdersLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminBulkGetOrders"
+      }
+    },
+    "AdminBulkOrderDetailsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminBulkOrderDetails"
+      }
+    },
+    "AdminBulkUpdateStatusLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminBulkUpdateStatus"
+      }
+    },
+    "BulkCancelOrderLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/cracker-backend-dev-bulkCancelOrder"
+      }
+    },
     "IamRoleLambdaExecution": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -575,6 +617,8 @@
                     "arn:aws:dynamodb:ap-south-1:*:table/Carts*",
                     "arn:aws:dynamodb:ap-south-1:*:table/Orders",
                     "arn:aws:dynamodb:ap-south-1:*:table/Orders/index/*",
+                    "arn:aws:dynamodb:ap-south-1:*:table/BulkOrders",
+                    "arn:aws:dynamodb:ap-south-1:*:table/BulkOrders/index/*",
                     "arn:aws:dynamodb:ap-south-1:*:table/AdminConfig*",
                     "arn:aws:dynamodb:ap-south-1:*:table/ContactUs*",
                     "arn:aws:dynamodb:ap-south-1:*:table/OtpTable*",
@@ -629,7 +673,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/auth/login.handler",
         "Runtime": "nodejs24.x",
@@ -642,6 +686,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -685,7 +730,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/auth/send-otp.handler",
         "Runtime": "nodejs24.x",
@@ -698,6 +743,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -741,7 +787,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/auth/register.handler",
         "Runtime": "nodejs24.x",
@@ -754,6 +800,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -797,7 +844,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/user/get-profile.main",
         "Runtime": "nodejs24.x",
@@ -810,6 +857,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -853,7 +901,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/user/update-profile.main",
         "Runtime": "nodejs24.x",
@@ -866,6 +914,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -909,7 +958,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getProducts.handler",
         "Runtime": "nodejs24.x",
@@ -922,6 +971,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -965,7 +1015,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getAllProducts.handler",
         "Runtime": "nodejs24.x",
@@ -978,6 +1028,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1021,7 +1072,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getProductDetails.handler",
         "Runtime": "nodejs24.x",
@@ -1034,6 +1085,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1077,7 +1129,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getProductsByCategory.handler",
         "Runtime": "nodejs24.x",
@@ -1090,6 +1142,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1133,7 +1186,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getProductsByBrand.handler",
         "Runtime": "nodejs24.x",
@@ -1146,6 +1199,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1189,7 +1243,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getCategories.handler",
         "Runtime": "nodejs24.x",
@@ -1202,6 +1256,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1245,7 +1300,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getBrands.handler",
         "Runtime": "nodejs24.x",
@@ -1258,6 +1313,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1301,7 +1357,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/cart.getCart",
         "Runtime": "nodejs24.x",
@@ -1314,6 +1370,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1357,7 +1414,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/cart.addItem",
         "Runtime": "nodejs24.x",
@@ -1370,6 +1427,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1413,7 +1471,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/cart.removeItem",
         "Runtime": "nodejs24.x",
@@ -1426,6 +1484,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1469,7 +1528,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/cart.clearCart",
         "Runtime": "nodejs24.x",
@@ -1482,6 +1541,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1525,7 +1585,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/productBatch.handler",
         "Runtime": "nodejs24.x",
@@ -1538,6 +1598,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1581,7 +1642,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/cartMerge.handler",
         "Runtime": "nodejs24.x",
@@ -1594,6 +1655,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1637,7 +1699,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/cartSync.handler",
         "Runtime": "nodejs24.x",
@@ -1650,6 +1712,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1693,7 +1756,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/Orders.handler",
         "Runtime": "nodejs24.x",
@@ -1706,6 +1769,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1749,7 +1813,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getOrders.handler",
         "Runtime": "nodejs24.x",
@@ -1762,6 +1826,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1805,7 +1870,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/cancelOrder.handler",
         "Runtime": "nodejs24.x",
@@ -1818,6 +1883,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1861,7 +1927,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adjustOrder.handler",
         "Runtime": "nodejs24.x",
@@ -1874,6 +1940,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1917,7 +1984,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminDashboard.handler",
         "Runtime": "nodejs24.x",
@@ -1930,6 +1997,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -1973,7 +2041,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminOrders.handler",
         "Runtime": "nodejs24.x",
@@ -1986,6 +2054,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2029,7 +2098,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminOrderDetails.handler",
         "Runtime": "nodejs24.x",
@@ -2042,6 +2111,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2085,7 +2155,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateOrder.handler",
         "Runtime": "nodejs24.x",
@@ -2098,6 +2168,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2141,7 +2212,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getAdminProducts.handler",
         "Runtime": "nodejs24.x",
@@ -2154,6 +2225,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2197,7 +2269,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/createAdminProduct.handler",
         "Runtime": "nodejs24.x",
@@ -2210,6 +2282,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2253,7 +2326,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/updateAdminProduct.handler",
         "Runtime": "nodejs24.x",
@@ -2266,6 +2339,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2309,7 +2383,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/deactivateAdminProduct.handler",
         "Runtime": "nodejs24.x",
@@ -2322,6 +2396,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2365,7 +2440,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getPresignedUrls.handler",
         "Runtime": "nodejs24.x",
@@ -2378,6 +2453,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2421,7 +2497,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getAdminProduct.handler",
         "Runtime": "nodejs24.x",
@@ -2434,6 +2510,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2477,7 +2554,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminGenerateImportUploadUrl.handler",
         "Runtime": "nodejs24.x",
@@ -2490,6 +2567,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2533,7 +2611,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminValidateProductImport.handler",
         "Runtime": "nodejs24.x",
@@ -2546,6 +2624,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2589,7 +2668,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminConfirmProductImport.handler",
         "Runtime": "nodejs24.x",
@@ -2602,6 +2681,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2645,7 +2725,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminListCategories.handler",
         "Runtime": "nodejs24.x",
@@ -2658,6 +2738,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2701,7 +2782,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminCreateCategory.handler",
         "Runtime": "nodejs24.x",
@@ -2714,6 +2795,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2757,7 +2839,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateCategoryStatus.handler",
         "Runtime": "nodejs24.x",
@@ -2770,6 +2852,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2813,7 +2896,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateCategory.handler",
         "Runtime": "nodejs24.x",
@@ -2826,6 +2909,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2869,7 +2953,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminGetCategoryById.handler",
         "Runtime": "nodejs24.x",
@@ -2882,6 +2966,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2925,7 +3010,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteCategory.handler",
         "Runtime": "nodejs24.x",
@@ -2938,6 +3023,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -2981,7 +3067,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminPresignCategoryImage.handler",
         "Runtime": "nodejs24.x",
@@ -2994,6 +3080,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3037,7 +3124,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/cleanupOrphanProductImages.handler",
         "Runtime": "nodejs24.x",
@@ -3050,6 +3137,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3093,7 +3181,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminListBrands.handler",
         "Runtime": "nodejs24.x",
@@ -3106,6 +3194,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3149,7 +3238,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminGetBrand.handler",
         "Runtime": "nodejs24.x",
@@ -3162,6 +3251,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3205,7 +3295,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminCreateBrand.handler",
         "Runtime": "nodejs24.x",
@@ -3218,6 +3308,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3261,7 +3352,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateBrand.handler",
         "Runtime": "nodejs24.x",
@@ -3274,6 +3365,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3317,7 +3409,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateBrandStatus.handler",
         "Runtime": "nodejs24.x",
@@ -3330,6 +3422,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3373,7 +3466,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteBrand.handler",
         "Runtime": "nodejs24.x",
@@ -3386,6 +3479,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3429,7 +3523,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminPresignBrandLogo.handler",
         "Runtime": "nodejs24.x",
@@ -3442,6 +3536,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3485,7 +3580,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminListUsers.handler",
         "Runtime": "nodejs24.x",
@@ -3498,6 +3593,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3541,7 +3637,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteUser.handler",
         "Runtime": "nodejs24.x",
@@ -3554,6 +3650,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3597,7 +3694,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/deleteProduct.handler",
         "Runtime": "nodejs24.x",
@@ -3610,6 +3707,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3653,7 +3751,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getConfig.handler",
         "Runtime": "nodejs24.x",
@@ -3666,6 +3764,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3709,7 +3808,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateConfig.handler",
         "Runtime": "nodejs24.x",
@@ -3722,6 +3821,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3765,7 +3865,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/bulk-upload-aitags.handler",
         "Runtime": "nodejs24.x",
@@ -3778,6 +3878,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3821,7 +3922,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminConfigSliderPresign.handler",
         "Runtime": "nodejs24.x",
@@ -3834,6 +3935,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3877,7 +3979,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/deleteProductImages.handler",
         "Runtime": "nodejs24.x",
@@ -3890,6 +3992,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3933,7 +4036,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminListDiscounts.handler",
         "Runtime": "nodejs24.x",
@@ -3946,6 +4049,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -3989,7 +4093,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminCreateDiscount.handler",
         "Runtime": "nodejs24.x",
@@ -4002,6 +4106,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4045,7 +4150,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminGetDiscountById.handler",
         "Runtime": "nodejs24.x",
@@ -4058,6 +4163,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4101,7 +4207,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateDiscount.handler",
         "Runtime": "nodejs24.x",
@@ -4114,6 +4220,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4157,7 +4264,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteDiscount.handler",
         "Runtime": "nodejs24.x",
@@ -4170,6 +4277,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4213,7 +4321,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getRevenueReport.handler",
         "Runtime": "nodejs24.x",
@@ -4226,6 +4334,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4269,7 +4378,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getProductReport.handler",
         "Runtime": "nodejs24.x",
@@ -4282,6 +4391,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4325,7 +4435,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/productSampleXls.handler",
         "Runtime": "nodejs24.x",
@@ -4338,6 +4448,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4381,7 +4492,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/orderRestore.handler",
         "Runtime": "nodejs24.x",
@@ -4394,6 +4505,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4437,7 +4549,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/popularProducts.handler",
         "Runtime": "nodejs24.x",
@@ -4450,6 +4562,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4493,7 +4606,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/auth/forgot/send-otp.handler",
         "Runtime": "nodejs24.x",
@@ -4506,6 +4619,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4549,7 +4663,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/auth/forgot/reset.handler",
         "Runtime": "nodejs24.x",
@@ -4562,6 +4676,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4605,7 +4720,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/contactSubmit.handler",
         "Runtime": "nodejs24.x",
@@ -4618,6 +4733,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4661,7 +4777,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/contactList.handler",
         "Runtime": "nodejs24.x",
@@ -4674,6 +4790,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4717,7 +4834,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/contactUpdate.handler",
         "Runtime": "nodejs24.x",
@@ -4730,6 +4847,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4773,7 +4891,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getPackages.handler",
         "Runtime": "nodejs24.x",
@@ -4786,6 +4904,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4829,7 +4948,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/getPackageDetails.handler",
         "Runtime": "nodejs24.x",
@@ -4842,6 +4961,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4885,7 +5005,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/aiRecommendation.handler",
         "Runtime": "nodejs24.x",
@@ -4898,6 +5018,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4941,7 +5062,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/estimateEmail.handler",
         "Runtime": "nodejs24.x",
@@ -4954,6 +5075,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -4997,7 +5119,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminCreateCoupon.handler",
         "Runtime": "nodejs24.x",
@@ -5010,6 +5132,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -5053,7 +5176,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminGetCoupons.handler",
         "Runtime": "nodejs24.x",
@@ -5066,6 +5189,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -5109,7 +5233,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteCoupon.handler",
         "Runtime": "nodejs24.x",
@@ -5122,6 +5246,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -5165,7 +5290,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785483112525-2026-07-31T07:31:52.525Z/cracker-backend.zip"
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
         },
         "Handler": "src/handlers/validateCoupon.handler",
         "Runtime": "nodejs24.x",
@@ -5178,6 +5303,7 @@
             "CART_TABLE": "Carts",
             "PRODUCTS_TABLE": "Products",
             "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
             "BUCKET_NAME": "cracker-app",
             "BRAND_TABLE": "Brands",
             "CATEGORY_TABLE": "Categories",
@@ -5214,6 +5340,405 @@
       },
       "DependsOn": [
         "ValidateCouponLogGroup"
+      ]
+    },
+    "BulkCreateOrderLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+        },
+        "Handler": "src/handlers/bulkOrder.handler",
+        "Runtime": "nodejs24.x",
+        "FunctionName": "cracker-backend-dev-bulkCreateOrder",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "CART_TABLE": "Carts",
+            "PRODUCTS_TABLE": "Products",
+            "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
+            "BUCKET_NAME": "cracker-app",
+            "BRAND_TABLE": "Brands",
+            "CATEGORY_TABLE": "Categories",
+            "USERS_TABLE": "Users",
+            "ADMIN_CONFIG_TABLE": "AdminConfig",
+            "DISCOUNT_TABLE": "Discounts",
+            "CONTACT_TABLE": "ContactUs",
+            "COUPONS_TABLE": "Coupons",
+            "OTP_TABLE": "OtpTable",
+            "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+            "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+            "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+            "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+            "CART_UPDATED_TID": "6a395e506ca224854303c222",
+            "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+            "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+            "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+            "DOMAIN": "https://www.sivakasicrackers.co.in",
+            "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+            "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+            "MAX_AI_PRODUCT_QTY": "10",
+            "REGION": "ap-south-1",
+            "NODE_OPTIONS": "--enable-source-maps"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "BulkCreateOrderLogGroup"
+      ]
+    },
+    "GetBulkOrderLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+        },
+        "Handler": "src/handlers/getBulkOrders.handler",
+        "Runtime": "nodejs24.x",
+        "FunctionName": "cracker-backend-dev-getBulkOrder",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "CART_TABLE": "Carts",
+            "PRODUCTS_TABLE": "Products",
+            "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
+            "BUCKET_NAME": "cracker-app",
+            "BRAND_TABLE": "Brands",
+            "CATEGORY_TABLE": "Categories",
+            "USERS_TABLE": "Users",
+            "ADMIN_CONFIG_TABLE": "AdminConfig",
+            "DISCOUNT_TABLE": "Discounts",
+            "CONTACT_TABLE": "ContactUs",
+            "COUPONS_TABLE": "Coupons",
+            "OTP_TABLE": "OtpTable",
+            "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+            "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+            "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+            "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+            "CART_UPDATED_TID": "6a395e506ca224854303c222",
+            "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+            "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+            "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+            "DOMAIN": "https://www.sivakasicrackers.co.in",
+            "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+            "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+            "MAX_AI_PRODUCT_QTY": "10",
+            "REGION": "ap-south-1",
+            "NODE_OPTIONS": "--enable-source-maps"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetBulkOrderLogGroup"
+      ]
+    },
+    "BulkGetOrderLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+        },
+        "Handler": "src/handlers/getDetailedBulkOrder.handler",
+        "Runtime": "nodejs24.x",
+        "FunctionName": "cracker-backend-dev-bulkGetOrder",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "CART_TABLE": "Carts",
+            "PRODUCTS_TABLE": "Products",
+            "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
+            "BUCKET_NAME": "cracker-app",
+            "BRAND_TABLE": "Brands",
+            "CATEGORY_TABLE": "Categories",
+            "USERS_TABLE": "Users",
+            "ADMIN_CONFIG_TABLE": "AdminConfig",
+            "DISCOUNT_TABLE": "Discounts",
+            "CONTACT_TABLE": "ContactUs",
+            "COUPONS_TABLE": "Coupons",
+            "OTP_TABLE": "OtpTable",
+            "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+            "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+            "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+            "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+            "CART_UPDATED_TID": "6a395e506ca224854303c222",
+            "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+            "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+            "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+            "DOMAIN": "https://www.sivakasicrackers.co.in",
+            "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+            "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+            "MAX_AI_PRODUCT_QTY": "10",
+            "REGION": "ap-south-1",
+            "NODE_OPTIONS": "--enable-source-maps"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "BulkGetOrderLogGroup"
+      ]
+    },
+    "AdminBulkGetOrdersLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+        },
+        "Handler": "src/handlers/adminBulkOrder.handler",
+        "Runtime": "nodejs24.x",
+        "FunctionName": "cracker-backend-dev-adminBulkGetOrders",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "CART_TABLE": "Carts",
+            "PRODUCTS_TABLE": "Products",
+            "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
+            "BUCKET_NAME": "cracker-app",
+            "BRAND_TABLE": "Brands",
+            "CATEGORY_TABLE": "Categories",
+            "USERS_TABLE": "Users",
+            "ADMIN_CONFIG_TABLE": "AdminConfig",
+            "DISCOUNT_TABLE": "Discounts",
+            "CONTACT_TABLE": "ContactUs",
+            "COUPONS_TABLE": "Coupons",
+            "OTP_TABLE": "OtpTable",
+            "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+            "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+            "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+            "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+            "CART_UPDATED_TID": "6a395e506ca224854303c222",
+            "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+            "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+            "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+            "DOMAIN": "https://www.sivakasicrackers.co.in",
+            "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+            "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+            "MAX_AI_PRODUCT_QTY": "10",
+            "REGION": "ap-south-1",
+            "NODE_OPTIONS": "--enable-source-maps"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AdminBulkGetOrdersLogGroup"
+      ]
+    },
+    "AdminBulkOrderDetailsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+        },
+        "Handler": "src/handlers/adminBulkOrderDetails.handler",
+        "Runtime": "nodejs24.x",
+        "FunctionName": "cracker-backend-dev-adminBulkOrderDetails",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "CART_TABLE": "Carts",
+            "PRODUCTS_TABLE": "Products",
+            "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
+            "BUCKET_NAME": "cracker-app",
+            "BRAND_TABLE": "Brands",
+            "CATEGORY_TABLE": "Categories",
+            "USERS_TABLE": "Users",
+            "ADMIN_CONFIG_TABLE": "AdminConfig",
+            "DISCOUNT_TABLE": "Discounts",
+            "CONTACT_TABLE": "ContactUs",
+            "COUPONS_TABLE": "Coupons",
+            "OTP_TABLE": "OtpTable",
+            "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+            "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+            "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+            "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+            "CART_UPDATED_TID": "6a395e506ca224854303c222",
+            "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+            "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+            "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+            "DOMAIN": "https://www.sivakasicrackers.co.in",
+            "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+            "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+            "MAX_AI_PRODUCT_QTY": "10",
+            "REGION": "ap-south-1",
+            "NODE_OPTIONS": "--enable-source-maps"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AdminBulkOrderDetailsLogGroup"
+      ]
+    },
+    "AdminBulkUpdateStatusLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+        },
+        "Handler": "src/handlers/adminBulkOrderStatusUpdate.handler",
+        "Runtime": "nodejs24.x",
+        "FunctionName": "cracker-backend-dev-adminBulkUpdateStatus",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "CART_TABLE": "Carts",
+            "PRODUCTS_TABLE": "Products",
+            "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
+            "BUCKET_NAME": "cracker-app",
+            "BRAND_TABLE": "Brands",
+            "CATEGORY_TABLE": "Categories",
+            "USERS_TABLE": "Users",
+            "ADMIN_CONFIG_TABLE": "AdminConfig",
+            "DISCOUNT_TABLE": "Discounts",
+            "CONTACT_TABLE": "ContactUs",
+            "COUPONS_TABLE": "Coupons",
+            "OTP_TABLE": "OtpTable",
+            "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+            "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+            "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+            "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+            "CART_UPDATED_TID": "6a395e506ca224854303c222",
+            "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+            "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+            "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+            "DOMAIN": "https://www.sivakasicrackers.co.in",
+            "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+            "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+            "MAX_AI_PRODUCT_QTY": "10",
+            "REGION": "ap-south-1",
+            "NODE_OPTIONS": "--enable-source-maps"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AdminBulkUpdateStatusLogGroup"
+      ]
+    },
+    "BulkCancelOrderLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+          "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+        },
+        "Handler": "src/handlers/cancelBulkOrder.handler",
+        "Runtime": "nodejs24.x",
+        "FunctionName": "cracker-backend-dev-bulkCancelOrder",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "CART_TABLE": "Carts",
+            "PRODUCTS_TABLE": "Products",
+            "ORDERS_TABLE": "Orders",
+            "BULK_ORDERS_TABLE": "BulkOrders",
+            "BUCKET_NAME": "cracker-app",
+            "BRAND_TABLE": "Brands",
+            "CATEGORY_TABLE": "Categories",
+            "USERS_TABLE": "Users",
+            "ADMIN_CONFIG_TABLE": "AdminConfig",
+            "DISCOUNT_TABLE": "Discounts",
+            "CONTACT_TABLE": "ContactUs",
+            "COUPONS_TABLE": "Coupons",
+            "OTP_TABLE": "OtpTable",
+            "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+            "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+            "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+            "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+            "CART_UPDATED_TID": "6a395e506ca224854303c222",
+            "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+            "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+            "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+            "DOMAIN": "https://www.sivakasicrackers.co.in",
+            "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+            "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+            "MAX_AI_PRODUCT_QTY": "10",
+            "REGION": "ap-south-1",
+            "NODE_OPTIONS": "--enable-source-maps"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "BulkCancelOrderLogGroup"
       ]
     },
     "CleanupOrphanProductImagesEventsRuleSchedule1": {
@@ -11372,6 +11897,531 @@
       },
       "DependsOn": "HttpApiIntegrationValidateCoupon"
     },
+    "BulkCreateOrderLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "BulkCreateOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationBulkCreateOrder": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "BulkCreateOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostBulkDashorder": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /bulk-order",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationBulkCreateOrder"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationBulkCreateOrder"
+    },
+    "GetBulkOrderLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetBulkOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetBulkOrder": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetBulkOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetBulkDashorder": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /bulk-order",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetBulkOrder"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetBulkOrder"
+    },
+    "BulkGetOrderLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "BulkGetOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationBulkGetOrder": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "BulkGetOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetBulkDashorderOrderidVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /bulk-order/{orderId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationBulkGetOrder"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationBulkGetOrder"
+    },
+    "AdminBulkGetOrdersLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AdminBulkGetOrdersLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationAdminBulkGetOrders": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "AdminBulkGetOrdersLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetAdminBulkDashorders": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /admin/bulk-orders",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationAdminBulkGetOrders"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationAdminBulkGetOrders"
+    },
+    "AdminBulkOrderDetailsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AdminBulkOrderDetailsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationAdminBulkOrderDetails": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "AdminBulkOrderDetailsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetAdminBulkDashordersOrderidVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /admin/bulk-orders/{orderId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationAdminBulkOrderDetails"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationAdminBulkOrderDetails"
+    },
+    "AdminBulkUpdateStatusLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AdminBulkUpdateStatusLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationAdminBulkUpdateStatus": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "AdminBulkUpdateStatusLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePutAdminBulkDashordersOrderidVarStatus": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "PUT /admin/bulk-orders/{orderId}/status",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationAdminBulkUpdateStatus"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationAdminBulkUpdateStatus"
+    },
+    "BulkCancelOrderLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "BulkCancelOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationBulkCancelOrder": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "BulkCancelOrderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePutBulkDashorderOrderidVarCancel": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "PUT /bulk-order/{orderId}/cancel",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationBulkCancelOrder"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationBulkCancelOrder"
+    },
     "ProductImagesBucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
@@ -11492,6 +12542,95 @@
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
         "TableName": "Orders",
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "orderId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "meta",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "createdAt",
+            "AttributeType": "N"
+          },
+          {
+            "AttributeName": "status",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "orderId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "meta",
+            "KeyType": "RANGE"
+          }
+        ],
+        "GlobalSecondaryIndexes": [
+          {
+            "IndexName": "userId-createdAt-index",
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "createdAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "meta-createdAt-index",
+            "KeySchema": [
+              {
+                "AttributeName": "meta",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "createdAt",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          },
+          {
+            "IndexName": "status-meta-index",
+            "KeySchema": [
+              {
+                "AttributeName": "status",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "meta",
+                "KeyType": "RANGE"
+              }
+            ],
+            "Projection": {
+              "ProjectionType": "ALL"
+            }
+          }
+        ]
+      }
+    },
+    "BulkOrdersTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "BulkOrders",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
