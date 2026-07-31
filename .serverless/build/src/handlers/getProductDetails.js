@@ -132,7 +132,13 @@ var handler = async (event) => {
       brandId: productRes.Item.brandId,
       youtubeUrl: productRes.Item.videoUrl ?? null,
       qty: productRes.Item.quantity ?? 0,
-      isComboPackage: productRes.Item.isComboPackage || false
+      isComboPackage: productRes.Item.isComboPackage || false,
+      isBulkOnly: productRes.Item.isBulkOnly || false,
+      cartonQty: productRes.Item.cartonQty || 0,
+      scheme1Price: productRes.Item.scheme1Price || 0,
+      scheme2Price: productRes.Item.scheme2Price || 0,
+      scheme3Price: productRes.Item.scheme3Price || 0,
+      scheme4Price: productRes.Item.scheme4Price || 0
     };
     return success(product);
   } catch (err) {

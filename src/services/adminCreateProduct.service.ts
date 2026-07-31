@@ -15,6 +15,12 @@ interface CreateProductInput {
     packageTagIds?: string[];
     aiTags?: string[];
     isComboPackage?: boolean;
+    isBulkOnly?: boolean;
+    cartonQty?: number;
+    scheme1Price?: number;
+    scheme2Price?: number;
+    scheme3Price?: number;
+    scheme4Price?: number;
 }
 
 export class AdminCreateProductService {

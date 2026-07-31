@@ -37216,7 +37216,13 @@ var PRODUCT_IMPORT_SCHEMA_V1 = {
     required: true,
     type: "string",
     default: ""
-  }
+  },
+  isBulkOnly: { required: false, type: "boolean", default: false },
+  cartonQty: { required: false, type: "number", min: 0 },
+  scheme1Price: { required: false, type: "number", min: 0 },
+  scheme2Price: { required: false, type: "number", min: 0 },
+  scheme3Price: { required: false, type: "number", min: 0 },
+  scheme4Price: { required: false, type: "number", min: 0 }
 };
 
 // src/services/productImportValidator.ts
@@ -37501,7 +37507,8 @@ var handler = async (event) => {
       const productId = `prod-${(0, import_crypto2.randomUUID)()}`;
       const comboValue = item.IsComboPackage ?? item.isComboPackage;
       const isCombo = typeof comboValue === "boolean" ? comboValue : String(comboValue).trim().toLowerCase() === "true";
-      console.log(isCombo);
+      const bulkProduct = item.isBulkOnly ?? item.isBulkOnly;
+      const isBulkOnly = typeof bulkProduct === "boolean" ? bulkProduct : String(bulkProduct).trim().toLowerCase() === "true";
       return {
         productId,
         item,
@@ -37540,11 +37547,15 @@ var handler = async (event) => {
               },
               isActive: { S: String(item.isActive ?? true) },
               createdAt: { S: now },
-              isComboPackage: {
-                BOOL: isCombo ?? false
-              },
+              isComboPackage: { BOOL: isCombo ?? false },
               sequenceNumber: { N: String(item.sequenceNumber ?? 0) },
-              productFamily: { S: item.productFamily }
+              productFamily: { S: item.productFamily },
+              isBulkOnly: { BOOL: isBulkOnly ?? false },
+              cartonQty: { N: String(item.cartonQty ?? 0) },
+              scheme1Price: { N: String(item.scheme1Price) },
+              scheme2Price: { N: String(item.scheme2Price) },
+              scheme3Price: { N: String(item.scheme3Price) },
+              scheme4Price: { N: String(item.scheme4Price) }
             }
           }
         }

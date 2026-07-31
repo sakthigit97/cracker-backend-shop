@@ -202,107 +202,40 @@ export class AiRecommendationOrchestratorService {
             );
 
         const additionalItems = [
-
             ...additionalProductIds,
-
             ...additionalProducts
-
                 .map(
                     (product: any) =>
                         product.productId
                 )
-
-                .filter(
-                    productId =>
-
-                        !additionalProductIds.includes(
-                            productId
-                        )
+                .filter(productId =>
+                    !additionalProductIds.includes(
+                        productId
+                    )
                 )
 
-        ]
-
-            .map(productId => {
-
-                const product =
-                    additionalProductMap.get(
-                        productId
-                    );
-
-                if (!product) {
-
-                    return null;
-
-                }
-
-                return {
-
-                    id:
-                        product.productId,
-
-                    name:
-                        product.name,
-
-                    image:
-                        product.image ?? null,
-
-                    price:
-                        product.price,
-
-                    originalPrice:
-                        product.originalPrice,
-
-                    discountText:
-                        product.discountText,
-
-                    categoryId:
-                        product.categoryId,
-
-                    brandId:
-                        product.brandId,
-
-                    qty:
-                        product.qty,
-
-                };
-
-            })
-
-            .filter(
-                (item): item is NonNullable<typeof item> =>
-                    item !== null
+        ].map(productId => {
+            const product = additionalProductMap.get(
+                productId
             );
 
-        console.log(
+            if (!product) {
+                return null;
+            }
 
-            "AI RECOMMENDATION COMPLETED",
+            return {
+                id: product.productId,
+                name: product.name,
+                image: product.image ?? null,
+                price: product.price,
+                originalPrice: product.originalPrice,
+                discountText: product.discountText,
+                categoryId: product.categoryId,
+                brandId: product.brandId,
+                qty: product.qty,
+            };
 
-            JSON.stringify({
-
-                budget:
-                    recommendationResult.budget,
-
-                relaxationLevel:
-                    recommendationResult.relaxationLevel,
-
-                candidateCount:
-                    recommendationCandidates.length,
-
-                packageProducts:
-                    packageItems.length,
-
-                additionalProducts:
-                    additionalItems.length,
-
-                packageTotal:
-                    packageResult.total,
-
-                packageItemCount:
-                    packageResult.itemCount,
-
-            })
-
-        );
+        }).filter((item): item is NonNullable<typeof item> => item !== null);
 
         return {
             status: "SUCCESS",

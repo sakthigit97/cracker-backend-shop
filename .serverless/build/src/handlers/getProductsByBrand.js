@@ -187,6 +187,7 @@ var handler = async (event) => {
         qty: p.quantity,
         searchText: p.searchText,
         isComboPackage: p.isComboPackage || false,
+        isBulkOnly: p.isBulkOnly || false,
         sequenceNumber: p.sequenceNumber || 0
       };
     }) || [];

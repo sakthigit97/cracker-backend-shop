@@ -39,4 +39,5 @@ export interface PackageItem {
     productId: string;
     selectedQty: number;
     categoryId?: string;
+    
 }

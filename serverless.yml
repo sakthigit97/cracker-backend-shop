@@ -13,6 +13,7 @@ provider:
     CART_TABLE: Carts
     PRODUCTS_TABLE: Products
     ORDERS_TABLE: Orders
+    BULK_ORDERS_TABLE: BulkOrders
     BUCKET_NAME: cracker-app
     BRAND_TABLE: Brands
     CATEGORY_TABLE: Categories
@@ -88,6 +89,8 @@ provider:
             - arn:aws:dynamodb:ap-south-1:*:table/Carts*
             - arn:aws:dynamodb:ap-south-1:*:table/Orders
             - arn:aws:dynamodb:ap-south-1:*:table/Orders/index/*
+            - arn:aws:dynamodb:ap-south-1:*:table/BulkOrders
+            - arn:aws:dynamodb:ap-south-1:*:table/BulkOrders/index/*
             - arn:aws:dynamodb:ap-south-1:*:table/AdminConfig*
             - arn:aws:dynamodb:ap-south-1:*:table/ContactUs*
             - arn:aws:dynamodb:ap-south-1:*:table/OtpTable*
@@ -690,7 +693,6 @@ functions:
           path: /coupon/validate
           method: POST
 
-
 resources:
   Resources:
     ProductImagesBucket:
@@ -814,6 +816,53 @@ resources:
             Projection:
               ProjectionType: ALL
 
+          - IndexName: status-meta-index
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: meta
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+    BulkOrdersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: BulkOrders
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: orderId
+            AttributeType: S
+          - AttributeName: meta
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: N
+          - AttributeName: status
+            AttributeType: S
+        KeySchema:
+          - AttributeName: orderId
+            KeyType: HASH
+          - AttributeName: meta
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: userId-createdAt-index
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: meta-createdAt-index
+            KeySchema:
+              - AttributeName: meta
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
           - IndexName: status-meta-index
             KeySchema:
               - AttributeName: status

@@ -44,12 +44,11 @@ export const handler = async (event: any) => {
         const now = new Date().toISOString();
         const productsToCreate = validRows.map((item: any) => {
             const productId = `prod-${randomUUID()}`;
-
             const comboValue = item.IsComboPackage ?? item.isComboPackage;
-            const isCombo = typeof comboValue === "boolean"
-                ? comboValue
-                : String(comboValue).trim().toLowerCase() === "true";
-            console.log(isCombo)
+            const isCombo = typeof comboValue === "boolean" ? comboValue : String(comboValue).trim().toLowerCase() === "true";
+            const bulkProduct = item.isBulkOnly ?? item.isBulkOnly;
+            const isBulkOnly = typeof bulkProduct === "boolean" ? bulkProduct : String(bulkProduct).trim().toLowerCase() === "true";
+
             return {
                 productId,
                 item,
@@ -95,11 +94,15 @@ export const handler = async (event: any) => {
                             },
                             isActive: { S: String(item.isActive ?? true) },
                             createdAt: { S: now },
-                            isComboPackage: {
-                                BOOL: isCombo ?? false,
-                            },
+                            isComboPackage: { BOOL: isCombo ?? false, },
                             sequenceNumber: { N: String(item.sequenceNumber ?? 0) },
                             productFamily: { S: item.productFamily },
+                            isBulkOnly: { BOOL: isBulkOnly ?? false, },
+                            cartonQty: { N: String(item.cartonQty ?? 0) },
+                            scheme1Price: { N: String(item.scheme1Price) },
+                            scheme2Price: { N: String(item.scheme2Price) },
+                            scheme3Price: { N: String(item.scheme3Price) },
+                            scheme4Price: { N: String(item.scheme4Price) },
                         },
                     },
                 },

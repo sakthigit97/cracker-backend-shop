@@ -37214,7 +37214,13 @@ var PRODUCT_IMPORT_SCHEMA_V1 = {
     required: true,
     type: "string",
     default: ""
-  }
+  },
+  isBulkOnly: { required: false, type: "boolean", default: false },
+  cartonQty: { required: false, type: "number", min: 0 },
+  scheme1Price: { required: false, type: "number", min: 0 },
+  scheme2Price: { required: false, type: "number", min: 0 },
+  scheme3Price: { required: false, type: "number", min: 0 },
+  scheme4Price: { required: false, type: "number", min: 0 }
 };
 
 // src/services/productImportValidator.ts

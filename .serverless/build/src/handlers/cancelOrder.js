@@ -4062,7 +4062,13 @@ var ProductService = class {
         qty: p.quantity,
         searchText: p.searchText,
         isComboPackage: p.isComboPackage || false,
-        sequenceNumber: p.sequenceNumber || 0
+        sequenceNumber: p.sequenceNumber || 0,
+        cartonQty: p.cartonQty || 0,
+        isBulkOnly: p.isBulkOnly || false,
+        scheme1Price: p.scheme1Price || 0,
+        scheme2Price: p.scheme2Price || 0,
+        scheme3Price: p.scheme3Price || 0,
+        scheme4Price: p.scheme4Price || 0
       };
     });
   }

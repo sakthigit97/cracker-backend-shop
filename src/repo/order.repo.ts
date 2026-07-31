@@ -8,7 +8,6 @@ import {
 
 import { ddb } from "../utils/dynamo";
 import { ProductService } from "../services/product.service";
-
 const TABLE_NAME = process.env.ORDERS_TABLE || "Orders";
 export class OrderRepository {
     private productService = new ProductService();

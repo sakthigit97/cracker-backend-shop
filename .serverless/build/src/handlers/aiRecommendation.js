@@ -1083,7 +1083,13 @@ var ProductService = class {
         qty: p.quantity,
         searchText: p.searchText,
         isComboPackage: p.isComboPackage || false,
-        sequenceNumber: p.sequenceNumber || 0
+        sequenceNumber: p.sequenceNumber || 0,
+        cartonQty: p.cartonQty || 0,
+        isBulkOnly: p.isBulkOnly || false,
+        scheme1Price: p.scheme1Price || 0,
+        scheme2Price: p.scheme2Price || 0,
+        scheme3Price: p.scheme3Price || 0,
+        scheme4Price: p.scheme4Price || 0
       };
     });
   }
@@ -1300,21 +1306,7 @@ var AiRecommendationOrchestratorService = class {
         brandId: product.brandId,
         qty: product.qty
       };
-    }).filter(
-      (item) => item !== null
-    );
-    console.log(
-      "AI RECOMMENDATION COMPLETED",
-      JSON.stringify({
-        budget: recommendationResult.budget,
-        relaxationLevel: recommendationResult.relaxationLevel,
-        candidateCount: recommendationCandidates.length,
-        packageProducts: packageItems.length,
-        additionalProducts: additionalItems.length,
-        packageTotal: packageResult.total,
-        packageItemCount: packageResult.itemCount
-      })
-    );
+    }).filter((item) => item !== null);
     return {
       status: "SUCCESS",
       budget: recommendationResult.budget,
