@@ -4319,6 +4319,7 @@ var BulkOrderService = class {
     );
     const isTamilNadu = state?.trim().toLowerCase() === "tamil nadu";
     let gstPercent = Number(config.gstPercent ?? 0) / 2;
+    const actualGstPercentage = config.gstPercent;
     if (isTamilNadu && config.disableGstForTN) {
       gstPercent = 0;
     }
@@ -4330,7 +4331,7 @@ var BulkOrderService = class {
       productTotal,
       packagingPercent,
       packagingCharge,
-      gstPercent,
+      gstPercent: actualGstPercentage,
       gstAmount,
       grandTotal
     };

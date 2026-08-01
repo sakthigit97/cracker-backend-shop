@@ -1677,7 +1677,7 @@ var require_sort = __commonJS({
   "node_modules/semver/functions/sort.js"(exports2, module2) {
     "use strict";
     var compareBuild = require_compare_build();
-    var sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose));
+    var sort = (list2, loose) => list2.sort((a, b) => compareBuild(a, b, loose));
     module2.exports = sort;
   }
 });
@@ -1687,7 +1687,7 @@ var require_rsort = __commonJS({
   "node_modules/semver/functions/rsort.js"(exports2, module2) {
     "use strict";
     var compareBuild = require_compare_build();
-    var rsort = (list, loose) => list.sort((a, b) => compareBuild(b, a, loose));
+    var rsort = (list2, loose) => list2.sort((a, b) => compareBuild(b, a, loose));
     module2.exports = rsort;
   }
 });
@@ -3706,7 +3706,7 @@ var require_sign = __commonJS({
       exp: { isValid: isNumber, message: '"exp" should be a number of seconds' },
       nbf: { isValid: isNumber, message: '"nbf" should be a number of seconds' }
     };
-    function validate(schema, allowUnknown, object, parameterName) {
+    function validate2(schema, allowUnknown, object, parameterName) {
       if (!isPlainObject(object)) {
         throw new Error('Expected "' + parameterName + '" to be a plain object.');
       }
@@ -3724,10 +3724,10 @@ var require_sign = __commonJS({
       });
     }
     function validateOptions(options) {
-      return validate(sign_options_schema, false, options, "options");
+      return validate2(sign_options_schema, false, options, "options");
     }
     function validatePayload(payload) {
-      return validate(registered_claims_schema, true, payload, "payload");
+      return validate2(registered_claims_schema, true, payload, "payload");
     }
     var options_to_payload = {
       "audience": "aud",
@@ -3899,12 +3899,158 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// src/handlers/getBulkOrders.ts
-var getBulkOrders_exports = {};
-__export(getBulkOrders_exports, {
-  handler: () => handler
+// src/handlers/adminCode.ts
+var adminCode_exports = {};
+__export(adminCode_exports, {
+  create: () => create,
+  list: () => list,
+  remove: () => remove,
+  validate: () => validate
 });
-module.exports = __toCommonJS(getBulkOrders_exports);
+module.exports = __toCommonJS(adminCode_exports);
+
+// src/libs/response.ts
+var success = (data, statusCode = 200) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: true,
+    data
+  })
+});
+var error = (message, statusCode = 400) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: false,
+    message
+  })
+});
+
+// src/repo/adminCode.repo.ts
+var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
+
+// src/utils/dynamo.ts
+var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
+var import_lib_dynamodb = require("@aws-sdk/lib-dynamodb");
+var client = new import_client_dynamodb.DynamoDBClient({});
+var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
+  marshallOptions: {
+    removeUndefinedValues: true
+  }
+});
+
+// src/repo/adminCode.repo.ts
+var TABLE = process.env.ADMIN_CODES_TABLE;
+var AdminCodeRepository = class {
+  static async create(code) {
+    await ddb.send(
+      new import_lib_dynamodb2.PutCommand({
+        TableName: TABLE,
+        Item: code,
+        ConditionExpression: "attribute_not_exists(#code)",
+        ExpressionAttributeNames: {
+          "#code": "code"
+        }
+      })
+    );
+    return code;
+  }
+  static async getByCode(code) {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.GetCommand({
+        TableName: TABLE,
+        Key: {
+          code
+        }
+      })
+    );
+    return result.Item ?? null;
+  }
+  static async list() {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.ScanCommand({
+        TableName: TABLE
+      })
+    );
+    return Array.isArray(result.Items) ? result.Items : [];
+  }
+  static async delete(code) {
+    const existing = await this.getByCode(code);
+    if (!existing) {
+      throw new Error(
+        "Admin Code not found."
+      );
+    }
+    await ddb.send(
+      new import_lib_dynamodb2.DeleteCommand({
+        TableName: TABLE,
+        Key: {
+          code
+        }
+      })
+    );
+  }
+};
+
+// src/services/adminCode.service.ts
+var AdminCodeService = class {
+  static async createCode(code) {
+    const existing = await AdminCodeRepository.getByCode(
+      code.code
+    );
+    if (existing) {
+      throw new Error(
+        "Code already exists"
+      );
+    }
+    await AdminCodeRepository.create(
+      code
+    );
+    return code;
+  }
+  static async listCodes() {
+    const codes = await AdminCodeRepository.list();
+    return codes.sort(
+      (a, b) => b.createdAt - a.createdAt
+    );
+  }
+  static async deleteCode(code) {
+    const existing = await AdminCodeRepository.getByCode(
+      code
+    );
+    if (!existing) {
+      throw new Error(
+        "Code not found"
+      );
+    }
+    await AdminCodeRepository.delete(
+      code
+    );
+  }
+  static async validateCode(userId, code) {
+    const adminCode = await AdminCodeRepository.getByCode(
+      code
+    );
+    if (!adminCode) {
+      throw new Error(
+        "Invalid Admin Code"
+      );
+    }
+    if (adminCode.expiryDate < Date.now()) {
+      throw new Error(
+        "Admin Code has expired"
+      );
+    }
+    if (adminCode.userId !== userId) {
+      throw new Error(
+        "This Admin Code is not assigned to you"
+      );
+    }
+    return {
+      schemeId: adminCode.schemeId,
+      success: true
+    };
+  }
+};
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -3933,787 +4079,134 @@ function verifyJwt(event) {
   };
 }
 
-// src/repo/bulkOrder.repo.ts
-var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
-
-// src/utils/dynamo.ts
-var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
-var import_lib_dynamodb = require("@aws-sdk/lib-dynamodb");
-var client = new import_client_dynamodb.DynamoDBClient({});
-var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
-  marshallOptions: {
-    removeUndefinedValues: true
-  }
-});
-
-// src/repo/bulkOrder.repo.ts
-var TABLE_NAME = process.env.BULK_ORDERS_TABLE;
-var BulkOrderRepository = class {
-  async create(order) {
-    await ddb.send(
-      new import_lib_dynamodb2.PutCommand({
-        TableName: TABLE_NAME,
-        Item: order
-      })
-    );
-  }
-  async getById(orderId) {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.GetCommand({
-        TableName: TABLE_NAME,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        }
-      })
-    );
-    return res.Item ?? null;
-  }
-  async getOrdersByUser(userId, limit, cursor) {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.QueryCommand({
-        TableName: TABLE_NAME,
-        IndexName: "userId-createdAt-index",
-        KeyConditionExpression: "userId = :userId",
-        ExpressionAttributeValues: {
-          ":userId": userId
-        },
-        ScanIndexForward: false,
-        Limit: limit,
-        ExclusiveStartKey: cursor
-      })
-    );
-    return {
-      items: res.Items ?? [],
-      nextCursor: res.LastEvaluatedKey ?? null
-    };
-  }
-  async updateStatus(orderId, data) {
-    await ddb.send(
-      new import_lib_dynamodb2.UpdateCommand({
-        TableName: TABLE_NAME,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        },
-        UpdateExpression: `
-                    SET
-                        #status = :status,
-                        updatedAt = :updatedAt,
-                        modifiedAt = :modifiedAt,
-                        modifiedBy = :modifiedBy,
-                        statusHistory = :statusHistory
-                `,
-        ExpressionAttributeNames: {
-          "#status": "status"
-        },
-        ExpressionAttributeValues: {
-          ":status": data.status,
-          ":updatedAt": data.updatedAt,
-          ":modifiedAt": data.modifiedAt,
-          ":modifiedBy": data.modifiedBy,
-          ":statusHistory": data.statusHistory
-        }
-      })
-    );
-  }
-  async getAdminConfig() {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.GetCommand({
-        TableName: "AdminConfig",
-        Key: {
-          configId: "global"
-        }
-      })
-    );
-    return res.Item ?? {};
-  }
-  async getUser(mobile) {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.GetCommand({
-        TableName: "Users",
-        Key: {
-          mobile
-        }
-      })
-    );
-    return res.Item ?? null;
-  }
-  async getAdminOrders(limit, cursor, status) {
-    const params = {
-      TableName: TABLE_NAME,
-      IndexName: "meta-createdAt-index",
-      KeyConditionExpression: "meta = :meta",
-      ExpressionAttributeValues: {
-        ":meta": "ORDER"
-      },
-      ScanIndexForward: false,
-      Limit: limit,
-      ExclusiveStartKey: cursor
-    };
-    if (status) {
-      params.FilterExpression = "#status = :status";
-      params.ExpressionAttributeNames = {
-        "#status": "status"
-      };
-      params.ExpressionAttributeValues[":status"] = status;
-    }
-    const res = await ddb.send(
-      new import_lib_dynamodb2.QueryCommand(params)
-    );
-    return {
-      items: res.Items ?? [],
-      nextCursor: res.LastEvaluatedKey ?? null
-    };
-  }
-};
-
-// src/services/product.service.ts
-var import_lib_dynamodb5 = require("@aws-sdk/lib-dynamodb");
-
-// src/repo/product.repo.ts
-var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
-var TABLE_NAME2 = process.env.PRODUCTS_TABLE;
-var ProductRepository = class {
-  async batchGet(productIds) {
-    if (productIds.length === 0) return [];
-    const keys = productIds.map((productId) => ({
-      productId
-    }));
-    const res = await ddb.send(
-      new import_lib_dynamodb3.BatchGetCommand({
-        RequestItems: {
-          [TABLE_NAME2]: { Keys: keys }
-        }
-      })
-    );
-    return res.Responses?.[TABLE_NAME2] ?? [];
-  }
-  async deleteProduct(productId) {
-    await ddb.send(
-      new import_lib_dynamodb3.DeleteCommand({
-        TableName: process.env.PRODUCTS_TABLE,
-        Key: { productId }
-      })
-    );
-  }
-};
-
-// src/services/discount.service.ts
-var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
-var DISCOUNT_TABLE = "Discounts";
-async function getActiveDiscounts() {
-  const res = await ddb.send(
-    new import_lib_dynamodb4.ScanCommand({
-      TableName: DISCOUNT_TABLE,
-      FilterExpression: "isActive = :true",
-      ExpressionAttributeValues: {
-        ":true": true
-      }
-    })
-  );
-  return res.Items || [];
-}
-
-// src/services/price.service.ts
-function applyDiscount(product, discounts) {
-  let applied = null;
-  applied = discounts.find(
-    (d) => d.discountType === "PRODUCT" && d.targetId === product.productId
-  ) || discounts.find(
-    (d) => d.discountType === "CATEGORY" && d.targetId === product.categoryId
-  ) || discounts.find(
-    (d) => d.discountType === "BRAND" && d.targetId === product.brandId
-  );
-  if (!applied) {
-    return {
-      price: product.price,
-      originalPrice: null,
-      discountText: null
-    };
-  }
-  let finalPrice = product.price;
-  if (applied.discountMode === "PERCENT") {
-    finalPrice = Math.round(
-      product.price - product.price * applied.discountValue / 100
-    );
-  }
-  if (applied.discountMode === "FLAT") {
-    finalPrice = product.price - applied.discountValue;
-  }
-  return {
-    price: finalPrice,
-    originalPrice: product.price,
-    discountText: applied.discountMode === "PERCENT" ? `${applied.discountValue}% OFF` : `\u20B9${applied.discountValue} OFF`
-  };
-}
-
-// src/services/product.service.ts
-var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
-var ProductService = class {
-  constructor(repo = new ProductRepository()) {
-    this.repo = repo;
-  }
-  async batchGetProducts(productIds) {
-    const uniqueIds = [...new Set(productIds)];
-    const allProducts = [];
-    for (let i = 0; i < uniqueIds.length; i += 100) {
-      const chunk = uniqueIds.slice(i, i + 100);
-      const products = await this.repo.batchGet(chunk);
-      if (products?.length) {
-        allProducts.push(...products);
-      }
-    }
-    if (allProducts.length === 0) return [];
-    const discounts = await getActiveDiscounts();
-    const productMap = new Map(
-      allProducts.map((p) => [p.productId, p])
-    );
-    return uniqueIds.map((id) => productMap.get(id)).filter((p) => Boolean(p)).filter((p) => p.isActive === "true" || p.isActive === true).map((p) => {
-      const priceInfo = applyDiscount(p, discounts);
-      return {
-        productId: p.productId,
-        name: p.name,
-        description: p.description ?? null,
-        image: p.imageUrls?.[0] ?? null,
-        price: priceInfo.price,
-        originalPrice: priceInfo.originalPrice > priceInfo.price ? priceInfo.originalPrice : void 0,
-        discountText: priceInfo.discountText,
-        categoryId: p.categoryId,
-        brandId: p.brandId,
-        qty: p.quantity,
-        searchText: p.searchText,
-        isComboPackage: p.isComboPackage || false,
-        sequenceNumber: p.sequenceNumber || 0,
-        cartonQty: p.cartonQty || 0,
-        isBulkOnly: p.isBulkOnly || false,
-        scheme1Price: p.scheme1Price || 0,
-        scheme2Price: p.scheme2Price || 0,
-        scheme3Price: p.scheme3Price || 0,
-        scheme4Price: p.scheme4Price || 0
-      };
-    });
-  }
-  async deleteProduct(productId) {
-    return this.repo.deleteProduct(productId);
-  }
-};
-
-// src/utils/bulkOrderValidation.ts
-var BulkOrderValidation = class {
-  static validateCreateRequest(request) {
-    if (!request) {
-      throw new Error("Request body is required.");
-    }
-    this.validateScheme(request.schemeId);
-    this.validateAddress(request.address);
-    this.validateItems(request.items);
-    this.validateRemarks(request.remarks);
-  }
-  static validateScheme(schemeId) {
-    if (!schemeId || !schemeId.trim()) {
-      throw new Error("Bulk scheme is required.");
-    }
-  }
-  static validateAddress(address) {
-    if (!address) {
-      throw new Error("Delivery address is required.");
-    }
-    if (!address.fullName?.trim()) {
-      throw new Error("Full name is required.");
-    }
-    if (address.fullName.trim().length < 3) {
-      throw new Error("Please enter a valid full name.");
-    }
-    if (!address.mobile?.trim()) {
-      throw new Error("Mobile number is required.");
-    }
-    if (!/^[6-9]\d{9}$/.test(address.mobile.trim())) {
-      throw new Error("Please enter a valid mobile number.");
-    }
-    if (address.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-      address.email.trim()
-    )) {
-      throw new Error("Please enter a valid email address.");
-    }
-    if (!address.addressLine1?.trim()) {
-      throw new Error("Address Line 1 is required.");
-    }
-    if (address.addressLine1.trim().length < 5) {
-      throw new Error("Please enter a valid address.");
-    }
-    if (!address.city?.trim()) {
-      throw new Error("City is required.");
-    }
-    if (!address.state?.trim()) {
-      throw new Error("State is required.");
-    }
-    if (!address.pincode?.trim()) {
-      throw new Error("Pincode is required.");
-    }
-    if (!/^\d{6}$/.test(address.pincode.trim())) {
-      throw new Error("Please enter a valid pincode.");
-    }
-  }
-  static validateItems(items) {
-    if (!Array.isArray(items)) {
-      throw new Error("Products are required.");
-    }
-    if (items.length === 0) {
-      throw new Error("Please add at least one product.");
-    }
-    const productIds = /* @__PURE__ */ new Set();
-    for (const item of items) {
-      if (!item.productId?.trim()) {
-        throw new Error("Invalid product.");
-      }
-      if (productIds.has(item.productId)) {
-        throw new Error(
-          "Duplicate products are not allowed."
-        );
-      }
-      productIds.add(item.productId);
-      if (!Number.isInteger(item.quantity) || item.quantity <= 0) {
-        throw new Error(
-          `Invalid quantity for product ${item.productId}.`
-        );
-      }
-    }
-  }
-  static validateRemarks(remarks) {
-    if (!remarks) {
-      return;
-    }
-    if (remarks.length > 500) {
-      throw new Error(
-        "Remarks cannot exceed 500 characters."
-      );
-    }
-  }
-};
-
-// src/services/bulkOrder.service.ts
-var STATUS_ORDER = [
-  "ORDER_PLACED",
-  "ORDER_CONFIRMED",
-  "PAYMENT_CONFIRMED",
-  "ORDER_PACKED",
-  "DISPATCHED",
-  "CANCELLED"
-];
-var BulkOrderService = class {
-  constructor(repo = new BulkOrderRepository(), productService = new ProductService()) {
-    this.repo = repo;
-    this.productService = productService;
-  }
-  calculatePricing(items, state, config) {
-    const productTotal = items.reduce(
-      (sum, item) => sum + item.total,
-      0
-    );
-    const packagingPercent = Number(
-      config.packagingPercent ?? 0
-    );
-    const packagingCharge = Math.round(
-      productTotal * packagingPercent / 100
-    );
-    const isTamilNadu = state?.trim().toLowerCase() === "tamil nadu";
-    let gstPercent = Number(config.gstPercent ?? 0) / 2;
-    const actualGstPercentage = config.gstPercent;
-    if (isTamilNadu && config.disableGstForTN) {
-      gstPercent = 0;
-    }
-    const gstAmount = Math.round(
-      (productTotal + packagingCharge) * gstPercent / 100
-    );
-    const grandTotal = productTotal + packagingCharge + gstAmount;
-    return {
-      productTotal,
-      packagingPercent,
-      packagingCharge,
-      gstPercent: actualGstPercentage,
-      gstAmount,
-      grandTotal
-    };
-  }
-  async createOrder(userId, request) {
-    BulkOrderValidation.validateCreateRequest(request);
-    const config = await this.repo.getAdminConfig();
-    if (!config) {
-      throw new Error("Admin configuration not found.");
-    }
-    const products = await this.loadProducts(request);
-    const productMap = new Map(
-      products.map((product) => [
-        product.productId,
-        product
-      ])
-    );
-    this.validateProducts(
-      request,
-      productMap
-    );
-    const items = this.buildItems(
-      request,
-      productMap
-    );
-    const pricing = this.calculatePricing(
-      items,
-      request.address.state,
-      config
-    );
-    this.validateScheme(
-      request.schemeId,
-      pricing.productTotal,
-      config
-    );
-    const order = this.buildOrder(
-      userId,
-      request,
-      items,
-      pricing
-    );
-    await this.repo.create(order);
-    return {
-      orderId: order.orderId,
-      pricing
-    };
-  }
-  async loadProducts(request) {
-    const ids = request.items.map(
-      (x) => x.productId
-    );
-    return await this.productService.batchGetProducts(
-      ids
-    );
-  }
-  validateProducts(request, productMap) {
-    if (productMap.size !== request.items.length) {
-      throw new Error("One or more selected products are unavailable.");
-    }
-    for (const requestItem of request.items) {
-      const product = productMap.get(
-        requestItem.productId
-      );
-      if (!product) {
-        throw new Error(
-          `Product not found: ${requestItem.productId}`
-        );
-      }
-      const cartonQty = Number(product.cartonQty ?? 0);
-      if (cartonQty <= 0) {
-        throw new Error(
-          `Carton quantity is not configured for ${product.name}.`
-        );
-      }
-      const schemePrice = this.getSchemePrice(
-        product,
-        request.schemeId
-      );
-      if (schemePrice <= 0) {
-        throw new Error(
-          `Bulk price is not configured for ${product.name}.`
-        );
-      }
-      if (!Number.isInteger(requestItem.quantity) || requestItem.quantity <= 0) {
-        throw new Error(
-          `Invalid quantity for ${product.name}.`
-        );
-      }
-    }
-  }
-  getSchemePrice(product, schemeId) {
-    switch (schemeId) {
-      case "SCHEME1":
-        return Number(product.scheme1Price ?? 0);
-      case "SCHEME2":
-        return Number(product.scheme2Price ?? 0);
-      case "SCHEME3":
-        return Number(product.scheme3Price ?? 0);
-      case "SCHEME4":
-        return Number(product.scheme4Price ?? 0);
-      default:
-        throw new Error(
-          `Invalid bulk scheme: ${schemeId}`
-        );
-    }
-  }
-  buildItems(request, productMap) {
-    return request.items.map((requestItem) => {
-      const product = productMap.get(
-        requestItem.productId
-      );
-      const schemePrice = this.getSchemePrice(
-        product,
-        request.schemeId
-      );
-      const cartonQty = Number(
-        product.cartonQty
-      );
-      const quantity = Number(
-        requestItem.quantity
-      );
-      return {
-        productId: product.productId,
-        name: product.name,
-        image: product.image,
-        brand: product.brandName,
-        categoryId: product.categoryId,
-        cartonQty,
-        schemePrice,
-        quantity,
-        total: schemePrice * cartonQty * quantity
-      };
-    });
-  }
-  validateScheme(schemeId, productTotal, config) {
-    const schemes = config?.bulkSchemes;
-    if (!Array.isArray(schemes) || schemes.length === 0) {
-      throw new Error("Bulk schemes are not configured.");
-    }
-    const scheme = schemes.find(
-      (s) => s.schemeId === schemeId
-    );
-    if (!scheme) {
-      throw new Error("Invalid bulk scheme selected.");
-    }
-    const minAmount = Number(scheme.minAmount ?? 0);
-    const maxAmount = Number(scheme.maxAmount ?? 0);
-    if (productTotal < minAmount) {
-      throw new Error(
-        `Minimum order amount for ${scheme.schemeName} is \u20B9${minAmount}.`
-      );
-    }
-    if (maxAmount > 0 && productTotal > maxAmount) {
-      throw new Error(
-        `Maximum order amount for ${scheme.schemeName} is \u20B9${maxAmount}.`
-      );
-    }
-  }
-  buildOrder(userId, request, items, pricing) {
-    const now = Date.now();
-    return {
-      orderId: this.generateOrderId(now),
-      meta: "ORDER",
-      userId,
-      status: "ORDER_PLACED",
-      schemeId: request.schemeId,
-      remarks: request.remarks,
-      address: request.address,
-      items,
-      pricing,
-      createdAt: now,
-      updatedAt: now,
-      statusHistory: [
-        {
-          status: "ORDER_PLACED",
-          at: now,
-          by: `USER#${userId}`
-        }
-      ]
-    };
-  }
-  generateOrderId(now) {
-    const d = new Date(now);
-    const ymd = d.getFullYear().toString() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
-    const rand = Math.floor(
-      1e3 + Math.random() * 9e3
-    );
-    return `BOR-${ymd}-${rand}`;
-  }
-  async getOrders(userId, limit, cursor) {
-    const result = await this.repo.getOrdersByUser(
-      userId,
-      limit,
-      cursor
-    );
-    return {
-      items: result.items.map((order) => ({
-        orderId: order.orderId,
-        userId: order.userId,
-        status: order.status,
-        schemeId: order.schemeId,
-        createdAt: order.createdAt,
-        pricing: order.pricing,
-        items: order.items
-      })),
-      nextCursor: result.nextCursor
-    };
-  }
-  async getOrder(userId, orderId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) {
-      throw new Error("Bulk order not found.");
-    }
-    if (order.userId !== userId) {
-      throw new Error("You are not authorized to view this bulk order.");
-    }
-    return order;
-  }
-  async adminGetOrders(limit, cursor, status) {
-    const result = await this.repo.getAdminOrders(
-      limit,
-      cursor,
-      status
-    );
-    return {
-      items: result.items.map((order) => ({
-        orderId: order.orderId,
-        userId: order.userId,
-        status: order.status,
-        schemeId: order.schemeId,
-        createdAt: order.createdAt,
-        customer: {
-          name: order.address?.name,
-          mobile: order.address?.mobile
-        },
-        pricing: order.pricing,
-        items: order.items
-      })),
-      nextCursor: result.nextCursor
-    };
-  }
-  async adminGetOrder(orderId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) {
-      throw new Error("Bulk order not found.");
-    }
-    return order;
-  }
-  addStatusHistory(history = [], status, by) {
-    return [
-      ...history,
-      {
-        status,
-        at: Date.now(),
-        by
-      }
-    ];
-  }
-  validateStatus(status) {
-    if (!STATUS_ORDER.includes(status)) {
-      throw new Error("Invalid order status.");
-    }
-  }
-  validateStatusTransition(currentStatus, newStatus) {
-    const currentIndex = STATUS_ORDER.indexOf(currentStatus);
-    const newIndex = STATUS_ORDER.indexOf(newStatus);
-    if (newIndex === -1) {
-      throw new Error("Invalid order status.");
-    }
-    if (currentStatus === newStatus) {
-      throw new Error("Order is already in this status.");
-    }
-    if (currentStatus === "CANCELLED") {
-      throw new Error("Cancelled orders cannot be updated.");
-    }
-    if (currentStatus === "DISPATCHED" && newStatus === "CANCELLED") {
-      throw new Error("Dispatched orders cannot be cancelled.");
-    }
-    if (newIndex < currentIndex) {
-      throw new Error("Order status cannot move backwards.");
-    }
-  }
-  async updateStatus(orderId, status, adminId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) {
-      throw new Error("Bulk order not found.");
-    }
-    this.validateStatus(status);
-    this.validateStatusTransition(
-      order.status,
-      status
-    );
-    const now = Date.now();
-    const statusHistory = this.addStatusHistory(
-      order.statusHistory,
-      status,
-      adminId
-    );
-    await this.repo.updateStatus(orderId, {
-      status,
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: adminId,
-      statusHistory
-    });
-    return {
-      message: "Bulk order status updated successfully."
-    };
-  }
-  async cancelOrder(userId, orderId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) {
-      throw new Error("Bulk order not found.");
-    }
-    if (order.userId !== userId) {
-      throw new Error("You are not authorized to cancel this bulk order.");
-    }
-    this.validateStatusTransition(
-      order.status,
-      "CANCELLED"
-    );
-    const now = Date.now();
-    const statusHistory = this.addStatusHistory(
-      order.statusHistory,
-      "CANCELLED",
-      `USER#${userId}`
-    );
-    await this.repo.updateStatus(orderId, {
-      status: "CANCELLED",
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: `USER#${userId}`,
-      statusHistory
-    });
-    return {
-      message: "Bulk order cancelled successfully."
-    };
-  }
-};
-
-// src/libs/response.ts
-var success = (data, statusCode = 200) => ({
-  statusCode,
-  body: JSON.stringify({
-    success: true,
-    data
-  })
-});
-
-// src/handlers/getBulkOrders.ts
-async function handler(event) {
+// src/handlers/adminCode.ts
+async function create(event) {
   try {
-    const user = verifyJwt(event);
-    const limit = Number(
-      event.queryStringParameters?.limit ?? 20
+    const { userId, role } = verifyJwt(event);
+    if (role !== "admin") {
+      return error("Forbidden");
+    }
+    if (!event.body) {
+      return error("Request body is required.");
+    }
+    const body = JSON.parse(event.body);
+    const code = body.code?.trim();
+    const requestUserId = body.userId?.trim();
+    const schemeId = body.schemeId;
+    const expiryDate = Number(body.expiryDate);
+    if (!code || !requestUserId || !schemeId || !expiryDate) {
+      return error(
+        "Code, User, Scheme and Expiry Date are required."
+      );
+    }
+    const response = await AdminCodeService.createCode({
+      code,
+      userId: requestUserId,
+      schemeId,
+      expiryDate,
+      createdAt: Date.now(),
+      createdBy: userId,
+      status: "ACTIVE"
+    });
+    return success(response);
+  } catch (e) {
+    console.error(
+      "Admin Code Creation Error:",
+      e
     );
-    const cursor = event.queryStringParameters?.cursor ? JSON.parse(
-      decodeURIComponent(
-        event.queryStringParameters.cursor
-      )
-    ) : void 0;
-    const service = new BulkOrderService();
-    const result = await service.getOrders(
-      user.userId,
-      limit,
-      cursor
+    return error(
+      e.message || "Unable to create admin code."
     );
-    return success(result);
-  } catch (error2) {
-    console.error("Get Bulk Orders Error:", error2);
-    return error2(
-      error2.message || "Unable to fetch bulk orders."
+  }
+}
+async function list(event) {
+  try {
+    const { role } = verifyJwt(event);
+    if (role !== "admin") {
+      return error("Forbidden");
+    }
+    const response = await AdminCodeService.listCodes();
+    return success(response);
+  } catch (e) {
+    console.error(
+      "Admin Code List Error:",
+      e
+    );
+    return error(
+      e.message || "Unable to fetch admin codes."
+    );
+  }
+}
+async function remove(event) {
+  try {
+    const { role } = verifyJwt(event);
+    if (role !== "admin") {
+      return error("Forbidden");
+    }
+    const code = event.pathParameters?.code?.trim();
+    if (!code) {
+      return error(
+        "Code is required."
+      );
+    }
+    await AdminCodeService.deleteCode(
+      code
+    );
+    return success({
+      message: "Admin Code deleted successfully."
+    });
+  } catch (e) {
+    console.error(
+      "Admin Code Delete Error:",
+      e
+    );
+    return error(
+      e.message || "Unable to delete admin code."
+    );
+  }
+}
+async function validate(event) {
+  try {
+    if (!event.body) {
+      return error(
+        "Request body is required."
+      );
+    }
+    const body = JSON.parse(
+      event.body
+    );
+    const { userId } = verifyJwt(event);
+    const code = body.code?.trim();
+    if (!userId || !code) {
+      return error(
+        "User ID and Code are required."
+      );
+    }
+    const response = await AdminCodeService.validateCode(
+      userId,
+      code
+    );
+    return success(response);
+  } catch (e) {
+    console.error(
+      "Admin Code Validation Error:",
+      e
+    );
+    return error(
+      e.message || "Invalid Admin Code."
     );
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  handler
+  create,
+  list,
+  remove,
+  validate
 });
 /*! Bundled license information:
 
 safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 */
-//# sourceMappingURL=getBulkOrders.js.map
+//# sourceMappingURL=adminCode.js.map

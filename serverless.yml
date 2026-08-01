@@ -22,6 +22,7 @@ provider:
     DISCOUNT_TABLE: Discounts
     CONTACT_TABLE: ContactUs
     COUPONS_TABLE: Coupons
+    ADMIN_CODES_TABLE: AdminCodes
     OTP_TABLE: OtpTable
     OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
     CONFIRM_ORDER_TID: ${env:CONFIRM_ORDER_TID}
@@ -94,6 +95,7 @@ provider:
             - arn:aws:dynamodb:ap-south-1:*:table/AdminConfig*
             - arn:aws:dynamodb:ap-south-1:*:table/ContactUs*
             - arn:aws:dynamodb:ap-south-1:*:table/OtpTable*
+            - arn:aws:dynamodb:ap-south-1:*:table/AdminCodes*
             - arn:aws:dynamodb:ap-south-1:*:table/Coupons*
 
         - Effect: Allow
@@ -742,6 +744,35 @@ functions:
           path: /bulk-order/{orderId}/cancel
           method: PUT
 
+  adminCodeCreate:
+    handler: src/handlers/adminCode.create
+    events:
+      - httpApi:
+          path: /admin/codes
+          method: POST
+
+  adminCodeList:
+    handler: src/handlers/adminCode.list
+    events:
+      - httpApi:
+          path: /admin/codes
+          method: GET
+
+  adminCodeDelete:
+    handler: src/handlers/adminCode.remove
+    events:
+      - httpApi:
+          path: /admin/codes/{code}
+          method: DELETE
+
+  adminCodeValidate:
+    handler: src/handlers/adminCode.validate
+    events:
+      - httpApi:
+          path: /bulk-order/validate-code
+          method: POST
+
+
 resources:
   Resources:
     ProductImagesBucket:
@@ -1043,4 +1074,16 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: couponCode
+            KeyType: HASH
+
+    AdminCodesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: AdminCodes
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: code
+            AttributeType: S
+        KeySchema:
+          - AttributeName: code
             KeyType: HASH

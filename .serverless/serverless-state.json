@@ -25,6 +25,7 @@
         "DISCOUNT_TABLE": "Discounts",
         "CONTACT_TABLE": "ContactUs",
         "COUPONS_TABLE": "Coupons",
+        "ADMIN_CODES_TABLE": "AdminCodes",
         "OTP_TABLE": "OtpTable",
         "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
         "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -103,6 +104,7 @@
                 "arn:aws:dynamodb:ap-south-1:*:table/AdminConfig*",
                 "arn:aws:dynamodb:ap-south-1:*:table/ContactUs*",
                 "arn:aws:dynamodb:ap-south-1:*:table/OtpTable*",
+                "arn:aws:dynamodb:ap-south-1:*:table/AdminCodes*",
                 "arn:aws:dynamodb:ap-south-1:*:table/Coupons*"
               ]
             },
@@ -670,6 +672,30 @@
               "LogGroupName": "/aws/lambda/cracker-backend-dev-bulkCancelOrder"
             }
           },
+          "AdminCodeCreateLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/cracker-backend-dev-adminCodeCreate"
+            }
+          },
+          "AdminCodeListLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/cracker-backend-dev-adminCodeList"
+            }
+          },
+          "AdminCodeDeleteLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/cracker-backend-dev-adminCodeDelete"
+            }
+          },
+          "AdminCodeValidateLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/cracker-backend-dev-adminCodeValidate"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -762,7 +788,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/auth/login.handler",
               "Runtime": "nodejs24.x",
@@ -784,6 +810,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -819,7 +846,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/auth/send-otp.handler",
               "Runtime": "nodejs24.x",
@@ -841,6 +868,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -876,7 +904,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/auth/register.handler",
               "Runtime": "nodejs24.x",
@@ -898,6 +926,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -933,7 +962,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/user/get-profile.main",
               "Runtime": "nodejs24.x",
@@ -955,6 +984,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -990,7 +1020,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/user/update-profile.main",
               "Runtime": "nodejs24.x",
@@ -1012,6 +1042,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1047,7 +1078,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProducts.handler",
               "Runtime": "nodejs24.x",
@@ -1069,6 +1100,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1104,7 +1136,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getAllProducts.handler",
               "Runtime": "nodejs24.x",
@@ -1126,6 +1158,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1161,7 +1194,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductDetails.handler",
               "Runtime": "nodejs24.x",
@@ -1183,6 +1216,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1218,7 +1252,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductsByCategory.handler",
               "Runtime": "nodejs24.x",
@@ -1240,6 +1274,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1275,7 +1310,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductsByBrand.handler",
               "Runtime": "nodejs24.x",
@@ -1297,6 +1332,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1332,7 +1368,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getCategories.handler",
               "Runtime": "nodejs24.x",
@@ -1354,6 +1390,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1389,7 +1426,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getBrands.handler",
               "Runtime": "nodejs24.x",
@@ -1411,6 +1448,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1446,7 +1484,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.getCart",
               "Runtime": "nodejs24.x",
@@ -1468,6 +1506,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1503,7 +1542,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.addItem",
               "Runtime": "nodejs24.x",
@@ -1525,6 +1564,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1560,7 +1600,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.removeItem",
               "Runtime": "nodejs24.x",
@@ -1582,6 +1622,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1617,7 +1658,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cart.clearCart",
               "Runtime": "nodejs24.x",
@@ -1639,6 +1680,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1674,7 +1716,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/productBatch.handler",
               "Runtime": "nodejs24.x",
@@ -1696,6 +1738,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1731,7 +1774,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cartMerge.handler",
               "Runtime": "nodejs24.x",
@@ -1753,6 +1796,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1788,7 +1832,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cartSync.handler",
               "Runtime": "nodejs24.x",
@@ -1810,6 +1854,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1845,7 +1890,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/Orders.handler",
               "Runtime": "nodejs24.x",
@@ -1867,6 +1912,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1902,7 +1948,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getOrders.handler",
               "Runtime": "nodejs24.x",
@@ -1924,6 +1970,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -1959,7 +2006,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cancelOrder.handler",
               "Runtime": "nodejs24.x",
@@ -1981,6 +2028,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2016,7 +2064,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adjustOrder.handler",
               "Runtime": "nodejs24.x",
@@ -2038,6 +2086,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2073,7 +2122,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDashboard.handler",
               "Runtime": "nodejs24.x",
@@ -2095,6 +2144,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2130,7 +2180,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminOrders.handler",
               "Runtime": "nodejs24.x",
@@ -2152,6 +2202,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2187,7 +2238,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminOrderDetails.handler",
               "Runtime": "nodejs24.x",
@@ -2209,6 +2260,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2244,7 +2296,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateOrder.handler",
               "Runtime": "nodejs24.x",
@@ -2266,6 +2318,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2301,7 +2354,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getAdminProducts.handler",
               "Runtime": "nodejs24.x",
@@ -2323,6 +2376,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2358,7 +2412,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/createAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2380,6 +2434,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2415,7 +2470,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/updateAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2437,6 +2492,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2472,7 +2528,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/deactivateAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2494,6 +2550,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2529,7 +2586,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getPresignedUrls.handler",
               "Runtime": "nodejs24.x",
@@ -2551,6 +2608,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2586,7 +2644,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2608,6 +2666,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2643,7 +2702,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGenerateImportUploadUrl.handler",
               "Runtime": "nodejs24.x",
@@ -2665,6 +2724,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2700,7 +2760,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminValidateProductImport.handler",
               "Runtime": "nodejs24.x",
@@ -2722,6 +2782,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2757,7 +2818,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminConfirmProductImport.handler",
               "Runtime": "nodejs24.x",
@@ -2779,6 +2840,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2814,7 +2876,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListCategories.handler",
               "Runtime": "nodejs24.x",
@@ -2836,6 +2898,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2871,7 +2934,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminCreateCategory.handler",
               "Runtime": "nodejs24.x",
@@ -2893,6 +2956,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2928,7 +2992,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateCategoryStatus.handler",
               "Runtime": "nodejs24.x",
@@ -2950,6 +3014,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -2985,7 +3050,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateCategory.handler",
               "Runtime": "nodejs24.x",
@@ -3007,6 +3072,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3042,7 +3108,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGetCategoryById.handler",
               "Runtime": "nodejs24.x",
@@ -3064,6 +3130,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3099,7 +3166,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteCategory.handler",
               "Runtime": "nodejs24.x",
@@ -3121,6 +3188,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3156,7 +3224,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminPresignCategoryImage.handler",
               "Runtime": "nodejs24.x",
@@ -3178,6 +3246,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3213,7 +3282,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cleanupOrphanProductImages.handler",
               "Runtime": "nodejs24.x",
@@ -3235,6 +3304,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3270,7 +3340,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListBrands.handler",
               "Runtime": "nodejs24.x",
@@ -3292,6 +3362,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3327,7 +3398,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGetBrand.handler",
               "Runtime": "nodejs24.x",
@@ -3349,6 +3420,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3384,7 +3456,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminCreateBrand.handler",
               "Runtime": "nodejs24.x",
@@ -3406,6 +3478,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3441,7 +3514,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateBrand.handler",
               "Runtime": "nodejs24.x",
@@ -3463,6 +3536,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3498,7 +3572,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateBrandStatus.handler",
               "Runtime": "nodejs24.x",
@@ -3520,6 +3594,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3555,7 +3630,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteBrand.handler",
               "Runtime": "nodejs24.x",
@@ -3577,6 +3652,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3612,7 +3688,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminPresignBrandLogo.handler",
               "Runtime": "nodejs24.x",
@@ -3634,6 +3710,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3669,7 +3746,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListUsers.handler",
               "Runtime": "nodejs24.x",
@@ -3691,6 +3768,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3726,7 +3804,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteUser.handler",
               "Runtime": "nodejs24.x",
@@ -3748,6 +3826,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3783,7 +3862,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/deleteProduct.handler",
               "Runtime": "nodejs24.x",
@@ -3805,6 +3884,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3840,7 +3920,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getConfig.handler",
               "Runtime": "nodejs24.x",
@@ -3862,6 +3942,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3897,7 +3978,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateConfig.handler",
               "Runtime": "nodejs24.x",
@@ -3919,6 +4000,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -3954,7 +4036,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/bulk-upload-aitags.handler",
               "Runtime": "nodejs24.x",
@@ -3976,6 +4058,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4011,7 +4094,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminConfigSliderPresign.handler",
               "Runtime": "nodejs24.x",
@@ -4033,6 +4116,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4068,7 +4152,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/deleteProductImages.handler",
               "Runtime": "nodejs24.x",
@@ -4090,6 +4174,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4125,7 +4210,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminListDiscounts.handler",
               "Runtime": "nodejs24.x",
@@ -4147,6 +4232,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4182,7 +4268,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminCreateDiscount.handler",
               "Runtime": "nodejs24.x",
@@ -4204,6 +4290,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4239,7 +4326,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGetDiscountById.handler",
               "Runtime": "nodejs24.x",
@@ -4261,6 +4348,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4296,7 +4384,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateDiscount.handler",
               "Runtime": "nodejs24.x",
@@ -4318,6 +4406,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4353,7 +4442,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteDiscount.handler",
               "Runtime": "nodejs24.x",
@@ -4375,6 +4464,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4410,7 +4500,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getRevenueReport.handler",
               "Runtime": "nodejs24.x",
@@ -4432,6 +4522,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4467,7 +4558,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getProductReport.handler",
               "Runtime": "nodejs24.x",
@@ -4489,6 +4580,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4524,7 +4616,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/productSampleXls.handler",
               "Runtime": "nodejs24.x",
@@ -4546,6 +4638,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4581,7 +4674,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/orderRestore.handler",
               "Runtime": "nodejs24.x",
@@ -4603,6 +4696,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4638,7 +4732,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/popularProducts.handler",
               "Runtime": "nodejs24.x",
@@ -4660,6 +4754,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4695,7 +4790,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/auth/forgot/send-otp.handler",
               "Runtime": "nodejs24.x",
@@ -4717,6 +4812,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4752,7 +4848,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/auth/forgot/reset.handler",
               "Runtime": "nodejs24.x",
@@ -4774,6 +4870,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4809,7 +4906,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/contactSubmit.handler",
               "Runtime": "nodejs24.x",
@@ -4831,6 +4928,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4866,7 +4964,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/contactList.handler",
               "Runtime": "nodejs24.x",
@@ -4888,6 +4986,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4923,7 +5022,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/contactUpdate.handler",
               "Runtime": "nodejs24.x",
@@ -4945,6 +5044,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -4980,7 +5080,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getPackages.handler",
               "Runtime": "nodejs24.x",
@@ -5002,6 +5102,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5037,7 +5138,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getPackageDetails.handler",
               "Runtime": "nodejs24.x",
@@ -5059,6 +5160,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5094,7 +5196,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/aiRecommendation.handler",
               "Runtime": "nodejs24.x",
@@ -5116,6 +5218,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5151,7 +5254,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/estimateEmail.handler",
               "Runtime": "nodejs24.x",
@@ -5173,6 +5276,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5208,7 +5312,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminCreateCoupon.handler",
               "Runtime": "nodejs24.x",
@@ -5230,6 +5334,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5265,7 +5370,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminGetCoupons.handler",
               "Runtime": "nodejs24.x",
@@ -5287,6 +5392,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5322,7 +5428,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteCoupon.handler",
               "Runtime": "nodejs24.x",
@@ -5344,6 +5450,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5379,7 +5486,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/validateCoupon.handler",
               "Runtime": "nodejs24.x",
@@ -5401,6 +5508,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5436,7 +5544,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/bulkOrder.handler",
               "Runtime": "nodejs24.x",
@@ -5458,6 +5566,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5493,7 +5602,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getBulkOrders.handler",
               "Runtime": "nodejs24.x",
@@ -5515,6 +5624,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5550,7 +5660,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/getDetailedBulkOrder.handler",
               "Runtime": "nodejs24.x",
@@ -5572,6 +5682,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5607,7 +5718,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminBulkOrder.handler",
               "Runtime": "nodejs24.x",
@@ -5629,6 +5740,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5664,7 +5776,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminBulkOrderDetails.handler",
               "Runtime": "nodejs24.x",
@@ -5686,6 +5798,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5721,7 +5834,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/adminBulkOrderStatusUpdate.handler",
               "Runtime": "nodejs24.x",
@@ -5743,6 +5856,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5778,7 +5892,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z/cracker-backend.zip"
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
               },
               "Handler": "src/handlers/cancelBulkOrder.handler",
               "Runtime": "nodejs24.x",
@@ -5800,6 +5914,7 @@
                   "DISCOUNT_TABLE": "Discounts",
                   "CONTACT_TABLE": "ContactUs",
                   "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
                   "OTP_TABLE": "OtpTable",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
@@ -5828,6 +5943,238 @@
             },
             "DependsOn": [
               "BulkCancelOrderLogGroup"
+            ]
+          },
+          "AdminCodeCreateLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
+              },
+              "Handler": "src/handlers/adminCode.create",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "cracker-backend-dev-adminCodeCreate",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+                  "CART_TABLE": "Carts",
+                  "PRODUCTS_TABLE": "Products",
+                  "ORDERS_TABLE": "Orders",
+                  "BULK_ORDERS_TABLE": "BulkOrders",
+                  "BUCKET_NAME": "cracker-app",
+                  "BRAND_TABLE": "Brands",
+                  "CATEGORY_TABLE": "Categories",
+                  "USERS_TABLE": "Users",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig",
+                  "DISCOUNT_TABLE": "Discounts",
+                  "CONTACT_TABLE": "ContactUs",
+                  "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
+                  "OTP_TABLE": "OtpTable",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "REGION": "ap-south-1",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminCodeCreateLogGroup"
+            ]
+          },
+          "AdminCodeListLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
+              },
+              "Handler": "src/handlers/adminCode.list",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "cracker-backend-dev-adminCodeList",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+                  "CART_TABLE": "Carts",
+                  "PRODUCTS_TABLE": "Products",
+                  "ORDERS_TABLE": "Orders",
+                  "BULK_ORDERS_TABLE": "BulkOrders",
+                  "BUCKET_NAME": "cracker-app",
+                  "BRAND_TABLE": "Brands",
+                  "CATEGORY_TABLE": "Categories",
+                  "USERS_TABLE": "Users",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig",
+                  "DISCOUNT_TABLE": "Discounts",
+                  "CONTACT_TABLE": "ContactUs",
+                  "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
+                  "OTP_TABLE": "OtpTable",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "REGION": "ap-south-1",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminCodeListLogGroup"
+            ]
+          },
+          "AdminCodeDeleteLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
+              },
+              "Handler": "src/handlers/adminCode.remove",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "cracker-backend-dev-adminCodeDelete",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+                  "CART_TABLE": "Carts",
+                  "PRODUCTS_TABLE": "Products",
+                  "ORDERS_TABLE": "Orders",
+                  "BULK_ORDERS_TABLE": "BulkOrders",
+                  "BUCKET_NAME": "cracker-app",
+                  "BRAND_TABLE": "Brands",
+                  "CATEGORY_TABLE": "Categories",
+                  "USERS_TABLE": "Users",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig",
+                  "DISCOUNT_TABLE": "Discounts",
+                  "CONTACT_TABLE": "ContactUs",
+                  "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
+                  "OTP_TABLE": "OtpTable",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "REGION": "ap-south-1",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminCodeDeleteLogGroup"
+            ]
+          },
+          "AdminCodeValidateLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z/cracker-backend.zip"
+              },
+              "Handler": "src/handlers/adminCode.validate",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "cracker-backend-dev-adminCodeValidate",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+                  "CART_TABLE": "Carts",
+                  "PRODUCTS_TABLE": "Products",
+                  "ORDERS_TABLE": "Orders",
+                  "BULK_ORDERS_TABLE": "BulkOrders",
+                  "BUCKET_NAME": "cracker-app",
+                  "BRAND_TABLE": "Brands",
+                  "CATEGORY_TABLE": "Categories",
+                  "USERS_TABLE": "Users",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig",
+                  "DISCOUNT_TABLE": "Discounts",
+                  "CONTACT_TABLE": "ContactUs",
+                  "COUPONS_TABLE": "Coupons",
+                  "ADMIN_CODES_TABLE": "AdminCodes",
+                  "OTP_TABLE": "OtpTable",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "REGION": "ap-south-1",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminCodeValidateLogGroup"
             ]
           },
           "CleanupOrphanProductImagesEventsRuleSchedule1": {
@@ -12247,6 +12594,294 @@
             },
             "DependsOn": "HttpApiIntegrationBulkCancelOrder"
           },
+          "AdminCodeCreateLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminCodeCreateLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminCodeCreate": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminCodeCreateLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRoutePostAdminCodes": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "POST /admin/codes",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminCodeCreate"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminCodeCreate"
+          },
+          "AdminCodeListLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminCodeListLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminCodeList": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminCodeListLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetAdminCodes": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /admin/codes",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminCodeList"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminCodeList"
+          },
+          "AdminCodeDeleteLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminCodeDeleteLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminCodeDelete": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminCodeDeleteLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteDeleteAdminCodesCodeVar": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "DELETE /admin/codes/{code}",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminCodeDelete"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminCodeDelete"
+          },
+          "AdminCodeValidateLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminCodeValidateLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminCodeValidate": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminCodeValidateLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRoutePostBulkDashorderValidateDashcode": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "POST /bulk-order/validate-code",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminCodeValidate"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminCodeValidate"
+          },
           "ProductImagesBucket": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
@@ -12731,6 +13366,25 @@
               "KeySchema": [
                 {
                   "AttributeName": "couponCode",
+                  "KeyType": "HASH"
+                }
+              ]
+            }
+          },
+          "AdminCodesTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "AdminCodes",
+              "BillingMode": "PAY_PER_REQUEST",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "code",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "code",
                   "KeyType": "HASH"
                 }
               ]
@@ -14659,7 +15313,7 @@
           {
             "httpApi": {
               "path": "/admin/bulk-orders",
-              "method": "get"
+              "method": "GET"
             },
             "resolvedMethod": "GET",
             "resolvedPath": "/admin/bulk-orders"
@@ -14732,6 +15386,94 @@
           }
         ],
         "name": "cracker-backend-dev-bulkCancelOrder",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminCodeCreate": {
+        "handler": "src/handlers/adminCode.create",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/admin/codes",
+              "method": "POST"
+            },
+            "resolvedMethod": "POST",
+            "resolvedPath": "/admin/codes"
+          }
+        ],
+        "name": "cracker-backend-dev-adminCodeCreate",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminCodeList": {
+        "handler": "src/handlers/adminCode.list",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/admin/codes",
+              "method": "GET"
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/admin/codes"
+          }
+        ],
+        "name": "cracker-backend-dev-adminCodeList",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminCodeDelete": {
+        "handler": "src/handlers/adminCode.remove",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/admin/codes/{code}",
+              "method": "DELETE"
+            },
+            "resolvedMethod": "DELETE",
+            "resolvedPath": "/admin/codes/{code}"
+          }
+        ],
+        "name": "cracker-backend-dev-adminCodeDelete",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminCodeValidate": {
+        "handler": "src/handlers/adminCode.validate",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/bulk-order/validate-code",
+              "method": "POST"
+            },
+            "resolvedMethod": "POST",
+            "resolvedPath": "/bulk-order/validate-code"
+          }
+        ],
+        "name": "cracker-backend-dev-adminCodeValidate",
         "environment": {
           "NODE_OPTIONS": "--enable-source-maps"
         },
@@ -15232,6 +15974,25 @@
               }
             ]
           }
+        },
+        "AdminCodesTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "AdminCodes",
+            "BillingMode": "PAY_PER_REQUEST",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "code",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "code",
+                "KeyType": "HASH"
+              }
+            ]
+          }
         }
       },
       "Outputs": {}
@@ -15250,7 +16011,7 @@
         "artifactsS3KeyDirname": "serverless/cracker-backend/dev/code-artifacts",
         "deploymentBucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
         "artifact": "C:\\Users\\Sakthibalan\\Desktop\\Sakthi_Projects\\cracker-backend-shop\\.serverless\\cracker-backend.zip",
-        "artifactDirectoryName": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z"
+        "artifactDirectoryName": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -15264,7 +16025,7 @@
     "layers": {}
   },
   "package": {
-    "artifactDirectoryName": "serverless/cracker-backend/dev/1785514575606-2026-07-31T16:16:15.606Z",
+    "artifactDirectoryName": "serverless/cracker-backend/dev/1785555562142-2026-08-01T03:39:22.142Z",
     "artifact": "cracker-backend.zip"
   }
 }
