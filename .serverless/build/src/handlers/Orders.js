@@ -4313,7 +4313,7 @@ var OrderRepository = class {
           TableName: "Users",
           Key: { mobile },
           UpdateExpression: "SET referralRewarded = :t",
-          ConditionExpression: "referralRewarded = :f",
+          ConditionExpression: "attribute_not_exists(referralRewarded) OR referralRewarded = :f",
           ExpressionAttributeValues: {
             ":t": true,
             ":f": false
@@ -4330,18 +4330,32 @@ var OrderRepository = class {
   }
   async addWalletCreditByReferralCode(referralCode, amount) {
     if (!referralCode || amount <= 0) return;
-    const scanRes = await ddb.send(
-      new import_lib_dynamodb6.ScanCommand({
-        TableName: "Users",
-        FilterExpression: "referralCode = :c",
-        ExpressionAttributeValues: {
-          ":c": referralCode
-        },
-        Limit: 1
-      })
+    let lastKey;
+    let refUser = null;
+    do {
+      const res = await ddb.send(
+        new import_lib_dynamodb6.ScanCommand({
+          TableName: "Users",
+          FilterExpression: "referralCode = :c",
+          ExpressionAttributeValues: {
+            ":c": referralCode
+          },
+          ExclusiveStartKey: lastKey
+        })
+      );
+      if (res.Items?.length) {
+        refUser = res.Items[0];
+        break;
+      }
+      lastKey = res.LastEvaluatedKey;
+    } while (lastKey);
+    if (!refUser) {
+      console.log("Referral user not found:", referralCode);
+      return;
+    }
+    console.log(
+      `Crediting \u20B9${amount} to ${refUser.mobile} (${referralCode})`
     );
-    const refUser = scanRes.Items?.[0];
-    if (!refUser) return;
     await ddb.send(
       new import_lib_dynamodb6.UpdateCommand({
         TableName: "Users",
@@ -4660,12 +4674,11 @@ var OrderService = class {
     this.repo = repo;
     this.couponService = new CouponService();
     this.pricingService = new OrderPricingService();
-    this.productRepo = new ProductRepository();
   }
   async createOrder(input) {
     const now = Date.now();
     const orderId = this.generateOrderId(now);
-    const isTamilNadu = input.address.toLowerCase().includes("tamil nadu");
+    const isTamilNadu = input.deliveryState.toLowerCase() === "tamil nadu";
     const deliveryDays = isTamilNadu ? 5 : 10;
     const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1e3;
     const items = await this.repo.buildItemsSnapshot(
@@ -4686,7 +4699,7 @@ var OrderService = class {
     const pricing = this.pricingService.calculate({
       items,
       walletUsed: input.walletUsed,
-      state: input.address,
+      state: input.deliveryState,
       config,
       couponResult
     });
@@ -4703,6 +4716,7 @@ var OrderService = class {
       meta: "ORDER",
       userId: input.userId,
       address: input.address,
+      deliveryState: input.deliveryState,
       items,
       status: "ORDER_PLACED",
       totalProductAmount: pricing.totalProductAmount,
@@ -4842,7 +4856,7 @@ var OrderService = class {
     const pricing = this.pricingService.calculate({
       items: updatedItems,
       walletUsed,
-      state: order.address,
+      state: order.deliveryState ?? order.address,
       config,
       couponResult
     });
@@ -5094,6 +5108,8 @@ var handler = async (event) => {
     const body = JSON.parse(event.body || "{}");
     const rawAddress = body.address;
     const address = typeof rawAddress === "string" ? rawAddress.trim() : "";
+    const rawDeliveryState = body.deliveryState;
+    const deliveryState = typeof rawDeliveryState === "string" ? rawDeliveryState.trim() : "";
     const paymentMode = body.paymentMode === "ONLINE" ? "ONLINE" : "OFFLINE";
     const paymentStatus = "PENDING";
     const transactionId = typeof body.transactionId === "string" ? body.transactionId : null;
@@ -5104,6 +5120,14 @@ var handler = async (event) => {
         statusCode: 400,
         body: JSON.stringify({
           message: "Address is required"
+        })
+      };
+    }
+    if (!deliveryState) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Delivery state is required"
         })
       };
     }
@@ -5127,6 +5151,7 @@ var handler = async (event) => {
     const result = await orderService.createOrder({
       userId,
       address,
+      deliveryState,
       cartItems,
       paymentMode,
       paymentStatus,

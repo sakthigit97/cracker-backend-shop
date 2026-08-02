@@ -56,6 +56,7 @@ export class AdminUpdateOrderService {
             input.status === "DISPATCHED" &&
             existing.status !== "DISPATCHED"
         ) {
+            console.log("Referral reward flow started");
             await this.handleReferralReward(updatedOrder);
         }
 
@@ -65,19 +66,40 @@ export class AdminUpdateOrderService {
     private async handleReferralReward(order: any) {
 
         const config = await this.orderRepo.getAdminConfig();
-        const isReferralEnabled = config.isReferralEnabled === true;
+        console.log("Config:", config);
 
-        if (!isReferralEnabled) return;
+        const isReferralEnabled = config.isReferralEnabled === true;
+        if (!isReferralEnabled) {
+            console.log("Referral disabled");
+            return;
+        }
 
         const userId = order.userId;
-        if (!userId) return;
+        console.log("UserId:", userId);
         const user = await this.orderRepo.getUserByMobile(userId);
-        if (!user) return;
-        if (!user.referredBy || user.referredBy === "") return;
-        if (user.referralRewarded === true) return;
-        let rewardAmount = Number(config.referralRewardAmount) || 0;
-        if (rewardAmount <= 0) return;
+        if (!user) {
+            console.log("User not found");
+            return;
+        }
 
+        console.log("referredBy:", user.referredBy);
+
+
+        if (!user.referredBy) {
+            console.log("No referral");
+            return;
+        }
+
+        console.log("rewarded:", user.referralRewarded);
+        if (user.referralRewarded) {
+            console.log("Already rewarded");
+            return;
+        }
+
+        console.log("Passed validation");
+        let rewardAmount = Number(config.referralRewardAmount) || 0;
+        console.log(rewardAmount, "rewardAmount");
+        if (rewardAmount <= 0) return;
         if (config.referralRewardType === "PERCENT") {
             const orderAmount = Number(
                 order.eligibleChargeAmount ??

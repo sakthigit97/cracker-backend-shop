@@ -15,10 +15,7 @@ export class OtpService {
             100000 + Math.random() * 900000
         ).toString();
 
-        const expiryTime =
-            Math.floor(Date.now() / 1000) +
-            5 * 60;
-
+        const expiryTime = Math.floor(Date.now() / 1000) + 5 * 60;
         await dbClient.send(
             new PutItemCommand({
                 TableName: process.env.OTP_TABLE!,
@@ -49,17 +46,14 @@ export class OtpService {
             {
                 method: "POST",
                 headers: {
-                    authkey:
-                        process.env.MSG91_AUTH_KEY!,
-                    "Content-Type":
-                        "application/json",
+                    authkey: process.env.MSG91_AUTH_KEY!,
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
             }
         );
 
         const data = await res.json();
-
         if (!res.ok) {
             console.error(
                 "MSG91 Error",

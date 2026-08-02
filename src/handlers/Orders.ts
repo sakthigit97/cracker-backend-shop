@@ -20,6 +20,11 @@ export const handler = async (event: any) => {
         const body = JSON.parse(event.body || "{}");
         const rawAddress = body.address;
         const address = typeof rawAddress === "string" ? rawAddress.trim() : "";
+        const rawDeliveryState = body.deliveryState;
+        const deliveryState =
+            typeof rawDeliveryState === "string"
+                ? rawDeliveryState.trim()
+                : "";
         const paymentMode = body.paymentMode === "ONLINE" ? "ONLINE" : "OFFLINE";
         const paymentStatus = "PENDING";
         const transactionId = typeof body.transactionId === "string" ? body.transactionId : null;
@@ -31,6 +36,14 @@ export const handler = async (event: any) => {
                 statusCode: 400,
                 body: JSON.stringify({
                     message: "Address is required",
+                }),
+            };
+        }
+        if (!deliveryState) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({
+                    message: "Delivery state is required",
                 }),
             };
         }
@@ -57,6 +70,7 @@ export const handler = async (event: any) => {
         const result = await orderService.createOrder({
             userId,
             address,
+            deliveryState,
             cartItems,
             paymentMode,
             paymentStatus,

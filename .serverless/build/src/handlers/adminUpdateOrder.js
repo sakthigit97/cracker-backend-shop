@@ -4302,7 +4302,7 @@ var OrderRepository = class {
           TableName: "Users",
           Key: { mobile },
           UpdateExpression: "SET referralRewarded = :t",
-          ConditionExpression: "referralRewarded = :f",
+          ConditionExpression: "attribute_not_exists(referralRewarded) OR referralRewarded = :f",
           ExpressionAttributeValues: {
             ":t": true,
             ":f": false
@@ -4319,18 +4319,32 @@ var OrderRepository = class {
   }
   async addWalletCreditByReferralCode(referralCode, amount) {
     if (!referralCode || amount <= 0) return;
-    const scanRes = await ddb.send(
-      new import_lib_dynamodb6.ScanCommand({
-        TableName: "Users",
-        FilterExpression: "referralCode = :c",
-        ExpressionAttributeValues: {
-          ":c": referralCode
-        },
-        Limit: 1
-      })
+    let lastKey;
+    let refUser = null;
+    do {
+      const res = await ddb.send(
+        new import_lib_dynamodb6.ScanCommand({
+          TableName: "Users",
+          FilterExpression: "referralCode = :c",
+          ExpressionAttributeValues: {
+            ":c": referralCode
+          },
+          ExclusiveStartKey: lastKey
+        })
+      );
+      if (res.Items?.length) {
+        refUser = res.Items[0];
+        break;
+      }
+      lastKey = res.LastEvaluatedKey;
+    } while (lastKey);
+    if (!refUser) {
+      console.log("Referral user not found:", referralCode);
+      return;
+    }
+    console.log(
+      `Crediting \u20B9${amount} to ${refUser.mobile} (${referralCode})`
     );
-    const refUser = scanRes.Items?.[0];
-    if (!refUser) return;
     await ddb.send(
       new import_lib_dynamodb6.UpdateCommand({
         TableName: "Users",
@@ -4455,21 +4469,39 @@ var AdminUpdateOrderService = class {
       previousStatus: existing.status
     });
     if (input.status === "DISPATCHED" && existing.status !== "DISPATCHED") {
+      console.log("Referral reward flow started");
       await this.handleReferralReward(updatedOrder);
     }
     return updatedOrder;
   }
   async handleReferralReward(order) {
     const config = await this.orderRepo.getAdminConfig();
+    console.log("Config:", config);
     const isReferralEnabled = config.isReferralEnabled === true;
-    if (!isReferralEnabled) return;
+    if (!isReferralEnabled) {
+      console.log("Referral disabled");
+      return;
+    }
     const userId = order.userId;
-    if (!userId) return;
+    console.log("UserId:", userId);
     const user = await this.orderRepo.getUserByMobile(userId);
-    if (!user) return;
-    if (!user.referredBy || user.referredBy === "") return;
-    if (user.referralRewarded === true) return;
+    if (!user) {
+      console.log("User not found");
+      return;
+    }
+    console.log("referredBy:", user.referredBy);
+    if (!user.referredBy) {
+      console.log("No referral");
+      return;
+    }
+    console.log("rewarded:", user.referralRewarded);
+    if (user.referralRewarded) {
+      console.log("Already rewarded");
+      return;
+    }
+    console.log("Passed validation");
     let rewardAmount = Number(config.referralRewardAmount) || 0;
+    console.log(rewardAmount, "rewardAmount");
     if (rewardAmount <= 0) return;
     if (config.referralRewardType === "PERCENT") {
       const orderAmount = Number(

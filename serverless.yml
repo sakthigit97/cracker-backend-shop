@@ -1,29 +1,33 @@
 service: cracker-backend
 
+custom:
+  stage: ${opt:stage, env:STAGE, 'dev'}
+  region: ${opt:region, env:AWS_REGION, 'ap-south-1'}
+
 provider:
   name: aws
   runtime: nodejs24.x
   versionFunctions: false
-  region: ap-south-1
-  stage: dev
+  region: ${self:custom.region}
+  stage: ${self:custom.stage}
   timeout: 60
 
   environment:
     JWT_SECRET: ${env:JWT_SECRET}
-    CART_TABLE: Carts
-    PRODUCTS_TABLE: Products
-    ORDERS_TABLE: Orders
-    BULK_ORDERS_TABLE: BulkOrders
-    BUCKET_NAME: cracker-app
-    BRAND_TABLE: Brands
-    CATEGORY_TABLE: Categories
-    USERS_TABLE: Users
-    ADMIN_CONFIG_TABLE: AdminConfig
-    DISCOUNT_TABLE: Discounts
-    CONTACT_TABLE: ContactUs
-    COUPONS_TABLE: Coupons
-    ADMIN_CODES_TABLE: AdminCodes
-    OTP_TABLE: OtpTable
+
+    CART_TABLE: Carts-${self:custom.stage}
+    PRODUCTS_TABLE: Products-${self:custom.stage}
+    ORDERS_TABLE: Orders-${self:custom.stage}
+    BULK_ORDERS_TABLE: BulkOrders-${self:custom.stage}
+    BRAND_TABLE: Brands-${self:custom.stage}
+    CATEGORY_TABLE: Categories-${self:custom.stage}
+    USERS_TABLE: Users-${self:custom.stage}
+    ADMIN_CONFIG_TABLE: AdminConfig-${self:custom.stage}
+    DISCOUNT_TABLE: Discounts-${self:custom.stage}
+    CONTACT_TABLE: ContactUs-${self:custom.stage}
+    COUPONS_TABLE: Coupons-${self:custom.stage}
+    OTP_TABLE: OtpTable-${self:custom.stage}
+
     OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
     CONFIRM_ORDER_TID: ${env:CONFIRM_ORDER_TID}
     ORDER_SUBMIT_TID: ${env:ORDER_SUBMIT_TID}
@@ -38,7 +42,7 @@ provider:
     MSG91_AUTH_KEY: ${env:MSG91_AUTH_KEY}
     RECAPTCHA_SECRET: ${env:RECAPTCHA_SECRET}
     MAX_AI_PRODUCT_QTY: 10
-    REGION: ap-south-1
+    REGION: ${self:custom.region}
 
   httpApi:
     cors:
@@ -80,23 +84,21 @@ provider:
             - dynamodb:BatchGetItem
             - dynamodb:BatchWriteItem
           Resource:
-            - arn:aws:dynamodb:ap-south-1:*:table/Users
-            - arn:aws:dynamodb:ap-south-1:*:table/Products
-            - arn:aws:dynamodb:ap-south-1:*:table/Products*
-            - arn:aws:dynamodb:ap-south-1:*:table/Products/index/*
-            - arn:aws:dynamodb:ap-south-1:*:table/Categories
-            - arn:aws:dynamodb:ap-south-1:*:table/Brands
-            - arn:aws:dynamodb:ap-south-1:*:table/Discounts
-            - arn:aws:dynamodb:ap-south-1:*:table/Carts*
-            - arn:aws:dynamodb:ap-south-1:*:table/Orders
-            - arn:aws:dynamodb:ap-south-1:*:table/Orders/index/*
-            - arn:aws:dynamodb:ap-south-1:*:table/BulkOrders
-            - arn:aws:dynamodb:ap-south-1:*:table/BulkOrders/index/*
-            - arn:aws:dynamodb:ap-south-1:*:table/AdminConfig*
-            - arn:aws:dynamodb:ap-south-1:*:table/ContactUs*
-            - arn:aws:dynamodb:ap-south-1:*:table/OtpTable*
-            - arn:aws:dynamodb:ap-south-1:*:table/AdminCodes*
-            - arn:aws:dynamodb:ap-south-1:*:table/Coupons*
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Users-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Products-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Products-${self:custom.stage}/index/*
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Categories-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Brands-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Discounts-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Carts-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Orders-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Orders-${self:custom.stage}/index/*
+            - arn:aws:dynamodb:${self:custom.region}:*:table/BulkOrders-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/BulkOrders-${self:custom.stage}/index/*
+            - arn:aws:dynamodb:${self:custom.region}:*:table/AdminConfig-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/ContactUs-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/OtpTable-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Coupons-${self:custom.stage}
 
         - Effect: Allow
           Action:
@@ -695,90 +697,89 @@ functions:
           path: /coupon/validate
           method: POST
 
-  bulkCreateOrder:
-    handler: src/handlers/bulkOrder.handler
-    events:
-      - httpApi:
-          path: /bulk-order
-          method: POST
+  # bulkCreateOrder:
+  #   handler: src/handlers/bulkOrder.handler
+  #   events:
+  #     - httpApi:
+  #         path: /bulk-order
+  #         method: POST
 
-  getBulkOrder:
-    handler: src/handlers/getBulkOrders.handler
-    events:
-      - httpApi:
-          path: /bulk-order
-          method: GET
+  # getBulkOrder:
+  #   handler: src/handlers/getBulkOrders.handler
+  #   events:
+  #     - httpApi:
+  #         path: /bulk-order
+  #         method: GET
 
-  bulkGetOrder:
-    handler: src/handlers/getDetailedBulkOrder.handler
-    events:
-      - httpApi:
-          path: /bulk-order/{orderId}
-          method: GET
+  # bulkGetOrder:
+  #   handler: src/handlers/getDetailedBulkOrder.handler
+  #   events:
+  #     - httpApi:
+  #         path: /bulk-order/{orderId}
+  #         method: GET
 
-  adminBulkGetOrders:
-    handler: src/handlers/adminBulkOrder.handler
-    events:
-      - httpApi:
-          path: /admin/bulk-orders
-          method: GET
+  # adminBulkGetOrders:
+  #   handler: src/handlers/adminBulkOrder.handler
+  #   events:
+  #     - httpApi:
+  #         path: /admin/bulk-orders
+  #         method: GET
 
-  adminBulkOrderDetails:
-    handler: src/handlers/adminBulkOrderDetails.handler
-    events:
-      - httpApi:
-          path: /admin/bulk-orders/{orderId}
-          method: GET
+  # adminBulkOrderDetails:
+  #   handler: src/handlers/adminBulkOrderDetails.handler
+  #   events:
+  #     - httpApi:
+  #         path: /admin/bulk-orders/{orderId}
+  #         method: GET
 
-  adminBulkUpdateStatus:
-    handler: src/handlers/adminBulkOrderStatusUpdate.handler
-    events:
-      - httpApi:
-          path: /admin/bulk-orders/{orderId}/status
-          method: PUT
+  # adminBulkUpdateStatus:
+  #   handler: src/handlers/adminBulkOrderStatusUpdate.handler
+  #   events:
+  #     - httpApi:
+  #         path: /admin/bulk-orders/{orderId}/status
+  #         method: PUT
 
-  bulkCancelOrder:
-    handler: src/handlers/cancelBulkOrder.handler
-    events:
-      - httpApi:
-          path: /bulk-order/{orderId}/cancel
-          method: PUT
+  # bulkCancelOrder:
+  #   handler: src/handlers/cancelBulkOrder.handler
+  #   events:
+  #     - httpApi:
+  #         path: /bulk-order/{orderId}/cancel
+  #         method: PUT
 
-  adminCodeCreate:
-    handler: src/handlers/adminCode.create
-    events:
-      - httpApi:
-          path: /admin/codes
-          method: POST
+  # adminCodeCreate:
+  #   handler: src/handlers/adminCode.create
+  #   events:
+  #     - httpApi:
+  #         path: /admin/codes
+  #         method: POST
 
-  adminCodeList:
-    handler: src/handlers/adminCode.list
-    events:
-      - httpApi:
-          path: /admin/codes
-          method: GET
+  # adminCodeList:
+  #   handler: src/handlers/adminCode.list
+  #   events:
+  #     - httpApi:
+  #         path: /admin/codes
+  #         method: GET
 
-  adminCodeDelete:
-    handler: src/handlers/adminCode.remove
-    events:
-      - httpApi:
-          path: /admin/codes/{code}
-          method: DELETE
+  # adminCodeDelete:
+  #   handler: src/handlers/adminCode.remove
+  #   events:
+  #     - httpApi:
+  #         path: /admin/codes/{code}
+  #         method: DELETE
 
-  adminCodeValidate:
-    handler: src/handlers/adminCode.validate
-    events:
-      - httpApi:
-          path: /bulk-order/validate-code
-          method: POST
-
+  # adminCodeValidate:
+  #   handler: src/handlers/adminCode.validate
+  #   events:
+  #     - httpApi:
+  #         path: /bulk-order/validate-code
+  #         method: POST
 
 resources:
   Resources:
     ProductImagesBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: cracker-app
+        BucketName: cracker-app-${self:custom.stage}
         PublicAccessBlockConfiguration:
           BlockPublicAcls: false
           BlockPublicPolicy: false
@@ -801,7 +802,7 @@ resources:
     ProductImagesBucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
-        Bucket: cracker-app
+        Bucket: cracker-app-${self:custom.stage}
         PolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -811,11 +812,11 @@ resources:
               Action:
                 - s3:GetObject
               Resource:
-                - arn:aws:s3:::cracker-app/products/*
-                - arn:aws:s3:::cracker-app/categories/*
-                - arn:aws:s3:::cracker-app/brands/*
-                - arn:aws:s3:::cracker-app/imports/*
-                - arn:aws:s3:::cracker-app/config/*
+                - arn:aws:s3:::cracker-app-${self:custom.stage}/products/*
+                - arn:aws:s3:::cracker-app-${self:custom.stage}/categories/*
+                - arn:aws:s3:::cracker-app-${self:custom.stage}/brands/*
+                - arn:aws:s3:::cracker-app-${self:custom.stage}/imports/*
+                - arn:aws:s3:::cracker-app-${self:custom.stage}/config/*
 
     UsersTable:
       Type: AWS::DynamoDB::Table
@@ -1076,14 +1077,14 @@ resources:
           - AttributeName: couponCode
             KeyType: HASH
 
-    AdminCodesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: AdminCodes
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: code
-            AttributeType: S
-        KeySchema:
-          - AttributeName: code
-            KeyType: HASH
+    # AdminCodesTable:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     TableName: AdminCodes
+    #     BillingMode: PAY_PER_REQUEST
+    #     AttributeDefinitions:
+    #       - AttributeName: code
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: code
+    #         KeyType: HASH

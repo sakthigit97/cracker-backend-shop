@@ -21,6 +21,7 @@ const handler = async (event: any) => {
 
   return success({
     mobile,
+    title: result.Item.title?.S,
     name: result.Item.name?.S,
     address: result.Item.address?.S,
     city: result.Item.city?.S,

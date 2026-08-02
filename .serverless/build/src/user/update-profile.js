@@ -3962,6 +3962,7 @@ var handler = async (event) => {
   const mobile = event.user.sub;
   const body = JSON.parse(event.body || "{}");
   const {
+    title,
     name,
     address,
     email,
@@ -3981,6 +3982,7 @@ var handler = async (event) => {
       UpdateExpression: `
         SET
           #name = :name,
+          title = :title,
           address = :address,
           city = :city,
           email = :email,
@@ -3992,6 +3994,7 @@ var handler = async (event) => {
         "#state": "state"
       },
       ExpressionAttributeValues: {
+        ":title": { S: title },
         ":name": { S: name },
         ":address": { S: address },
         ":city": { S: city || "" },

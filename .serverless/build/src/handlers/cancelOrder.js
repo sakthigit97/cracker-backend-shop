@@ -4213,7 +4213,7 @@ var OrderRepository = class {
           TableName: "Users",
           Key: { mobile },
           UpdateExpression: "SET referralRewarded = :t",
-          ConditionExpression: "referralRewarded = :f",
+          ConditionExpression: "attribute_not_exists(referralRewarded) OR referralRewarded = :f",
           ExpressionAttributeValues: {
             ":t": true,
             ":f": false
@@ -4230,18 +4230,32 @@ var OrderRepository = class {
   }
   async addWalletCreditByReferralCode(referralCode, amount) {
     if (!referralCode || amount <= 0) return;
-    const scanRes = await ddb.send(
-      new import_lib_dynamodb5.ScanCommand({
-        TableName: "Users",
-        FilterExpression: "referralCode = :c",
-        ExpressionAttributeValues: {
-          ":c": referralCode
-        },
-        Limit: 1
-      })
+    let lastKey;
+    let refUser = null;
+    do {
+      const res = await ddb.send(
+        new import_lib_dynamodb5.ScanCommand({
+          TableName: "Users",
+          FilterExpression: "referralCode = :c",
+          ExpressionAttributeValues: {
+            ":c": referralCode
+          },
+          ExclusiveStartKey: lastKey
+        })
+      );
+      if (res.Items?.length) {
+        refUser = res.Items[0];
+        break;
+      }
+      lastKey = res.LastEvaluatedKey;
+    } while (lastKey);
+    if (!refUser) {
+      console.log("Referral user not found:", referralCode);
+      return;
+    }
+    console.log(
+      `Crediting \u20B9${amount} to ${refUser.mobile} (${referralCode})`
     );
-    const refUser = scanRes.Items?.[0];
-    if (!refUser) return;
     await ddb.send(
       new import_lib_dynamodb5.UpdateCommand({
         TableName: "Users",
@@ -4560,12 +4574,11 @@ var OrderService = class {
     this.repo = repo;
     this.couponService = new CouponService();
     this.pricingService = new OrderPricingService();
-    this.productRepo = new ProductRepository();
   }
   async createOrder(input) {
     const now = Date.now();
     const orderId = this.generateOrderId(now);
-    const isTamilNadu = input.address.toLowerCase().includes("tamil nadu");
+    const isTamilNadu = input.deliveryState.toLowerCase() === "tamil nadu";
     const deliveryDays = isTamilNadu ? 5 : 10;
     const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1e3;
     const items = await this.repo.buildItemsSnapshot(
@@ -4586,7 +4599,7 @@ var OrderService = class {
     const pricing = this.pricingService.calculate({
       items,
       walletUsed: input.walletUsed,
-      state: input.address,
+      state: input.deliveryState,
       config,
       couponResult
     });
@@ -4603,6 +4616,7 @@ var OrderService = class {
       meta: "ORDER",
       userId: input.userId,
       address: input.address,
+      deliveryState: input.deliveryState,
       items,
       status: "ORDER_PLACED",
       totalProductAmount: pricing.totalProductAmount,
@@ -4742,7 +4756,7 @@ var OrderService = class {
     const pricing = this.pricingService.calculate({
       items: updatedItems,
       walletUsed,
-      state: order.address,
+      state: order.deliveryState ?? order.address,
       config,
       couponResult
     });

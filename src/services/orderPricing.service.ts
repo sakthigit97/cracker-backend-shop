@@ -53,9 +53,7 @@ export class OrderPricingService {
             return 0;
         }
 
-        const isTamilNadu =
-            state?.toLowerCase().includes("tamil nadu");
-
+        const isTamilNadu = state?.toLowerCase().includes("tamil nadu");
         if (
             isTamilNadu &&
             config.disableGstForTN

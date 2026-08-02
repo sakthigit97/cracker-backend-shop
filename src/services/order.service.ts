@@ -1,11 +1,11 @@
 import { OrderRepository } from "../repo/order.repo";
-import { ProductRepository } from "../repo/product.repo";
 import { OrderPricingService } from "./orderPricing.service";
 import { CouponService } from "./coupon.service";
 
 interface CreateOrderInput {
     userId: string;
     address: string;
+    deliveryState: string;
     cartItems: {
         itemId: string;
         quantity: number;
@@ -18,17 +18,15 @@ interface CreateOrderInput {
 }
 
 const CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
-
 export class OrderService {
     private couponService = new CouponService();
     private pricingService = new OrderPricingService();
     constructor(private repo = new OrderRepository()) { }
-    private productRepo = new ProductRepository();
 
     async createOrder(input: CreateOrderInput): Promise<any> {
         const now = Date.now();
         const orderId = this.generateOrderId(now);
-        const isTamilNadu = input.address.toLowerCase().includes("tamil nadu");
+        const isTamilNadu = input.deliveryState.toLowerCase() === "tamil nadu";
         const deliveryDays = isTamilNadu ? 5 : 10;
         const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1000;
         const items = await this.repo.buildItemsSnapshot(
@@ -51,7 +49,7 @@ export class OrderService {
         const pricing = this.pricingService.calculate({
             items,
             walletUsed: input.walletUsed,
-            state: input.address,
+            state: input.deliveryState,
             config,
             couponResult,
         });
@@ -75,6 +73,7 @@ export class OrderService {
             meta: "ORDER",
             userId: input.userId,
             address: input.address,
+            deliveryState: input.deliveryState,
             items,
             status: "ORDER_PLACED",
             totalProductAmount: pricing.totalProductAmount,
@@ -250,7 +249,7 @@ export class OrderService {
         const pricing = this.pricingService.calculate({
             items: updatedItems,
             walletUsed,
-            state: order.address,
+            state: order.deliveryState ?? order.address,
             config,
             couponResult,
         });
@@ -287,5 +286,4 @@ export class OrderService {
 
         return await this.repo.getById(orderId);
     }
-
 }

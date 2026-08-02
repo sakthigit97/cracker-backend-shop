@@ -8,6 +8,7 @@ const handler = async (event: any) => {
   const body = JSON.parse(event.body || "{}");
 
   const {
+    title,
     name,
     address,
     email,
@@ -29,6 +30,7 @@ const handler = async (event: any) => {
       UpdateExpression: `
         SET
           #name = :name,
+          title = :title,
           address = :address,
           city = :city,
           email = :email,
@@ -40,6 +42,7 @@ const handler = async (event: any) => {
         "#state": "state",
       },
       ExpressionAttributeValues: {
+        ":title": { S: title },
         ":name": { S: name },
         ":address": { S: address },
         ":city": { S: city || "" },

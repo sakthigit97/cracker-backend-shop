@@ -154,7 +154,7 @@ export class OrderRepository {
                     TableName: "Users",
                     Key: { mobile },
                     UpdateExpression: "SET referralRewarded = :t",
-                    ConditionExpression: "referralRewarded = :f",
+                    ConditionExpression: "attribute_not_exists(referralRewarded) OR referralRewarded = :f",
                     ExpressionAttributeValues: {
                         ":t": true,
                         ":f": false,
@@ -172,18 +172,37 @@ export class OrderRepository {
 
     async addWalletCreditByReferralCode(referralCode: string, amount: number) {
         if (!referralCode || amount <= 0) return;
-        const scanRes = await ddb.send(
-            new ScanCommand({
-                TableName: "Users",
-                FilterExpression: "referralCode = :c",
-                ExpressionAttributeValues: {
-                    ":c": referralCode,
-                },
-                Limit: 1,
-            })
+        let lastKey;
+        let refUser = null;
+
+        do {
+            const res: any = await ddb.send(
+                new ScanCommand({
+                    TableName: "Users",
+                    FilterExpression: "referralCode = :c",
+                    ExpressionAttributeValues: {
+                        ":c": referralCode,
+                    },
+                    ExclusiveStartKey: lastKey,
+                })
+            );
+
+            if (res.Items?.length) {
+                refUser = res.Items[0];
+                break;
+            }
+
+            lastKey = res.LastEvaluatedKey;
+        } while (lastKey);
+
+        if (!refUser) {
+            console.log("Referral user not found:", referralCode);
+            return;
+        }
+
+        console.log(
+            `Crediting ₹${amount} to ${refUser.mobile} (${referralCode})`
         );
-        const refUser = scanRes.Items?.[0];
-        if (!refUser) return;
 
         await ddb.send(
             new UpdateCommand({

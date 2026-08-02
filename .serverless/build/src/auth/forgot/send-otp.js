@@ -23,7 +23,7 @@ __export(send_otp_exports, {
   handler: () => handler
 });
 module.exports = __toCommonJS(send_otp_exports);
-var import_client_dynamodb3 = require("@aws-sdk/client-dynamodb");
+var import_client_dynamodb4 = require("@aws-sdk/client-dynamodb");
 
 // src/libs/db.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
@@ -137,6 +137,66 @@ var OtpService = class {
   }
 };
 
+// src/repo/adminConfig.repo.ts
+var import_client_dynamodb3 = require("@aws-sdk/client-dynamodb");
+var import_lib_dynamodb = require("@aws-sdk/lib-dynamodb");
+var client = new import_client_dynamodb3.DynamoDBClient({ region: "ap-south-1" });
+var docClient = import_lib_dynamodb.DynamoDBDocumentClient.from(client);
+var TABLE_NAME = process.env.ADMIN_CONFIG_TABLE;
+var AdminConfigRepo = class {
+  async getGlobalConfig() {
+    const result = await docClient.send(
+      new import_lib_dynamodb.GetCommand({
+        TableName: TABLE_NAME,
+        Key: { configId: "global" }
+      })
+    );
+    return result.Item;
+  }
+  async updateGlobalConfig(payload) {
+    const existing = await this.getGlobalConfig();
+    const updatedItem = {
+      ...existing || {},
+      ...payload,
+      configId: "global",
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    await docClient.send(
+      new import_lib_dynamodb.PutCommand({
+        TableName: TABLE_NAME,
+        Item: updatedItem
+      })
+    );
+    return updatedItem;
+  }
+};
+
+// src/services/adminConfig.service.ts
+var AdminConfigService = class {
+  constructor(repo) {
+    this.repo = repo;
+  }
+  async getConfig() {
+    const config = await this.repo.getGlobalConfig();
+    if (!config) {
+      return {
+        isPaymentEnabled: false,
+        isEmailEnabled: false,
+        isSmsEnabled: false,
+        maintenanceMode: false,
+        sliderImages: []
+      };
+    }
+    const { configId, updatedAt, ...publicConfig } = config;
+    return publicConfig;
+  }
+  async updateConfig(payload) {
+    const updated = await this.repo.updateGlobalConfig(payload);
+    const { configId, updatedAt, ...publicConfig } = updated;
+    return publicConfig;
+  }
+};
+
 // src/auth/forgot/send-otp.ts
 var otpService = new OtpService();
 var verifyCaptcha = async (token) => {
@@ -155,6 +215,9 @@ var verifyCaptcha = async (token) => {
 };
 var handler = async (event) => {
   try {
+    const repo = new AdminConfigRepo();
+    const service = new AdminConfigService(repo);
+    const config = await service.getConfig();
     const body = JSON.parse(event.body || "{}");
     const { mobile, captchaToken } = body;
     if (!/^[6-9]\d{9}$/.test(mobile)) {
@@ -164,7 +227,7 @@ var handler = async (event) => {
       return error("Invalid CAPTCHA", 400);
     }
     const existing = await dbClient.send(
-      new import_client_dynamodb3.GetItemCommand({
+      new import_client_dynamodb4.GetItemCommand({
         TableName: "Users",
         Key: {
           mobile: { S: mobile }
@@ -174,7 +237,11 @@ var handler = async (event) => {
     if (!existing.Item) {
       return error("User not found. Please register first", 404);
     }
-    await otpService.sendOtp(mobile);
+    if (config.isForgotOTPEnabled) {
+      await otpService.sendOtp(mobile);
+    } else {
+      console.log("Forgot OTP send is not enabled");
+    }
     return success({
       message: "OTP sent successfully"
     });
