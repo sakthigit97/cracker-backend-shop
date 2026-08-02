@@ -1,8 +1,7 @@
 import { ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "../utils/dynamo";
 
-const DISCOUNT_TABLE = "Discounts";
-
+const DISCOUNT_TABLE = process.env.DISCOUNT_TABLE!;
 export async function getActiveDiscounts() {
   const res = await ddb.send(
     new ScanCommand({

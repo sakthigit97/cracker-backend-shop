@@ -38,11 +38,13 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 });
 
 // src/repo/getPackages.repo.ts
+var PRODUCTS_TABLE = process.env.PRODUCTS_TABLE;
+var ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE;
 var GetPackagesRepository = class {
   async getPackages() {
     const config = await ddb.send(
       new import_lib_dynamodb2.GetCommand({
-        TableName: "AdminConfig",
+        TableName: ADMIN_CONFIG_TABLE,
         Key: {
           configId: "global"
         }
@@ -51,7 +53,7 @@ var GetPackagesRepository = class {
     const packageTags = config.Item?.packageTags || [];
     const productsRes = await ddb.send(
       new import_lib_dynamodb2.ScanCommand({
-        TableName: "Products"
+        TableName: PRODUCTS_TABLE
       })
     );
     const products = productsRes.Items || [];

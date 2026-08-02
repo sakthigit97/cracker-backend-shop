@@ -4,13 +4,15 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "../utils/dynamo";
 
+const PRODUCTS_TABLE = process.env.PRODUCTS_TABLE!;
+const ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE!;
 export class GetPackageDetailsRepository {
     async getPackageDetails(
         packageId: string
     ) {
         const config = await ddb.send(
             new GetCommand({
-                TableName: "AdminConfig",
+                TableName: ADMIN_CONFIG_TABLE,
                 Key: {
                     configId: "global",
                 },
@@ -37,7 +39,7 @@ export class GetPackageDetailsRepository {
         do {
             const res: any = await ddb.send(
                 new ScanCommand({
-                    TableName: "Products",
+                    TableName: PRODUCTS_TABLE,
                     ProjectionExpression: "productId, packageTagIds",
                     ExclusiveStartKey: lastKey,
                 })

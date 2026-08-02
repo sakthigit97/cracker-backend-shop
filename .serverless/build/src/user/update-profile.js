@@ -3961,6 +3961,7 @@ var withAuth = (handler2) => {
 var handler = async (event) => {
   const mobile = event.user.sub;
   const body = JSON.parse(event.body || "{}");
+  const USERS_TABLE = process.env.USERS_TABLE;
   const {
     title,
     name,
@@ -3975,7 +3976,7 @@ var handler = async (event) => {
   }
   await dbClient.send(
     new import_client_dynamodb2.UpdateItemCommand({
-      TableName: "Users",
+      TableName: USERS_TABLE,
       Key: {
         mobile: { S: mobile }
       },

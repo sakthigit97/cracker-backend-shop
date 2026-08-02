@@ -5,7 +5,7 @@ import { success, error } from "../../libs/response";
 import { OtpService } from "../../utils/otp.service";
 
 const otpService = new OtpService();
-
+const USERS_TABLE = process.env.USERS_TABLE!;
 export const handler = async (event: any) => {
     try {
         const body = JSON.parse(event.body || "{}");
@@ -25,7 +25,7 @@ export const handler = async (event: any) => {
 
         await dbClient.send(
             new UpdateItemCommand({
-                TableName: "Users",
+                TableName: USERS_TABLE,
                 Key: { mobile: { S: mobile } },
                 UpdateExpression: "SET passwordHash = :p",
                 ExpressionAttributeValues: {

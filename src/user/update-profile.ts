@@ -6,7 +6,7 @@ import { withAuth } from "../libs/auth-middleware";
 const handler = async (event: any) => {
   const mobile = event.user.sub;
   const body = JSON.parse(event.body || "{}");
-
+  const USERS_TABLE = process.env.USERS_TABLE!;
   const {
     title,
     name,
@@ -23,7 +23,7 @@ const handler = async (event: any) => {
 
   await dbClient.send(
     new UpdateItemCommand({
-      TableName: "Users",
+      TableName: USERS_TABLE,
       Key: {
         mobile: { S: mobile },
       },

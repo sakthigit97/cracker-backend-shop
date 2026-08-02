@@ -1876,6 +1876,8 @@ var OtpService = class {
 };
 
 // src/auth/register.ts
+var USERS_TABLE = process.env.USERS_TABLE;
+var ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE;
 var otpService = new OtpService();
 var handler = async (event) => {
   try {
@@ -1902,7 +1904,7 @@ var handler = async (event) => {
     }
     const existing = await dbClient.send(
       new import_client_dynamodb3.GetItemCommand({
-        TableName: "Users",
+        TableName: USERS_TABLE,
         Key: {
           mobile: { S: mobile }
         }
@@ -1913,7 +1915,7 @@ var handler = async (event) => {
     }
     const configRes = await dbClient.send(
       new import_client_dynamodb3.GetItemCommand({
-        TableName: "AdminConfig",
+        TableName: ADMIN_CONFIG_TABLE,
         Key: {
           configId: { S: "global" }
         }
@@ -1928,7 +1930,7 @@ var handler = async (event) => {
     if (code && isReferralEnabled) {
       const referralCheck = await dbClient.send(
         new import_client_dynamodb3.ScanCommand({
-          TableName: "Users",
+          TableName: USERS_TABLE,
           FilterExpression: "referralCode = :code",
           ExpressionAttributeValues: {
             ":code": { S: code }
@@ -1948,7 +1950,7 @@ var handler = async (event) => {
     const passwordHash = await hashPassword(password);
     await dbClient.send(
       new import_client_dynamodb3.PutItemCommand({
-        TableName: "Users",
+        TableName: USERS_TABLE,
         Item: {
           mobile: { S: mobile },
           name: { S: name },

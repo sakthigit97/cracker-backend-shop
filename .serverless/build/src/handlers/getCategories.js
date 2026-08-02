@@ -52,6 +52,7 @@ var error = (message, statusCode = 400) => ({
 });
 
 // src/handlers/getCategories.ts
+var CATEGORY_TABLE = process.env.CATEGORY_TABLE;
 var handler = async () => {
   try {
     let items = [];
@@ -59,7 +60,7 @@ var handler = async () => {
     do {
       const res = await ddb.send(
         new import_lib_dynamodb2.ScanCommand({
-          TableName: "Categories",
+          TableName: CATEGORY_TABLE,
           FilterExpression: "isActive = :active",
           ExpressionAttributeValues: {
             ":active": true

@@ -8,7 +8,9 @@ import {
 
 import { ddb } from "../utils/dynamo";
 import { ProductService } from "../services/product.service";
-const TABLE_NAME = process.env.ORDERS_TABLE || "Orders";
+const ORDERS_TABLE = process.env.ORDERS_TABLE!;
+const USERS_TABLE = process.env.USERS_TABLE!;
+const ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE!;
 export class OrderRepository {
     private productService = new ProductService();
 
@@ -49,7 +51,7 @@ export class OrderRepository {
     async create(order: any) {
         await ddb.send(
             new PutCommand({
-                TableName: TABLE_NAME,
+                TableName:  ORDERS_TABLE,
                 Item: order,
             })
         );
@@ -58,7 +60,7 @@ export class OrderRepository {
     async getOrdersByUser(userId: string, limit: number, cursor?: any) {
         const res = await ddb.send(
             new QueryCommand({
-                TableName: TABLE_NAME,
+                TableName:  ORDERS_TABLE,
                 IndexName: "userId-createdAt-index",
                 KeyConditionExpression: "userId = :uid",
                 ExpressionAttributeValues: {
@@ -79,7 +81,7 @@ export class OrderRepository {
     async getById(orderId: string) {
         const res = await ddb.send(
             new GetCommand({
-                TableName: TABLE_NAME,
+                TableName:  ORDERS_TABLE,
                 Key: {
                     orderId,
                     meta: "ORDER",
@@ -93,7 +95,7 @@ export class OrderRepository {
     async updateStatus(orderId: string, data: any) {
         await ddb.send(
             new UpdateCommand({
-                TableName: TABLE_NAME,
+                TableName:  ORDERS_TABLE,
                 Key: {
                     orderId,
                     meta: "ORDER",
@@ -123,7 +125,7 @@ export class OrderRepository {
     async getUserByMobile(mobile: string) {
         const res = await ddb.send(
             new GetCommand({
-                TableName: "Users",
+                TableName: USERS_TABLE,
                 Key: { mobile },
             })
         );
@@ -136,7 +138,7 @@ export class OrderRepository {
 
         await ddb.send(
             new UpdateCommand({
-                TableName: "Users",
+                TableName: USERS_TABLE,
                 Key: { mobile },
                 UpdateExpression: "SET walletCredit = walletCredit - :amt",
                 ConditionExpression: "walletCredit >= :amt",
@@ -151,7 +153,7 @@ export class OrderRepository {
         try {
             await ddb.send(
                 new UpdateCommand({
-                    TableName: "Users",
+                    TableName: USERS_TABLE,
                     Key: { mobile },
                     UpdateExpression: "SET referralRewarded = :t",
                     ConditionExpression: "attribute_not_exists(referralRewarded) OR referralRewarded = :f",
@@ -178,7 +180,7 @@ export class OrderRepository {
         do {
             const res: any = await ddb.send(
                 new ScanCommand({
-                    TableName: "Users",
+                    TableName: USERS_TABLE,
                     FilterExpression: "referralCode = :c",
                     ExpressionAttributeValues: {
                         ":c": referralCode,
@@ -206,7 +208,7 @@ export class OrderRepository {
 
         await ddb.send(
             new UpdateCommand({
-                TableName: "Users",
+                TableName: USERS_TABLE,
                 Key: { mobile: refUser.mobile },
                 UpdateExpression: "SET walletCredit = if_not_exists(walletCredit, :z) + :amt",
                 ExpressionAttributeValues: {
@@ -220,7 +222,7 @@ export class OrderRepository {
     async getAdminConfig() {
         const res = await ddb.send(
             new GetCommand({
-                TableName: "AdminConfig",
+                TableName: ADMIN_CONFIG_TABLE,
                 Key: {
                     configId: "global",
                 },
@@ -233,7 +235,7 @@ export class OrderRepository {
     async updateItems(orderId: string, data: any) {
         await ddb.send(
             new UpdateCommand({
-                TableName: TABLE_NAME,
+                TableName:  ORDERS_TABLE,
                 Key: {
                     orderId,
                     meta: "ORDER",

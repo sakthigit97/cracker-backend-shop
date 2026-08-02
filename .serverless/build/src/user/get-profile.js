@@ -3960,9 +3960,10 @@ var withAuth = (handler2) => {
 // src/user/get-profile.ts
 var handler = async (event) => {
   const mobile = event.user.sub;
+  const USERS_TABLE = process.env.USERS_TABLE;
   const result = await dbClient.send(
     new import_client_dynamodb2.GetItemCommand({
-      TableName: "Users",
+      TableName: USERS_TABLE,
       Key: {
         mobile: { S: mobile }
       }

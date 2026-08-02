@@ -9,6 +9,7 @@ import { success, error } from "../libs/response";
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   try {
     const brandId = event.pathParameters?.brandId;
+    const PRODUCTS_TABLE = process.env.PRODUCTS_TABLE!;
 
     if (!brandId) {
       return error("brandId is required", 400);
@@ -31,7 +32,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     if (searchLower) {
       const res = await ddb.send(
         new ScanCommand({
-          TableName: "Products",
+          TableName: PRODUCTS_TABLE,
           FilterExpression:
             "isActive = :active AND contains(#st, :q) AND #bid = :bid AND #qty >= :minQty",
           ExpressionAttributeNames: {
@@ -53,7 +54,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     } else {
       const res = await ddb.send(
         new QueryCommand({
-          TableName: "Products",
+          TableName: PRODUCTS_TABLE,
           IndexName: "brandId-index",
           KeyConditionExpression: "brandId = :bid",
           FilterExpression: "isActive = :active",

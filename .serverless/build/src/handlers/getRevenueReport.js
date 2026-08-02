@@ -3936,6 +3936,7 @@ function verifyJwt(event) {
 // src/services/revenue.service.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
 var client = new import_client_dynamodb.DynamoDBClient({});
+var ORDERS_TABLE = process.env.ORDERS_TABLE;
 var RevenueService = class {
   async getRevenueReport(params) {
     const { range, fromDate, toDate } = params;
@@ -3951,7 +3952,7 @@ var RevenueService = class {
     }
     const data = await client.send(
       new import_client_dynamodb.ScanCommand({
-        TableName: "Orders"
+        TableName: ORDERS_TABLE
       })
     );
     const items = data.Items || [];

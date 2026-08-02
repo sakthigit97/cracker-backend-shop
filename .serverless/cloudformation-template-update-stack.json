@@ -5,493 +5,493 @@
     "LoginLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-login"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-login"
       }
     },
     "SendOtpLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-sendOtp"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-sendOtp"
       }
     },
     "RegisterLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-register"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-register"
       }
     },
     "GetProfileLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getProfile"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getProfile"
       }
     },
     "UpdateProfileLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-updateProfile"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-updateProfile"
       }
     },
     "GetProductsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getProducts"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getProducts"
       }
     },
     "GetAllProductsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getAllProducts"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getAllProducts"
       }
     },
     "GetProductDetailsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getProductDetails"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getProductDetails"
       }
     },
     "GetProductsByCategoryLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getProductsByCategory"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getProductsByCategory"
       }
     },
     "GetProductsByBrandLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getProductsByBrand"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getProductsByBrand"
       }
     },
     "GetCategoriesLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getCategories"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getCategories"
       }
     },
     "GetBrandsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getBrands"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getBrands"
       }
     },
     "GetCartLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getCart"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getCart"
       }
     },
     "AddCartItemLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-addCartItem"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-addCartItem"
       }
     },
     "RemoveCartItemLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-removeCartItem"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-removeCartItem"
       }
     },
     "ClearCartLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-clearCart"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-clearCart"
       }
     },
     "ProductBatchLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-productBatch"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-productBatch"
       }
     },
     "CartMergeLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-cartMerge"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-cartMerge"
       }
     },
     "CartSyncLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-cartSync"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-cartSync"
       }
     },
     "CreateOrderLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-createOrder"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-createOrder"
       }
     },
     "GetOrdersLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getOrders"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getOrders"
       }
     },
     "CancelOrderLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-cancelOrder"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-cancelOrder"
       }
     },
     "AdjustOrderLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adjustOrder"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adjustOrder"
       }
     },
     "AdminDashboardLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminDashboard"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminDashboard"
       }
     },
     "AdminOrdersLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminOrders"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminOrders"
       }
     },
     "AdminOrderDetailsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminOrderDetails"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminOrderDetails"
       }
     },
     "AdminOrderUpdateLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminOrderUpdate"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminOrderUpdate"
       }
     },
     "AdminGetProductsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminGetProducts"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminGetProducts"
       }
     },
     "AdminCreateProductLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminCreateProduct"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminCreateProduct"
       }
     },
     "AdminUpdateProductLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminUpdateProduct"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminUpdateProduct"
       }
     },
     "AdminDeactivateProductLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminDeactivateProduct"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminDeactivateProduct"
       }
     },
     "GetPresignedURLLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getPresignedURL"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getPresignedURL"
       }
     },
     "AdminGetProductLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminGetProduct"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminGetProduct"
       }
     },
     "GetProductUploadURLLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getProductUploadURL"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getProductUploadURL"
       }
     },
     "GetProductValidateURLLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getProductValidateURL"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getProductValidateURL"
       }
     },
     "GetProductUploadConfirmLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getProductUploadConfirm"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getProductUploadConfirm"
       }
     },
     "GetCategoryListLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getCategoryList"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getCategoryList"
       }
     },
     "CreateCategoryLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-CreateCategory"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-CreateCategory"
       }
     },
     "UpdateStatusCategoryLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-UpdateStatusCategory"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-UpdateStatusCategory"
       }
     },
     "UpdateCategoryLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-UpdateCategory"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-UpdateCategory"
       }
     },
     "GetCategoryByIdLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getCategoryById"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getCategoryById"
       }
     },
     "AdminDeleteCategoryLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-AdminDeleteCategory"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-AdminDeleteCategory"
       }
     },
     "CategoryPresignUrlLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-CategoryPresignUrl"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-CategoryPresignUrl"
       }
     },
     "CleanupOrphanProductImagesLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-cleanupOrphanProductImages"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-cleanupOrphanProductImages"
       }
     },
     "AdminListBrandsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-AdminListBrands"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-AdminListBrands"
       }
     },
     "AdminGetBrandByIdLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-AdminGetBrandById"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-AdminGetBrandById"
       }
     },
     "AdminCreateBrandLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-AdminCreateBrand"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-AdminCreateBrand"
       }
     },
     "AdminUpdateBrandLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-AdminUpdateBrand"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-AdminUpdateBrand"
       }
     },
     "AdminUpdateBrandStatusLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-AdminUpdateBrandStatus"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-AdminUpdateBrandStatus"
       }
     },
     "AdminDeleteBrandLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-AdminDeleteBrand"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-AdminDeleteBrand"
       }
     },
     "AdminPresignBrandLogoLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-AdminPresignBrandLogo"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-AdminPresignBrandLogo"
       }
     },
     "AdminListUsersLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminListUsers"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminListUsers"
       }
     },
     "AdminDeleteUserLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminDeleteUser"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminDeleteUser"
       }
     },
     "DeleteProductLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-deleteProduct"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-deleteProduct"
       }
     },
     "GetConfigLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getConfig"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getConfig"
       }
     },
     "UpdateAdminConfigLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-updateAdminConfig"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-updateAdminConfig"
       }
     },
     "BulkAdminConfigLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-bulkAdminConfig"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-bulkAdminConfig"
       }
     },
     "AdminPresignConfigLogoLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-AdminPresignConfigLogo"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-AdminPresignConfigLogo"
       }
     },
     "DeleteProductImagesLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-deleteProductImages"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-deleteProductImages"
       }
     },
     "AdminListDiscountsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminListDiscounts"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminListDiscounts"
       }
     },
     "AdminCreateDiscountLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminCreateDiscount"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminCreateDiscount"
       }
     },
     "AdminGetDiscountByIdLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminGetDiscountById"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminGetDiscountById"
       }
     },
     "AdminUpdateDiscountLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminUpdateDiscount"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminUpdateDiscount"
       }
     },
     "AdminDeleteDiscountLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-AdminDeleteDiscount"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-AdminDeleteDiscount"
       }
     },
     "RevenueReportLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-revenueReport"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-revenueReport"
       }
     },
     "ProductReportLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-productReport"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-productReport"
       }
     },
     "GetProductXlsPresignedURLLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getProductXlsPresignedURL"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getProductXlsPresignedURL"
       }
     },
     "RestoreOrderLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-restoreOrder"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-restoreOrder"
       }
     },
     "PopulerProductsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-populerProducts"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-populerProducts"
       }
     },
     "ForgotSendOtpLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-forgotSendOtp"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-forgotSendOtp"
       }
     },
     "ResetPasswordLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-resetPassword"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-resetPassword"
       }
     },
     "ContactSubmitLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-contactSubmit"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-contactSubmit"
       }
     },
     "ContactListLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-contactList"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-contactList"
       }
     },
     "ContactUpdateLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-contactUpdate"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-contactUpdate"
       }
     },
     "GetPackagesLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getPackages"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getPackages"
       }
     },
     "GetPackageItemsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-getPackageItems"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getPackageItems"
       }
     },
     "AiRecommendationLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-aiRecommendation"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-aiRecommendation"
       }
     },
     "EstimateSendEmailLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-estimateSendEmail"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-estimateSendEmail"
       }
     },
     "AdminCreateCouponLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminCreateCoupon"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminCreateCoupon"
       }
     },
     "AdminGetCouponsLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminGetCoupons"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminGetCoupons"
       }
     },
     "AdminDeleteCouponLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-adminDeleteCoupon"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminDeleteCoupon"
       }
     },
     "ValidateCouponLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/cracker-backend-dev-validateCoupon"
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-validateCoupon"
       }
     },
     "IamRoleLambdaExecution": {
@@ -519,7 +519,7 @@
               "Fn::Join": [
                 "-",
                 [
-                  "cracker-backend",
+                  "sivakassi-pyropark-shop-backend",
                   "dev",
                   "lambda"
                 ]
@@ -537,7 +537,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/cracker-backend-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sivakassi-pyropark-shop-backend-dev*:*"
                     }
                   ]
                 },
@@ -548,7 +548,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/cracker-backend-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/sivakassi-pyropark-shop-backend-dev*:*:*"
                     }
                   ]
                 },
@@ -587,7 +587,7 @@
                   "Action": [
                     "s3:ListBucket"
                   ],
-                  "Resource": "arn:aws:s3:::cracker-app"
+                  "Resource": "arn:aws:s3:::sivakasi-pyropark-424006471348-dev"
                 },
                 {
                   "Effect": "Allow",
@@ -597,12 +597,12 @@
                     "s3:DeleteObject"
                   ],
                   "Resource": [
-                    "arn:aws:s3:::cracker-app/products/*",
-                    "arn:aws:s3:::cracker-app/imports/*",
-                    "arn:aws:s3:::cracker-app/brands/*",
-                    "arn:aws:s3:::cracker-app/categories/*",
-                    "arn:aws:s3:::cracker-app/config/*",
-                    "arn:aws:s3:::cracker-app/templates/*"
+                    "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/products/*",
+                    "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/imports/*",
+                    "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/brands/*",
+                    "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/categories/*",
+                    "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/config/*",
+                    "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/templates/*"
                   ]
                 }
               ]
@@ -614,7 +614,7 @@
           "Fn::Join": [
             "-",
             [
-              "cracker-backend",
+              "sivakassi-pyropark-shop-backend",
               "dev",
               {
                 "Ref": "AWS::Region"
@@ -630,20 +630,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/auth/login.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-login",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-login",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -666,7 +665,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -686,20 +685,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/auth/send-otp.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-sendOtp",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-sendOtp",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -722,7 +720,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -742,20 +740,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/auth/register.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-register",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-register",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -778,7 +775,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -798,20 +795,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/user/get-profile.main",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getProfile",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getProfile",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -834,7 +830,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -854,20 +850,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/user/update-profile.main",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-updateProfile",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-updateProfile",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -890,7 +885,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -910,20 +905,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getProducts.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getProducts",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getProducts",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -946,7 +940,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -966,20 +960,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getAllProducts.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getAllProducts",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getAllProducts",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1002,7 +995,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1022,20 +1015,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getProductDetails.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getProductDetails",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getProductDetails",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1058,7 +1050,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1078,20 +1070,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getProductsByCategory.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getProductsByCategory",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getProductsByCategory",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1114,7 +1105,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1134,20 +1125,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getProductsByBrand.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getProductsByBrand",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getProductsByBrand",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1170,7 +1160,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1190,20 +1180,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getCategories.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getCategories",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getCategories",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1226,7 +1215,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1246,20 +1235,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getBrands.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getBrands",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getBrands",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1282,7 +1270,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1302,20 +1290,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cart.getCart",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getCart",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getCart",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1338,7 +1325,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1358,20 +1345,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cart.addItem",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-addCartItem",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-addCartItem",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1394,7 +1380,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1414,20 +1400,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cart.removeItem",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-removeCartItem",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-removeCartItem",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1450,7 +1435,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1470,20 +1455,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cart.clearCart",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-clearCart",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-clearCart",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1506,7 +1490,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1526,20 +1510,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/productBatch.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-productBatch",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-productBatch",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1562,7 +1545,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1582,20 +1565,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cartMerge.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-cartMerge",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-cartMerge",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1618,7 +1600,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1638,20 +1620,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cartSync.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-cartSync",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-cartSync",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1674,7 +1655,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1694,20 +1675,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/Orders.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-createOrder",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-createOrder",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1730,7 +1710,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1750,20 +1730,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getOrders.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getOrders",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getOrders",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1786,7 +1765,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1806,20 +1785,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cancelOrder.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-cancelOrder",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-cancelOrder",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1842,7 +1820,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1862,20 +1840,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adjustOrder.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adjustOrder",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adjustOrder",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1898,7 +1875,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1918,20 +1895,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDashboard.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminDashboard",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminDashboard",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -1954,7 +1930,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -1974,20 +1950,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminOrders.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminOrders",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminOrders",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2010,7 +1985,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2030,20 +2005,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminOrderDetails.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminOrderDetails",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminOrderDetails",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2066,7 +2040,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2086,20 +2060,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateOrder.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminOrderUpdate",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminOrderUpdate",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2122,7 +2095,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2142,20 +2115,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getAdminProducts.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminGetProducts",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminGetProducts",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2178,7 +2150,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2198,20 +2170,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/createAdminProduct.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminCreateProduct",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminCreateProduct",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2234,7 +2205,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2254,20 +2225,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/updateAdminProduct.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminUpdateProduct",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminUpdateProduct",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2290,7 +2260,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2310,20 +2280,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/deactivateAdminProduct.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminDeactivateProduct",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminDeactivateProduct",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2346,7 +2315,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2366,20 +2335,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getPresignedUrls.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getPresignedURL",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getPresignedURL",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2402,7 +2370,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2422,20 +2390,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getAdminProduct.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminGetProduct",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminGetProduct",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2458,7 +2425,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2478,20 +2445,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminGenerateImportUploadUrl.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getProductUploadURL",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getProductUploadURL",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2514,7 +2480,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2534,20 +2500,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminValidateProductImport.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getProductValidateURL",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getProductValidateURL",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2570,7 +2535,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2590,20 +2555,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminConfirmProductImport.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getProductUploadConfirm",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getProductUploadConfirm",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2626,7 +2590,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2646,20 +2610,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminListCategories.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getCategoryList",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getCategoryList",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2682,7 +2645,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2702,20 +2665,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCreateCategory.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-CreateCategory",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-CreateCategory",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2738,7 +2700,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2758,20 +2720,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateCategoryStatus.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-UpdateStatusCategory",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-UpdateStatusCategory",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2794,7 +2755,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2814,20 +2775,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateCategory.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-UpdateCategory",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-UpdateCategory",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2850,7 +2810,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2870,20 +2830,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminGetCategoryById.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getCategoryById",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getCategoryById",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2906,7 +2865,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2926,20 +2885,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteCategory.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-AdminDeleteCategory",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-AdminDeleteCategory",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -2962,7 +2920,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -2982,20 +2940,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminPresignCategoryImage.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-CategoryPresignUrl",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-CategoryPresignUrl",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3018,7 +2975,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3038,20 +2995,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cleanupOrphanProductImages.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-cleanupOrphanProductImages",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-cleanupOrphanProductImages",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3074,7 +3030,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3094,20 +3050,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminListBrands.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-AdminListBrands",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-AdminListBrands",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3130,7 +3085,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3150,20 +3105,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminGetBrand.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-AdminGetBrandById",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-AdminGetBrandById",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3186,7 +3140,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3206,20 +3160,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCreateBrand.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-AdminCreateBrand",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-AdminCreateBrand",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3242,7 +3195,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3262,20 +3215,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateBrand.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-AdminUpdateBrand",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-AdminUpdateBrand",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3298,7 +3250,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3318,20 +3270,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateBrandStatus.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-AdminUpdateBrandStatus",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-AdminUpdateBrandStatus",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3354,7 +3305,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3374,20 +3325,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteBrand.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-AdminDeleteBrand",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-AdminDeleteBrand",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3410,7 +3360,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3430,20 +3380,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminPresignBrandLogo.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-AdminPresignBrandLogo",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-AdminPresignBrandLogo",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3466,7 +3415,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3486,20 +3435,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminListUsers.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminListUsers",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminListUsers",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3522,7 +3470,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3542,20 +3490,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteUser.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminDeleteUser",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminDeleteUser",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3578,7 +3525,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3598,20 +3545,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/deleteProduct.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-deleteProduct",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-deleteProduct",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3634,7 +3580,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3654,20 +3600,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getConfig.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getConfig",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getConfig",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3690,7 +3635,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3710,20 +3655,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateConfig.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-updateAdminConfig",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-updateAdminConfig",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3746,7 +3690,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3766,20 +3710,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/bulk-upload-aitags.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-bulkAdminConfig",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-bulkAdminConfig",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3802,7 +3745,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3822,20 +3765,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminConfigSliderPresign.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-AdminPresignConfigLogo",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-AdminPresignConfigLogo",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3858,7 +3800,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3878,20 +3820,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/deleteProductImages.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-deleteProductImages",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-deleteProductImages",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3914,7 +3855,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3934,20 +3875,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminListDiscounts.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminListDiscounts",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminListDiscounts",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -3970,7 +3910,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -3990,20 +3930,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCreateDiscount.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminCreateDiscount",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminCreateDiscount",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4026,7 +3965,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4046,20 +3985,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminGetDiscountById.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminGetDiscountById",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminGetDiscountById",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4082,7 +4020,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4102,20 +4040,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateDiscount.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminUpdateDiscount",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminUpdateDiscount",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4138,7 +4075,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4158,20 +4095,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteDiscount.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-AdminDeleteDiscount",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-AdminDeleteDiscount",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4194,7 +4130,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4214,20 +4150,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getRevenueReport.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-revenueReport",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-revenueReport",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4250,7 +4185,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4270,20 +4205,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getProductReport.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-productReport",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-productReport",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4306,7 +4240,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4326,20 +4260,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/productSampleXls.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getProductXlsPresignedURL",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getProductXlsPresignedURL",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4362,7 +4295,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4382,20 +4315,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/orderRestore.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-restoreOrder",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-restoreOrder",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4418,7 +4350,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4438,20 +4370,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/popularProducts.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-populerProducts",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-populerProducts",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4474,7 +4405,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4494,20 +4425,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/auth/forgot/send-otp.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-forgotSendOtp",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-forgotSendOtp",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4530,7 +4460,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4550,20 +4480,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/auth/forgot/reset.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-resetPassword",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-resetPassword",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4586,7 +4515,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4606,20 +4535,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/contactSubmit.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-contactSubmit",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-contactSubmit",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4642,7 +4570,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4662,20 +4590,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/contactList.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-contactList",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-contactList",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4698,7 +4625,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4718,20 +4645,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/contactUpdate.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-contactUpdate",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-contactUpdate",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4754,7 +4680,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4774,20 +4700,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getPackages.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getPackages",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getPackages",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4810,7 +4735,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4830,20 +4755,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getPackageDetails.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-getPackageItems",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-getPackageItems",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4866,7 +4790,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4886,20 +4810,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/aiRecommendation.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-aiRecommendation",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-aiRecommendation",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4922,7 +4845,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4942,20 +4865,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/estimateEmail.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-estimateSendEmail",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-estimateSendEmail",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -4978,7 +4900,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -4998,20 +4920,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCreateCoupon.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminCreateCoupon",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminCreateCoupon",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -5034,7 +4955,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -5054,20 +4975,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminGetCoupons.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminGetCoupons",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminGetCoupons",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -5090,7 +5010,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -5110,20 +5030,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteCoupon.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-adminDeleteCoupon",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminDeleteCoupon",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -5146,7 +5065,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -5166,20 +5085,19 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/cracker-backend/dev/1785672907941-2026-08-02T12:15:07.941Z/cracker-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1785678419325-2026-08-02T13:46:59.325Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/validateCoupon.handler",
         "Runtime": "nodejs24.x",
-        "FunctionName": "cracker-backend-dev-validateCoupon",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-validateCoupon",
         "MemorySize": 1024,
         "Timeout": 60,
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "ABS2476DJDH947JPLSJASK",
+            "JWT_SECRET": "AS2476DJdev1633493488ADDMIN",
             "CART_TABLE": "Carts-dev",
             "PRODUCTS_TABLE": "Products-dev",
             "ORDERS_TABLE": "Orders-dev",
-            "BULK_ORDERS_TABLE": "BulkOrders-dev",
             "BRAND_TABLE": "Brands-dev",
             "CATEGORY_TABLE": "Categories-dev",
             "USERS_TABLE": "Users-dev",
@@ -5202,7 +5120,7 @@
             "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
             "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
             "MAX_AI_PRODUCT_QTY": "10",
-            "REGION": "ap-south-1",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
             "NODE_OPTIONS": "--enable-source-maps"
           }
         },
@@ -5257,7 +5175,7 @@
     "HttpApi": {
       "Type": "AWS::ApiGatewayV2::Api",
       "Properties": {
-        "Name": "dev-cracker-backend",
+        "Name": "dev-sivakassi-pyropark-shop-backend",
         "ProtocolType": "HTTP",
         "CorsConfiguration": {
           "AllowHeaders": [
@@ -11376,7 +11294,7 @@
     "ProductImagesBucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
-        "BucketName": "cracker-app-dev",
+        "BucketName": "sivakasi-pyropark-424006471348-dev",
         "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": false,
           "BlockPublicPolicy": false,
@@ -11409,7 +11327,7 @@
     "ProductImagesBucketPolicy": {
       "Type": "AWS::S3::BucketPolicy",
       "Properties": {
-        "Bucket": "cracker-app-dev",
+        "Bucket": "sivakasi-pyropark-424006471348-dev",
         "PolicyDocument": {
           "Version": "2012-10-17",
           "Statement": [
@@ -11421,11 +11339,11 @@
                 "s3:GetObject"
               ],
               "Resource": [
-                "arn:aws:s3:::cracker-app-dev/products/*",
-                "arn:aws:s3:::cracker-app-dev/categories/*",
-                "arn:aws:s3:::cracker-app-dev/brands/*",
-                "arn:aws:s3:::cracker-app-dev/imports/*",
-                "arn:aws:s3:::cracker-app-dev/config/*"
+                "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/products/*",
+                "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/categories/*",
+                "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/brands/*",
+                "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/imports/*",
+                "arn:aws:s3:::sivakasi-pyropark-424006471348-dev/config/*"
               ]
             }
           ]
@@ -11435,7 +11353,7 @@
     "UsersTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Users",
+        "TableName": "Users-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11454,7 +11372,7 @@
     "BrandsTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Brands",
+        "TableName": "Brands-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11473,7 +11391,7 @@
     "CategoriesTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Categories",
+        "TableName": "Categories-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11492,96 +11410,7 @@
     "OrdersTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Orders",
-        "BillingMode": "PAY_PER_REQUEST",
-        "AttributeDefinitions": [
-          {
-            "AttributeName": "orderId",
-            "AttributeType": "S"
-          },
-          {
-            "AttributeName": "meta",
-            "AttributeType": "S"
-          },
-          {
-            "AttributeName": "userId",
-            "AttributeType": "S"
-          },
-          {
-            "AttributeName": "createdAt",
-            "AttributeType": "N"
-          },
-          {
-            "AttributeName": "status",
-            "AttributeType": "S"
-          }
-        ],
-        "KeySchema": [
-          {
-            "AttributeName": "orderId",
-            "KeyType": "HASH"
-          },
-          {
-            "AttributeName": "meta",
-            "KeyType": "RANGE"
-          }
-        ],
-        "GlobalSecondaryIndexes": [
-          {
-            "IndexName": "userId-createdAt-index",
-            "KeySchema": [
-              {
-                "AttributeName": "userId",
-                "KeyType": "HASH"
-              },
-              {
-                "AttributeName": "createdAt",
-                "KeyType": "RANGE"
-              }
-            ],
-            "Projection": {
-              "ProjectionType": "ALL"
-            }
-          },
-          {
-            "IndexName": "meta-createdAt-index",
-            "KeySchema": [
-              {
-                "AttributeName": "meta",
-                "KeyType": "HASH"
-              },
-              {
-                "AttributeName": "createdAt",
-                "KeyType": "RANGE"
-              }
-            ],
-            "Projection": {
-              "ProjectionType": "ALL"
-            }
-          },
-          {
-            "IndexName": "status-meta-index",
-            "KeySchema": [
-              {
-                "AttributeName": "status",
-                "KeyType": "HASH"
-              },
-              {
-                "AttributeName": "meta",
-                "KeyType": "RANGE"
-              }
-            ],
-            "Projection": {
-              "ProjectionType": "ALL"
-            }
-          }
-        ]
-      }
-    },
-    "BulkOrdersTable": {
-      "Type": "AWS::DynamoDB::Table",
-      "Properties": {
-        "TableName": "BulkOrders",
+        "TableName": "Orders-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11670,7 +11499,7 @@
     "ProductsTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Products",
+        "TableName": "Products-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11739,7 +11568,7 @@
     "DiscountsTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Discounts",
+        "TableName": "Discounts-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11758,7 +11587,7 @@
     "CartsTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Carts",
+        "TableName": "Carts-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11785,7 +11614,7 @@
     "AdminConfigTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "AdminConfig",
+        "TableName": "AdminConfig-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11804,7 +11633,7 @@
     "ContactUsTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "ContactUs",
+        "TableName": "ContactUs-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11823,7 +11652,7 @@
     "OtpTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "OtpTable",
+        "TableName": "OtpTable-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11846,7 +11675,7 @@
     "CouponsTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "Coupons",
+        "TableName": "Coupons-dev",
         "BillingMode": "PAY_PER_REQUEST",
         "AttributeDefinitions": [
           {
@@ -11867,7 +11696,7 @@
     "ServerlessDeploymentBucketName": {
       "Value": "serverless-framework-deployments-ap-south-1-05523700-d247",
       "Export": {
-        "Name": "sls-cracker-backend-dev-ServerlessDeploymentBucketName"
+        "Name": "sls-sivakassi-pyropark-shop-backend-dev-ServerlessDeploymentBucketName"
       }
     },
     "HttpApiId": {
@@ -11876,7 +11705,7 @@
         "Ref": "HttpApi"
       },
       "Export": {
-        "Name": "sls-cracker-backend-dev-HttpApiId"
+        "Name": "sls-sivakassi-pyropark-shop-backend-dev-HttpApiId"
       }
     },
     "HttpApiUrl": {
@@ -11901,7 +11730,7 @@
         ]
       },
       "Export": {
-        "Name": "sls-cracker-backend-dev-HttpApiUrl"
+        "Name": "sls-sivakassi-pyropark-shop-backend-dev-HttpApiUrl"
       }
     }
   }
