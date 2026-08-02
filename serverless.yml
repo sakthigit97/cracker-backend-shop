@@ -2,13 +2,13 @@ service: cracker-backend
 
 custom:
   stage: ${opt:stage, env:STAGE, 'dev'}
-  region: ${opt:region, env:AWS_REGION, 'ap-south-1'}
+  region: ap-south-1
 
 provider:
   name: aws
   runtime: nodejs24.x
   versionFunctions: false
-  region: ${self:custom.region}
+  region: ap-south-1
   stage: ${self:custom.stage}
   timeout: 60
 
@@ -42,7 +42,7 @@ provider:
     MSG91_AUTH_KEY: ${env:MSG91_AUTH_KEY}
     RECAPTCHA_SECRET: ${env:RECAPTCHA_SECRET}
     MAX_AI_PRODUCT_QTY: 10
-    REGION: ${self:custom.region}
+    REGION: ap-south-1
 
   httpApi:
     cors:
@@ -104,7 +104,7 @@ provider:
           Action:
             - s3:ListBucket
           Resource:
-            - arn:aws:s3:::cracker-app
+            - arn:aws:s3:::cracker-app-${self:custom.stage}
 
         - Effect: Allow
           Action:
