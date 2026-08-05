@@ -21,7 +21,6 @@ export function verifyJwt(event: any): JwtPayload {
     }
 
     const token = authHeader.replace("Bearer ", "").trim();
-
     const decoded = jwt.verify(
         token,
         process.env.JWT_SECRET

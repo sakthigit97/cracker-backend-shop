@@ -32,7 +32,12 @@ export class OrderRepository {
         );
 
         const snapshot = cartItems.map((c) => {
-            const product = map.get(c.itemId)!;
+            const product = map.get(c.itemId);
+            if (!product) {
+                throw new Error(
+                    `Product ${c.itemId} not found`
+                );
+            }
             return {
                 productId: c.itemId,
                 name: product.name,
@@ -51,7 +56,7 @@ export class OrderRepository {
     async create(order: any) {
         await ddb.send(
             new PutCommand({
-                TableName:  ORDERS_TABLE,
+                TableName: ORDERS_TABLE,
                 Item: order,
             })
         );
@@ -60,7 +65,7 @@ export class OrderRepository {
     async getOrdersByUser(userId: string, limit: number, cursor?: any) {
         const res = await ddb.send(
             new QueryCommand({
-                TableName:  ORDERS_TABLE,
+                TableName: ORDERS_TABLE,
                 IndexName: "userId-createdAt-index",
                 KeyConditionExpression: "userId = :uid",
                 ExpressionAttributeValues: {
@@ -81,7 +86,7 @@ export class OrderRepository {
     async getById(orderId: string) {
         const res = await ddb.send(
             new GetCommand({
-                TableName:  ORDERS_TABLE,
+                TableName: ORDERS_TABLE,
                 Key: {
                     orderId,
                     meta: "ORDER",
@@ -95,7 +100,7 @@ export class OrderRepository {
     async updateStatus(orderId: string, data: any) {
         await ddb.send(
             new UpdateCommand({
-                TableName:  ORDERS_TABLE,
+                TableName: ORDERS_TABLE,
                 Key: {
                     orderId,
                     meta: "ORDER",
@@ -235,7 +240,7 @@ export class OrderRepository {
     async updateItems(orderId: string, data: any) {
         await ddb.send(
             new UpdateCommand({
-                TableName:  ORDERS_TABLE,
+                TableName: ORDERS_TABLE,
                 Key: {
                     orderId,
                     meta: "ORDER",
