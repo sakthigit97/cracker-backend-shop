@@ -4017,7 +4017,10 @@ function applyDiscount(product, discounts) {
     );
   }
   if (applied.discountMode === "FLAT") {
-    finalPrice = product.price - applied.discountValue;
+    finalPrice = Math.max(
+      0,
+      product.price - applied.discountValue
+    );
   }
   return {
     price: finalPrice,
@@ -4103,6 +4106,11 @@ var OrderRepository = class {
     );
     const snapshot = cartItems.map((c) => {
       const product = map.get(c.itemId);
+      if (!product) {
+        throw new Error(
+          `Product ${c.itemId} not found`
+        );
+      }
       return {
         productId: c.itemId,
         name: product.name,
