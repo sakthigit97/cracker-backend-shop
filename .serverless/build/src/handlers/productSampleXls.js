@@ -28,8 +28,9 @@ var import_s3_request_presigner = require("@aws-sdk/s3-request-presigner");
 var s3 = new import_client_s3.S3Client({ region: "ap-south-1" });
 var handler = async () => {
   try {
+    const BUCKET = process.env.BUCKET_NAME;
     const command = new import_client_s3.GetObjectCommand({
-      Bucket: "cracker-app",
+      Bucket: BUCKET,
       Key: "templates/product-import-template.xlsx"
     });
     const url = await (0, import_s3_request_presigner.getSignedUrl)(s3, command, {

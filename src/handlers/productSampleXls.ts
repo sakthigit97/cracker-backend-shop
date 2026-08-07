@@ -4,8 +4,10 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 const s3 = new S3Client({ region: "ap-south-1" });
 export const handler = async () => {
     try {
+
+        const BUCKET = process.env.BUCKET_NAME!;
         const command = new GetObjectCommand({
-            Bucket: "cracker-app",
+            Bucket: BUCKET,
             Key: "templates/product-import-template.xlsx",
         });
 

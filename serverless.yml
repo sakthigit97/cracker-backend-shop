@@ -1,24 +1,22 @@
-service: cracker-backend
+service: sivakassi-pyropark-shop-backend
 
 custom:
-  stage: ${opt:stage, env:STAGE, 'dev'}
-  region: ${opt:region, env:AWS_REGION, 'ap-south-1'}
+  stage: dev
+  region: ap-south-1
 
 provider:
   name: aws
   runtime: nodejs24.x
   versionFunctions: false
-  region: ${self:custom.region}
   stage: ${self:custom.stage}
   timeout: 60
 
   environment:
     JWT_SECRET: ${env:JWT_SECRET}
-
     CART_TABLE: Carts-${self:custom.stage}
     PRODUCTS_TABLE: Products-${self:custom.stage}
     ORDERS_TABLE: Orders-${self:custom.stage}
-    BULK_ORDERS_TABLE: BulkOrders-${self:custom.stage}
+    # BULK_ORDERS_TABLE: BulkOrders-${self:custom.stage}
     BRAND_TABLE: Brands-${self:custom.stage}
     CATEGORY_TABLE: Categories-${self:custom.stage}
     USERS_TABLE: Users-${self:custom.stage}
@@ -27,7 +25,6 @@ provider:
     CONTACT_TABLE: ContactUs-${self:custom.stage}
     COUPONS_TABLE: Coupons-${self:custom.stage}
     OTP_TABLE: OtpTable-${self:custom.stage}
-
     OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
     CONFIRM_ORDER_TID: ${env:CONFIRM_ORDER_TID}
     ORDER_SUBMIT_TID: ${env:ORDER_SUBMIT_TID}
@@ -42,7 +39,7 @@ provider:
     MSG91_AUTH_KEY: ${env:MSG91_AUTH_KEY}
     RECAPTCHA_SECRET: ${env:RECAPTCHA_SECRET}
     MAX_AI_PRODUCT_QTY: 10
-    REGION: ${self:custom.region}
+    BUCKET_NAME: sivakasi-pyropark-${aws:accountId}-${self:provider.stage}
 
   httpApi:
     cors:
@@ -100,11 +97,13 @@ provider:
             - arn:aws:dynamodb:${self:custom.region}:*:table/OtpTable-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/Coupons-${self:custom.stage}
 
+            
+
         - Effect: Allow
           Action:
             - s3:ListBucket
           Resource:
-            - arn:aws:s3:::cracker-app
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}
 
         - Effect: Allow
           Action:
@@ -112,12 +111,12 @@ provider:
             - s3:GetObject
             - s3:DeleteObject
           Resource:
-            - arn:aws:s3:::cracker-app/products/*
-            - arn:aws:s3:::cracker-app/imports/*
-            - arn:aws:s3:::cracker-app/brands/*
-            - arn:aws:s3:::cracker-app/categories/*
-            - arn:aws:s3:::cracker-app/config/*
-            - arn:aws:s3:::cracker-app/templates/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/products/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/imports/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/brands/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/categories/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/config/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/templates/*
 
 package:
   patterns:
@@ -129,28 +128,28 @@ functions:
     events:
       - httpApi:
           path: /auth/login
-          method: post
+          method: POST
 
   sendOtp:
     handler: src/auth/send-otp.handler
     events:
       - httpApi:
           path: /auth/register/send-otp
-          method: post
+          method: POST
 
   register:
     handler: src/auth/register.handler
     events:
       - httpApi:
           path: /auth/register/verify
-          method: post
+          method: POST
 
   getProfile:
     handler: src/user/get-profile.main
     events:
       - httpApi:
           path: /user/profile
-          method: get
+          method: GET
 
   updateProfile:
     handler: src/user/update-profile.main
@@ -164,49 +163,49 @@ functions:
     events:
       - httpApi:
           path: /products
-          method: get
+          method: GET
 
   getAllProducts:
     handler: src/handlers/getAllProducts.handler
     events:
       - httpApi:
           path: /products/all
-          method: get
+          method: GET
 
   getProductDetails:
     handler: src/handlers/getProductDetails.handler
     events:
       - httpApi:
           path: /products/details/{productId}
-          method: get
+          method: GET
 
   getProductsByCategory:
     handler: src/handlers/getProductsByCategory.handler
     events:
       - httpApi:
           path: /products/category/{categoryId}
-          method: get
+          method: GET
 
   getProductsByBrand:
     handler: src/handlers/getProductsByBrand.handler
     events:
       - httpApi:
           path: /products/brand/{brandId}
-          method: get
+          method: GET
 
   getCategories:
     handler: src/handlers/getCategories.handler
     events:
       - httpApi:
           path: /categories
-          method: get
+          method: GET
 
   getBrands:
     handler: src/handlers/getBrands.handler
     events:
       - httpApi:
           path: /brands
-          method: get
+          method: GET
 
   getCart:
     handler: src/handlers/cart.getCart
@@ -534,7 +533,7 @@ functions:
     events:
       - httpApi:
           path: /admin/products/delete-images
-          method: post
+          method: POST
 
   adminListDiscounts:
     handler: src/handlers/adminListDiscounts.handler
@@ -779,7 +778,7 @@ resources:
     ProductImagesBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: cracker-app-${self:custom.stage}
+        BucketName: sivakasi-pyropark-${aws:accountId}-${self:provider.stage}
         PublicAccessBlockConfiguration:
           BlockPublicAcls: false
           BlockPublicPolicy: false
@@ -802,7 +801,7 @@ resources:
     ProductImagesBucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
-        Bucket: cracker-app-${self:custom.stage}
+        Bucket: sivakasi-pyropark-${aws:accountId}-${self:provider.stage}
         PolicyDocument:
           Version: "2012-10-17"
           Statement:
@@ -812,16 +811,16 @@ resources:
               Action:
                 - s3:GetObject
               Resource:
-                - arn:aws:s3:::cracker-app-${self:custom.stage}/products/*
-                - arn:aws:s3:::cracker-app-${self:custom.stage}/categories/*
-                - arn:aws:s3:::cracker-app-${self:custom.stage}/brands/*
-                - arn:aws:s3:::cracker-app-${self:custom.stage}/imports/*
-                - arn:aws:s3:::cracker-app-${self:custom.stage}/config/*
+                - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/products/*
+                - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/categories/*
+                - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/brands/*
+                - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/imports/*
+                - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/config/*
 
     UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Users
+        TableName: Users-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: mobile
@@ -833,7 +832,7 @@ resources:
     BrandsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Brands
+        TableName: Brands-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: brandId
@@ -845,7 +844,7 @@ resources:
     CategoriesTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Categories
+        TableName: Categories-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: categoryId
@@ -857,7 +856,7 @@ resources:
     OrdersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Orders
+        TableName: Orders-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
 
         AttributeDefinitions:
@@ -897,53 +896,6 @@ resources:
             Projection:
               ProjectionType: ALL
 
-          - IndexName: status-meta-index
-            KeySchema:
-              - AttributeName: status
-                KeyType: HASH
-              - AttributeName: meta
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-
-    BulkOrdersTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: BulkOrders
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: orderId
-            AttributeType: S
-          - AttributeName: meta
-            AttributeType: S
-          - AttributeName: userId
-            AttributeType: S
-          - AttributeName: createdAt
-            AttributeType: N
-          - AttributeName: status
-            AttributeType: S
-        KeySchema:
-          - AttributeName: orderId
-            KeyType: HASH
-          - AttributeName: meta
-            KeyType: RANGE
-        GlobalSecondaryIndexes:
-          - IndexName: userId-createdAt-index
-            KeySchema:
-              - AttributeName: userId
-                KeyType: HASH
-              - AttributeName: createdAt
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
-          - IndexName: meta-createdAt-index
-            KeySchema:
-              - AttributeName: meta
-                KeyType: HASH
-              - AttributeName: createdAt
-                KeyType: RANGE
-            Projection:
-              ProjectionType: ALL
           - IndexName: status-meta-index
             KeySchema:
               - AttributeName: status
@@ -956,7 +908,7 @@ resources:
     ProductsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Products
+        TableName: Products-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
 
         AttributeDefinitions:
@@ -998,7 +950,7 @@ resources:
     DiscountsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Discounts
+        TableName: Discounts-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: discountId
@@ -1010,7 +962,7 @@ resources:
     CartsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Carts
+        TableName: Carts-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: cartId
@@ -1026,7 +978,7 @@ resources:
     AdminConfigTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: AdminConfig
+        TableName: AdminConfig-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: configId
@@ -1038,7 +990,7 @@ resources:
     ContactUsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ContactUs
+        TableName: ContactUs-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: contactId
@@ -1050,7 +1002,7 @@ resources:
     OtpTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: OtpTable
+        TableName: OtpTable-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
 
         AttributeDefinitions:
@@ -1068,7 +1020,7 @@ resources:
     CouponsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Coupons
+        TableName: Coupons-${self:custom.stage}
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: couponCode
@@ -1076,6 +1028,53 @@ resources:
         KeySchema:
           - AttributeName: couponCode
             KeyType: HASH
+
+    # BulkOrdersTable:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     TableName: BulkOrders-${self:custom.stage}
+    #     BillingMode: PAY_PER_REQUEST
+    #     AttributeDefinitions:
+    #       - AttributeName: orderId
+    #         AttributeType: S
+    #       - AttributeName: meta
+    #         AttributeType: S
+    #       - AttributeName: userId
+    #         AttributeType: S
+    #       - AttributeName: createdAt
+    #         AttributeType: N
+    #       - AttributeName: status
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: orderId
+    #         KeyType: HASH
+    #       - AttributeName: meta
+    #         KeyType: RANGE
+    #     GlobalSecondaryIndexes:
+    #       - IndexName: userId-createdAt-index
+    #         KeySchema:
+    #           - AttributeName: userId
+    #             KeyType: HASH
+    #           - AttributeName: createdAt
+    #             KeyType: RANGE
+    #         Projection:
+    #           ProjectionType: ALL
+    #       - IndexName: meta-createdAt-index
+    #         KeySchema:
+    #           - AttributeName: meta
+    #             KeyType: HASH
+    #           - AttributeName: createdAt
+    #             KeyType: RANGE
+    #         Projection:
+    #           ProjectionType: ALL
+    #       - IndexName: status-meta-index
+    #         KeySchema:
+    #           - AttributeName: status
+    #             KeyType: HASH
+    #           - AttributeName: meta
+    #             KeyType: RANGE
+    #         Projection:
+    #           ProjectionType: ALL
 
     # AdminCodesTable:
     #   Type: AWS::DynamoDB::Table

@@ -5,10 +5,10 @@ import { withAuth } from "../libs/auth-middleware";
 
 const handler = async (event: any) => {
   const mobile = event.user.sub;
-
+  const USERS_TABLE = process.env.USERS_TABLE!;
   const result = await dbClient.send(
     new GetItemCommand({
-      TableName: "Users",
+      TableName: USERS_TABLE,
       Key: {
         mobile: { S: mobile },
       },

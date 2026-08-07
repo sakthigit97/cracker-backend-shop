@@ -37,7 +37,7 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 
 // src/services/discount.service.ts
 var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
-var DISCOUNT_TABLE = "Discounts";
+var DISCOUNT_TABLE = process.env.DISCOUNT_TABLE;
 async function getActiveDiscounts() {
   const res = await ddb.send(
     new import_lib_dynamodb2.ScanCommand({
@@ -75,7 +75,10 @@ function applyDiscount(product, discounts) {
     );
   }
   if (applied.discountMode === "FLAT") {
-    finalPrice = product.price - applied.discountValue;
+    finalPrice = Math.max(
+      0,
+      product.price - applied.discountValue
+    );
   }
   return {
     price: finalPrice,
@@ -104,12 +107,13 @@ var error = (message, statusCode = 400) => ({
 var handler = async (event) => {
   try {
     const productId = event.pathParameters?.productId;
+    const PRODUCTS_TABLE = process.env.PRODUCTS_TABLE;
     if (!productId) {
       return error("productId is required", 400);
     }
     const productRes = await ddb.send(
       new import_lib_dynamodb3.GetCommand({
-        TableName: "Products",
+        TableName: PRODUCTS_TABLE,
         Key: {
           productId
         }

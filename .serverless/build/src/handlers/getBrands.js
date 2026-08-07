@@ -52,11 +52,12 @@ var error = (message, statusCode = 400) => ({
 });
 
 // src/handlers/getBrands.ts
+var BRAND_TABLE = process.env.BRAND_TABLE;
 var handler = async () => {
   try {
     const res = await ddb.send(
       new import_lib_dynamodb2.ScanCommand({
-        TableName: "Brands",
+        TableName: BRAND_TABLE,
         FilterExpression: "isActive = :active",
         ExpressionAttributeValues: {
           ":active": true

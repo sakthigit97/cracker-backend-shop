@@ -5670,6 +5670,7 @@ var error = (message, statusCode = 400) => ({
 });
 
 // src/auth/login.ts
+var USERS_TABLE = process.env.USERS_TABLE;
 var handler = async (event) => {
   try {
     const body = JSON.parse(event.body || "{}");
@@ -5679,7 +5680,7 @@ var handler = async (event) => {
     }
     const result = await dbClient.send(
       new import_client_dynamodb2.GetItemCommand({
-        TableName: "Users",
+        TableName: USERS_TABLE,
         Key: {
           mobile: { S: mobile }
         }

@@ -1,4 +1,3 @@
-import { randomBytes } from "crypto";
 import { Coupon } from "../models/coupon.model";
 import { CouponRepository } from "../repo/coupon.repo";
 

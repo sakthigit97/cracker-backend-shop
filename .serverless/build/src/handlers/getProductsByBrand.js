@@ -37,7 +37,7 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 
 // src/services/discount.service.ts
 var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
-var DISCOUNT_TABLE = "Discounts";
+var DISCOUNT_TABLE = process.env.DISCOUNT_TABLE;
 async function getActiveDiscounts() {
   const res = await ddb.send(
     new import_lib_dynamodb2.ScanCommand({
@@ -75,7 +75,10 @@ function applyDiscount(product, discounts) {
     );
   }
   if (applied.discountMode === "FLAT") {
-    finalPrice = product.price - applied.discountValue;
+    finalPrice = Math.max(
+      0,
+      product.price - applied.discountValue
+    );
   }
   return {
     price: finalPrice,
@@ -120,6 +123,7 @@ var error = (message, statusCode = 400) => ({
 var handler = async (event) => {
   try {
     const brandId = event.pathParameters?.brandId;
+    const PRODUCTS_TABLE = process.env.PRODUCTS_TABLE;
     if (!brandId) {
       return error("brandId is required", 400);
     }
@@ -137,7 +141,7 @@ var handler = async (event) => {
     if (searchLower) {
       const res = await ddb.send(
         new import_lib_dynamodb3.ScanCommand({
-          TableName: "Products",
+          TableName: PRODUCTS_TABLE,
           FilterExpression: "isActive = :active AND contains(#st, :q) AND #bid = :bid AND #qty >= :minQty",
           ExpressionAttributeNames: {
             "#st": "searchText",
@@ -157,7 +161,7 @@ var handler = async (event) => {
     } else {
       const res = await ddb.send(
         new import_lib_dynamodb3.QueryCommand({
-          TableName: "Products",
+          TableName: PRODUCTS_TABLE,
           IndexName: "brandId-index",
           KeyConditionExpression: "brandId = :bid",
           FilterExpression: "isActive = :active",

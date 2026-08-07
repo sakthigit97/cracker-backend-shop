@@ -3,11 +3,12 @@ import { APIGatewayProxyHandler } from "aws-lambda";
 import { ddb } from "../utils/dynamo";
 import { success, error } from "../libs/response";
 
+const BRAND_TABLE = process.env.BRAND_TABLE!;
 export const handler: APIGatewayProxyHandler = async () => {
   try {
     const res = await ddb.send(
       new ScanCommand({
-        TableName: "Brands",
+        TableName: BRAND_TABLE,
         FilterExpression: "isActive = :active",
         ExpressionAttributeValues: {
           ":active": true,

@@ -7,7 +7,10 @@ import {
 
 import { ddb } from "../utils/dynamo";
 import { BulkOrder } from "../types/bulkOrder";
+
 const TABLE_NAME = process.env.BULK_ORDERS_TABLE!;
+const USERS_TABLE = process.env.USERS_TABLE!;
+const ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE!;
 export class BulkOrderRepository {
 
     async create(order: BulkOrder): Promise<void> {
@@ -110,7 +113,7 @@ export class BulkOrderRepository {
 
         const res = await ddb.send(
             new GetCommand({
-                TableName: "AdminConfig",
+                TableName: ADMIN_CONFIG_TABLE,
                 Key: {
                     configId: "global",
                 },
@@ -125,7 +128,7 @@ export class BulkOrderRepository {
 
         const res = await ddb.send(
             new GetCommand({
-                TableName: "Users",
+                TableName: USERS_TABLE,
                 Key: {
                     mobile,
                 },

@@ -8,8 +8,7 @@ const ORDER_TABLE = process.env.ORDERS_TABLE!;
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     try {
 
-        const decoded = verifyJwt(event);
-        const userId = decoded.userId;
+        const { userId, role } = verifyJwt(event);
         if (!userId) {
             return {
                 statusCode: 401,
@@ -18,10 +17,9 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
                 }),
             };
         }
-
+        const username = role === 'admin' ? "Admin" : "User";
         const body = JSON.parse(event.body || "{}");
         const { orderId } = body;
-
         if (!orderId) {
             return error("orderId is required", 400);
         }
@@ -43,29 +41,38 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
         }
 
         const now = Date.now();
-        const updatedAt = Number(order.updatedAt);
-
+        const updatedAt = Number(order.updatedAt || 0);
         const diffDays = (now - updatedAt) / (1000 * 60 * 60 * 24);
 
         if (diffDays > 30) {
             return error("Order cannot be restored after 30 days", 400);
         }
         const sevenDaysLater = now + (7 * 24 * 60 * 60 * 1000);
+        const statusHistory = [
+            ...(order.statusHistory || []),
+            {
+                status: "ORDER_PLACED",
+                at: now,
+                by: username,
+            },
+        ];
 
         await ddb.send(
             new UpdateCommand({
                 TableName: ORDER_TABLE,
                 Key: { orderId, meta: "ORDER", },
-                UpdateExpression: "SET #status = :newStatus, updatedAt = :now, expectedDelivery = :delivery",
+                UpdateExpression: "SET #status = :newStatus,  paymentStatus = :paymentStatus, updatedAt = :now, expectedDelivery = :delivery, statusHistory = :statusHistory",
                 ConditionExpression: "#status = :expectedStatus",
                 ExpressionAttributeNames: {
                     "#status": "status",
                 },
                 ExpressionAttributeValues: {
                     ":newStatus": "ORDER_PLACED",
+                    ":paymentStatus": "PENDING",
                     ":expectedStatus": "CANCELLED",
                     ":now": now,
                     ":delivery": sevenDaysLater,
+                    ":statusHistory": statusHistory,
                 },
             })
         );

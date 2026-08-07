@@ -8,6 +8,7 @@ import { success, error } from "../libs/response";
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     try {
         const productId = event.pathParameters?.productId;
+        const PRODUCTS_TABLE = process.env.PRODUCTS_TABLE!;
 
         if (!productId) {
             return error("productId is required", 400);
@@ -15,7 +16,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
         const productRes = await ddb.send(
             new GetCommand({
-                TableName: "Products",
+                TableName: PRODUCTS_TABLE,
                 Key: {
                     productId,
                 },

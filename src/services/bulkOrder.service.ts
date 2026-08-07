@@ -325,9 +325,7 @@ export class BulkOrderService {
             pricing,
 
             createdAt: now,
-
             updatedAt: now,
-
             statusHistory: [
                 {
                     status: "ORDER_PLACED",

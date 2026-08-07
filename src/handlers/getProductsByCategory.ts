@@ -8,6 +8,7 @@ import { success, error } from "../libs/response";
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   try {
+    const PRODUCTS_TABLE = process.env.PRODUCTS_TABLE!;
     const categoryId = event.pathParameters?.categoryId;
 
     if (!categoryId) {
@@ -30,7 +31,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     let lastKey = null;
     if (searchLower) {
       const params: any = {
-        TableName: "Products",
+        TableName: PRODUCTS_TABLE,
         FilterExpression:
           "isActive = :active AND contains(#st, :q) AND #cid = :cid AND #qty >= :minQty",
         ExpressionAttributeNames: {
@@ -52,7 +53,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     } else {
       const res = await ddb.send(
         new QueryCommand({
-          TableName: "Products",
+          TableName: PRODUCTS_TABLE,
           IndexName: "categoryId-index",
           KeyConditionExpression: "categoryId = :cid",
           FilterExpression: "isActive = :active",

@@ -4,6 +4,7 @@ import { comparePassword } from "../libs/hash";
 import { generateToken } from "../libs/jwt";
 import { success, error } from "../libs/response";
 
+const USERS_TABLE = process.env.USERS_TABLE!;
 export const handler = async (event: any) => {
   try {
     const body = JSON.parse(event.body || "{}");
@@ -15,7 +16,7 @@ export const handler = async (event: any) => {
 
     const result = await dbClient.send(
       new GetItemCommand({
-        TableName: "Users",
+        TableName: USERS_TABLE,
         Key: {
           mobile: { S: mobile },
         },

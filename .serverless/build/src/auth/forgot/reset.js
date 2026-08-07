@@ -1877,6 +1877,7 @@ var OtpService = class {
 
 // src/auth/forgot/reset.ts
 var otpService = new OtpService();
+var USERS_TABLE = process.env.USERS_TABLE;
 var handler = async (event) => {
   try {
     const body = JSON.parse(event.body || "{}");
@@ -1892,7 +1893,7 @@ var handler = async (event) => {
     const passwordHash = await hashPassword(password);
     await dbClient.send(
       new import_client_dynamodb3.UpdateItemCommand({
-        TableName: "Users",
+        TableName: USERS_TABLE,
         Key: { mobile: { S: mobile } },
         UpdateExpression: "SET passwordHash = :p",
         ExpressionAttributeValues: {

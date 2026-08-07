@@ -38,11 +38,13 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 });
 
 // src/repo/getPackageDetails.repo.ts
+var PRODUCTS_TABLE = process.env.PRODUCTS_TABLE;
+var ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE;
 var GetPackageDetailsRepository = class {
   async getPackageDetails(packageId) {
     const config = await ddb.send(
       new import_lib_dynamodb2.GetCommand({
-        TableName: "AdminConfig",
+        TableName: ADMIN_CONFIG_TABLE,
         Key: {
           configId: "global"
         }
@@ -61,7 +63,7 @@ var GetPackageDetailsRepository = class {
     do {
       const res = await ddb.send(
         new import_lib_dynamodb2.ScanCommand({
-          TableName: "Products",
+          TableName: PRODUCTS_TABLE,
           ProjectionExpression: "productId, packageTagIds",
           ExclusiveStartKey: lastKey
         })
@@ -110,7 +112,7 @@ var ProductRepository = class {
 
 // src/services/discount.service.ts
 var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
-var DISCOUNT_TABLE = "Discounts";
+var DISCOUNT_TABLE = process.env.DISCOUNT_TABLE;
 async function getActiveDiscounts() {
   const res = await ddb.send(
     new import_lib_dynamodb4.ScanCommand({
@@ -148,7 +150,10 @@ function applyDiscount(product, discounts) {
     );
   }
   if (applied.discountMode === "FLAT") {
-    finalPrice = product.price - applied.discountValue;
+    finalPrice = Math.max(
+      0,
+      product.price - applied.discountValue
+    );
   }
   return {
     price: finalPrice,

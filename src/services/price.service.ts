@@ -36,7 +36,10 @@ export function applyDiscount(product: any, discounts: any[]) {
     }
 
     if (applied.discountMode === "FLAT") {
-        finalPrice = product.price - applied.discountValue;
+        finalPrice = Math.max(
+            0,
+            product.price - applied.discountValue
+        );
     }
 
     return {

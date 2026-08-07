@@ -8,7 +8,8 @@ import { dbClient } from "../libs/db";
 import { hashPassword } from "../libs/hash";
 import { success, error } from "../libs/response";
 import { OtpService } from "../utils/otp.service";
-
+const USERS_TABLE = process.env.USERS_TABLE!;
+const ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE!;
 const otpService = new OtpService();
 export const handler = async (event: any) => {
   try {
@@ -40,7 +41,7 @@ export const handler = async (event: any) => {
 
     const existing = await dbClient.send(
       new GetItemCommand({
-        TableName: "Users",
+        TableName: USERS_TABLE,
         Key: {
           mobile: { S: mobile },
         },
@@ -53,7 +54,7 @@ export const handler = async (event: any) => {
 
     const configRes = await dbClient.send(
       new GetItemCommand({
-        TableName: "AdminConfig",
+        TableName: ADMIN_CONFIG_TABLE,
         Key: {
           configId: { S: "global" },
         },
@@ -74,7 +75,7 @@ export const handler = async (event: any) => {
     if (code && isReferralEnabled) {
       const referralCheck = await dbClient.send(
         new ScanCommand({
-          TableName: "Users",
+          TableName: USERS_TABLE,
           FilterExpression: "referralCode = :code",
           ExpressionAttributeValues: {
             ":code": { S: code },
@@ -98,7 +99,7 @@ export const handler = async (event: any) => {
     const passwordHash = await hashPassword(password);
     await dbClient.send(
       new PutItemCommand({
-        TableName: "Users",
+        TableName: USERS_TABLE,
         Item: {
           mobile: { S: mobile },
           name: { S: name },

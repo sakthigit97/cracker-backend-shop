@@ -1,6 +1,7 @@
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 
 const client = new DynamoDBClient({});
+const ORDERS_TABLE = process.env.ORDERS_TABLE!;
 
 export class ProductReportService {
     async getProductReport(params: {
@@ -29,7 +30,7 @@ export class ProductReportService {
         ]);
 
         const data = await client.send(
-            new ScanCommand({ TableName: "Orders" })
+            new ScanCommand({ TableName: ORDERS_TABLE })
         );
 
         const orders = data.Items || [];

@@ -3,6 +3,7 @@ import { APIGatewayProxyHandler } from "aws-lambda";
 import { ddb } from "../utils/dynamo";
 import { success, error } from "../libs/response";
 
+const CATEGORY_TABLE = process.env.CATEGORY_TABLE!;
 export const handler: APIGatewayProxyHandler = async () => {
   try {
     let items: any[] = [];
@@ -11,7 +12,7 @@ export const handler: APIGatewayProxyHandler = async () => {
     do {
       const res = await ddb.send(
         new ScanCommand({
-          TableName: "Categories",
+          TableName: CATEGORY_TABLE,
           FilterExpression: "isActive = :active",
           ExpressionAttributeValues: {
             ":active": true,

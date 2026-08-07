@@ -199,6 +199,7 @@ var AdminConfigService = class {
 
 // src/auth/send-otp.ts
 var otpService = new OtpService();
+var USERS_TABLE = process.env.USERS_TABLE;
 var verifyCaptcha = async (token) => {
   const res = await fetch(
     "https://www.google.com/recaptcha/api/siteverify",
@@ -228,7 +229,7 @@ var handler = async (event) => {
     }
     const existing = await dbClient.send(
       new import_client_dynamodb4.GetItemCommand({
-        TableName: "Users",
+        TableName: USERS_TABLE,
         Key: {
           mobile: { S: mobile }
         }

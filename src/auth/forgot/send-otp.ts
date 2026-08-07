@@ -6,6 +6,7 @@ import { AdminConfigRepo } from "../../repo/adminConfig.repo";
 import { AdminConfigService } from "../../services/adminConfig.service";
 
 const otpService = new OtpService();
+const USERS_TABLE = process.env.USERS_TABLE!;
 const verifyCaptcha = async (token: string) => {
     const res = await fetch(
         "https://www.google.com/recaptcha/api/siteverify",
@@ -42,7 +43,7 @@ export const handler = async (event: any) => {
 
         const existing = await dbClient.send(
             new GetItemCommand({
-                TableName: "Users",
+                TableName: USERS_TABLE,
                 Key: {
                     mobile: { S: mobile },
                 },

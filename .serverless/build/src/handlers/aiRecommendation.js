@@ -89,7 +89,7 @@ var RecommendationRepository = class {
 
 // src/services/discount.service.ts
 var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
-var DISCOUNT_TABLE = "Discounts";
+var DISCOUNT_TABLE = process.env.DISCOUNT_TABLE;
 async function getActiveDiscounts() {
   const res = await ddb.send(
     new import_lib_dynamodb3.ScanCommand({
@@ -127,7 +127,10 @@ function applyDiscount(product, discounts) {
     );
   }
   if (applied.discountMode === "FLAT") {
-    finalPrice = product.price - applied.discountValue;
+    finalPrice = Math.max(
+      0,
+      product.price - applied.discountValue
+    );
   }
   return {
     price: finalPrice,
