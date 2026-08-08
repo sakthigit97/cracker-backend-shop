@@ -8,8 +8,9 @@ import {
     PutCommand,
 } from "@aws-sdk/lib-dynamodb";
 
+const REGION = process.env.AWS_REGION;
 const client = new DynamoDBClient({
-    region: "ap-south-1",
+    region: REGION,
 });
 
 const ddb = DynamoDBDocumentClient.from(client);

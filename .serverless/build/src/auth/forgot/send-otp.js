@@ -27,8 +27,9 @@ var import_client_dynamodb4 = require("@aws-sdk/client-dynamodb");
 
 // src/libs/db.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
+var REGION = process.env.AWS_REGION;
 var dbClient = new import_client_dynamodb.DynamoDBClient({
-  region: "ap-south-1"
+  region: REGION
 });
 
 // src/libs/response.ts
@@ -140,7 +141,8 @@ var OtpService = class {
 // src/repo/adminConfig.repo.ts
 var import_client_dynamodb3 = require("@aws-sdk/client-dynamodb");
 var import_lib_dynamodb = require("@aws-sdk/lib-dynamodb");
-var client = new import_client_dynamodb3.DynamoDBClient({ region: "ap-south-1" });
+var REGION2 = process.env.AWS_REGION;
+var client = new import_client_dynamodb3.DynamoDBClient({ region: REGION2 });
 var docClient = import_lib_dynamodb.DynamoDBDocumentClient.from(client);
 var TABLE_NAME = process.env.ADMIN_CONFIG_TABLE;
 var AdminConfigRepo = class {

@@ -25,7 +25,8 @@ __export(productSampleXls_exports, {
 module.exports = __toCommonJS(productSampleXls_exports);
 var import_client_s3 = require("@aws-sdk/client-s3");
 var import_s3_request_presigner = require("@aws-sdk/s3-request-presigner");
-var s3 = new import_client_s3.S3Client({ region: "ap-south-1" });
+var REGION = process.env.AWS_REGION;
+var s3 = new import_client_s3.S3Client({ region: REGION });
 var handler = async () => {
   try {
     const BUCKET = process.env.BUCKET_NAME;

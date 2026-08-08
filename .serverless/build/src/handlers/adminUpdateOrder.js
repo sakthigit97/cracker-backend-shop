@@ -4632,7 +4632,8 @@ var SmsService = class {
 // src/repo/adminConfig.repo.ts
 var import_client_dynamodb2 = require("@aws-sdk/client-dynamodb");
 var import_lib_dynamodb7 = require("@aws-sdk/lib-dynamodb");
-var client2 = new import_client_dynamodb2.DynamoDBClient({ region: "ap-south-1" });
+var REGION = process.env.AWS_REGION;
+var client2 = new import_client_dynamodb2.DynamoDBClient({ region: REGION });
 var docClient = import_lib_dynamodb7.DynamoDBDocumentClient.from(client2);
 var TABLE_NAME2 = process.env.ADMIN_CONFIG_TABLE;
 var AdminConfigRepo = class {
