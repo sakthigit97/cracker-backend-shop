@@ -1,19 +1,21 @@
-  Table data migration from one to another table with cross orgin  
-   
-    npx ts-node scripts/migrate-dynamodb.ts \
-    ap-south-1 Products-dev us-east-1 Products-prod
-
+Table data migration from one to another table with cross orgin  
+  npx ts-node scripts/migrate-dynamodb.ts ap-south-1 Users-dev us-east-1 Users-prod
     source-region
     source-table
     destination-region
     destination-table
 
 
+
+
+
+
+
+
+
 user data import to table 
     change the table name/region/xls- inside the script and then run 
-
     npx tsx scripts/migrate-users.ts
-
 
 
 category/brand/adminconfig/products
