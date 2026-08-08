@@ -2,8 +2,36 @@ import { Coupon } from "../models/coupon.model";
 import { CouponRepository } from "../repo/coupon.repo";
 
 export class CouponService {
-
     private repo = new CouponRepository();
+
+    private normalizeExpiryDate(expiryDate: string): string {
+        const value = expiryDate.trim();
+
+        if (!value) {
+            throw new Error("Expiry Date is required");
+        }
+
+        if (
+            value.endsWith("Z") ||
+            /[+-]\d{2}:\d{2}$/.test(value)
+        ) {
+            const date = new Date(value);
+
+            if (Number.isNaN(date.getTime())) {
+                throw new Error("Invalid Expiry Date");
+            }
+
+            return date.toISOString();
+        }
+
+        const date = new Date(`${value}:00+05:30`);
+        if (Number.isNaN(date.getTime())) {
+            throw new Error("Invalid Expiry Date");
+        }
+
+        return date.toISOString();
+    }
+
     async createCoupon(payload: Partial<Coupon>) {
         if (!payload.type) {
             throw new Error("Coupon type is required");
@@ -28,23 +56,29 @@ export class CouponService {
             throw new Error("Expiry Date is required");
         }
 
-        if (new Date(payload.expiryDate) <= new Date()) {
+        const expiryDate = this.normalizeExpiryDate(
+            payload.expiryDate
+        );
+
+        if (new Date(expiryDate).getTime() <= Date.now()) {
             throw new Error("Expiry Date must be a future date");
         }
 
-        const couponCode = payload.couponCode?.trim().toUpperCase();
+        const couponCode =
+            payload.couponCode?.trim().toUpperCase();
 
         if (!couponCode) {
             throw new Error("Coupon Code is required");
         }
 
         const now = new Date().toISOString();
+
         const coupon: Coupon = {
             couponCode,
             description: payload.description ?? "",
             type: payload.type,
             value: payload.value,
-            expiryDate: payload.expiryDate,
+            expiryDate,
             createdAt: now,
             updatedAt: now,
         };
@@ -54,29 +88,25 @@ export class CouponService {
 
     async getCoupons() {
         const coupons = await this.repo.listCoupons();
+
         return coupons.sort((a, b) =>
             b.createdAt.localeCompare(a.createdAt)
         );
-
     }
 
     async deleteCoupon(couponCode: string) {
-
         if (!couponCode) {
             throw new Error("Coupon code is required");
         }
 
         await this.repo.deleteCoupon(couponCode);
-
     }
-
 
     async validateCoupon(
         couponCode: string,
         orderAmount: number
     ) {
-
-        if (!couponCode) {
+        if (!couponCode?.trim()) {
             throw new Error("Coupon Code is required");
         }
 
@@ -88,19 +118,42 @@ export class CouponService {
             throw new Error("Invalid Coupon Code");
         }
 
-        if (new Date(coupon.expiryDate) <= new Date()) {
+        const expiryTime = new Date(
+            coupon.expiryDate
+        ).getTime();
+
+        if (Number.isNaN(expiryTime)) {
+            console.error(
+                "Invalid coupon expiryDate:",
+                coupon.expiryDate
+            );
+
+            throw new Error("Invalid Coupon Expiry");
+        }
+
+        if (expiryTime <= Date.now()) {
             throw new Error("Coupon Expired");
         }
 
         let discount = 0;
+
         if (coupon.type === "FLAT") {
-            discount = Math.min(coupon.value, orderAmount);
+            discount = Math.min(
+                coupon.value,
+                orderAmount
+            );
         } else {
-            discount = (orderAmount * coupon.value) / 100;
+            discount =
+                (orderAmount * coupon.value) / 100;
         }
 
         discount = Math.round(discount);
-        const payable = Math.max(0, orderAmount - discount);
+
+        const payable = Math.max(
+            0,
+            orderAmount - discount
+        );
+
         return {
             couponCode: coupon.couponCode,
             couponType: coupon.type,
