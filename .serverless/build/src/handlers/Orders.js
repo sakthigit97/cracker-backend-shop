@@ -4602,6 +4602,24 @@ var CouponService = class {
   constructor() {
     this.repo = new CouponRepository();
   }
+  normalizeExpiryDate(expiryDate) {
+    const value = expiryDate.trim();
+    if (!value) {
+      throw new Error("Expiry Date is required");
+    }
+    if (value.endsWith("Z") || /[+-]\d{2}:\d{2}$/.test(value)) {
+      const date2 = new Date(value);
+      if (Number.isNaN(date2.getTime())) {
+        throw new Error("Invalid Expiry Date");
+      }
+      return date2.toISOString();
+    }
+    const date = /* @__PURE__ */ new Date(`${value}:00+05:30`);
+    if (Number.isNaN(date.getTime())) {
+      throw new Error("Invalid Expiry Date");
+    }
+    return date.toISOString();
+  }
   async createCoupon(payload) {
     if (!payload.type) {
       throw new Error("Coupon type is required");
@@ -4615,7 +4633,10 @@ var CouponService = class {
     if (!payload.expiryDate) {
       throw new Error("Expiry Date is required");
     }
-    if (new Date(payload.expiryDate) <= /* @__PURE__ */ new Date()) {
+    const expiryDate = this.normalizeExpiryDate(
+      payload.expiryDate
+    );
+    if (new Date(expiryDate).getTime() <= Date.now()) {
       throw new Error("Expiry Date must be a future date");
     }
     const couponCode = payload.couponCode?.trim().toUpperCase();
@@ -4628,7 +4649,7 @@ var CouponService = class {
       description: payload.description ?? "",
       type: payload.type,
       value: payload.value,
-      expiryDate: payload.expiryDate,
+      expiryDate,
       createdAt: now,
       updatedAt: now
     };
@@ -4647,7 +4668,7 @@ var CouponService = class {
     await this.repo.deleteCoupon(couponCode);
   }
   async validateCoupon(couponCode, orderAmount) {
-    if (!couponCode) {
+    if (!couponCode?.trim()) {
       throw new Error("Coupon Code is required");
     }
     const coupon = await this.repo.getCoupon(
@@ -4656,17 +4677,33 @@ var CouponService = class {
     if (!coupon) {
       throw new Error("Invalid Coupon Code");
     }
-    if (new Date(coupon.expiryDate) <= /* @__PURE__ */ new Date()) {
+    const expiryTime = new Date(
+      coupon.expiryDate
+    ).getTime();
+    if (Number.isNaN(expiryTime)) {
+      console.error(
+        "Invalid coupon expiryDate:",
+        coupon.expiryDate
+      );
+      throw new Error("Invalid Coupon Expiry");
+    }
+    if (expiryTime <= Date.now()) {
       throw new Error("Coupon Expired");
     }
     let discount = 0;
     if (coupon.type === "FLAT") {
-      discount = Math.min(coupon.value, orderAmount);
+      discount = Math.min(
+        coupon.value,
+        orderAmount
+      );
     } else {
       discount = orderAmount * coupon.value / 100;
     }
     discount = Math.round(discount);
-    const payable = Math.max(0, orderAmount - discount);
+    const payable = Math.max(
+      0,
+      orderAmount - discount
+    );
     return {
       couponCode: coupon.couponCode,
       couponType: coupon.type,
