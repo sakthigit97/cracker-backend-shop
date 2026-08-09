@@ -1,8 +1,8 @@
 service: sivakassi-pyropark-shop-api
 
 custom:
-  stage: dev
-  region: ap-south-1
+  stage: prod
+  region: us-east-1
 
 provider:
   name: aws
@@ -40,6 +40,9 @@ provider:
     RECAPTCHA_SECRET: ${env:RECAPTCHA_SECRET}
     MAX_AI_PRODUCT_QTY: 10
     BUCKET_NAME: sivakasi-pyropark-${aws:accountId}-${self:provider.stage}
+    CLOUDFRONT_DOMAIN: ${env:CLOUDFRONT_DOMAIN}
+    DISTRIBUTION_ID: ${env:DISTRIBUTION_ID}
+    STAGE: ${self:custom.stage}
 
   httpApi:
     cors:
@@ -96,8 +99,6 @@ provider:
             - arn:aws:dynamodb:${self:custom.region}:*:table/ContactUs-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/OtpTable-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/Coupons-${self:custom.stage}
-
-            
 
         - Effect: Allow
           Action:
@@ -816,6 +817,18 @@ resources:
                 - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/brands/*
                 - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/imports/*
                 - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/config/*
+
+            - Sid: AllowCloudFrontRead
+              Effect: Allow
+              Principal:
+                Service: cloudfront.amazonaws.com
+              Action:
+                - s3:GetObject
+              Resource:
+                - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/*
+              Condition:
+                StringEquals:
+                  AWS:SourceArn: arn:aws:cloudfront::${aws:accountId}:distribution/${env:DISTRIBUTION_ID}
 
     UsersTable:
       Type: AWS::DynamoDB::Table

@@ -3955,6 +3955,8 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(ddbClient);
 // src/utils/presign.ts
 var import_crypto = require("crypto");
 var BUCKET = process.env.BUCKET_NAME;
+var CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN;
+var STAGE = process.env.STAGE;
 async function getPresignedUploads(productId, files) {
   return Promise.all(
     files.map(async (file) => {
@@ -3968,9 +3970,10 @@ async function getPresignedUploads(productId, files) {
         }),
         { expiresIn: 300 }
       );
+      const fileUrl = STAGE === "prod" ? `https://${CLOUDFRONT_DOMAIN}/${key}` : `https://${BUCKET}.s3.amazonaws.com/${key}`;
       return {
         uploadUrl,
-        fileUrl: `https://${BUCKET}.s3.amazonaws.com/${key}`
+        fileUrl
       };
     })
   );
