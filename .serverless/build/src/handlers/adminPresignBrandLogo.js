@@ -3952,7 +3952,7 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(ddbClient);
 
 // src/handlers/adminPresignBrandLogo.ts
 var BUCKET = process.env.BUCKET_NAME;
-var REGION = process.env.AWS_REGION || "ap-south-1";
+var REGION = process.env.AWS_REGION;
 var handler = async (event) => {
   try {
     const { role } = verifyJwt(event);

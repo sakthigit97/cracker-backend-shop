@@ -33280,8 +33280,9 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(ddbClient);
 // src/handlers/bulk-upload-aitags.ts
 var import_client_s32 = require("@aws-sdk/client-s3");
 var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
+var REGION = process.env.AWS_REGION;
 var client = new import_client_dynamodb2.DynamoDBClient({
-  region: "ap-south-1"
+  region: REGION
 });
 var ddb2 = import_lib_dynamodb2.DynamoDBDocumentClient.from(client);
 var TABLE_NAME = process.env.ADMIN_CONFIG_TABLE;

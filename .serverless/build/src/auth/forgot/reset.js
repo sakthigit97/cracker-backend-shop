@@ -37,8 +37,9 @@ var import_client_dynamodb3 = require("@aws-sdk/client-dynamodb");
 
 // src/libs/db.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
+var REGION = process.env.AWS_REGION;
 var dbClient = new import_client_dynamodb.DynamoDBClient({
-  region: "ap-south-1"
+  region: REGION
 });
 
 // node_modules/bcryptjs/index.js

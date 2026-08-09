@@ -5,7 +5,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3 } from "../utils/aws";
 
 const BUCKET = process.env.BUCKET_NAME!;
-const REGION = process.env.AWS_REGION || "ap-south-1";
+const REGION = process.env.AWS_REGION;
 
 export const handler = async (event: any) => {
     try {

@@ -27,7 +27,8 @@ module.exports = __toCommonJS(getConfig_exports);
 // src/repo/adminConfig.repo.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
 var import_lib_dynamodb = require("@aws-sdk/lib-dynamodb");
-var client = new import_client_dynamodb.DynamoDBClient({ region: "ap-south-1" });
+var REGION = process.env.AWS_REGION;
+var client = new import_client_dynamodb.DynamoDBClient({ region: REGION });
 var docClient = import_lib_dynamodb.DynamoDBDocumentClient.from(client);
 var TABLE_NAME = process.env.ADMIN_CONFIG_TABLE;
 var AdminConfigRepo = class {

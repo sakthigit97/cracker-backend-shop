@@ -5,7 +5,9 @@ import {
     PutCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-const client = new DynamoDBClient({ region: "ap-south-1" });
+
+const REGION = process.env.AWS_REGION;
+const client = new DynamoDBClient({ region: REGION });
 const docClient = DynamoDBDocumentClient.from(client);
 const TABLE_NAME = process.env.ADMIN_CONFIG_TABLE!;
 
