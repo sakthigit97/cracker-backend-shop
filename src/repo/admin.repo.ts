@@ -2,7 +2,6 @@ import { QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "../utils/dynamo";
 
 const TABLE = process.env.ORDERS_TABLE!;
-
 const ALL_STATUSES = [
     "ORDER_PLACED",
     "ORDER_CONFIRMED",

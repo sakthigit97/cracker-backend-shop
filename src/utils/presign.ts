@@ -4,6 +4,9 @@ import { s3 } from "./aws";
 import { randomUUID } from "crypto";
 
 const BUCKET = process.env.BUCKET_NAME!;
+const CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN!;
+const STAGE = process.env.STAGE;
+
 export async function getPresignedUploads(
     productId: string,
     files: { name: string; type: string }[]
@@ -21,9 +24,13 @@ export async function getPresignedUploads(
                 { expiresIn: 300 }
             );
 
+            const fileUrl = STAGE === "prod"
+                ? `https://${CLOUDFRONT_DOMAIN}/${key}`
+                : `https://${BUCKET}.s3.amazonaws.com/${key}`;
+
             return {
                 uploadUrl,
-                fileUrl: `https://${BUCKET}.s3.amazonaws.com/${key}`,
+                fileUrl,
             };
         })
     );

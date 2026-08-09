@@ -1930,9 +1930,10 @@ var handler = async (event) => {
     let referredBy = "";
     if (code && isReferralEnabled) {
       const referralCheck = await dbClient.send(
-        new import_client_dynamodb3.ScanCommand({
+        new import_client_dynamodb3.QueryCommand({
           TableName: USERS_TABLE,
-          FilterExpression: "referralCode = :code",
+          IndexName: "referralCode-index",
+          KeyConditionExpression: "referralCode = :code",
           ExpressionAttributeValues: {
             ":code": { S: code }
           }

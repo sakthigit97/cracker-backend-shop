@@ -33,8 +33,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       const res = await ddb.send(
         new ScanCommand({
           TableName: PRODUCTS_TABLE,
-          FilterExpression:
-            "isActive = :active AND contains(#st, :q) AND #bid = :bid AND #qty >= :minQty",
+          FilterExpression: "isActive = :active AND contains(#st, :q) AND #bid = :bid AND #qty >= :minQty",
           ExpressionAttributeNames: {
             "#st": "searchText",
             "#bid": "brandId",

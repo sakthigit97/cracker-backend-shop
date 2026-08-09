@@ -4344,9 +4344,10 @@ var OrderRepository = class {
     let refUser = null;
     do {
       const res = await ddb.send(
-        new import_lib_dynamodb6.ScanCommand({
+        new import_lib_dynamodb6.QueryCommand({
           TableName: USERS_TABLE,
-          FilterExpression: "referralCode = :c",
+          IndexName: "referralCode-index",
+          KeyConditionExpression: "referralCode = :c",
           ExpressionAttributeValues: {
             ":c": referralCode
           },

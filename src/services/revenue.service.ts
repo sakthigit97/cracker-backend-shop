@@ -10,9 +10,7 @@ export class RevenueService {
         toDate?: string;
     }) {
         const { range, fromDate, toDate } = params;
-
         const now = Date.now();
-
         let fromTime: number;
         let toTime = now;
 
@@ -31,16 +29,12 @@ export class RevenueService {
         );
 
         const items = data.Items || [];
-
         let totalRevenue = 0;
         let totalOrders = 0;
-
         let todayRevenue = 0;
         let yesterdayRevenue = 0;
-
         const todayStart = new Date();
         todayStart.setHours(0, 0, 0, 0);
-
         const yesterdayStart = new Date(todayStart);
         yesterdayStart.setDate(todayStart.getDate() - 1);
         const trendMap: Record<string, number> = {};
