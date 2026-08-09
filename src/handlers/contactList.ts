@@ -3,7 +3,6 @@ import { ddb } from "../utils/dynamo";
 import { verifyJwt } from "../utils/auth";
 
 const TABLE = process.env.CONTACT_TABLE!;
-
 export const handler = async (event: any) => {
     try {
         const { role } = verifyJwt(event);

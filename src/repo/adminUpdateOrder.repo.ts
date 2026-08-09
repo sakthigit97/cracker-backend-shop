@@ -2,7 +2,6 @@ import { UpdateCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "../utils/dynamo";
 
 const TABLE = process.env.ORDERS_TABLE!;
-
 export class AdminUpdateOrderRepository {
     async getOrderById(orderId: string) {
         const res = await ddb.send(
@@ -15,10 +14,8 @@ export class AdminUpdateOrderRepository {
                 Limit: 1,
             })
         );
-
         return res.Items?.[0] || null;
     }
-
 
     async updateOrder(input: {
         orderId: string;

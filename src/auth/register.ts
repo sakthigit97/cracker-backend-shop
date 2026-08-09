@@ -2,6 +2,7 @@ import {
   PutItemCommand,
   GetItemCommand,
   ScanCommand,
+  QueryCommand,
 } from "@aws-sdk/client-dynamodb";
 
 import { dbClient } from "../libs/db";
@@ -73,13 +74,23 @@ export const handler = async (event: any) => {
     const initialCredit = isJoinBonusEnabled ? joinBonusAmount : 0;
     let referredBy = "";
     if (code && isReferralEnabled) {
+      // const referralCheck = await dbClient.send(
+      //   new ScanCommand({
+      //     TableName: USERS_TABLE,
+      //     FilterExpression: "referralCode = :code",
+      //     ExpressionAttributeValues: {
+      //       ":code": { S: code },
+      //     }
+      //   })
+      // );
       const referralCheck = await dbClient.send(
-        new ScanCommand({
+        new QueryCommand({
           TableName: USERS_TABLE,
-          FilterExpression: "referralCode = :code",
+          IndexName: "referralCode-index",
+          KeyConditionExpression: "referralCode = :code",
           ExpressionAttributeValues: {
             ":code": { S: code },
-          }
+          },
         })
       );
 

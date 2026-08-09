@@ -24,19 +24,12 @@ export class AdminUserRepository {
         }
 
         const res = await ddb.send(new ScanCommand(params));
-
         let items = res.Items || [];
         if (search?.trim()) {
             const q = search.toLowerCase();
-
             items = items.filter((u: any) => {
-                const nameMatch =
-                    u.name?.toLowerCase().includes(q);
-
-                const mobileMatch =
-                    u.mobile &&
-                    String(u.mobile).includes(q);
-
+                const nameMatch = u.name?.toLowerCase().includes(q);
+                const mobileMatch = u.mobile && String(u.mobile).includes(q);
                 return nameMatch || mobileMatch;
             });
         }

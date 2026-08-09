@@ -838,9 +838,20 @@ resources:
         AttributeDefinitions:
           - AttributeName: mobile
             AttributeType: S
+          - AttributeName: referralCode
+            AttributeType: S
+
         KeySchema:
           - AttributeName: mobile
             KeyType: HASH
+
+        GlobalSecondaryIndexes:
+          - IndexName: referralCode-index
+            KeySchema:
+              - AttributeName: referralCode
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 
     BrandsTable:
       Type: AWS::DynamoDB::Table
@@ -914,6 +925,15 @@ resources:
               - AttributeName: status
                 KeyType: HASH
               - AttributeName: meta
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+          - IndexName: status-createdAt-index
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: createdAt
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL

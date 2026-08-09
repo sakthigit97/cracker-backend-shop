@@ -3,7 +3,6 @@ import {
     QueryCommand,
     UpdateCommand,
     GetCommand,
-    ScanCommand,
 } from "@aws-sdk/lib-dynamodb";
 
 import { ddb } from "../utils/dynamo";
@@ -183,10 +182,21 @@ export class OrderRepository {
         let refUser = null;
 
         do {
+            // const res: any = await ddb.send(
+            //     new ScanCommand({
+            //         TableName: USERS_TABLE,
+            //         FilterExpression: "referralCode = :c",
+            //         ExpressionAttributeValues: {
+            //             ":c": referralCode,
+            //         },
+            //         ExclusiveStartKey: lastKey,
+            //     })
+            // );
             const res: any = await ddb.send(
-                new ScanCommand({
+                new QueryCommand({
                     TableName: USERS_TABLE,
-                    FilterExpression: "referralCode = :c",
+                    IndexName: "referralCode-index",
+                    KeyConditionExpression: "referralCode = :c",
                     ExpressionAttributeValues: {
                         ":c": referralCode,
                     },

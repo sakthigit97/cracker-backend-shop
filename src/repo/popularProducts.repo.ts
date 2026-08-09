@@ -3,7 +3,6 @@ import { ddb } from "../utils/dynamo";
 import { ProductService } from "../services/product.service";
 
 const ORDERS_TABLE = process.env.ORDERS_TABLE!;
-
 export class PopularProductsRepository {
   private productService = new ProductService();
 
@@ -31,7 +30,6 @@ export class PopularProductsRepository {
       );
 
       const orders = res.Items || [];
-
       for (const order of orders) {
         const items = order.items || [];
 
