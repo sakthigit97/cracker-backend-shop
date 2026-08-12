@@ -63,56 +63,64 @@ export class AdminCodeService {
         );
 
     }
-
     static async validateCode(
         userId: string,
-        code: string
+        code: string,
+        schemeId?: string
     ) {
-
         const adminCode =
             await AdminCodeRepository.getByCode(
                 code
             );
 
         if (!adminCode) {
-
             throw new Error(
                 "Invalid Admin Code"
             );
-
         }
 
         if (
-            adminCode.expiryDate <
+            adminCode.status !==
+            "ACTIVE"
+        ) {
+            throw new Error(
+                "This Admin Code is no longer active."
+            );
+        }
+
+        if (
+            adminCode.expiryDate <=
             Date.now()
         ) {
-
             throw new Error(
                 "Admin Code has expired"
             );
-
         }
 
         if (
             adminCode.userId !==
             userId
         ) {
-
             throw new Error(
                 "This Admin Code is not assigned to you"
             );
+        }
 
+        if (
+            schemeId &&
+            adminCode.schemeId !==
+            schemeId
+        ) {
+            throw new Error(
+                "This Admin Code is not valid for the selected bulk scheme."
+            );
         }
 
         return {
-
             schemeId:
                 adminCode.schemeId,
-
             success: true,
-
         };
-
     }
 
 }

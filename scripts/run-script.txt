@@ -8,11 +8,6 @@ Table data migration from one to another table with cross orgin
 
 
 
-
-
-
-
-
 user data import to table 
     change the table name/region/xls- inside the script and then run 
     npx tsx scripts/migrate-users.ts

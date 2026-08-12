@@ -44,10 +44,11 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
             isComboPackage: productRes.Item.isComboPackage || false,
             isBulkOnly: productRes.Item.isBulkOnly || false,
             cartonQty: productRes.Item.cartonQty || 0,
-            scheme1Price: productRes.Item.scheme1Price || 0,
-            scheme2Price: productRes.Item.scheme2Price || 0,
-            scheme3Price: productRes.Item.scheme3Price || 0,
-            scheme4Price: productRes.Item.scheme4Price || 0,
+            bulkOrderBasePrice: productRes.Item.bulkOrderBasePrice || 0,
+            isBulkOrderOnly: productRes.Item.isBulkOrderOnly || false,
+            isRetailOnly: productRes.Item.isRetailOnly || false,
+            productPer: productRes.Item.productPer || 0,
+            productMeasurement: productRes.Item.productMeasurement || 0,
         };
 
         return success(product);

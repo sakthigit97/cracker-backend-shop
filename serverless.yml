@@ -16,7 +16,7 @@ provider:
     CART_TABLE: Carts-${self:custom.stage}
     PRODUCTS_TABLE: Products-${self:custom.stage}
     ORDERS_TABLE: Orders-${self:custom.stage}
-    # BULK_ORDERS_TABLE: BulkOrders-${self:custom.stage}
+    BULK_ORDERS_TABLE: BulkOrders-${self:custom.stage}
     BRAND_TABLE: Brands-${self:custom.stage}
     CATEGORY_TABLE: Categories-${self:custom.stage}
     USERS_TABLE: Users-${self:custom.stage}
@@ -25,6 +25,7 @@ provider:
     CONTACT_TABLE: ContactUs-${self:custom.stage}
     COUPONS_TABLE: Coupons-${self:custom.stage}
     OTP_TABLE: OtpTable-${self:custom.stage}
+    ADMIN_CODES_TABLE: AdminCodes-${self:custom.stage}
     OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
     CONFIRM_ORDER_TID: ${env:CONFIRM_ORDER_TID}
     ORDER_SUBMIT_TID: ${env:ORDER_SUBMIT_TID}
@@ -99,6 +100,7 @@ provider:
             - arn:aws:dynamodb:${self:custom.region}:*:table/ContactUs-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/OtpTable-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/Coupons-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/AdminCodes-${self:custom.stage}
 
         - Effect: Allow
           Action:
@@ -697,82 +699,82 @@ functions:
           path: /coupon/validate
           method: POST
 
-  # bulkCreateOrder:
-  #   handler: src/handlers/bulkOrder.handler
-  #   events:
-  #     - httpApi:
-  #         path: /bulk-order
-  #         method: POST
+  bulkCreateOrder:
+    handler: src/handlers/bulkOrder.handler
+    events:
+      - httpApi:
+          path: /bulk-order
+          method: POST
 
-  # getBulkOrder:
-  #   handler: src/handlers/getBulkOrders.handler
-  #   events:
-  #     - httpApi:
-  #         path: /bulk-order
-  #         method: GET
+  getBulkOrder:
+    handler: src/handlers/getBulkOrders.handler
+    events:
+      - httpApi:
+          path: /bulk-order
+          method: GET
 
-  # bulkGetOrder:
-  #   handler: src/handlers/getDetailedBulkOrder.handler
-  #   events:
-  #     - httpApi:
-  #         path: /bulk-order/{orderId}
-  #         method: GET
+  bulkGetOrder:
+    handler: src/handlers/getDetailedBulkOrder.handler
+    events:
+      - httpApi:
+          path: /bulk-order/{orderId}
+          method: GET
 
-  # adminBulkGetOrders:
-  #   handler: src/handlers/adminBulkOrder.handler
-  #   events:
-  #     - httpApi:
-  #         path: /admin/bulk-orders
-  #         method: GET
+  adminBulkGetOrders:
+    handler: src/handlers/adminBulkOrder.handler
+    events:
+      - httpApi:
+          path: /admin/bulk-orders
+          method: GET
 
-  # adminBulkOrderDetails:
-  #   handler: src/handlers/adminBulkOrderDetails.handler
-  #   events:
-  #     - httpApi:
-  #         path: /admin/bulk-orders/{orderId}
-  #         method: GET
+  adminBulkOrderDetails:
+    handler: src/handlers/adminBulkOrderDetails.handler
+    events:
+      - httpApi:
+          path: /admin/bulk-orders/{orderId}
+          method: GET
 
-  # adminBulkUpdateStatus:
-  #   handler: src/handlers/adminBulkOrderStatusUpdate.handler
-  #   events:
-  #     - httpApi:
-  #         path: /admin/bulk-orders/{orderId}/status
-  #         method: PUT
+  adminBulkUpdateStatus:
+    handler: src/handlers/adminBulkOrderStatusUpdate.handler
+    events:
+      - httpApi:
+          path: /admin/bulk-orders/{orderId}/status
+          method: PUT
 
-  # bulkCancelOrder:
-  #   handler: src/handlers/cancelBulkOrder.handler
-  #   events:
-  #     - httpApi:
-  #         path: /bulk-order/{orderId}/cancel
-  #         method: PUT
+  bulkCancelOrder:
+    handler: src/handlers/cancelBulkOrder.handler
+    events:
+      - httpApi:
+          path: /bulk-order/{orderId}/cancel
+          method: PUT
 
-  # adminCodeCreate:
-  #   handler: src/handlers/adminCode.create
-  #   events:
-  #     - httpApi:
-  #         path: /admin/codes
-  #         method: POST
+  adminCodeCreate:
+    handler: src/handlers/adminCode.create
+    events:
+      - httpApi:
+          path: /admin/codes
+          method: POST
 
-  # adminCodeList:
-  #   handler: src/handlers/adminCode.list
-  #   events:
-  #     - httpApi:
-  #         path: /admin/codes
-  #         method: GET
+  adminCodeList:
+    handler: src/handlers/adminCode.list
+    events:
+      - httpApi:
+          path: /admin/codes
+          method: GET
 
-  # adminCodeDelete:
-  #   handler: src/handlers/adminCode.remove
-  #   events:
-  #     - httpApi:
-  #         path: /admin/codes/{code}
-  #         method: DELETE
+  adminCodeDelete:
+    handler: src/handlers/adminCode.remove
+    events:
+      - httpApi:
+          path: /admin/codes/{code}
+          method: DELETE
 
-  # adminCodeValidate:
-  #   handler: src/handlers/adminCode.validate
-  #   events:
-  #     - httpApi:
-  #         path: /bulk-order/validate-code
-  #         method: POST
+  adminCodeValidate:
+    handler: src/handlers/adminCode.validate
+    events:
+      - httpApi:
+          path: /bulk-order/validate-code
+          method: POST
 
 resources:
   Resources:
@@ -1062,61 +1064,61 @@ resources:
           - AttributeName: couponCode
             KeyType: HASH
 
-    # BulkOrdersTable:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     TableName: BulkOrders-${self:custom.stage}
-    #     BillingMode: PAY_PER_REQUEST
-    #     AttributeDefinitions:
-    #       - AttributeName: orderId
-    #         AttributeType: S
-    #       - AttributeName: meta
-    #         AttributeType: S
-    #       - AttributeName: userId
-    #         AttributeType: S
-    #       - AttributeName: createdAt
-    #         AttributeType: N
-    #       - AttributeName: status
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: orderId
-    #         KeyType: HASH
-    #       - AttributeName: meta
-    #         KeyType: RANGE
-    #     GlobalSecondaryIndexes:
-    #       - IndexName: userId-createdAt-index
-    #         KeySchema:
-    #           - AttributeName: userId
-    #             KeyType: HASH
-    #           - AttributeName: createdAt
-    #             KeyType: RANGE
-    #         Projection:
-    #           ProjectionType: ALL
-    #       - IndexName: meta-createdAt-index
-    #         KeySchema:
-    #           - AttributeName: meta
-    #             KeyType: HASH
-    #           - AttributeName: createdAt
-    #             KeyType: RANGE
-    #         Projection:
-    #           ProjectionType: ALL
-    #       - IndexName: status-meta-index
-    #         KeySchema:
-    #           - AttributeName: status
-    #             KeyType: HASH
-    #           - AttributeName: meta
-    #             KeyType: RANGE
-    #         Projection:
-    #           ProjectionType: ALL
+    BulkOrdersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: BulkOrders-${self:custom.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: orderId
+            AttributeType: S
+          - AttributeName: meta
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: createdAt
+            AttributeType: N
+          - AttributeName: status
+            AttributeType: S
+        KeySchema:
+          - AttributeName: orderId
+            KeyType: HASH
+          - AttributeName: meta
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: userId-createdAt-index
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: meta-createdAt-index
+            KeySchema:
+              - AttributeName: meta
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+          - IndexName: status-createdAt-index
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
 
-    # AdminCodesTable:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     TableName: AdminCodes
-    #     BillingMode: PAY_PER_REQUEST
-    #     AttributeDefinitions:
-    #       - AttributeName: code
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: code
-    #         KeyType: HASH
+    AdminCodesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: AdminCodes-${self:custom.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: code
+            AttributeType: S
+        KeySchema:
+          - AttributeName: code
+            KeyType: HASH

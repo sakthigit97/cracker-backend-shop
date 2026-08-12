@@ -13,11 +13,10 @@ import {
     GetCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-const REGION = "ap-south-1";
-const TABLE_NAME = "Users";
-const EXCEL_FILE = "./data/users-test.xlsx";
+const REGION = "us-east-1";
+const TABLE_NAME = "Users-prod";
+const EXCEL_FILE = "./data/users.xlsx";
 const MISSING_USERS_FILE = "./data/missing-users.txt";
-
 const DEFAULT_PASSWORD = "user@123";
 
 const client = DynamoDBDocumentClient.from(
@@ -120,7 +119,6 @@ function parseAddress(fullAddress: string) {
     const pinMatches = original.match(/\b\d{6}\b/g);
 
     if (pinMatches && pinMatches.length > 0) {
-        // Use the last 6-digit number if multiple exist.
         pincode = pinMatches[pinMatches.length - 1];
     }
 
@@ -129,10 +127,6 @@ function parseAddress(fullAddress: string) {
         .replace(/\s*-\s*$/, "")
         .replace(/\s+/g, " ")
         .trim();
-
-    // --------------------------------------------------
-    // 2. Try comma-separated format first
-    // --------------------------------------------------
 
     const parts = cleanedAddress
         .split(",")
@@ -554,8 +548,7 @@ async function main() {
         // Email
         // ----------------------------------------------
 
-        const email =
-            normalizeEmail(row.user_email);
+        const email = normalizeEmail(row.user_email);
 
         // Invalid email is intentionally NOT a
         // reason to skip the user.
@@ -642,11 +635,12 @@ async function main() {
         // Keep the same types as Users table.
         // ----------------------------------------------
 
+        const referralCode =
+            `CRK${Math.floor(100000 + Math.random() * 900000)}`;
         const item = {
             mobile: mobile,
             name: name,
             email: email,
-
             address: parsed.address,
             city: parsed.city,
             state: parsed.state,
@@ -658,7 +652,7 @@ async function main() {
 
             walletCredit: 0,
 
-            referralCode: "",
+            referralCode: referralCode,
             referredBy: "",
 
             referralRewarded: false,

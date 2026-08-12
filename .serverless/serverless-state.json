@@ -15,6 +15,7 @@
         "CART_TABLE": "Carts-dev",
         "PRODUCTS_TABLE": "Products-dev",
         "ORDERS_TABLE": "Orders-dev",
+        "BULK_ORDERS_TABLE": "BulkOrders-dev",
         "BRAND_TABLE": "Brands-dev",
         "CATEGORY_TABLE": "Categories-dev",
         "USERS_TABLE": "Users-dev",
@@ -23,6 +24,7 @@
         "CONTACT_TABLE": "ContactUs-dev",
         "COUPONS_TABLE": "Coupons-dev",
         "OTP_TABLE": "OtpTable-dev",
+        "ADMIN_CODES_TABLE": "AdminCodes-dev",
         "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
         "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
         "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -102,7 +104,8 @@
                 "arn:aws:dynamodb:ap-south-1:*:table/AdminConfig-dev",
                 "arn:aws:dynamodb:ap-south-1:*:table/ContactUs-dev",
                 "arn:aws:dynamodb:ap-south-1:*:table/OtpTable-dev",
-                "arn:aws:dynamodb:ap-south-1:*:table/Coupons-dev"
+                "arn:aws:dynamodb:ap-south-1:*:table/Coupons-dev",
+                "arn:aws:dynamodb:ap-south-1:*:table/AdminCodes-dev"
               ]
             },
             {
@@ -628,6 +631,72 @@
               "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-validateCoupon"
             }
           },
+          "BulkCreateOrderLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-bulkCreateOrder"
+            }
+          },
+          "GetBulkOrderLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-getBulkOrder"
+            }
+          },
+          "BulkGetOrderLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-bulkGetOrder"
+            }
+          },
+          "AdminBulkGetOrdersLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminBulkGetOrders"
+            }
+          },
+          "AdminBulkOrderDetailsLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminBulkOrderDetails"
+            }
+          },
+          "AdminBulkUpdateStatusLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminBulkUpdateStatus"
+            }
+          },
+          "BulkCancelOrderLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-bulkCancelOrder"
+            }
+          },
+          "AdminCodeCreateLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminCodeCreate"
+            }
+          },
+          "AdminCodeListLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminCodeList"
+            }
+          },
+          "AdminCodeDeleteLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminCodeDelete"
+            }
+          },
+          "AdminCodeValidateLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminCodeValidate"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -720,7 +789,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/auth/login.handler",
               "Runtime": "nodejs24.x",
@@ -733,6 +802,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -741,6 +811,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -778,7 +849,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/auth/send-otp.handler",
               "Runtime": "nodejs24.x",
@@ -791,6 +862,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -799,6 +871,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -836,7 +909,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/auth/register.handler",
               "Runtime": "nodejs24.x",
@@ -849,6 +922,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -857,6 +931,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -894,7 +969,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/user/get-profile.main",
               "Runtime": "nodejs24.x",
@@ -907,6 +982,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -915,6 +991,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -952,7 +1029,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/user/update-profile.main",
               "Runtime": "nodejs24.x",
@@ -965,6 +1042,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -973,6 +1051,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1010,7 +1089,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getProducts.handler",
               "Runtime": "nodejs24.x",
@@ -1023,6 +1102,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1031,6 +1111,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1068,7 +1149,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getAllProducts.handler",
               "Runtime": "nodejs24.x",
@@ -1081,6 +1162,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1089,6 +1171,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1126,7 +1209,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getProductDetails.handler",
               "Runtime": "nodejs24.x",
@@ -1139,6 +1222,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1147,6 +1231,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1184,7 +1269,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getProductsByCategory.handler",
               "Runtime": "nodejs24.x",
@@ -1197,6 +1282,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1205,6 +1291,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1242,7 +1329,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getProductsByBrand.handler",
               "Runtime": "nodejs24.x",
@@ -1255,6 +1342,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1263,6 +1351,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1300,7 +1389,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getCategories.handler",
               "Runtime": "nodejs24.x",
@@ -1313,6 +1402,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1321,6 +1411,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1358,7 +1449,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getBrands.handler",
               "Runtime": "nodejs24.x",
@@ -1371,6 +1462,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1379,6 +1471,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1416,7 +1509,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/cart.getCart",
               "Runtime": "nodejs24.x",
@@ -1429,6 +1522,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1437,6 +1531,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1474,7 +1569,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/cart.addItem",
               "Runtime": "nodejs24.x",
@@ -1487,6 +1582,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1495,6 +1591,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1532,7 +1629,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/cart.removeItem",
               "Runtime": "nodejs24.x",
@@ -1545,6 +1642,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1553,6 +1651,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1590,7 +1689,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/cart.clearCart",
               "Runtime": "nodejs24.x",
@@ -1603,6 +1702,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1611,6 +1711,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1648,7 +1749,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/productBatch.handler",
               "Runtime": "nodejs24.x",
@@ -1661,6 +1762,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1669,6 +1771,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1706,7 +1809,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/cartMerge.handler",
               "Runtime": "nodejs24.x",
@@ -1719,6 +1822,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1727,6 +1831,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1764,7 +1869,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/cartSync.handler",
               "Runtime": "nodejs24.x",
@@ -1777,6 +1882,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1785,6 +1891,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1822,7 +1929,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/Orders.handler",
               "Runtime": "nodejs24.x",
@@ -1835,6 +1942,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1843,6 +1951,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1880,7 +1989,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getOrders.handler",
               "Runtime": "nodejs24.x",
@@ -1893,6 +2002,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1901,6 +2011,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1938,7 +2049,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/cancelOrder.handler",
               "Runtime": "nodejs24.x",
@@ -1951,6 +2062,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -1959,6 +2071,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -1996,7 +2109,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adjustOrder.handler",
               "Runtime": "nodejs24.x",
@@ -2009,6 +2122,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2017,6 +2131,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2054,7 +2169,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminDashboard.handler",
               "Runtime": "nodejs24.x",
@@ -2067,6 +2182,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2075,6 +2191,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2112,7 +2229,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminOrders.handler",
               "Runtime": "nodejs24.x",
@@ -2125,6 +2242,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2133,6 +2251,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2170,7 +2289,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminOrderDetails.handler",
               "Runtime": "nodejs24.x",
@@ -2183,6 +2302,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2191,6 +2311,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2228,7 +2349,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateOrder.handler",
               "Runtime": "nodejs24.x",
@@ -2241,6 +2362,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2249,6 +2371,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2286,7 +2409,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getAdminProducts.handler",
               "Runtime": "nodejs24.x",
@@ -2299,6 +2422,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2307,6 +2431,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2344,7 +2469,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/createAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2357,6 +2482,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2365,6 +2491,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2402,7 +2529,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/updateAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2415,6 +2542,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2423,6 +2551,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2460,7 +2589,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/deactivateAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2473,6 +2602,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2481,6 +2611,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2518,7 +2649,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getPresignedUrls.handler",
               "Runtime": "nodejs24.x",
@@ -2531,6 +2662,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2539,6 +2671,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2576,7 +2709,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getAdminProduct.handler",
               "Runtime": "nodejs24.x",
@@ -2589,6 +2722,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2597,6 +2731,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2634,7 +2769,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminGenerateImportUploadUrl.handler",
               "Runtime": "nodejs24.x",
@@ -2647,6 +2782,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2655,6 +2791,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2692,7 +2829,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminValidateProductImport.handler",
               "Runtime": "nodejs24.x",
@@ -2705,6 +2842,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2713,6 +2851,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2750,7 +2889,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminConfirmProductImport.handler",
               "Runtime": "nodejs24.x",
@@ -2763,6 +2902,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2771,6 +2911,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2808,7 +2949,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminListCategories.handler",
               "Runtime": "nodejs24.x",
@@ -2821,6 +2962,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2829,6 +2971,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2866,7 +3009,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminCreateCategory.handler",
               "Runtime": "nodejs24.x",
@@ -2879,6 +3022,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2887,6 +3031,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2924,7 +3069,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateCategoryStatus.handler",
               "Runtime": "nodejs24.x",
@@ -2937,6 +3082,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -2945,6 +3091,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -2982,7 +3129,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateCategory.handler",
               "Runtime": "nodejs24.x",
@@ -2995,6 +3142,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3003,6 +3151,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3040,7 +3189,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminGetCategoryById.handler",
               "Runtime": "nodejs24.x",
@@ -3053,6 +3202,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3061,6 +3211,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3098,7 +3249,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteCategory.handler",
               "Runtime": "nodejs24.x",
@@ -3111,6 +3262,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3119,6 +3271,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3156,7 +3309,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminPresignCategoryImage.handler",
               "Runtime": "nodejs24.x",
@@ -3169,6 +3322,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3177,6 +3331,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3214,7 +3369,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/cleanupOrphanProductImages.handler",
               "Runtime": "nodejs24.x",
@@ -3227,6 +3382,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3235,6 +3391,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3272,7 +3429,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminListBrands.handler",
               "Runtime": "nodejs24.x",
@@ -3285,6 +3442,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3293,6 +3451,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3330,7 +3489,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminGetBrand.handler",
               "Runtime": "nodejs24.x",
@@ -3343,6 +3502,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3351,6 +3511,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3388,7 +3549,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminCreateBrand.handler",
               "Runtime": "nodejs24.x",
@@ -3401,6 +3562,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3409,6 +3571,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3446,7 +3609,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateBrand.handler",
               "Runtime": "nodejs24.x",
@@ -3459,6 +3622,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3467,6 +3631,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3504,7 +3669,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateBrandStatus.handler",
               "Runtime": "nodejs24.x",
@@ -3517,6 +3682,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3525,6 +3691,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3562,7 +3729,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteBrand.handler",
               "Runtime": "nodejs24.x",
@@ -3575,6 +3742,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3583,6 +3751,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3620,7 +3789,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminPresignBrandLogo.handler",
               "Runtime": "nodejs24.x",
@@ -3633,6 +3802,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3641,6 +3811,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3678,7 +3849,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminListUsers.handler",
               "Runtime": "nodejs24.x",
@@ -3691,6 +3862,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3699,6 +3871,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3736,7 +3909,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteUser.handler",
               "Runtime": "nodejs24.x",
@@ -3749,6 +3922,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3757,6 +3931,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3794,7 +3969,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/deleteProduct.handler",
               "Runtime": "nodejs24.x",
@@ -3807,6 +3982,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3815,6 +3991,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3852,7 +4029,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getConfig.handler",
               "Runtime": "nodejs24.x",
@@ -3865,6 +4042,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3873,6 +4051,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3910,7 +4089,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateConfig.handler",
               "Runtime": "nodejs24.x",
@@ -3923,6 +4102,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3931,6 +4111,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -3968,7 +4149,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/bulk-upload-aitags.handler",
               "Runtime": "nodejs24.x",
@@ -3981,6 +4162,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -3989,6 +4171,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4026,7 +4209,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminConfigSliderPresign.handler",
               "Runtime": "nodejs24.x",
@@ -4039,6 +4222,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4047,6 +4231,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4084,7 +4269,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/deleteProductImages.handler",
               "Runtime": "nodejs24.x",
@@ -4097,6 +4282,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4105,6 +4291,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4142,7 +4329,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminListDiscounts.handler",
               "Runtime": "nodejs24.x",
@@ -4155,6 +4342,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4163,6 +4351,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4200,7 +4389,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminCreateDiscount.handler",
               "Runtime": "nodejs24.x",
@@ -4213,6 +4402,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4221,6 +4411,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4258,7 +4449,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminGetDiscountById.handler",
               "Runtime": "nodejs24.x",
@@ -4271,6 +4462,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4279,6 +4471,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4316,7 +4509,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminUpdateDiscount.handler",
               "Runtime": "nodejs24.x",
@@ -4329,6 +4522,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4337,6 +4531,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4374,7 +4569,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteDiscount.handler",
               "Runtime": "nodejs24.x",
@@ -4387,6 +4582,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4395,6 +4591,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4432,7 +4629,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getRevenueReport.handler",
               "Runtime": "nodejs24.x",
@@ -4445,6 +4642,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4453,6 +4651,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4490,7 +4689,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getProductReport.handler",
               "Runtime": "nodejs24.x",
@@ -4503,6 +4702,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4511,6 +4711,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4548,7 +4749,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/productSampleXls.handler",
               "Runtime": "nodejs24.x",
@@ -4561,6 +4762,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4569,6 +4771,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4606,7 +4809,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/orderRestore.handler",
               "Runtime": "nodejs24.x",
@@ -4619,6 +4822,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4627,6 +4831,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4664,7 +4869,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/popularProducts.handler",
               "Runtime": "nodejs24.x",
@@ -4677,6 +4882,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4685,6 +4891,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4722,7 +4929,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/auth/forgot/send-otp.handler",
               "Runtime": "nodejs24.x",
@@ -4735,6 +4942,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4743,6 +4951,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4780,7 +4989,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/auth/forgot/reset.handler",
               "Runtime": "nodejs24.x",
@@ -4793,6 +5002,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4801,6 +5011,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4838,7 +5049,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/contactSubmit.handler",
               "Runtime": "nodejs24.x",
@@ -4851,6 +5062,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4859,6 +5071,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4896,7 +5109,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/contactList.handler",
               "Runtime": "nodejs24.x",
@@ -4909,6 +5122,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4917,6 +5131,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -4954,7 +5169,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/contactUpdate.handler",
               "Runtime": "nodejs24.x",
@@ -4967,6 +5182,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -4975,6 +5191,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -5012,7 +5229,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getPackages.handler",
               "Runtime": "nodejs24.x",
@@ -5025,6 +5242,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -5033,6 +5251,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -5070,7 +5289,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/getPackageDetails.handler",
               "Runtime": "nodejs24.x",
@@ -5083,6 +5302,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -5091,6 +5311,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -5128,7 +5349,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/aiRecommendation.handler",
               "Runtime": "nodejs24.x",
@@ -5141,6 +5362,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -5149,6 +5371,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -5186,7 +5409,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/estimateEmail.handler",
               "Runtime": "nodejs24.x",
@@ -5199,6 +5422,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -5207,6 +5431,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -5244,7 +5469,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminCreateCoupon.handler",
               "Runtime": "nodejs24.x",
@@ -5257,6 +5482,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -5265,6 +5491,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -5302,7 +5529,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminGetCoupons.handler",
               "Runtime": "nodejs24.x",
@@ -5315,6 +5542,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -5323,6 +5551,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -5360,7 +5589,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/adminDeleteCoupon.handler",
               "Runtime": "nodejs24.x",
@@ -5373,6 +5602,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -5381,6 +5611,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -5418,7 +5649,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z/sivakassi-pyropark-shop-backend.zip"
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
               },
               "Handler": "src/handlers/validateCoupon.handler",
               "Runtime": "nodejs24.x",
@@ -5431,6 +5662,7 @@
                   "CART_TABLE": "Carts-dev",
                   "PRODUCTS_TABLE": "Products-dev",
                   "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
                   "BRAND_TABLE": "Brands-dev",
                   "CATEGORY_TABLE": "Categories-dev",
                   "USERS_TABLE": "Users-dev",
@@ -5439,6 +5671,7 @@
                   "CONTACT_TABLE": "ContactUs-dev",
                   "COUPONS_TABLE": "Coupons-dev",
                   "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
                   "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
                   "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
                   "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
@@ -5469,6 +5702,666 @@
             },
             "DependsOn": [
               "ValidateCouponLogGroup"
+            ]
+          },
+          "BulkCreateOrderLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/bulkOrder.handler",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-bulkCreateOrder",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "BulkCreateOrderLogGroup"
+            ]
+          },
+          "GetBulkOrderLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/getBulkOrders.handler",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-getBulkOrder",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "GetBulkOrderLogGroup"
+            ]
+          },
+          "BulkGetOrderLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/getDetailedBulkOrder.handler",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-bulkGetOrder",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "BulkGetOrderLogGroup"
+            ]
+          },
+          "AdminBulkGetOrdersLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/adminBulkOrder.handler",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminBulkGetOrders",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminBulkGetOrdersLogGroup"
+            ]
+          },
+          "AdminBulkOrderDetailsLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/adminBulkOrderDetails.handler",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminBulkOrderDetails",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminBulkOrderDetailsLogGroup"
+            ]
+          },
+          "AdminBulkUpdateStatusLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/adminBulkOrderStatusUpdate.handler",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminBulkUpdateStatus",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminBulkUpdateStatusLogGroup"
+            ]
+          },
+          "BulkCancelOrderLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/cancelBulkOrder.handler",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-bulkCancelOrder",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "BulkCancelOrderLogGroup"
+            ]
+          },
+          "AdminCodeCreateLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/adminCode.create",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminCodeCreate",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminCodeCreateLogGroup"
+            ]
+          },
+          "AdminCodeListLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/adminCode.list",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminCodeList",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminCodeListLogGroup"
+            ]
+          },
+          "AdminCodeDeleteLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/adminCode.remove",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminCodeDelete",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminCodeDeleteLogGroup"
+            ]
+          },
+          "AdminCodeValidateLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+                "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z/sivakassi-pyropark-shop-backend.zip"
+              },
+              "Handler": "src/handlers/adminCode.validate",
+              "Runtime": "nodejs24.x",
+              "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminCodeValidate",
+              "MemorySize": 1024,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+                  "CART_TABLE": "Carts-dev",
+                  "PRODUCTS_TABLE": "Products-dev",
+                  "ORDERS_TABLE": "Orders-dev",
+                  "BULK_ORDERS_TABLE": "BulkOrders-dev",
+                  "BRAND_TABLE": "Brands-dev",
+                  "CATEGORY_TABLE": "Categories-dev",
+                  "USERS_TABLE": "Users-dev",
+                  "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+                  "DISCOUNT_TABLE": "Discounts-dev",
+                  "CONTACT_TABLE": "ContactUs-dev",
+                  "COUPONS_TABLE": "Coupons-dev",
+                  "OTP_TABLE": "OtpTable-dev",
+                  "ADMIN_CODES_TABLE": "AdminCodes-dev",
+                  "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+                  "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+                  "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+                  "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+                  "CART_UPDATED_TID": "6a395e506ca224854303c222",
+                  "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+                  "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+                  "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+                  "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+                  "DOMAIN": "https://www.sivakasicrackers.co.in",
+                  "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+                  "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+                  "MAX_AI_PRODUCT_QTY": "10",
+                  "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+                  "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+                  "DISTRIBUTION_ID": "EKBXVKHZI610H",
+                  "STAGE": "dev",
+                  "NODE_OPTIONS": "--enable-source-maps"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AdminCodeValidateLogGroup"
             ]
           },
           "CleanupOrphanProductImagesEventsRuleSchedule1": {
@@ -11384,6 +12277,798 @@
             },
             "DependsOn": "HttpApiIntegrationValidateCoupon"
           },
+          "BulkCreateOrderLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "BulkCreateOrderLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationBulkCreateOrder": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"BulkCreateOrderLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRoutePostBulkDashorder": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "POST /bulk-order",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationBulkCreateOrder"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationBulkCreateOrder"
+          },
+          "GetBulkOrderLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetBulkOrderLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationGetBulkOrder": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"GetBulkOrderLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetBulkDashorder": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /bulk-order",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationGetBulkOrder"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationGetBulkOrder"
+          },
+          "BulkGetOrderLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "BulkGetOrderLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationBulkGetOrder": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"BulkGetOrderLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetBulkDashorderOrderidVar": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /bulk-order/{orderId}",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationBulkGetOrder"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationBulkGetOrder"
+          },
+          "AdminBulkGetOrdersLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminBulkGetOrdersLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminBulkGetOrders": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminBulkGetOrdersLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetAdminBulkDashorders": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /admin/bulk-orders",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminBulkGetOrders"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminBulkGetOrders"
+          },
+          "AdminBulkOrderDetailsLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminBulkOrderDetailsLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminBulkOrderDetails": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminBulkOrderDetailsLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetAdminBulkDashordersOrderidVar": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /admin/bulk-orders/{orderId}",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminBulkOrderDetails"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminBulkOrderDetails"
+          },
+          "AdminBulkUpdateStatusLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminBulkUpdateStatusLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminBulkUpdateStatus": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminBulkUpdateStatusLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRoutePutAdminBulkDashordersOrderidVarStatus": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "PUT /admin/bulk-orders/{orderId}/status",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminBulkUpdateStatus"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminBulkUpdateStatus"
+          },
+          "BulkCancelOrderLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "BulkCancelOrderLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationBulkCancelOrder": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"BulkCancelOrderLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRoutePutBulkDashorderOrderidVarCancel": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "PUT /bulk-order/{orderId}/cancel",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationBulkCancelOrder"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationBulkCancelOrder"
+          },
+          "AdminCodeCreateLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminCodeCreateLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminCodeCreate": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminCodeCreateLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRoutePostAdminCodes": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "POST /admin/codes",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminCodeCreate"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminCodeCreate"
+          },
+          "AdminCodeListLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminCodeListLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminCodeList": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminCodeListLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteGetAdminCodes": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "GET /admin/codes",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminCodeList"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminCodeList"
+          },
+          "AdminCodeDeleteLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminCodeDeleteLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminCodeDelete": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminCodeDeleteLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRouteDeleteAdminCodesCodeVar": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "DELETE /admin/codes/{code}",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminCodeDelete"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminCodeDelete"
+          },
+          "AdminCodeValidateLambdaPermissionHttpApi": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AdminCodeValidateLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "HttpApi"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "HttpApiIntegrationAdminCodeValidate": {
+            "Type": "AWS::ApiGatewayV2::Integration",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "IntegrationType": "AWS_PROXY",
+              "IntegrationUri": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AdminCodeValidateLambdaPermissionHttpApi\"][\"Properties\"][\"FunctionName\"]"
+              },
+              "PayloadFormatVersion": "2.0",
+              "TimeoutInMillis": 30000
+            }
+          },
+          "HttpApiRoutePostBulkDashorderValidateDashcode": {
+            "Type": "AWS::ApiGatewayV2::Route",
+            "Properties": {
+              "ApiId": {
+                "Ref": "HttpApi"
+              },
+              "RouteKey": "POST /bulk-order/validate-code",
+              "Target": {
+                "Fn::Join": [
+                  "/",
+                  [
+                    "integrations",
+                    {
+                      "Ref": "HttpApiIntegrationAdminCodeValidate"
+                    }
+                  ]
+                ]
+              }
+            },
+            "DependsOn": "HttpApiIntegrationAdminCodeValidate"
+          },
           "ProductImagesBucket": {
             "Type": "AWS::S3::Bucket",
             "Properties": {
@@ -11831,6 +13516,114 @@
               "KeySchema": [
                 {
                   "AttributeName": "couponCode",
+                  "KeyType": "HASH"
+                }
+              ]
+            }
+          },
+          "BulkOrdersTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "BulkOrders-dev",
+              "BillingMode": "PAY_PER_REQUEST",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "orderId",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "meta",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "userId",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "createdAt",
+                  "AttributeType": "N"
+                },
+                {
+                  "AttributeName": "status",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "orderId",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "meta",
+                  "KeyType": "RANGE"
+                }
+              ],
+              "GlobalSecondaryIndexes": [
+                {
+                  "IndexName": "userId-createdAt-index",
+                  "KeySchema": [
+                    {
+                      "AttributeName": "userId",
+                      "KeyType": "HASH"
+                    },
+                    {
+                      "AttributeName": "createdAt",
+                      "KeyType": "RANGE"
+                    }
+                  ],
+                  "Projection": {
+                    "ProjectionType": "ALL"
+                  }
+                },
+                {
+                  "IndexName": "meta-createdAt-index",
+                  "KeySchema": [
+                    {
+                      "AttributeName": "meta",
+                      "KeyType": "HASH"
+                    },
+                    {
+                      "AttributeName": "createdAt",
+                      "KeyType": "RANGE"
+                    }
+                  ],
+                  "Projection": {
+                    "ProjectionType": "ALL"
+                  }
+                },
+                {
+                  "IndexName": "status-createdAt-index",
+                  "KeySchema": [
+                    {
+                      "AttributeName": "status",
+                      "KeyType": "HASH"
+                    },
+                    {
+                      "AttributeName": "createdAt",
+                      "KeyType": "RANGE"
+                    }
+                  ],
+                  "Projection": {
+                    "ProjectionType": "ALL"
+                  }
+                }
+              ]
+            }
+          },
+          "AdminCodesTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "AdminCodes-dev",
+              "BillingMode": "PAY_PER_REQUEST",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "code",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "code",
                   "KeyType": "HASH"
                 }
               ]
@@ -13690,6 +15483,248 @@
         "timeout": 60,
         "runtime": "nodejs24.x",
         "vpc": {}
+      },
+      "bulkCreateOrder": {
+        "handler": "src/handlers/bulkOrder.handler",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/bulk-order",
+              "method": "POST"
+            },
+            "resolvedMethod": "POST",
+            "resolvedPath": "/bulk-order"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-bulkCreateOrder",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "getBulkOrder": {
+        "handler": "src/handlers/getBulkOrders.handler",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/bulk-order",
+              "method": "GET"
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/bulk-order"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-getBulkOrder",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "bulkGetOrder": {
+        "handler": "src/handlers/getDetailedBulkOrder.handler",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/bulk-order/{orderId}",
+              "method": "GET"
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/bulk-order/{orderId}"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-bulkGetOrder",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminBulkGetOrders": {
+        "handler": "src/handlers/adminBulkOrder.handler",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/admin/bulk-orders",
+              "method": "GET"
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/admin/bulk-orders"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-adminBulkGetOrders",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminBulkOrderDetails": {
+        "handler": "src/handlers/adminBulkOrderDetails.handler",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/admin/bulk-orders/{orderId}",
+              "method": "GET"
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/admin/bulk-orders/{orderId}"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-adminBulkOrderDetails",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminBulkUpdateStatus": {
+        "handler": "src/handlers/adminBulkOrderStatusUpdate.handler",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/admin/bulk-orders/{orderId}/status",
+              "method": "PUT"
+            },
+            "resolvedMethod": "PUT",
+            "resolvedPath": "/admin/bulk-orders/{orderId}/status"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-adminBulkUpdateStatus",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "bulkCancelOrder": {
+        "handler": "src/handlers/cancelBulkOrder.handler",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/bulk-order/{orderId}/cancel",
+              "method": "PUT"
+            },
+            "resolvedMethod": "PUT",
+            "resolvedPath": "/bulk-order/{orderId}/cancel"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-bulkCancelOrder",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminCodeCreate": {
+        "handler": "src/handlers/adminCode.create",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/admin/codes",
+              "method": "POST"
+            },
+            "resolvedMethod": "POST",
+            "resolvedPath": "/admin/codes"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-adminCodeCreate",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminCodeList": {
+        "handler": "src/handlers/adminCode.list",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/admin/codes",
+              "method": "GET"
+            },
+            "resolvedMethod": "GET",
+            "resolvedPath": "/admin/codes"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-adminCodeList",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminCodeDelete": {
+        "handler": "src/handlers/adminCode.remove",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/admin/codes/{code}",
+              "method": "DELETE"
+            },
+            "resolvedMethod": "DELETE",
+            "resolvedPath": "/admin/codes/{code}"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-adminCodeDelete",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
+      },
+      "adminCodeValidate": {
+        "handler": "src/handlers/adminCode.validate",
+        "events": [
+          {
+            "httpApi": {
+              "path": "/bulk-order/validate-code",
+              "method": "POST"
+            },
+            "resolvedMethod": "POST",
+            "resolvedPath": "/bulk-order/validate-code"
+          }
+        ],
+        "name": "sivakassi-pyropark-shop-backend-dev-adminCodeValidate",
+        "environment": {
+          "NODE_OPTIONS": "--enable-source-maps"
+        },
+        "package": {},
+        "memory": 1024,
+        "timeout": 60,
+        "runtime": "nodejs24.x",
+        "vpc": {}
       }
     },
     "resources": {
@@ -14145,6 +16180,114 @@
               }
             ]
           }
+        },
+        "BulkOrdersTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "BulkOrders-dev",
+            "BillingMode": "PAY_PER_REQUEST",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "orderId",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "meta",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "userId",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "createdAt",
+                "AttributeType": "N"
+              },
+              {
+                "AttributeName": "status",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "orderId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "meta",
+                "KeyType": "RANGE"
+              }
+            ],
+            "GlobalSecondaryIndexes": [
+              {
+                "IndexName": "userId-createdAt-index",
+                "KeySchema": [
+                  {
+                    "AttributeName": "userId",
+                    "KeyType": "HASH"
+                  },
+                  {
+                    "AttributeName": "createdAt",
+                    "KeyType": "RANGE"
+                  }
+                ],
+                "Projection": {
+                  "ProjectionType": "ALL"
+                }
+              },
+              {
+                "IndexName": "meta-createdAt-index",
+                "KeySchema": [
+                  {
+                    "AttributeName": "meta",
+                    "KeyType": "HASH"
+                  },
+                  {
+                    "AttributeName": "createdAt",
+                    "KeyType": "RANGE"
+                  }
+                ],
+                "Projection": {
+                  "ProjectionType": "ALL"
+                }
+              },
+              {
+                "IndexName": "status-createdAt-index",
+                "KeySchema": [
+                  {
+                    "AttributeName": "status",
+                    "KeyType": "HASH"
+                  },
+                  {
+                    "AttributeName": "createdAt",
+                    "KeyType": "RANGE"
+                  }
+                ],
+                "Projection": {
+                  "ProjectionType": "ALL"
+                }
+              }
+            ]
+          }
+        },
+        "AdminCodesTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "AdminCodes-dev",
+            "BillingMode": "PAY_PER_REQUEST",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "code",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "code",
+                "KeyType": "HASH"
+              }
+            ]
+          }
         }
       },
       "Outputs": {}
@@ -14166,7 +16309,7 @@
         "artifactsS3KeyDirname": "serverless/sivakassi-pyropark-shop-backend/dev/code-artifacts",
         "deploymentBucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
         "artifact": "C:\\Users\\Sakthibalan\\Desktop\\Sakthi_Projects\\cracker-backend-shop\\.serverless\\sivakassi-pyropark-shop-backend.zip",
-        "artifactDirectoryName": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z"
+        "artifactDirectoryName": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z"
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
@@ -14180,7 +16323,7 @@
     "layers": {}
   },
   "package": {
-    "artifactDirectoryName": "serverless/sivakassi-pyropark-shop-backend/dev/1786285916765-2026-08-09T14:31:56.765Z",
+    "artifactDirectoryName": "serverless/sivakassi-pyropark-shop-backend/dev/1786547464233-2026-08-12T15:11:04.233Z",
     "artifact": "sivakassi-pyropark-shop-backend.zip"
   }
 }
