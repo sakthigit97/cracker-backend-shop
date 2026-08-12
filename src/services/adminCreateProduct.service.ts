@@ -17,17 +17,17 @@ interface CreateProductInput {
     isComboPackage?: boolean;
     isBulkOnly?: boolean;
     cartonQty?: number;
-    scheme1Price?: number;
-    scheme2Price?: number;
-    scheme3Price?: number;
-    scheme4Price?: number;
+    bulkOrderBasePrice?: number;
+    isBulkOrderOnly?: boolean;
+    isRetailOnly?: boolean;
+    productPer?: number;
+    productMeasurement?: string;
 }
 
 export class AdminCreateProductService {
     constructor(private repo = new AdminCreateProductRepository()) { }
 
     async createProduct(input: CreateProductInput) {
-
         const sequenceNumber = await this.repo.getNextSequenceNumber(input.categoryId);
         const product = {
             productId: input.productId,

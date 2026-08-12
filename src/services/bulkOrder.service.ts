@@ -1,6 +1,8 @@
 import { BulkOrderRepository } from "../repo/bulkOrder.repo";
 import { ProductService } from "./product.service";
 import { BulkOrderValidation } from "../utils/bulkOrderValidation";
+import { AdminCodeService } from "./adminCode.service";
+
 import {
     BulkOrder,
     BulkOrderItem,
@@ -28,32 +30,38 @@ export class BulkOrderService {
         state: string,
         config: any
     ): BulkOrderPricing {
-
         const productTotal = items.reduce(
-            (sum, item) => sum + item.total,
+            (sum, item) =>
+                sum + Number(item.total || 0),
             0
         );
 
         const packagingPercent = Number(
-            config.packagingPercent ?? 0
+            config?.packagingPercent ?? 0
         );
 
         const packagingCharge = Math.round(
             (productTotal * packagingPercent) / 100
         );
 
-        const isTamilNadu = state?.trim().toLowerCase() === "tamil nadu";
-        let gstPercent = Number(config.gstPercent ?? 0) / 2;
-        const actualGstPercentage = config.gstPercent;
-        if (
-            isTamilNadu &&
-            config.disableGstForTN
-        ) {
+        const configuredGstPercent = Number(
+            config?.gstPercent ?? 0
+        );
+
+        let gstPercent = configuredGstPercent / 2;
+        const disableGstForTN = config?.disableGstForTN === true;
+        const isTN = state?.trim().toLowerCase() === "tamil nadu";
+        if (isTN && disableGstForTN) {
             gstPercent = 0;
         }
 
+        const taxableAmount =
+            productTotal +
+            packagingCharge;
+
         const gstAmount = Math.round(
-            ((productTotal + packagingCharge) * gstPercent) / 100
+            (taxableAmount * gstPercent) /
+            100
         );
 
         const grandTotal =
@@ -65,7 +73,7 @@ export class BulkOrderService {
             productTotal,
             packagingPercent,
             packagingCharge,
-            gstPercent: actualGstPercentage,
+            gstPercent,
             gstAmount,
             grandTotal,
         };
@@ -75,16 +83,52 @@ export class BulkOrderService {
         userId: string,
         request: CreateBulkOrderRequest
     ) {
+        BulkOrderValidation.validateCreateRequest(
+            request
+        );
 
-        BulkOrderValidation.validateCreateRequest(request);
         const config = await this.repo.getAdminConfig();
-        if (!config) {
-            throw new Error("Admin configuration not found.");
-        }
-        const products = await this.loadProducts(request);
 
+        if (!config) {
+            throw new Error(
+                "Admin configuration not found."
+            );
+        }
+
+        const scheme = this.getScheme(
+            request.schemeId,
+            config
+        );
+
+        if (!scheme) {
+            throw new Error(
+                "Invalid bulk scheme selected."
+            );
+        }
+
+        if (scheme.isActive === false) {
+            throw new Error(
+                "The selected bulk scheme is no longer active."
+            );
+        }
+
+        if (scheme.isAdminApprovalRequired) {
+            if (!request.adminCode?.trim()) {
+                throw new Error(
+                    "Admin approval is required for the selected bulk scheme."
+                );
+            }
+
+            await AdminCodeService.validateCode(
+                userId,
+                request.adminCode.trim(),
+                request.schemeId
+            );
+        }
+
+        const products = await this.loadProducts(request);
         const productMap = new Map(
-            products.map(product => [
+            products.map((product) => [
                 product.productId,
                 product,
             ])
@@ -97,19 +141,20 @@ export class BulkOrderService {
 
         const items = this.buildItems(
             request,
-            productMap
+            productMap,
+            scheme
         );
 
-        const pricing = this.calculatePricing(
-            items,
-            request.address.state,
-            config
-        );
+        const pricing =
+            this.calculatePricing(
+                items,
+                request.address.state,
+                config
+            );
 
         this.validateScheme(
-            request.schemeId,
-            pricing.productTotal,
-            config
+            scheme,
+            pricing.productTotal
         );
 
         const order = this.buildOrder(
@@ -120,6 +165,7 @@ export class BulkOrderService {
         );
 
         await this.repo.create(order);
+
         return {
             orderId: order.orderId,
             pricing,
@@ -129,31 +175,33 @@ export class BulkOrderService {
     private async loadProducts(
         request: CreateBulkOrderRequest
     ) {
-
         const ids = request.items.map(
-            x => x.productId
+            (item) => item.productId
         );
 
-        return await this.productService.batchGetProducts(
+        return this.productService.batchGetProducts(
             ids
         );
-
     }
 
     private validateProducts(
         request: CreateBulkOrderRequest,
         productMap: Map<string, any>
     ): void {
-
-        if (productMap.size !== request.items.length) {
-            throw new Error("One or more selected products are unavailable.");
+        if (
+            productMap.size !==
+            request.items.length
+        ) {
+            throw new Error(
+                "One or more selected products are unavailable."
+            );
         }
 
         for (const requestItem of request.items) {
-
-            const product = productMap.get(
-                requestItem.productId
-            );
+            const product =
+                productMap.get(
+                    requestItem.productId
+                );
 
             if (!product) {
                 throw new Error(
@@ -161,26 +209,34 @@ export class BulkOrderService {
                 );
             }
 
-            const cartonQty = Number(product.cartonQty ?? 0);
+            const cartonQty = Number(
+                product.cartonQty ?? 0
+            );
+
             if (cartonQty <= 0) {
                 throw new Error(
                     `Carton quantity is not configured for ${product.name}.`
                 );
             }
 
-            const schemePrice = this.getSchemePrice(
-                product,
-                request.schemeId
-            );
+            const bulkOrderBasePrice =
+                Number(
+                    product.bulkOrderBasePrice ??
+                    0
+                );
 
-            if (schemePrice <= 0) {
+            if (
+                bulkOrderBasePrice <= 0
+            ) {
                 throw new Error(
                     `Bulk price is not configured for ${product.name}.`
                 );
             }
 
             if (
-                !Number.isInteger(requestItem.quantity) ||
+                !Number.isInteger(
+                    requestItem.quantity
+                ) ||
                 requestItem.quantity <= 0
             ) {
                 throw new Error(
@@ -190,97 +246,166 @@ export class BulkOrderService {
         }
     }
 
-    private getSchemePrice(
-        product: any,
-        schemeId: string
-    ): number {
+    private getScheme(
+        schemeId: string,
+        config: any
+    ): any | null {
+        const schemes =
+            config?.bulkOrderSchemes;
 
-        switch (schemeId) {
-
-            case "SCHEME1":
-                return Number(product.scheme1Price ?? 0);
-
-            case "SCHEME2":
-                return Number(product.scheme2Price ?? 0);
-
-            case "SCHEME3":
-                return Number(product.scheme3Price ?? 0);
-
-            case "SCHEME4":
-                return Number(product.scheme4Price ?? 0);
-
-            default:
-                throw new Error(
-                    `Invalid bulk scheme: ${schemeId}`
-                );
+        if (
+            !Array.isArray(schemes) ||
+            schemes.length === 0
+        ) {
+            throw new Error(
+                "Bulk schemes are not configured."
+            );
         }
 
+        return (
+            schemes.find(
+                (scheme: any) =>
+                    scheme.schemeId ===
+                    schemeId
+            ) ?? null
+        );
     }
 
+    private calculateSchemePrice(
+        product: any,
+        scheme: any
+    ): number {
+        const basePrice = Number(
+            product?.bulkOrderBasePrice ??
+            0
+        );
+
+        if (basePrice <= 0) {
+            return 0;
+        }
+
+        const adjustmentPercent =
+            Number(
+                scheme?.bulkPriceAdjustmentPercent ??
+                0
+            );
+
+        if (
+            !adjustmentPercent ||
+            adjustmentPercent <= 0
+        ) {
+            return basePrice;
+        }
+
+        const adjustmentAmount =
+            (basePrice *
+                adjustmentPercent) /
+            100;
+
+        if (
+            scheme.bulkPriceAdjustmentType ===
+            "MINUS"
+        ) {
+            return Math.max(
+                0,
+                Math.round(
+                    basePrice -
+                    adjustmentAmount
+                )
+            );
+        }
+
+        if (
+            scheme.bulkPriceAdjustmentType ===
+            "PLUS"
+        ) {
+            return Math.round(
+                basePrice +
+                adjustmentAmount
+            );
+        }
+
+        return basePrice;
+    }
     private buildItems(
         request: CreateBulkOrderRequest,
-        productMap: Map<string, any>
+        productMap: Map<string, any>,
+        scheme: any
     ): BulkOrderItem[] {
+        return request.items.map(
+            (requestItem) => {
+                const product =
+                    productMap.get(
+                        requestItem.productId
+                    )!;
 
-        return request.items.map(requestItem => {
-            const product = productMap.get(
-                requestItem.productId
-            )!;
+                const bulkOrderBasePrice =
+                    Number(
+                        product.bulkOrderBasePrice ??
+                        0
+                    );
 
-            const schemePrice = this.getSchemePrice(
-                product,
-                request.schemeId
-            );
+                const unitPrice =
+                    this.calculateSchemePrice(
+                        product,
+                        scheme
+                    );
 
-            const cartonQty = Number(
-                product.cartonQty
-            );
+                const cartonQty =
+                    Number(
+                        product.cartonQty ?? 0
+                    );
 
-            const quantity = Number(
-                requestItem.quantity
-            );
+                const quantity =
+                    Number(
+                        requestItem.quantity
+                    );
 
-            return {
-                productId: product.productId,
-                name: product.name,
-                image: product.image,
-                brand: product.brandName,
-                categoryId: product.categoryId,
-                cartonQty,
-                schemePrice,
-                quantity,
-                total: schemePrice *
+                const total =
+                    unitPrice *
                     cartonQty *
+                    quantity;
+
+                return {
+                    productId:
+                        product.productId,
+                    name: product.name,
+                    image: product.image,
+                    brand:
+                        product.brandName ??
+                        product.brand,
+                    categoryId:
+                        product.categoryId,
+                    bulkOrderBasePrice,
+                    cartonQty,
+                    unitPrice,
+                    schemePrice: unitPrice,
                     quantity,
-            };
-        });
+                    total,
+                };
+            }
+        );
     }
 
     private validateScheme(
-        schemeId: string,
-        productTotal: number,
-        config: any
+        scheme: any,
+        productTotal: number
     ): void {
-
-        const schemes = config?.bulkSchemes;
-        if (!Array.isArray(schemes) || schemes.length === 0) {
-            throw new Error("Bulk schemes are not configured.");
-        }
-
-        const scheme = schemes.find(
-            (s: any) => s.schemeId === schemeId
+        const minAmount = Number(
+            scheme.minAmount ?? 0
         );
 
-        if (!scheme) {
-            throw new Error("Invalid bulk scheme selected.");
-        }
+        const maxAmount = Number(
+            scheme.maxAmount ?? 0
+        );
 
-        const minAmount = Number(scheme.minAmount ?? 0);
-        const maxAmount = Number(scheme.maxAmount ?? 0);
-
-        if (productTotal < minAmount) {
+        if (
+            productTotal < minAmount
+        ) {
             throw new Error(
-                `Minimum order amount for ${scheme.schemeName} is ₹${minAmount}.`
+                `Minimum order amount for ${scheme.schemeName} is ₹${minAmount.toLocaleString(
+                    "en-IN"
+                )}.`
             );
         }
 
@@ -289,10 +414,11 @@ export class BulkOrderService {
             productTotal > maxAmount
         ) {
             throw new Error(
-                `Maximum order amount for ${scheme.schemeName} is ₹${maxAmount}.`
+                `Maximum order amount for ${scheme.schemeName} is ₹${maxAmount.toLocaleString(
+                    "en-IN"
+                )}.`
             );
         }
-
     }
 
     private buildOrder(
@@ -301,12 +427,11 @@ export class BulkOrderService {
         items: BulkOrderItem[],
         pricing: BulkOrderPricing
     ): BulkOrder {
-
         const now = Date.now();
 
         return {
-
-            orderId: this.generateOrderId(now),
+            orderId:
+                this.generateOrderId(now),
 
             meta: "ORDER",
 
@@ -314,47 +439,56 @@ export class BulkOrderService {
 
             status: "ORDER_PLACED",
 
-            schemeId: request.schemeId,
+            schemeId:
+                request.schemeId,
 
-            remarks: request.remarks,
+            remarks:
+                request.remarks,
 
-            address: request.address,
+            address:
+                request.address,
 
             items,
 
             pricing,
 
             createdAt: now,
+
             updatedAt: now,
+
             statusHistory: [
                 {
-                    status: "ORDER_PLACED",
+                    status:
+                        "ORDER_PLACED",
                     at: now,
                     by: `USER#${userId}`,
                 },
             ],
         };
-
     }
 
     private generateOrderId(
         now: number
     ) {
-
         const d = new Date(now);
 
         const ymd =
             d.getFullYear().toString() +
-            String(d.getMonth() + 1).padStart(2, "0") +
-            String(d.getDate()).padStart(2, "0");
+            String(
+                d.getMonth() + 1
+            ).padStart(2, "0") +
+            String(
+                d.getDate()
+            ).padStart(2, "0");
 
         const rand =
             Math.floor(
-                1000 + Math.random() * 9000
+                1000 +
+                Math.random() *
+                9000
             );
 
         return `BOR-${ymd}-${rand}`;
-
     }
 
     async getOrders(
@@ -362,24 +496,34 @@ export class BulkOrderService {
         limit: number,
         cursor?: any
     ) {
-
-        const result = await this.repo.getOrdersByUser(
-            userId,
-            limit,
-            cursor
-        );
+        const result =
+            await this.repo.getOrdersByUser(
+                userId,
+                limit,
+                cursor
+            );
 
         return {
-            items: result.items.map((order: any) => ({
-                orderId: order.orderId,
-                userId: order.userId,
-                status: order.status,
-                schemeId: order.schemeId,
-                createdAt: order.createdAt,
-                pricing: order.pricing,
-                items: order.items,
-            })),
-            nextCursor: result.nextCursor,
+            items: result.items.map(
+                (order: any) => ({
+                    orderId:
+                        order.orderId,
+                    userId:
+                        order.userId,
+                    status:
+                        order.status,
+                    schemeId:
+                        order.schemeId,
+                    createdAt:
+                        order.createdAt,
+                    pricing:
+                        order.pricing,
+                    items:
+                        order.items,
+                })
+            ),
+            nextCursor:
+                result.nextCursor,
         };
     }
 
@@ -387,18 +531,26 @@ export class BulkOrderService {
         userId: string,
         orderId: string
     ) {
+        const order =
+            await this.repo.getById(
+                orderId
+            );
 
-        const order = await this.repo.getById(orderId);
         if (!order) {
-            throw new Error("Bulk order not found.");
+            throw new Error(
+                "Bulk order not found."
+            );
         }
 
-        if (order.userId !== userId) {
-            throw new Error("You are not authorized to view this bulk order.");
+        if (
+            order.userId !== userId
+        ) {
+            throw new Error(
+                "You are not authorized to view this bulk order."
+            );
         }
 
         return order;
-
     }
 
     async adminGetOrders(
@@ -406,107 +558,176 @@ export class BulkOrderService {
         cursor?: any,
         status?: string
     ) {
-
-        const result = await this.repo.getAdminOrders(
-            limit,
-            cursor,
-            status
-        );
+        const result =
+            await this.repo.getAdminOrders(
+                limit,
+                cursor,
+                status
+            );
 
         return {
-            items: result.items.map((order: any) => ({
-                orderId: order.orderId,
-                userId: order.userId,
-                status: order.status,
-                schemeId: order.schemeId,
-                createdAt: order.createdAt,
-                customer: {
-                    name: order.address?.name,
-                    mobile: order.address?.mobile,
-                },
-                pricing: order.pricing,
-                items: order.items,
-            })),
-            nextCursor: result.nextCursor,
+            items: result.items.map(
+                (order: any) => ({
+                    orderId:
+                        order.orderId,
+                    userId:
+                        order.userId,
+                    status:
+                        order.status,
+                    schemeId:
+                        order.schemeId,
+                    createdAt:
+                        order.createdAt,
+                    customer: {
+                        name:
+                            order.address
+                                ?.fullName,
+                        mobile:
+                            order.address
+                                ?.mobile,
+                    },
+                    pricing:
+                        order.pricing,
+                    items:
+                        order.items,
+                })
+            ),
+            nextCursor:
+                result.nextCursor,
         };
     }
 
-    async adminGetOrder(orderId: string) {
+    async adminGetOrder(
+        orderId: string
+    ) {
+        const order =
+            await this.repo.getById(
+                orderId
+            );
 
-        const order = await this.repo.getById(orderId);
         if (!order) {
-            throw new Error("Bulk order not found.");
+            throw new Error(
+                "Bulk order not found."
+            );
         }
+
         return order;
     }
 
     private addStatusHistory(
         history: any[] = [],
         status: string,
-        by: string
+        by: string,
+        comment?: string
     ) {
-
         return [
             ...history,
             {
                 status,
                 at: Date.now(),
                 by,
+                ...(comment?.trim()
+                    ? {
+                        comment: comment.trim(),
+                    }
+                    : {}),
             },
         ];
-
     }
 
-    private validateStatus(status: string) {
-
-        if (!STATUS_ORDER.includes(status)) {
-            throw new Error("Invalid order status.");
+    private validateStatus(
+        status: string
+    ) {
+        if (
+            !STATUS_ORDER.includes(
+                status
+            )
+        ) {
+            throw new Error(
+                "Invalid order status."
+            );
         }
-
     }
 
     private validateStatusTransition(
         currentStatus: string,
         newStatus: string
     ) {
+        const currentIndex =
+            STATUS_ORDER.indexOf(
+                currentStatus
+            );
 
-        const currentIndex = STATUS_ORDER.indexOf(currentStatus);
-        const newIndex = STATUS_ORDER.indexOf(newStatus);
+        const newIndex =
+            STATUS_ORDER.indexOf(
+                newStatus
+            );
 
         if (newIndex === -1) {
-            throw new Error("Invalid order status.");
+            throw new Error(
+                "Invalid order status."
+            );
         }
 
-        if (currentStatus === newStatus) {
-            throw new Error("Order is already in this status.");
+        if (
+            currentStatus ===
+            newStatus
+        ) {
+            throw new Error(
+                "Order is already in this status."
+            );
         }
 
-        if (currentStatus === "CANCELLED") {
-            throw new Error("Cancelled orders cannot be updated.");
+        if (
+            currentStatus ===
+            "CANCELLED"
+        ) {
+            throw new Error(
+                "Cancelled orders cannot be updated."
+            );
         }
 
-        if (currentStatus === "DISPATCHED" && newStatus === "CANCELLED") {
-            throw new Error("Dispatched orders cannot be cancelled.");
+        if (
+            currentStatus ===
+            "DISPATCHED" &&
+            newStatus ===
+            "CANCELLED"
+        ) {
+            throw new Error(
+                "Dispatched orders cannot be cancelled."
+            );
         }
 
-        if (newIndex < currentIndex) {
-            throw new Error("Order status cannot move backwards.");
+        if (
+            newIndex < currentIndex
+        ) {
+            throw new Error(
+                "Order status cannot move backwards."
+            );
         }
-
     }
 
     async updateStatus(
         orderId: string,
         status: string,
-        adminId: string
+        adminId: string,
+        comment?: string,
+        role?: string,
     ) {
+        const order =
+            await this.repo.getById(
+                orderId
+            );
 
-        const order = await this.repo.getById(orderId);
         if (!order) {
-            throw new Error("Bulk order not found.");
+            throw new Error(
+                "Bulk order not found."
+            );
         }
 
-        this.validateStatus(status);
+        this.validateStatus(
+            status
+        );
 
         this.validateStatusTransition(
             order.status,
@@ -517,36 +738,48 @@ export class BulkOrderService {
         const statusHistory = this.addStatusHistory(
             order.statusHistory,
             status,
-            adminId
+            adminId,
+            comment
         );
 
-        await this.repo.updateStatus(orderId, {
-            status,
-            updatedAt: now,
-            modifiedAt: now,
-            modifiedBy: adminId,
-            statusHistory,
-        });
+        await this.repo.updateStatus(
+            orderId,
+            {
+                status,
+                updatedAt: now,
+                modifiedAt: now,
+                modifiedBy: adminId,
+                statusHistory,
+            }
+        );
 
         return {
-            message: "Bulk order status updated successfully.",
+            message:
+                "Bulk order status updated successfully.",
         };
-
     }
 
     async cancelOrder(
         userId: string,
         orderId: string
     ) {
-
-        const order = await this.repo.getById(orderId);
+        const order =
+            await this.repo.getById(
+                orderId
+            );
 
         if (!order) {
-            throw new Error("Bulk order not found.");
+            throw new Error(
+                "Bulk order not found."
+            );
         }
 
-        if (order.userId !== userId) {
-            throw new Error("You are not authorized to cancel this bulk order.");
+        if (
+            order.userId !== userId
+        ) {
+            throw new Error(
+                "You are not authorized to cancel this bulk order."
+            );
         }
 
         this.validateStatusTransition(
@@ -555,22 +788,30 @@ export class BulkOrderService {
         );
 
         const now = Date.now();
-        const statusHistory = this.addStatusHistory(
-            order.statusHistory,
-            "CANCELLED",
-            `USER#${userId}`
+
+        const statusHistory =
+            this.addStatusHistory(
+                order.statusHistory,
+                "CANCELLED",
+                `USER#${userId}`
+            );
+
+        await this.repo.updateStatus(
+            orderId,
+            {
+                status:
+                    "CANCELLED",
+                updatedAt: now,
+                modifiedAt: now,
+                modifiedBy:
+                    `USER#${userId}`,
+                statusHistory,
+            }
         );
 
-        await this.repo.updateStatus(orderId, {
-            status: "CANCELLED",
-            updatedAt: now,
-            modifiedAt: now,
-            modifiedBy: `USER#${userId}`,
-            statusHistory,
-        });
-
         return {
-            message: "Bulk order cancelled successfully.",
+            message:
+                "Bulk order cancelled successfully.",
         };
     }
 }

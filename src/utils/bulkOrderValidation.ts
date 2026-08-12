@@ -10,23 +10,48 @@ export class BulkOrderValidation {
     ): void {
 
         if (!request) {
-            throw new Error("Request body is required.");
+            throw new Error(
+                "Request body is required."
+            );
         }
 
-        this.validateScheme(request.schemeId);
-        this.validateAddress(request.address);
-        this.validateItems(request.items);
-        this.validateRemarks(request.remarks);
+        this.validateScheme(
+            request.schemeId
+        );
+
+        this.validateAddress(
+            request.address
+        );
+
+        this.validateItems(
+            request.items
+        );
+
+        this.validateRemarks(
+            request.remarks
+        );
     }
 
     static validateScheme(
         schemeId?: string
     ): void {
 
-        if (!schemeId || !schemeId.trim()) {
-            throw new Error("Bulk scheme is required.");
+        if (
+            !schemeId ||
+            !schemeId.trim()
+        ) {
+            throw new Error(
+                "Bulk scheme is required."
+            );
         }
 
+        if (
+            schemeId.trim().length > 100
+        ) {
+            throw new Error(
+                "Invalid bulk scheme."
+            );
+        }
     }
 
     static validateAddress(
@@ -34,58 +59,185 @@ export class BulkOrderValidation {
     ): void {
 
         if (!address) {
-            throw new Error("Delivery address is required.");
+            throw new Error(
+                "Delivery address is required."
+            );
         }
 
-        if (!address.fullName?.trim()) {
-            throw new Error("Full name is required.");
+        /*
+         * Full Name
+         */
+        const fullName =
+            address.fullName?.trim() ?? "";
+
+        if (!fullName) {
+            throw new Error(
+                "Full name is required."
+            );
         }
 
-        if (address.fullName.trim().length < 3) {
-            throw new Error("Please enter a valid full name.");
+        if (fullName.length < 3) {
+            throw new Error(
+                "Please enter a valid full name."
+            );
         }
 
-        if (!address.mobile?.trim()) {
-            throw new Error("Mobile number is required.");
+        if (fullName.length > 100) {
+            throw new Error(
+                "Full name cannot exceed 100 characters."
+            );
         }
 
-        if (!/^[6-9]\d{9}$/.test(address.mobile.trim())) {
-            throw new Error("Please enter a valid mobile number.");
+        /*
+         * Mobile
+         */
+        const mobile =
+            address.mobile?.trim() ?? "";
+
+        if (!mobile) {
+            throw new Error(
+                "Mobile number is required."
+            );
         }
 
         if (
-            address.email &&
-            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                address.email.trim()
+            !/^[6-9]\d{9}$/.test(
+                mobile
             )
         ) {
-            throw new Error("Please enter a valid email address.");
+            throw new Error(
+                "Please enter a valid mobile number."
+            );
         }
 
-        if (!address.addressLine1?.trim()) {
-            throw new Error("Address Line 1 is required.");
+        /*
+         * Email
+         */
+        const email =
+            address.email?.trim() ?? "";
+
+        if (email) {
+
+            if (
+                email.length > 150
+            ) {
+                throw new Error(
+                    "Email cannot exceed 150 characters."
+                );
+            }
+
+            if (
+                !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                    email
+                )
+            ) {
+                throw new Error(
+                    "Please enter a valid email address."
+                );
+            }
         }
 
-        if (address.addressLine1.trim().length < 5) {
-            throw new Error("Please enter a valid address.");
+        /*
+         * Address Line 1
+         */
+        const addressLine1 =
+            address.addressLine1?.trim() ??
+            "";
+
+        if (!addressLine1) {
+            throw new Error(
+                "Address Line 1 is required."
+            );
         }
 
-        if (!address.city?.trim()) {
-            throw new Error("City is required.");
+        if (
+            addressLine1.length < 5
+        ) {
+            throw new Error(
+                "Please enter a valid address."
+            );
         }
 
-        if (!address.state?.trim()) {
-            throw new Error("State is required.");
+        if (
+            addressLine1.length > 250
+        ) {
+            throw new Error(
+                "Address Line 1 cannot exceed 250 characters."
+            );
         }
 
-        if (!address.pincode?.trim()) {
-            throw new Error("Pincode is required.");
+        /*
+         * Address Line 2
+         */
+        const addressLine2 =
+            address.addressLine2?.trim() ??
+            "";
+
+        if (
+            addressLine2.length > 250
+        ) {
+            throw new Error(
+                "Address Line 2 cannot exceed 250 characters."
+            );
         }
 
-        if (!/^\d{6}$/.test(address.pincode.trim())) {
-            throw new Error("Please enter a valid pincode.");
+        /*
+         * City
+         */
+        const city =
+            address.city?.trim() ?? "";
+
+        if (!city) {
+            throw new Error(
+                "City is required."
+            );
         }
 
+        if (city.length > 100) {
+            throw new Error(
+                "City cannot exceed 100 characters."
+            );
+        }
+
+        /*
+         * State
+         */
+        const state =
+            address.state?.trim() ?? "";
+
+        if (!state) {
+            throw new Error(
+                "State is required."
+            );
+        }
+
+        if (state.length > 100) {
+            throw new Error(
+                "State cannot exceed 100 characters."
+            );
+        }
+
+        /*
+         * Pincode
+         */
+        const pincode =
+            address.pincode?.trim() ?? "";
+
+        if (!pincode) {
+            throw new Error(
+                "Pincode is required."
+            );
+        }
+
+        if (
+            !/^\d{6}$/.test(
+                pincode
+            )
+        ) {
+            throw new Error(
+                "Please enter a valid pincode."
+            );
+        }
     }
 
     static validateItems(
@@ -96,55 +248,108 @@ export class BulkOrderValidation {
     ): void {
 
         if (!Array.isArray(items)) {
-            throw new Error("Products are required.");
+            throw new Error(
+                "Products are required."
+            );
         }
 
         if (items.length === 0) {
-            throw new Error("Please add at least one product.");
+            throw new Error(
+                "Please add at least one product."
+            );
         }
 
-        const productIds = new Set<string>();
+        /*
+         * Prevent unexpectedly large requests.
+         */
+        if (items.length > 100) {
+            throw new Error(
+                "You can select a maximum of 100 products per bulk order."
+            );
+        }
+
+        const productIds =
+            new Set<string>();
 
         for (const item of items) {
 
-            if (!item.productId?.trim()) {
-                throw new Error("Invalid product.");
+            const productId =
+                item?.productId?.trim() ??
+                "";
+
+            if (!productId) {
+                throw new Error(
+                    "Invalid product."
+                );
             }
 
-            if (productIds.has(item.productId)) {
+            if (
+                productId.length > 100
+            ) {
+                throw new Error(
+                    "Invalid product."
+                );
+            }
+
+            if (
+                productIds.has(
+                    productId
+                )
+            ) {
                 throw new Error(
                     "Duplicate products are not allowed."
                 );
             }
 
-            productIds.add(item.productId);
+            productIds.add(
+                productId
+            );
 
             if (
-                !Number.isInteger(item.quantity) ||
+                !Number.isInteger(
+                    item.quantity
+                ) ||
                 item.quantity <= 0
             ) {
                 throw new Error(
-                    `Invalid quantity for product ${item.productId}.`
+                    `Invalid quantity for product ${productId}.`
                 );
             }
 
+            /*
+             * Prevent unrealistic quantities
+             * from reaching pricing/database logic.
+             */
+            if (
+                item.quantity > 100000
+            ) {
+                throw new Error(
+                    `Invalid quantity for product ${productId}.`
+                );
+            }
         }
-
     }
 
     static validateRemarks(
         remarks?: string
     ): void {
 
-        if (!remarks) {
+        if (
+            remarks === undefined ||
+            remarks === null
+        ) {
             return;
         }
 
-        if (remarks.length > 500) {
+        const value =
+            remarks.trim();
+
+        if (
+            value.length > 500
+        ) {
             throw new Error(
                 "Remarks cannot exceed 500 characters."
             );
         }
-
     }
 }

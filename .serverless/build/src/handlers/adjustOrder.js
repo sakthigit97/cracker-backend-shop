@@ -4067,11 +4067,11 @@ var ProductService = class {
         isComboPackage: p.isComboPackage || false,
         sequenceNumber: p.sequenceNumber || 0,
         cartonQty: p.cartonQty || 0,
-        isBulkOnly: p.isBulkOnly || false,
-        scheme1Price: p.scheme1Price || 0,
-        scheme2Price: p.scheme2Price || 0,
-        scheme3Price: p.scheme3Price || 0,
-        scheme4Price: p.scheme4Price || 0
+        bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
+        isBulkOrderOnly: p.isBulkOrderOnly || false,
+        isRetailOnly: p.isRetailOnly || false,
+        productPer: p.productPer || 0,
+        productMeasurement: p.productMeasurement || ""
       };
     });
   }

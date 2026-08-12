@@ -146,7 +146,6 @@ export async function validate(
     event: APIGatewayProxyEventV2
 ) {
     try {
-
         if (!event.body) {
             return error(
                 "Request body is required."
@@ -157,27 +156,38 @@ export async function validate(
             event.body
         );
 
-        const { userId } = verifyJwt(event);
-        const code = body.code?.trim();
+        const { userId } =
+            verifyJwt(event);
+
+        const code =
+            body.code?.trim();
+
+        const schemeId =
+            body.schemeId?.trim();
 
         if (
             !userId ||
-            !code
+            !code ||
+            !schemeId
         ) {
             return error(
-                "User ID and Code are required."
+                "User ID, Code and Scheme are required."
             );
         }
 
-        const response = await AdminCodeService.validateCode(
-            userId,
-            code
-        );
+        const response =
+            await AdminCodeService.validateCode(
+                userId,
+                code,
+                schemeId
+            );
 
-        return success(response);
-
+        return success({
+            valid: response.success,
+            schemeId:
+                response.schemeId,
+        });
     } catch (e: any) {
-
         console.error(
             "Admin Code Validation Error:",
             e
@@ -187,6 +197,5 @@ export async function validate(
             e.message ||
             "Invalid Admin Code."
         );
-
     }
 }

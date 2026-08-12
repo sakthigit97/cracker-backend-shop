@@ -834,14 +834,14 @@ var require_decode = __commonJS({
 // node_modules/jsonwebtoken/lib/JsonWebTokenError.js
 var require_JsonWebTokenError = __commonJS({
   "node_modules/jsonwebtoken/lib/JsonWebTokenError.js"(exports2, module2) {
-    var JsonWebTokenError = function(message, error) {
+    var JsonWebTokenError = function(message, error2) {
       Error.call(this, message);
       if (Error.captureStackTrace) {
         Error.captureStackTrace(this, this.constructor);
       }
       this.name = "JsonWebTokenError";
       this.message = message;
-      if (error) this.inner = error;
+      if (error2) this.inner = error2;
     };
     JsonWebTokenError.prototype = Object.create(Error.prototype);
     JsonWebTokenError.prototype.constructor = JsonWebTokenError;
@@ -3793,8 +3793,8 @@ var require_sign = __commonJS({
       } else if (isObjectPayload) {
         try {
           validatePayload(payload);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
         if (!options.mutatePayload) {
           payload = Object.assign({}, payload);
@@ -3815,14 +3815,14 @@ var require_sign = __commonJS({
       }
       try {
         validateOptions(options);
-      } catch (error) {
-        return failure(error);
+      } catch (error2) {
+        return failure(error2);
       }
       if (!options.allowInvalidAsymmetricKeyTypes) {
         try {
           validateAsymmetricKey(header.alg, secretOrPrivateKey);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
       }
       const timestamp = payload.iat || Math.floor(Date.now() / 1e3);
@@ -3899,12 +3899,12 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// src/handlers/cancelOrder.ts
-var cancelOrder_exports = {};
-__export(cancelOrder_exports, {
+// src/handlers/adminBulkOrder.ts
+var adminBulkOrder_exports = {};
+__export(adminBulkOrder_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(cancelOrder_exports);
+module.exports = __toCommonJS(adminBulkOrder_exports);
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -3933,8 +3933,8 @@ function verifyJwt(event) {
   };
 }
 
-// src/repo/order.repo.ts
-var import_lib_dynamodb5 = require("@aws-sdk/lib-dynamodb");
+// src/repo/bulkOrder.repo.ts
+var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
 
 // src/utils/dynamo.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
@@ -3946,12 +3946,136 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
   }
 });
 
+// src/repo/bulkOrder.repo.ts
+var TABLE_NAME = process.env.BULK_ORDERS_TABLE;
+var USERS_TABLE = process.env.USERS_TABLE;
+var ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE;
+var BulkOrderRepository = class {
+  async create(order) {
+    await ddb.send(
+      new import_lib_dynamodb2.PutCommand({
+        TableName: TABLE_NAME,
+        Item: order
+      })
+    );
+  }
+  async getById(orderId) {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.GetCommand({
+        TableName: TABLE_NAME,
+        Key: {
+          orderId,
+          meta: "ORDER"
+        }
+      })
+    );
+    return res.Item ?? null;
+  }
+  async getOrdersByUser(userId, limit, cursor) {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.QueryCommand({
+        TableName: TABLE_NAME,
+        IndexName: "userId-createdAt-index",
+        KeyConditionExpression: "userId = :userId",
+        ExpressionAttributeValues: {
+          ":userId": userId
+        },
+        ScanIndexForward: false,
+        Limit: limit,
+        ExclusiveStartKey: cursor
+      })
+    );
+    return {
+      items: res.Items ?? [],
+      nextCursor: res.LastEvaluatedKey ?? null
+    };
+  }
+  async updateStatus(orderId, data) {
+    await ddb.send(
+      new import_lib_dynamodb2.UpdateCommand({
+        TableName: TABLE_NAME,
+        Key: {
+          orderId,
+          meta: "ORDER"
+        },
+        UpdateExpression: `
+                    SET
+                        #status = :status,
+                        updatedAt = :updatedAt,
+                        modifiedAt = :modifiedAt,
+                        modifiedBy = :modifiedBy,
+                        statusHistory = :statusHistory
+                `,
+        ExpressionAttributeNames: {
+          "#status": "status"
+        },
+        ExpressionAttributeValues: {
+          ":status": data.status,
+          ":updatedAt": data.updatedAt,
+          ":modifiedAt": data.modifiedAt,
+          ":modifiedBy": data.modifiedBy,
+          ":statusHistory": data.statusHistory
+        }
+      })
+    );
+  }
+  async getAdminConfig() {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.GetCommand({
+        TableName: ADMIN_CONFIG_TABLE,
+        Key: {
+          configId: "global"
+        }
+      })
+    );
+    return res.Item ?? {};
+  }
+  async getUser(mobile) {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.GetCommand({
+        TableName: USERS_TABLE,
+        Key: {
+          mobile
+        }
+      })
+    );
+    return res.Item ?? null;
+  }
+  async getAdminOrders(limit, cursor, status) {
+    const params = {
+      TableName: TABLE_NAME,
+      IndexName: "meta-createdAt-index",
+      KeyConditionExpression: "meta = :meta",
+      ExpressionAttributeValues: {
+        ":meta": "ORDER"
+      },
+      ScanIndexForward: false,
+      Limit: limit,
+      ExclusiveStartKey: cursor
+    };
+    if (status) {
+      params.FilterExpression = "#status = :status";
+      params.ExpressionAttributeNames = {
+        "#status": "status"
+      };
+      params.ExpressionAttributeValues[":status"] = status;
+    }
+    const res = await ddb.send(
+      new import_lib_dynamodb2.QueryCommand(params)
+    );
+    return {
+      items: res.Items ?? [],
+      nextCursor: res.LastEvaluatedKey ?? null
+    };
+  }
+};
+
 // src/services/product.service.ts
-var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
+var import_lib_dynamodb5 = require("@aws-sdk/lib-dynamodb");
 
 // src/repo/product.repo.ts
-var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
-var TABLE_NAME = process.env.PRODUCTS_TABLE;
+var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
+var TABLE_NAME2 = process.env.PRODUCTS_TABLE;
 var ProductRepository = class {
   async batchGet(productIds) {
     if (productIds.length === 0) return [];
@@ -3959,17 +4083,17 @@ var ProductRepository = class {
       productId
     }));
     const res = await ddb.send(
-      new import_lib_dynamodb2.BatchGetCommand({
+      new import_lib_dynamodb3.BatchGetCommand({
         RequestItems: {
-          [TABLE_NAME]: { Keys: keys }
+          [TABLE_NAME2]: { Keys: keys }
         }
       })
     );
-    return res.Responses?.[TABLE_NAME] ?? [];
+    return res.Responses?.[TABLE_NAME2] ?? [];
   }
   async deleteProduct(productId) {
     await ddb.send(
-      new import_lib_dynamodb2.DeleteCommand({
+      new import_lib_dynamodb3.DeleteCommand({
         TableName: process.env.PRODUCTS_TABLE,
         Key: { productId }
       })
@@ -3978,11 +4102,11 @@ var ProductRepository = class {
 };
 
 // src/services/discount.service.ts
-var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
+var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
 var DISCOUNT_TABLE = process.env.DISCOUNT_TABLE;
 async function getActiveDiscounts() {
   const res = await ddb.send(
-    new import_lib_dynamodb3.ScanCommand({
+    new import_lib_dynamodb4.ScanCommand({
       TableName: DISCOUNT_TABLE,
       FilterExpression: "isActive = :true",
       ExpressionAttributeValues: {
@@ -4080,795 +4204,929 @@ var ProductService = class {
   }
 };
 
-// src/repo/order.repo.ts
-var ORDERS_TABLE = process.env.ORDERS_TABLE;
-var USERS_TABLE = process.env.USERS_TABLE;
-var ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE;
-var OrderRepository = class {
-  constructor() {
-    this.productService = new ProductService();
-  }
-  async buildItemsSnapshot(cartItems) {
-    const productIds = cartItems.map((c) => c.itemId);
-    const products = await this.productService.batchGetProducts(productIds);
-    const map = new Map(
-      products.map((p) => [
-        p.productId,
-        {
-          name: p.name,
-          price: p.price,
-          image: p.image || null,
-          originalPrice: p.originalPrice || null,
-          discountText: p.discountText || "",
-          isComboPackage: p.isComboPackage || false
-        }
-      ])
-    );
-    const snapshot = cartItems.map((c) => {
-      const product = map.get(c.itemId);
-      if (!product) {
-        throw new Error(
-          `Product ${c.itemId} not found`
-        );
-      }
-      return {
-        productId: c.itemId,
-        name: product.name,
-        image: product.image,
-        price: product.price,
-        quantity: c.quantity,
-        total: product.price * c.quantity,
-        originalPrice: product.originalPrice,
-        discountText: product.discountText,
-        isComboPackage: product.isComboPackage
-      };
-    });
-    return snapshot;
-  }
-  async create(order) {
-    await ddb.send(
-      new import_lib_dynamodb5.PutCommand({
-        TableName: ORDERS_TABLE,
-        Item: order
-      })
-    );
-  }
-  async getOrdersByUser(userId, limit, cursor) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.QueryCommand({
-        TableName: ORDERS_TABLE,
-        IndexName: "userId-createdAt-index",
-        KeyConditionExpression: "userId = :uid",
-        ExpressionAttributeValues: {
-          ":uid": userId
-        },
-        ScanIndexForward: false,
-        Limit: limit,
-        ExclusiveStartKey: cursor
-      })
-    );
-    return {
-      items: res.Items || [],
-      nextCursor: res.LastEvaluatedKey || null
-    };
-  }
-  async getById(orderId) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: ORDERS_TABLE,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        }
-      })
-    );
-    return res.Item;
-  }
-  async updateStatus(orderId, data) {
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: ORDERS_TABLE,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        },
-        UpdateExpression: `
-                SET 
-                    #status = :status,
-                    updatedAt = :updatedAt,
-                    modifiedAt = :modifiedAt,
-                    modifiedBy = :modifiedBy,
-                    statusHistory = :statusHistory
-                `,
-        ExpressionAttributeNames: {
-          "#status": "status"
-        },
-        ExpressionAttributeValues: {
-          ":status": data.status,
-          ":updatedAt": data.updatedAt,
-          ":modifiedAt": data.modifiedAt,
-          ":modifiedBy": data.modifiedBy,
-          ":statusHistory": data.statusHistory
-        }
-      })
-    );
-  }
-  async getUserByMobile(mobile) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: USERS_TABLE,
-        Key: { mobile }
-      })
-    );
-    return res.Item || null;
-  }
-  async deductWalletCredit(mobile, usedAmount) {
-    if (usedAmount <= 0) return;
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: USERS_TABLE,
-        Key: { mobile },
-        UpdateExpression: "SET walletCredit = walletCredit - :amt",
-        ConditionExpression: "walletCredit >= :amt",
-        ExpressionAttributeValues: {
-          ":amt": usedAmount
-        }
-      })
-    );
-  }
-  async markReferralRewarded(mobile) {
-    try {
-      await ddb.send(
-        new import_lib_dynamodb5.UpdateCommand({
-          TableName: USERS_TABLE,
-          Key: { mobile },
-          UpdateExpression: "SET referralRewarded = :t",
-          ConditionExpression: "attribute_not_exists(referralRewarded) OR referralRewarded = :f",
-          ExpressionAttributeValues: {
-            ":t": true,
-            ":f": false
-          }
-        })
+// src/utils/bulkOrderValidation.ts
+var BulkOrderValidation = class {
+  static validateCreateRequest(request) {
+    if (!request) {
+      throw new Error(
+        "Request body is required."
       );
-      return true;
-    } catch (err) {
-      if (err.name === "ConditionalCheckFailedException") {
-        return false;
-      }
-      throw err;
+    }
+    this.validateScheme(
+      request.schemeId
+    );
+    this.validateAddress(
+      request.address
+    );
+    this.validateItems(
+      request.items
+    );
+    this.validateRemarks(
+      request.remarks
+    );
+  }
+  static validateScheme(schemeId) {
+    if (!schemeId || !schemeId.trim()) {
+      throw new Error(
+        "Bulk scheme is required."
+      );
+    }
+    if (schemeId.trim().length > 100) {
+      throw new Error(
+        "Invalid bulk scheme."
+      );
     }
   }
-  async addWalletCreditByReferralCode(referralCode, amount) {
-    if (!referralCode || amount <= 0) return;
-    let lastKey;
-    let refUser = null;
-    do {
-      const res = await ddb.send(
-        new import_lib_dynamodb5.QueryCommand({
-          TableName: USERS_TABLE,
-          IndexName: "referralCode-index",
-          KeyConditionExpression: "referralCode = :c",
-          ExpressionAttributeValues: {
-            ":c": referralCode
-          },
-          ExclusiveStartKey: lastKey
-        })
+  static validateAddress(address) {
+    if (!address) {
+      throw new Error(
+        "Delivery address is required."
       );
-      if (res.Items?.length) {
-        refUser = res.Items[0];
-        break;
+    }
+    const fullName = address.fullName?.trim() ?? "";
+    if (!fullName) {
+      throw new Error(
+        "Full name is required."
+      );
+    }
+    if (fullName.length < 3) {
+      throw new Error(
+        "Please enter a valid full name."
+      );
+    }
+    if (fullName.length > 100) {
+      throw new Error(
+        "Full name cannot exceed 100 characters."
+      );
+    }
+    const mobile = address.mobile?.trim() ?? "";
+    if (!mobile) {
+      throw new Error(
+        "Mobile number is required."
+      );
+    }
+    if (!/^[6-9]\d{9}$/.test(
+      mobile
+    )) {
+      throw new Error(
+        "Please enter a valid mobile number."
+      );
+    }
+    const email = address.email?.trim() ?? "";
+    if (email) {
+      if (email.length > 150) {
+        throw new Error(
+          "Email cannot exceed 150 characters."
+        );
       }
-      lastKey = res.LastEvaluatedKey;
-    } while (lastKey);
-    if (!refUser) {
-      console.log("Referral user not found:", referralCode);
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        email
+      )) {
+        throw new Error(
+          "Please enter a valid email address."
+        );
+      }
+    }
+    const addressLine1 = address.addressLine1?.trim() ?? "";
+    if (!addressLine1) {
+      throw new Error(
+        "Address Line 1 is required."
+      );
+    }
+    if (addressLine1.length < 5) {
+      throw new Error(
+        "Please enter a valid address."
+      );
+    }
+    if (addressLine1.length > 250) {
+      throw new Error(
+        "Address Line 1 cannot exceed 250 characters."
+      );
+    }
+    const addressLine2 = address.addressLine2?.trim() ?? "";
+    if (addressLine2.length > 250) {
+      throw new Error(
+        "Address Line 2 cannot exceed 250 characters."
+      );
+    }
+    const city = address.city?.trim() ?? "";
+    if (!city) {
+      throw new Error(
+        "City is required."
+      );
+    }
+    if (city.length > 100) {
+      throw new Error(
+        "City cannot exceed 100 characters."
+      );
+    }
+    const state = address.state?.trim() ?? "";
+    if (!state) {
+      throw new Error(
+        "State is required."
+      );
+    }
+    if (state.length > 100) {
+      throw new Error(
+        "State cannot exceed 100 characters."
+      );
+    }
+    const pincode = address.pincode?.trim() ?? "";
+    if (!pincode) {
+      throw new Error(
+        "Pincode is required."
+      );
+    }
+    if (!/^\d{6}$/.test(
+      pincode
+    )) {
+      throw new Error(
+        "Please enter a valid pincode."
+      );
+    }
+  }
+  static validateItems(items) {
+    if (!Array.isArray(items)) {
+      throw new Error(
+        "Products are required."
+      );
+    }
+    if (items.length === 0) {
+      throw new Error(
+        "Please add at least one product."
+      );
+    }
+    if (items.length > 100) {
+      throw new Error(
+        "You can select a maximum of 100 products per bulk order."
+      );
+    }
+    const productIds = /* @__PURE__ */ new Set();
+    for (const item of items) {
+      const productId = item?.productId?.trim() ?? "";
+      if (!productId) {
+        throw new Error(
+          "Invalid product."
+        );
+      }
+      if (productId.length > 100) {
+        throw new Error(
+          "Invalid product."
+        );
+      }
+      if (productIds.has(
+        productId
+      )) {
+        throw new Error(
+          "Duplicate products are not allowed."
+        );
+      }
+      productIds.add(
+        productId
+      );
+      if (!Number.isInteger(
+        item.quantity
+      ) || item.quantity <= 0) {
+        throw new Error(
+          `Invalid quantity for product ${productId}.`
+        );
+      }
+      if (item.quantity > 1e5) {
+        throw new Error(
+          `Invalid quantity for product ${productId}.`
+        );
+      }
+    }
+  }
+  static validateRemarks(remarks) {
+    if (remarks === void 0 || remarks === null) {
       return;
     }
-    console.log(
-      `Crediting \u20B9${amount} to ${refUser.mobile} (${referralCode})`
-    );
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: USERS_TABLE,
-        Key: { mobile: refUser.mobile },
-        UpdateExpression: "SET walletCredit = if_not_exists(walletCredit, :z) + :amt",
-        ExpressionAttributeValues: {
-          ":amt": amount,
-          ":z": 0
-        }
-      })
-    );
-  }
-  async getAdminConfig() {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: ADMIN_CONFIG_TABLE,
-        Key: {
-          configId: "global"
-        }
-      })
-    );
-    return res.Item || {};
-  }
-  async updateItems(orderId, data) {
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: ORDERS_TABLE,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        },
-        UpdateExpression: `
-                SET
-                    #items = :items,
-                    totalProductAmount = :totalProductAmount,
-                    nonComboProductTotal = :nonComboProductTotal,
-                    comboPackageTotal = :comboPackageTotal,
-                    couponCode = :couponCode,
-                    couponType = :couponType,
-                    couponValue = :couponValue,
-                    couponDiscount = :couponDiscount,
-                    packagingCharge = :packagingCharge,
-                    amountBeforeDiscount = :amountBeforeDiscount,
-                    amountAfterDiscount = :amountAfterDiscount,
-                    gstAmount = :gstAmount,
-                    grandTotal = :grandTotal,
-                    walletUsed = :walletUsed,
-                    finalPayable = :finalPayable,
-                    updatedAt = :updatedAt,
-                    modifiedAt = :modifiedAt,
-                    modifiedBy = :modifiedBy,
-                    statusHistory = :statusHistory
-            `,
-        ExpressionAttributeNames: {
-          "#items": "items"
-        },
-        ExpressionAttributeValues: {
-          ":items": data.items,
-          ":totalProductAmount": data.totalProductAmount,
-          ":nonComboProductTotal": data.nonComboProductTotal,
-          ":comboPackageTotal": data.comboPackageTotal,
-          ":couponCode": data.couponCode ?? null,
-          ":couponType": data.couponType ?? null,
-          ":couponValue": data.couponValue ?? null,
-          ":couponDiscount": data.couponDiscount ?? 0,
-          ":packagingCharge": data.packagingCharge,
-          ":amountBeforeDiscount": data.amountBeforeDiscount,
-          ":amountAfterDiscount": data.amountAfterDiscount,
-          ":gstAmount": data.gstAmount,
-          ":grandTotal": data.grandTotal,
-          ":walletUsed": data.walletUsed,
-          ":finalPayable": data.finalPayable,
-          ":updatedAt": data.updatedAt,
-          ":modifiedAt": data.modifiedAt,
-          ":modifiedBy": data.modifiedBy,
-          ":statusHistory": data.statusHistory
-        }
-      })
-    );
+    const value = remarks.trim();
+    if (value.length > 500) {
+      throw new Error(
+        "Remarks cannot exceed 500 characters."
+      );
+    }
   }
 };
 
-// src/services/orderPricing.service.ts
-var OrderPricingService = class {
-  calculateProductTotals(items) {
-    let totalProductAmount = 0;
-    let nonComboProductTotal = 0;
-    let comboPackageTotal = 0;
-    for (const item of items) {
-      totalProductAmount += item.total;
-      if (item.isComboPackage) {
-        comboPackageTotal += item.total;
-      } else {
-        nonComboProductTotal += item.total;
-      }
-    }
-    return {
-      totalProductAmount,
-      nonComboProductTotal,
-      comboPackageTotal
-    };
-  }
-  calculatePackaging(nonComboProductTotal, config) {
-    if (config.enablePackagingCharge === false || config.packagingPercent <= 0) {
-      return 0;
-    }
-    return Math.round(
-      nonComboProductTotal * config.packagingPercent / 100
-    );
-  }
-  calculateGST(discountedGrossTotal, state, config) {
-    if (config.enableGst === false) {
-      return 0;
-    }
-    const isTamilNadu = state?.toLowerCase().includes("tamil nadu");
-    if (isTamilNadu && config.disableGstForTN) {
-      return 0;
-    }
-    const effectivePercent = config.gstPercent / 2;
-    return Math.round(
-      discountedGrossTotal * effectivePercent / 100
-    );
-  }
-  calculateFinalPayable(grandTotal, walletUsed) {
-    return Math.max(
-      0,
-      grandTotal - walletUsed
-    );
-  }
-  calculateAmountBeforeDiscount(items, config) {
-    const totals = this.calculateProductTotals(items);
-    const packagingCharge = this.calculatePackaging(
-      totals.nonComboProductTotal,
-      config
-    );
-    return totals.totalProductAmount + packagingCharge;
-  }
-  calculate(input) {
-    const totals = this.calculateProductTotals(input.items);
-    const packagingCharge = this.calculatePackaging(
-      totals.nonComboProductTotal,
-      input.config
-    );
-    const amountBeforeDiscount = totals.totalProductAmount + packagingCharge;
-    const couponCode = input.couponResult?.couponCode ?? null;
-    const couponType = input.couponResult?.couponType ?? null;
-    const couponValue = input.couponResult?.couponValue ?? null;
-    let couponDiscount = 0;
-    if (couponCode && couponType && couponValue != null) {
-      if (couponType === "PERCENTAGE") {
-        couponDiscount = Math.round(
-          amountBeforeDiscount * couponValue / 100
-        );
-      } else {
-        couponDiscount = couponValue;
-      }
-      couponDiscount = Math.min(couponDiscount, amountBeforeDiscount);
-    }
-    const amountAfterDiscount = amountBeforeDiscount - couponDiscount;
-    const gstAmount = this.calculateGST(
-      amountAfterDiscount,
-      input.state,
-      input.config
-    );
-    const grandTotal = amountAfterDiscount + gstAmount;
-    const appliedWallet = Math.min(input.walletUsed, grandTotal);
-    const finalPayable = this.calculateFinalPayable(grandTotal, appliedWallet);
-    return {
-      totalProductAmount: totals.totalProductAmount,
-      nonComboProductTotal: totals.nonComboProductTotal,
-      comboPackageTotal: totals.comboPackageTotal,
-      packagingCharge,
-      amountBeforeDiscount,
-      couponCode,
-      couponType,
-      couponValue,
-      couponDiscount,
-      amountAfterDiscount,
-      gstAmount,
-      grandTotal,
-      walletUsed: appliedWallet,
-      finalPayable
-    };
-  }
-};
-
-// src/repo/coupon.repo.ts
+// src/repo/adminCode.repo.ts
 var import_lib_dynamodb6 = require("@aws-sdk/lib-dynamodb");
-var TABLE = process.env.COUPONS_TABLE;
-var CouponRepository = class {
-  async getCoupon(code) {
+var TABLE = process.env.ADMIN_CODES_TABLE;
+var AdminCodeRepository = class {
+  static async create(code) {
+    await ddb.send(
+      new import_lib_dynamodb6.PutCommand({
+        TableName: TABLE,
+        Item: code,
+        ConditionExpression: "attribute_not_exists(#code)",
+        ExpressionAttributeNames: {
+          "#code": "code"
+        }
+      })
+    );
+    return code;
+  }
+  static async getByCode(code) {
     const result = await ddb.send(
       new import_lib_dynamodb6.GetCommand({
         TableName: TABLE,
         Key: {
-          couponCode: code
+          code
         }
       })
     );
-    return result.Item;
+    return result.Item ?? null;
   }
-  async createCoupon(coupon) {
-    await ddb.send(
-      new import_lib_dynamodb6.PutCommand({
-        TableName: TABLE,
-        Item: coupon,
-        ConditionExpression: "attribute_not_exists(couponCode)"
-      })
-    );
-    return coupon;
-  }
-  async listCoupons() {
+  static async list() {
     const result = await ddb.send(
       new import_lib_dynamodb6.ScanCommand({
         TableName: TABLE
       })
     );
-    return result.Items ?? [];
+    return Array.isArray(result.Items) ? result.Items : [];
   }
-  async deleteCoupon(couponCode) {
+  static async delete(code) {
+    const existing = await this.getByCode(code);
+    if (!existing) {
+      throw new Error(
+        "Admin Code not found."
+      );
+    }
     await ddb.send(
       new import_lib_dynamodb6.DeleteCommand({
         TableName: TABLE,
         Key: {
-          couponCode
+          code
         }
       })
     );
   }
 };
 
-// src/services/coupon.service.ts
-var CouponService = class {
-  constructor() {
-    this.repo = new CouponRepository();
-  }
-  normalizeExpiryDate(expiryDate) {
-    const value = expiryDate.trim();
-    if (!value) {
-      throw new Error("Expiry Date is required");
-    }
-    if (value.endsWith("Z") || /[+-]\d{2}:\d{2}$/.test(value)) {
-      const date2 = new Date(value);
-      if (Number.isNaN(date2.getTime())) {
-        throw new Error("Invalid Expiry Date");
-      }
-      return date2.toISOString();
-    }
-    const date = /* @__PURE__ */ new Date(`${value}:00+05:30`);
-    if (Number.isNaN(date.getTime())) {
-      throw new Error("Invalid Expiry Date");
-    }
-    return date.toISOString();
-  }
-  async createCoupon(payload) {
-    if (!payload.type) {
-      throw new Error("Coupon type is required");
-    }
-    if (payload.value === void 0 || payload.value === null || payload.value <= 0) {
-      throw new Error("Coupon value must be greater than zero");
-    }
-    if (payload.type === "PERCENTAGE" && payload.value > 100) {
-      throw new Error("Percentage cannot exceed 100");
-    }
-    if (!payload.expiryDate) {
-      throw new Error("Expiry Date is required");
-    }
-    const expiryDate = this.normalizeExpiryDate(
-      payload.expiryDate
+// src/services/adminCode.service.ts
+var AdminCodeService = class {
+  static async createCode(code) {
+    const existing = await AdminCodeRepository.getByCode(
+      code.code
     );
-    if (new Date(expiryDate).getTime() <= Date.now()) {
-      throw new Error("Expiry Date must be a future date");
-    }
-    const couponCode = payload.couponCode?.trim().toUpperCase();
-    if (!couponCode) {
-      throw new Error("Coupon Code is required");
-    }
-    const now = (/* @__PURE__ */ new Date()).toISOString();
-    const coupon = {
-      couponCode,
-      description: payload.description ?? "",
-      type: payload.type,
-      value: payload.value,
-      expiryDate,
-      createdAt: now,
-      updatedAt: now
-    };
-    return await this.repo.createCoupon(coupon);
-  }
-  async getCoupons() {
-    const coupons = await this.repo.listCoupons();
-    return coupons.sort(
-      (a, b) => b.createdAt.localeCompare(a.createdAt)
-    );
-  }
-  async deleteCoupon(couponCode) {
-    if (!couponCode) {
-      throw new Error("Coupon code is required");
-    }
-    await this.repo.deleteCoupon(couponCode);
-  }
-  async validateCoupon(couponCode, orderAmount) {
-    if (!couponCode?.trim()) {
-      throw new Error("Coupon Code is required");
-    }
-    const coupon = await this.repo.getCoupon(
-      couponCode.trim().toUpperCase()
-    );
-    if (!coupon) {
-      throw new Error("Invalid Coupon Code");
-    }
-    const expiryTime = new Date(
-      coupon.expiryDate
-    ).getTime();
-    if (Number.isNaN(expiryTime)) {
-      console.error(
-        "Invalid coupon expiryDate:",
-        coupon.expiryDate
+    if (existing) {
+      throw new Error(
+        "Code already exists"
       );
-      throw new Error("Invalid Coupon Expiry");
     }
-    if (expiryTime <= Date.now()) {
-      throw new Error("Coupon Expired");
-    }
-    let discount = 0;
-    if (coupon.type === "FLAT") {
-      discount = Math.min(
-        coupon.value,
-        orderAmount
-      );
-    } else {
-      discount = orderAmount * coupon.value / 100;
-    }
-    discount = Math.round(discount);
-    const payable = Math.max(
-      0,
-      orderAmount - discount
+    await AdminCodeRepository.create(
+      code
     );
+    return code;
+  }
+  static async listCodes() {
+    const codes = await AdminCodeRepository.list();
+    return codes.sort(
+      (a, b) => b.createdAt - a.createdAt
+    );
+  }
+  static async deleteCode(code) {
+    const existing = await AdminCodeRepository.getByCode(
+      code
+    );
+    if (!existing) {
+      throw new Error(
+        "Code not found"
+      );
+    }
+    await AdminCodeRepository.delete(
+      code
+    );
+  }
+  static async validateCode(userId, code, schemeId) {
+    const adminCode = await AdminCodeRepository.getByCode(
+      code
+    );
+    if (!adminCode) {
+      throw new Error(
+        "Invalid Admin Code"
+      );
+    }
+    if (adminCode.status !== "ACTIVE") {
+      throw new Error(
+        "This Admin Code is no longer active."
+      );
+    }
+    if (adminCode.expiryDate <= Date.now()) {
+      throw new Error(
+        "Admin Code has expired"
+      );
+    }
+    if (adminCode.userId !== userId) {
+      throw new Error(
+        "This Admin Code is not assigned to you"
+      );
+    }
+    if (schemeId && adminCode.schemeId !== schemeId) {
+      throw new Error(
+        "This Admin Code is not valid for the selected bulk scheme."
+      );
+    }
     return {
-      couponCode: coupon.couponCode,
-      couponType: coupon.type,
-      couponValue: coupon.value,
-      couponDiscount: discount,
-      payable
+      schemeId: adminCode.schemeId,
+      success: true
     };
   }
 };
 
-// src/services/order.service.ts
-var CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
-var OrderService = class {
-  constructor(repo = new OrderRepository()) {
+// src/services/bulkOrder.service.ts
+var STATUS_ORDER = [
+  "ORDER_PLACED",
+  "ORDER_CONFIRMED",
+  "PAYMENT_CONFIRMED",
+  "ORDER_PACKED",
+  "DISPATCHED",
+  "CANCELLED"
+];
+var BulkOrderService = class {
+  constructor(repo = new BulkOrderRepository(), productService = new ProductService()) {
     this.repo = repo;
-    this.couponService = new CouponService();
-    this.pricingService = new OrderPricingService();
+    this.productService = productService;
   }
-  async createOrder(input) {
-    const now = Date.now();
-    const orderId = this.generateOrderId(now);
-    const isTamilNadu = input.deliveryState.toLowerCase() === "tamil nadu";
-    const deliveryDays = isTamilNadu ? 5 : 10;
-    const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1e3;
-    const items = await this.repo.buildItemsSnapshot(
-      input.cartItems
+  calculatePricing(items, state, config) {
+    const productTotal = items.reduce(
+      (sum, item) => sum + Number(item.total || 0),
+      0
+    );
+    const packagingPercent = Number(
+      config?.packagingPercent ?? 0
+    );
+    const packagingCharge = Math.round(
+      productTotal * packagingPercent / 100
+    );
+    const configuredGstPercent = Number(
+      config?.gstPercent ?? 0
+    );
+    let gstPercent = configuredGstPercent / 2;
+    const disableGstForTN = config?.disableGstForTN === true;
+    const isTN = state?.trim().toLowerCase() === "tamil nadu";
+    if (isTN && disableGstForTN) {
+      gstPercent = 0;
+    }
+    const taxableAmount = productTotal + packagingCharge;
+    const gstAmount = Math.round(
+      taxableAmount * gstPercent / 100
+    );
+    const grandTotal = productTotal + packagingCharge + gstAmount;
+    return {
+      productTotal,
+      packagingPercent,
+      packagingCharge,
+      gstPercent,
+      gstAmount,
+      grandTotal
+    };
+  }
+  async createOrder(userId, request) {
+    BulkOrderValidation.validateCreateRequest(
+      request
     );
     const config = await this.repo.getAdminConfig();
-    const amountBeforeDiscount = this.pricingService.calculateAmountBeforeDiscount(
-      items,
-      config
-    );
-    let couponResult;
-    if (input.couponCode) {
-      couponResult = await this.couponService.validateCoupon(
-        input.couponCode,
-        amountBeforeDiscount
+    if (!config) {
+      throw new Error(
+        "Admin configuration not found."
       );
     }
-    const pricing = this.pricingService.calculate({
-      items,
-      walletUsed: input.walletUsed,
-      state: input.deliveryState,
-      config,
-      couponResult
-    });
-    const user = await this.repo.getUserByMobile(input.userId);
-    const availableCredit = Number(user?.walletCredit || 0);
-    if (input.walletUsed > availableCredit) {
-      throw new Error("Invalid wallet usage");
+    const scheme = this.getScheme(
+      request.schemeId,
+      config
+    );
+    if (!scheme) {
+      throw new Error(
+        "Invalid bulk scheme selected."
+      );
     }
-    const paymentMode = input.paymentMode ?? "OFFLINE";
-    const paymentStatus = input.paymentStatus ?? (paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED");
-    const transactionId = input.transactionId ?? null;
-    const order = {
-      orderId,
-      meta: "ORDER",
-      userId: input.userId,
-      address: input.address,
-      deliveryState: input.deliveryState,
+    if (scheme.isActive === false) {
+      throw new Error(
+        "The selected bulk scheme is no longer active."
+      );
+    }
+    if (scheme.isAdminApprovalRequired) {
+      if (!request.adminCode?.trim()) {
+        throw new Error(
+          "Admin approval is required for the selected bulk scheme."
+        );
+      }
+      await AdminCodeService.validateCode(
+        userId,
+        request.adminCode.trim(),
+        request.schemeId
+      );
+    }
+    const products = await this.loadProducts(request);
+    const productMap = new Map(
+      products.map((product) => [
+        product.productId,
+        product
+      ])
+    );
+    this.validateProducts(
+      request,
+      productMap
+    );
+    const items = this.buildItems(
+      request,
+      productMap,
+      scheme
+    );
+    const pricing = this.calculatePricing(
       items,
+      request.address.state,
+      config
+    );
+    this.validateScheme(
+      scheme,
+      pricing.productTotal
+    );
+    const order = this.buildOrder(
+      userId,
+      request,
+      items,
+      pricing
+    );
+    await this.repo.create(order);
+    return {
+      orderId: order.orderId,
+      pricing
+    };
+  }
+  async loadProducts(request) {
+    const ids = request.items.map(
+      (item) => item.productId
+    );
+    return this.productService.batchGetProducts(
+      ids
+    );
+  }
+  validateProducts(request, productMap) {
+    if (productMap.size !== request.items.length) {
+      throw new Error(
+        "One or more selected products are unavailable."
+      );
+    }
+    for (const requestItem of request.items) {
+      const product = productMap.get(
+        requestItem.productId
+      );
+      if (!product) {
+        throw new Error(
+          `Product not found: ${requestItem.productId}`
+        );
+      }
+      const cartonQty = Number(
+        product.cartonQty ?? 0
+      );
+      if (cartonQty <= 0) {
+        throw new Error(
+          `Carton quantity is not configured for ${product.name}.`
+        );
+      }
+      const bulkOrderBasePrice = Number(
+        product.bulkOrderBasePrice ?? 0
+      );
+      if (bulkOrderBasePrice <= 0) {
+        throw new Error(
+          `Bulk price is not configured for ${product.name}.`
+        );
+      }
+      if (!Number.isInteger(
+        requestItem.quantity
+      ) || requestItem.quantity <= 0) {
+        throw new Error(
+          `Invalid quantity for ${product.name}.`
+        );
+      }
+    }
+  }
+  getScheme(schemeId, config) {
+    const schemes = config?.bulkOrderSchemes;
+    if (!Array.isArray(schemes) || schemes.length === 0) {
+      throw new Error(
+        "Bulk schemes are not configured."
+      );
+    }
+    return schemes.find(
+      (scheme) => scheme.schemeId === schemeId
+    ) ?? null;
+  }
+  calculateSchemePrice(product, scheme) {
+    const basePrice = Number(
+      product?.bulkOrderBasePrice ?? 0
+    );
+    if (basePrice <= 0) {
+      return 0;
+    }
+    const adjustmentPercent = Number(
+      scheme?.bulkPriceAdjustmentPercent ?? 0
+    );
+    if (!adjustmentPercent || adjustmentPercent <= 0) {
+      return basePrice;
+    }
+    const adjustmentAmount = basePrice * adjustmentPercent / 100;
+    if (scheme.bulkPriceAdjustmentType === "MINUS") {
+      return Math.max(
+        0,
+        Math.round(
+          basePrice - adjustmentAmount
+        )
+      );
+    }
+    if (scheme.bulkPriceAdjustmentType === "PLUS") {
+      return Math.round(
+        basePrice + adjustmentAmount
+      );
+    }
+    return basePrice;
+  }
+  buildItems(request, productMap, scheme) {
+    return request.items.map(
+      (requestItem) => {
+        const product = productMap.get(
+          requestItem.productId
+        );
+        const bulkOrderBasePrice = Number(
+          product.bulkOrderBasePrice ?? 0
+        );
+        const unitPrice = this.calculateSchemePrice(
+          product,
+          scheme
+        );
+        const cartonQty = Number(
+          product.cartonQty ?? 0
+        );
+        const quantity = Number(
+          requestItem.quantity
+        );
+        const total = unitPrice * cartonQty * quantity;
+        return {
+          productId: product.productId,
+          name: product.name,
+          image: product.image,
+          brand: product.brandName ?? product.brand,
+          categoryId: product.categoryId,
+          bulkOrderBasePrice,
+          cartonQty,
+          unitPrice,
+          schemePrice: unitPrice,
+          quantity,
+          total
+        };
+      }
+    );
+  }
+  validateScheme(scheme, productTotal) {
+    const minAmount = Number(
+      scheme.minAmount ?? 0
+    );
+    const maxAmount = Number(
+      scheme.maxAmount ?? 0
+    );
+    if (productTotal < minAmount) {
+      throw new Error(
+        `Minimum order amount for ${scheme.schemeName} is \u20B9${minAmount.toLocaleString(
+          "en-IN"
+        )}.`
+      );
+    }
+    if (maxAmount > 0 && productTotal > maxAmount) {
+      throw new Error(
+        `Maximum order amount for ${scheme.schemeName} is \u20B9${maxAmount.toLocaleString(
+          "en-IN"
+        )}.`
+      );
+    }
+  }
+  buildOrder(userId, request, items, pricing) {
+    const now = Date.now();
+    return {
+      orderId: this.generateOrderId(now),
+      meta: "ORDER",
+      userId,
       status: "ORDER_PLACED",
-      totalProductAmount: pricing.totalProductAmount,
-      nonComboProductTotal: pricing.nonComboProductTotal,
-      comboPackageTotal: pricing.comboPackageTotal,
-      packagingCharge: pricing.packagingCharge,
-      amountBeforeDiscount: pricing.amountBeforeDiscount,
-      couponCode: pricing.couponCode,
-      couponType: pricing.couponType,
-      couponValue: pricing.couponValue,
-      couponDiscount: pricing.couponDiscount,
-      amountAfterDiscount: pricing.amountAfterDiscount,
-      gstAmount: pricing.gstAmount,
-      grandTotal: pricing.grandTotal,
-      walletUsed: pricing.walletUsed,
-      finalPayable: pricing.finalPayable,
-      paymentMode,
-      paymentStatus,
-      transactionId,
-      expectedDelivery,
+      schemeId: request.schemeId,
+      remarks: request.remarks,
+      address: request.address,
+      items,
+      pricing,
       createdAt: now,
       updatedAt: now,
       statusHistory: [
         {
           status: "ORDER_PLACED",
           at: now,
-          by: `USER#${input.userId}`
+          by: `USER#${userId}`
         }
       ]
-    };
-    await this.repo.create(order);
-    if (input.walletUsed > 0) {
-      await this.repo.deductWalletCredit(
-        input.userId,
-        pricing.walletUsed
-      );
-    }
-    if (pricing.couponCode) {
-      await this.couponService.deleteCoupon(
-        pricing.couponCode
-      );
-    }
-    return {
-      orderId,
-      pricing
     };
   }
   generateOrderId(now) {
     const d = new Date(now);
-    const ymd = d.getFullYear().toString() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
-    const rand = Math.floor(1e3 + Math.random() * 9e3);
-    return `ORD-${ymd}-${rand}`;
+    const ymd = d.getFullYear().toString() + String(
+      d.getMonth() + 1
+    ).padStart(2, "0") + String(
+      d.getDate()
+    ).padStart(2, "0");
+    const rand = Math.floor(
+      1e3 + Math.random() * 9e3
+    );
+    return `BOR-${ymd}-${rand}`;
   }
-  async getUserOrders(userId, limit, cursor) {
-    return this.repo.getOrdersByUser(userId, limit, cursor);
+  async getOrders(userId, limit, cursor) {
+    const result = await this.repo.getOrdersByUser(
+      userId,
+      limit,
+      cursor
+    );
+    return {
+      items: result.items.map(
+        (order) => ({
+          orderId: order.orderId,
+          userId: order.userId,
+          status: order.status,
+          schemeId: order.schemeId,
+          createdAt: order.createdAt,
+          pricing: order.pricing,
+          items: order.items
+        })
+      ),
+      nextCursor: result.nextCursor
+    };
   }
-  async cancelOrder(orderId, userId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) throw new Error("Order not found");
-    if (order.userId !== userId) throw new Error("Unauthorized");
-    if (!CANCELLABLE_STATUSES.includes(order.status)) {
-      throw new Error("Order cannot be cancelled at this stage");
+  async getOrder(userId, orderId) {
+    const order = await this.repo.getById(
+      orderId
+    );
+    if (!order) {
+      throw new Error(
+        "Bulk order not found."
+      );
     }
-    const now = Date.now();
-    await this.repo.updateStatus(orderId, {
-      status: "CANCELLED",
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: `USER#${userId}`,
-      statusHistory: [
-        ...order.statusHistory || [],
-        {
-          status: "CANCELLED",
-          at: now,
-          by: `USER#${userId}`
-        }
-      ]
-    });
-  }
-  async getOrderById(orderId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) throw new Error("Order not found");
+    if (order.userId !== userId) {
+      throw new Error(
+        "You are not authorized to view this bulk order."
+      );
+    }
     return order;
   }
-  async adjustOrder(input) {
-    const {
-      userId,
-      role,
-      orderId,
-      items,
-      walletUsed
-    } = input;
-    if (!orderId) {
-      throw new Error("Order ID required");
-    }
-    if (!Array.isArray(items)) {
-      throw new Error("Invalid items");
-    }
-    const order = await this.repo.getById(orderId);
+  async adminGetOrders(limit, cursor, status) {
+    const result = await this.repo.getAdminOrders(
+      limit,
+      cursor,
+      status
+    );
+    return {
+      items: result.items.map(
+        (order) => ({
+          orderId: order.orderId,
+          userId: order.userId,
+          status: order.status,
+          schemeId: order.schemeId,
+          createdAt: order.createdAt,
+          customer: {
+            name: order.address?.fullName,
+            mobile: order.address?.mobile
+          },
+          pricing: order.pricing,
+          items: order.items
+        })
+      ),
+      nextCursor: result.nextCursor
+    };
+  }
+  async adminGetOrder(orderId) {
+    const order = await this.repo.getById(
+      orderId
+    );
     if (!order) {
-      throw new Error("Order not found");
+      throw new Error(
+        "Bulk order not found."
+      );
     }
-    const isAdmin = role === "admin";
-    if (!isAdmin && order.userId !== userId) {
-      throw new Error("Unauthorized");
-    }
-    const blockedStatuses = ["DISPATCHED", "CANCELLED"];
-    if (blockedStatuses.includes(order.status)) {
-      throw new Error("Order cannot be adjusted at this stage");
-    }
-    if (items.length === 0) {
-      throw new Error("Order cannot be empty");
-    }
-    for (const item of items) {
-      if (!item.productId) {
-        throw new Error("Invalid productId");
+    return order;
+  }
+  addStatusHistory(history = [], status, by, comment) {
+    return [
+      ...history,
+      {
+        status,
+        at: Date.now(),
+        by,
+        ...comment?.trim() ? {
+          comment: comment.trim()
+        } : {}
       }
-      if (!Number.isInteger(item.quantity) || item.quantity <= 0) {
-        throw new Error("Quantity must be a positive integer");
-      }
+    ];
+  }
+  validateStatus(status) {
+    if (!STATUS_ORDER.includes(
+      status
+    )) {
+      throw new Error(
+        "Invalid order status."
+      );
     }
-    const cartItems = items.map((item) => ({
-      itemId: item.productId,
-      quantity: item.quantity
-    }));
-    const updatedItems = await this.repo.buildItemsSnapshot(cartItems);
-    const config = await this.repo.getAdminConfig();
-    let couponResult;
-    if (order.couponCode) {
-      couponResult = {
-        couponCode: order.couponCode,
-        couponType: order.couponType,
-        couponValue: Number(order.couponValue ?? 0),
-        couponDiscount: Number(order.couponDiscount ?? 0)
-      };
+  }
+  validateStatusTransition(currentStatus, newStatus) {
+    const currentIndex = STATUS_ORDER.indexOf(
+      currentStatus
+    );
+    const newIndex = STATUS_ORDER.indexOf(
+      newStatus
+    );
+    if (newIndex === -1) {
+      throw new Error(
+        "Invalid order status."
+      );
     }
-    const pricing = this.pricingService.calculate({
-      items: updatedItems,
-      walletUsed,
-      state: order.deliveryState ?? order.address,
-      config,
-      couponResult
-    });
+    if (currentStatus === newStatus) {
+      throw new Error(
+        "Order is already in this status."
+      );
+    }
+    if (currentStatus === "CANCELLED") {
+      throw new Error(
+        "Cancelled orders cannot be updated."
+      );
+    }
+    if (currentStatus === "DISPATCHED" && newStatus === "CANCELLED") {
+      throw new Error(
+        "Dispatched orders cannot be cancelled."
+      );
+    }
+    if (newIndex < currentIndex) {
+      throw new Error(
+        "Order status cannot move backwards."
+      );
+    }
+  }
+  async updateStatus(orderId, status, adminId, comment, role) {
+    const order = await this.repo.getById(
+      orderId
+    );
+    if (!order) {
+      throw new Error(
+        "Bulk order not found."
+      );
+    }
+    this.validateStatus(
+      status
+    );
+    this.validateStatusTransition(
+      order.status,
+      status
+    );
     const now = Date.now();
-    await this.repo.updateItems(orderId, {
-      items: updatedItems,
-      totalProductAmount: pricing.totalProductAmount,
-      nonComboProductTotal: pricing.nonComboProductTotal,
-      comboPackageTotal: pricing.comboPackageTotal,
-      packagingCharge: pricing.packagingCharge,
-      amountBeforeDiscount: pricing.amountBeforeDiscount,
-      couponCode: pricing.couponCode,
-      couponType: pricing.couponType,
-      couponValue: pricing.couponValue,
-      couponDiscount: pricing.couponDiscount,
-      amountAfterDiscount: pricing.amountAfterDiscount,
-      gstAmount: pricing.gstAmount,
-      grandTotal: pricing.grandTotal,
-      walletUsed: pricing.walletUsed,
-      finalPayable: pricing.finalPayable,
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: isAdmin ? "ADMIN" : `USER#${userId}`,
-      statusHistory: [
-        ...order.statusHistory || [],
-        {
-          status: "ORDER_ADJUSTED",
-          at: now,
-          by: isAdmin ? "ADMIN" : `USER#${userId}`
-        }
-      ]
-    });
-    return await this.repo.getById(orderId);
+    const statusHistory = this.addStatusHistory(
+      order.statusHistory,
+      status,
+      adminId,
+      comment
+    );
+    await this.repo.updateStatus(
+      orderId,
+      {
+        status,
+        updatedAt: now,
+        modifiedAt: now,
+        modifiedBy: adminId,
+        statusHistory
+      }
+    );
+    return {
+      message: "Bulk order status updated successfully."
+    };
+  }
+  async cancelOrder(userId, orderId) {
+    const order = await this.repo.getById(
+      orderId
+    );
+    if (!order) {
+      throw new Error(
+        "Bulk order not found."
+      );
+    }
+    if (order.userId !== userId) {
+      throw new Error(
+        "You are not authorized to cancel this bulk order."
+      );
+    }
+    this.validateStatusTransition(
+      order.status,
+      "CANCELLED"
+    );
+    const now = Date.now();
+    const statusHistory = this.addStatusHistory(
+      order.statusHistory,
+      "CANCELLED",
+      `USER#${userId}`
+    );
+    await this.repo.updateStatus(
+      orderId,
+      {
+        status: "CANCELLED",
+        updatedAt: now,
+        modifiedAt: now,
+        modifiedBy: `USER#${userId}`,
+        statusHistory
+      }
+    );
+    return {
+      message: "Bulk order cancelled successfully."
+    };
   }
 };
 
-// src/handlers/cancelOrder.ts
-var service = new OrderService();
-var handler = async (event) => {
+// src/libs/response.ts
+var success = (data, statusCode = 200) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: true,
+    data
+  })
+});
+var error = (message, statusCode = 400) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: false,
+    message
+  })
+});
+
+// src/handlers/adminBulkOrder.ts
+var VALID_STATUSES = /* @__PURE__ */ new Set([
+  "ORDER_PLACED",
+  "ORDER_CONFIRMED",
+  "PAYMENT_CONFIRMED",
+  "ORDER_PACKED",
+  "DISPATCHED",
+  "CANCELLED"
+]);
+async function handler(event) {
   try {
-    const { userId } = verifyJwt(event);
-    const orderId = event.pathParameters?.orderId;
-    if (!orderId) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: "Order ID required" })
-      };
+    const { role } = verifyJwt(event);
+    if (role !== "admin") {
+      return error(
+        "Forbidden",
+        403
+      );
     }
-    await service.cancelOrder(orderId, userId);
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ success: true })
-    };
-  } catch (err) {
-    console.error("Cancel order failed", err);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        success: false,
-        message: err?.message || "Internal Server Error"
-      })
-    };
+    const requestedLimit = Number(
+      event.queryStringParameters?.limit ?? 20
+    );
+    const limit = Number.isFinite(
+      requestedLimit
+    ) && requestedLimit > 0 ? Math.min(
+      Math.floor(
+        requestedLimit
+      ),
+      100
+    ) : 20;
+    const rawStatus = event.queryStringParameters?.status?.trim();
+    const status = rawStatus || void 0;
+    if (status && !VALID_STATUSES.has(status)) {
+      return error(
+        "Invalid order status."
+      );
+    }
+    let cursor;
+    const cursorParam = event.queryStringParameters?.cursor;
+    if (cursorParam) {
+      try {
+        cursor = JSON.parse(
+          decodeURIComponent(
+            cursorParam
+          )
+        );
+      } catch {
+        return error(
+          "Invalid pagination cursor."
+        );
+      }
+    }
+    const service = new BulkOrderService();
+    const result = await service.adminGetOrders(
+      limit,
+      cursor,
+      status
+    );
+    return success(result);
+  } catch (e) {
+    console.error(
+      "Admin Get Bulk Orders Error:",
+      e
+    );
+    return error(
+      e?.message || "Unable to fetch bulk orders."
+    );
   }
-};
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler
@@ -4878,4 +5136,4 @@ var handler = async (event) => {
 safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 */
-//# sourceMappingURL=cancelOrder.js.map
+//# sourceMappingURL=adminBulkOrder.js.map

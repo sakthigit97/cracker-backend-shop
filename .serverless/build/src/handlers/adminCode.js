@@ -834,14 +834,14 @@ var require_decode = __commonJS({
 // node_modules/jsonwebtoken/lib/JsonWebTokenError.js
 var require_JsonWebTokenError = __commonJS({
   "node_modules/jsonwebtoken/lib/JsonWebTokenError.js"(exports2, module2) {
-    var JsonWebTokenError = function(message, error) {
+    var JsonWebTokenError = function(message, error2) {
       Error.call(this, message);
       if (Error.captureStackTrace) {
         Error.captureStackTrace(this, this.constructor);
       }
       this.name = "JsonWebTokenError";
       this.message = message;
-      if (error) this.inner = error;
+      if (error2) this.inner = error2;
     };
     JsonWebTokenError.prototype = Object.create(Error.prototype);
     JsonWebTokenError.prototype.constructor = JsonWebTokenError;
@@ -1677,7 +1677,7 @@ var require_sort = __commonJS({
   "node_modules/semver/functions/sort.js"(exports2, module2) {
     "use strict";
     var compareBuild = require_compare_build();
-    var sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose));
+    var sort = (list2, loose) => list2.sort((a, b) => compareBuild(a, b, loose));
     module2.exports = sort;
   }
 });
@@ -1687,7 +1687,7 @@ var require_rsort = __commonJS({
   "node_modules/semver/functions/rsort.js"(exports2, module2) {
     "use strict";
     var compareBuild = require_compare_build();
-    var rsort = (list, loose) => list.sort((a, b) => compareBuild(b, a, loose));
+    var rsort = (list2, loose) => list2.sort((a, b) => compareBuild(b, a, loose));
     module2.exports = rsort;
   }
 });
@@ -3706,7 +3706,7 @@ var require_sign = __commonJS({
       exp: { isValid: isNumber, message: '"exp" should be a number of seconds' },
       nbf: { isValid: isNumber, message: '"nbf" should be a number of seconds' }
     };
-    function validate(schema, allowUnknown, object, parameterName) {
+    function validate2(schema, allowUnknown, object, parameterName) {
       if (!isPlainObject(object)) {
         throw new Error('Expected "' + parameterName + '" to be a plain object.');
       }
@@ -3724,10 +3724,10 @@ var require_sign = __commonJS({
       });
     }
     function validateOptions(options) {
-      return validate(sign_options_schema, false, options, "options");
+      return validate2(sign_options_schema, false, options, "options");
     }
     function validatePayload(payload) {
-      return validate(registered_claims_schema, true, payload, "payload");
+      return validate2(registered_claims_schema, true, payload, "payload");
     }
     var options_to_payload = {
       "audience": "aud",
@@ -3793,8 +3793,8 @@ var require_sign = __commonJS({
       } else if (isObjectPayload) {
         try {
           validatePayload(payload);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
         if (!options.mutatePayload) {
           payload = Object.assign({}, payload);
@@ -3815,14 +3815,14 @@ var require_sign = __commonJS({
       }
       try {
         validateOptions(options);
-      } catch (error) {
-        return failure(error);
+      } catch (error2) {
+        return failure(error2);
       }
       if (!options.allowInvalidAsymmetricKeyTypes) {
         try {
           validateAsymmetricKey(header.alg, secretOrPrivateKey);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
       }
       const timestamp = payload.iat || Math.floor(Date.now() / 1e3);
@@ -3899,12 +3899,168 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// src/handlers/cancelOrder.ts
-var cancelOrder_exports = {};
-__export(cancelOrder_exports, {
-  handler: () => handler
+// src/handlers/adminCode.ts
+var adminCode_exports = {};
+__export(adminCode_exports, {
+  create: () => create,
+  list: () => list,
+  remove: () => remove,
+  validate: () => validate
 });
-module.exports = __toCommonJS(cancelOrder_exports);
+module.exports = __toCommonJS(adminCode_exports);
+
+// src/libs/response.ts
+var success = (data, statusCode = 200) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: true,
+    data
+  })
+});
+var error = (message, statusCode = 400) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: false,
+    message
+  })
+});
+
+// src/repo/adminCode.repo.ts
+var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
+
+// src/utils/dynamo.ts
+var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
+var import_lib_dynamodb = require("@aws-sdk/lib-dynamodb");
+var client = new import_client_dynamodb.DynamoDBClient({});
+var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
+  marshallOptions: {
+    removeUndefinedValues: true
+  }
+});
+
+// src/repo/adminCode.repo.ts
+var TABLE = process.env.ADMIN_CODES_TABLE;
+var AdminCodeRepository = class {
+  static async create(code) {
+    await ddb.send(
+      new import_lib_dynamodb2.PutCommand({
+        TableName: TABLE,
+        Item: code,
+        ConditionExpression: "attribute_not_exists(#code)",
+        ExpressionAttributeNames: {
+          "#code": "code"
+        }
+      })
+    );
+    return code;
+  }
+  static async getByCode(code) {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.GetCommand({
+        TableName: TABLE,
+        Key: {
+          code
+        }
+      })
+    );
+    return result.Item ?? null;
+  }
+  static async list() {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.ScanCommand({
+        TableName: TABLE
+      })
+    );
+    return Array.isArray(result.Items) ? result.Items : [];
+  }
+  static async delete(code) {
+    const existing = await this.getByCode(code);
+    if (!existing) {
+      throw new Error(
+        "Admin Code not found."
+      );
+    }
+    await ddb.send(
+      new import_lib_dynamodb2.DeleteCommand({
+        TableName: TABLE,
+        Key: {
+          code
+        }
+      })
+    );
+  }
+};
+
+// src/services/adminCode.service.ts
+var AdminCodeService = class {
+  static async createCode(code) {
+    const existing = await AdminCodeRepository.getByCode(
+      code.code
+    );
+    if (existing) {
+      throw new Error(
+        "Code already exists"
+      );
+    }
+    await AdminCodeRepository.create(
+      code
+    );
+    return code;
+  }
+  static async listCodes() {
+    const codes = await AdminCodeRepository.list();
+    return codes.sort(
+      (a, b) => b.createdAt - a.createdAt
+    );
+  }
+  static async deleteCode(code) {
+    const existing = await AdminCodeRepository.getByCode(
+      code
+    );
+    if (!existing) {
+      throw new Error(
+        "Code not found"
+      );
+    }
+    await AdminCodeRepository.delete(
+      code
+    );
+  }
+  static async validateCode(userId, code, schemeId) {
+    const adminCode = await AdminCodeRepository.getByCode(
+      code
+    );
+    if (!adminCode) {
+      throw new Error(
+        "Invalid Admin Code"
+      );
+    }
+    if (adminCode.status !== "ACTIVE") {
+      throw new Error(
+        "This Admin Code is no longer active."
+      );
+    }
+    if (adminCode.expiryDate <= Date.now()) {
+      throw new Error(
+        "Admin Code has expired"
+      );
+    }
+    if (adminCode.userId !== userId) {
+      throw new Error(
+        "This Admin Code is not assigned to you"
+      );
+    }
+    if (schemeId && adminCode.schemeId !== schemeId) {
+      throw new Error(
+        "This Admin Code is not valid for the selected bulk scheme."
+      );
+    }
+    return {
+      schemeId: adminCode.schemeId,
+      success: true
+    };
+  }
+};
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -3933,949 +4089,139 @@ function verifyJwt(event) {
   };
 }
 
-// src/repo/order.repo.ts
-var import_lib_dynamodb5 = require("@aws-sdk/lib-dynamodb");
-
-// src/utils/dynamo.ts
-var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
-var import_lib_dynamodb = require("@aws-sdk/lib-dynamodb");
-var client = new import_client_dynamodb.DynamoDBClient({});
-var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
-  marshallOptions: {
-    removeUndefinedValues: true
-  }
-});
-
-// src/services/product.service.ts
-var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
-
-// src/repo/product.repo.ts
-var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
-var TABLE_NAME = process.env.PRODUCTS_TABLE;
-var ProductRepository = class {
-  async batchGet(productIds) {
-    if (productIds.length === 0) return [];
-    const keys = productIds.map((productId) => ({
-      productId
-    }));
-    const res = await ddb.send(
-      new import_lib_dynamodb2.BatchGetCommand({
-        RequestItems: {
-          [TABLE_NAME]: { Keys: keys }
-        }
-      })
-    );
-    return res.Responses?.[TABLE_NAME] ?? [];
-  }
-  async deleteProduct(productId) {
-    await ddb.send(
-      new import_lib_dynamodb2.DeleteCommand({
-        TableName: process.env.PRODUCTS_TABLE,
-        Key: { productId }
-      })
-    );
-  }
-};
-
-// src/services/discount.service.ts
-var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
-var DISCOUNT_TABLE = process.env.DISCOUNT_TABLE;
-async function getActiveDiscounts() {
-  const res = await ddb.send(
-    new import_lib_dynamodb3.ScanCommand({
-      TableName: DISCOUNT_TABLE,
-      FilterExpression: "isActive = :true",
-      ExpressionAttributeValues: {
-        ":true": true
-      }
-    })
-  );
-  return res.Items || [];
-}
-
-// src/services/price.service.ts
-function applyDiscount(product, discounts) {
-  let applied = null;
-  applied = discounts.find(
-    (d) => d.discountType === "PRODUCT" && d.targetId === product.productId
-  ) || discounts.find(
-    (d) => d.discountType === "CATEGORY" && d.targetId === product.categoryId
-  ) || discounts.find(
-    (d) => d.discountType === "BRAND" && d.targetId === product.brandId
-  );
-  if (!applied) {
-    return {
-      price: product.price,
-      originalPrice: null,
-      discountText: null
-    };
-  }
-  let finalPrice = product.price;
-  if (applied.discountMode === "PERCENT") {
-    finalPrice = Math.round(
-      product.price - product.price * applied.discountValue / 100
-    );
-  }
-  if (applied.discountMode === "FLAT") {
-    finalPrice = Math.max(
-      0,
-      product.price - applied.discountValue
-    );
-  }
-  return {
-    price: finalPrice,
-    originalPrice: product.price,
-    discountText: applied.discountMode === "PERCENT" ? `${applied.discountValue}% OFF` : `\u20B9${applied.discountValue} OFF`
-  };
-}
-
-// src/services/product.service.ts
-var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
-var ProductService = class {
-  constructor(repo = new ProductRepository()) {
-    this.repo = repo;
-  }
-  async batchGetProducts(productIds) {
-    const uniqueIds = [...new Set(productIds)];
-    const allProducts = [];
-    for (let i = 0; i < uniqueIds.length; i += 100) {
-      const chunk = uniqueIds.slice(i, i + 100);
-      const products = await this.repo.batchGet(chunk);
-      if (products?.length) {
-        allProducts.push(...products);
-      }
-    }
-    if (allProducts.length === 0) return [];
-    const discounts = await getActiveDiscounts();
-    const productMap = new Map(
-      allProducts.map((p) => [p.productId, p])
-    );
-    return uniqueIds.map((id) => productMap.get(id)).filter((p) => Boolean(p)).filter((p) => p.isActive === "true" || p.isActive === true).map((p) => {
-      const priceInfo = applyDiscount(p, discounts);
-      return {
-        productId: p.productId,
-        name: p.name,
-        description: p.description ?? null,
-        image: p.imageUrls?.[0] ?? null,
-        price: priceInfo.price,
-        originalPrice: priceInfo.originalPrice > priceInfo.price ? priceInfo.originalPrice : void 0,
-        discountText: priceInfo.discountText,
-        categoryId: p.categoryId,
-        brandId: p.brandId,
-        qty: p.quantity,
-        searchText: p.searchText,
-        isComboPackage: p.isComboPackage || false,
-        sequenceNumber: p.sequenceNumber || 0,
-        cartonQty: p.cartonQty || 0,
-        bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
-        isBulkOrderOnly: p.isBulkOrderOnly || false,
-        isRetailOnly: p.isRetailOnly || false,
-        productPer: p.productPer || 0,
-        productMeasurement: p.productMeasurement || ""
-      };
-    });
-  }
-  async deleteProduct(productId) {
-    return this.repo.deleteProduct(productId);
-  }
-};
-
-// src/repo/order.repo.ts
-var ORDERS_TABLE = process.env.ORDERS_TABLE;
-var USERS_TABLE = process.env.USERS_TABLE;
-var ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE;
-var OrderRepository = class {
-  constructor() {
-    this.productService = new ProductService();
-  }
-  async buildItemsSnapshot(cartItems) {
-    const productIds = cartItems.map((c) => c.itemId);
-    const products = await this.productService.batchGetProducts(productIds);
-    const map = new Map(
-      products.map((p) => [
-        p.productId,
-        {
-          name: p.name,
-          price: p.price,
-          image: p.image || null,
-          originalPrice: p.originalPrice || null,
-          discountText: p.discountText || "",
-          isComboPackage: p.isComboPackage || false
-        }
-      ])
-    );
-    const snapshot = cartItems.map((c) => {
-      const product = map.get(c.itemId);
-      if (!product) {
-        throw new Error(
-          `Product ${c.itemId} not found`
-        );
-      }
-      return {
-        productId: c.itemId,
-        name: product.name,
-        image: product.image,
-        price: product.price,
-        quantity: c.quantity,
-        total: product.price * c.quantity,
-        originalPrice: product.originalPrice,
-        discountText: product.discountText,
-        isComboPackage: product.isComboPackage
-      };
-    });
-    return snapshot;
-  }
-  async create(order) {
-    await ddb.send(
-      new import_lib_dynamodb5.PutCommand({
-        TableName: ORDERS_TABLE,
-        Item: order
-      })
-    );
-  }
-  async getOrdersByUser(userId, limit, cursor) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.QueryCommand({
-        TableName: ORDERS_TABLE,
-        IndexName: "userId-createdAt-index",
-        KeyConditionExpression: "userId = :uid",
-        ExpressionAttributeValues: {
-          ":uid": userId
-        },
-        ScanIndexForward: false,
-        Limit: limit,
-        ExclusiveStartKey: cursor
-      })
-    );
-    return {
-      items: res.Items || [],
-      nextCursor: res.LastEvaluatedKey || null
-    };
-  }
-  async getById(orderId) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: ORDERS_TABLE,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        }
-      })
-    );
-    return res.Item;
-  }
-  async updateStatus(orderId, data) {
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: ORDERS_TABLE,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        },
-        UpdateExpression: `
-                SET 
-                    #status = :status,
-                    updatedAt = :updatedAt,
-                    modifiedAt = :modifiedAt,
-                    modifiedBy = :modifiedBy,
-                    statusHistory = :statusHistory
-                `,
-        ExpressionAttributeNames: {
-          "#status": "status"
-        },
-        ExpressionAttributeValues: {
-          ":status": data.status,
-          ":updatedAt": data.updatedAt,
-          ":modifiedAt": data.modifiedAt,
-          ":modifiedBy": data.modifiedBy,
-          ":statusHistory": data.statusHistory
-        }
-      })
-    );
-  }
-  async getUserByMobile(mobile) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: USERS_TABLE,
-        Key: { mobile }
-      })
-    );
-    return res.Item || null;
-  }
-  async deductWalletCredit(mobile, usedAmount) {
-    if (usedAmount <= 0) return;
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: USERS_TABLE,
-        Key: { mobile },
-        UpdateExpression: "SET walletCredit = walletCredit - :amt",
-        ConditionExpression: "walletCredit >= :amt",
-        ExpressionAttributeValues: {
-          ":amt": usedAmount
-        }
-      })
-    );
-  }
-  async markReferralRewarded(mobile) {
-    try {
-      await ddb.send(
-        new import_lib_dynamodb5.UpdateCommand({
-          TableName: USERS_TABLE,
-          Key: { mobile },
-          UpdateExpression: "SET referralRewarded = :t",
-          ConditionExpression: "attribute_not_exists(referralRewarded) OR referralRewarded = :f",
-          ExpressionAttributeValues: {
-            ":t": true,
-            ":f": false
-          }
-        })
-      );
-      return true;
-    } catch (err) {
-      if (err.name === "ConditionalCheckFailedException") {
-        return false;
-      }
-      throw err;
-    }
-  }
-  async addWalletCreditByReferralCode(referralCode, amount) {
-    if (!referralCode || amount <= 0) return;
-    let lastKey;
-    let refUser = null;
-    do {
-      const res = await ddb.send(
-        new import_lib_dynamodb5.QueryCommand({
-          TableName: USERS_TABLE,
-          IndexName: "referralCode-index",
-          KeyConditionExpression: "referralCode = :c",
-          ExpressionAttributeValues: {
-            ":c": referralCode
-          },
-          ExclusiveStartKey: lastKey
-        })
-      );
-      if (res.Items?.length) {
-        refUser = res.Items[0];
-        break;
-      }
-      lastKey = res.LastEvaluatedKey;
-    } while (lastKey);
-    if (!refUser) {
-      console.log("Referral user not found:", referralCode);
-      return;
-    }
-    console.log(
-      `Crediting \u20B9${amount} to ${refUser.mobile} (${referralCode})`
-    );
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: USERS_TABLE,
-        Key: { mobile: refUser.mobile },
-        UpdateExpression: "SET walletCredit = if_not_exists(walletCredit, :z) + :amt",
-        ExpressionAttributeValues: {
-          ":amt": amount,
-          ":z": 0
-        }
-      })
-    );
-  }
-  async getAdminConfig() {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: ADMIN_CONFIG_TABLE,
-        Key: {
-          configId: "global"
-        }
-      })
-    );
-    return res.Item || {};
-  }
-  async updateItems(orderId, data) {
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: ORDERS_TABLE,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        },
-        UpdateExpression: `
-                SET
-                    #items = :items,
-                    totalProductAmount = :totalProductAmount,
-                    nonComboProductTotal = :nonComboProductTotal,
-                    comboPackageTotal = :comboPackageTotal,
-                    couponCode = :couponCode,
-                    couponType = :couponType,
-                    couponValue = :couponValue,
-                    couponDiscount = :couponDiscount,
-                    packagingCharge = :packagingCharge,
-                    amountBeforeDiscount = :amountBeforeDiscount,
-                    amountAfterDiscount = :amountAfterDiscount,
-                    gstAmount = :gstAmount,
-                    grandTotal = :grandTotal,
-                    walletUsed = :walletUsed,
-                    finalPayable = :finalPayable,
-                    updatedAt = :updatedAt,
-                    modifiedAt = :modifiedAt,
-                    modifiedBy = :modifiedBy,
-                    statusHistory = :statusHistory
-            `,
-        ExpressionAttributeNames: {
-          "#items": "items"
-        },
-        ExpressionAttributeValues: {
-          ":items": data.items,
-          ":totalProductAmount": data.totalProductAmount,
-          ":nonComboProductTotal": data.nonComboProductTotal,
-          ":comboPackageTotal": data.comboPackageTotal,
-          ":couponCode": data.couponCode ?? null,
-          ":couponType": data.couponType ?? null,
-          ":couponValue": data.couponValue ?? null,
-          ":couponDiscount": data.couponDiscount ?? 0,
-          ":packagingCharge": data.packagingCharge,
-          ":amountBeforeDiscount": data.amountBeforeDiscount,
-          ":amountAfterDiscount": data.amountAfterDiscount,
-          ":gstAmount": data.gstAmount,
-          ":grandTotal": data.grandTotal,
-          ":walletUsed": data.walletUsed,
-          ":finalPayable": data.finalPayable,
-          ":updatedAt": data.updatedAt,
-          ":modifiedAt": data.modifiedAt,
-          ":modifiedBy": data.modifiedBy,
-          ":statusHistory": data.statusHistory
-        }
-      })
-    );
-  }
-};
-
-// src/services/orderPricing.service.ts
-var OrderPricingService = class {
-  calculateProductTotals(items) {
-    let totalProductAmount = 0;
-    let nonComboProductTotal = 0;
-    let comboPackageTotal = 0;
-    for (const item of items) {
-      totalProductAmount += item.total;
-      if (item.isComboPackage) {
-        comboPackageTotal += item.total;
-      } else {
-        nonComboProductTotal += item.total;
-      }
-    }
-    return {
-      totalProductAmount,
-      nonComboProductTotal,
-      comboPackageTotal
-    };
-  }
-  calculatePackaging(nonComboProductTotal, config) {
-    if (config.enablePackagingCharge === false || config.packagingPercent <= 0) {
-      return 0;
-    }
-    return Math.round(
-      nonComboProductTotal * config.packagingPercent / 100
-    );
-  }
-  calculateGST(discountedGrossTotal, state, config) {
-    if (config.enableGst === false) {
-      return 0;
-    }
-    const isTamilNadu = state?.toLowerCase().includes("tamil nadu");
-    if (isTamilNadu && config.disableGstForTN) {
-      return 0;
-    }
-    const effectivePercent = config.gstPercent / 2;
-    return Math.round(
-      discountedGrossTotal * effectivePercent / 100
-    );
-  }
-  calculateFinalPayable(grandTotal, walletUsed) {
-    return Math.max(
-      0,
-      grandTotal - walletUsed
-    );
-  }
-  calculateAmountBeforeDiscount(items, config) {
-    const totals = this.calculateProductTotals(items);
-    const packagingCharge = this.calculatePackaging(
-      totals.nonComboProductTotal,
-      config
-    );
-    return totals.totalProductAmount + packagingCharge;
-  }
-  calculate(input) {
-    const totals = this.calculateProductTotals(input.items);
-    const packagingCharge = this.calculatePackaging(
-      totals.nonComboProductTotal,
-      input.config
-    );
-    const amountBeforeDiscount = totals.totalProductAmount + packagingCharge;
-    const couponCode = input.couponResult?.couponCode ?? null;
-    const couponType = input.couponResult?.couponType ?? null;
-    const couponValue = input.couponResult?.couponValue ?? null;
-    let couponDiscount = 0;
-    if (couponCode && couponType && couponValue != null) {
-      if (couponType === "PERCENTAGE") {
-        couponDiscount = Math.round(
-          amountBeforeDiscount * couponValue / 100
-        );
-      } else {
-        couponDiscount = couponValue;
-      }
-      couponDiscount = Math.min(couponDiscount, amountBeforeDiscount);
-    }
-    const amountAfterDiscount = amountBeforeDiscount - couponDiscount;
-    const gstAmount = this.calculateGST(
-      amountAfterDiscount,
-      input.state,
-      input.config
-    );
-    const grandTotal = amountAfterDiscount + gstAmount;
-    const appliedWallet = Math.min(input.walletUsed, grandTotal);
-    const finalPayable = this.calculateFinalPayable(grandTotal, appliedWallet);
-    return {
-      totalProductAmount: totals.totalProductAmount,
-      nonComboProductTotal: totals.nonComboProductTotal,
-      comboPackageTotal: totals.comboPackageTotal,
-      packagingCharge,
-      amountBeforeDiscount,
-      couponCode,
-      couponType,
-      couponValue,
-      couponDiscount,
-      amountAfterDiscount,
-      gstAmount,
-      grandTotal,
-      walletUsed: appliedWallet,
-      finalPayable
-    };
-  }
-};
-
-// src/repo/coupon.repo.ts
-var import_lib_dynamodb6 = require("@aws-sdk/lib-dynamodb");
-var TABLE = process.env.COUPONS_TABLE;
-var CouponRepository = class {
-  async getCoupon(code) {
-    const result = await ddb.send(
-      new import_lib_dynamodb6.GetCommand({
-        TableName: TABLE,
-        Key: {
-          couponCode: code
-        }
-      })
-    );
-    return result.Item;
-  }
-  async createCoupon(coupon) {
-    await ddb.send(
-      new import_lib_dynamodb6.PutCommand({
-        TableName: TABLE,
-        Item: coupon,
-        ConditionExpression: "attribute_not_exists(couponCode)"
-      })
-    );
-    return coupon;
-  }
-  async listCoupons() {
-    const result = await ddb.send(
-      new import_lib_dynamodb6.ScanCommand({
-        TableName: TABLE
-      })
-    );
-    return result.Items ?? [];
-  }
-  async deleteCoupon(couponCode) {
-    await ddb.send(
-      new import_lib_dynamodb6.DeleteCommand({
-        TableName: TABLE,
-        Key: {
-          couponCode
-        }
-      })
-    );
-  }
-};
-
-// src/services/coupon.service.ts
-var CouponService = class {
-  constructor() {
-    this.repo = new CouponRepository();
-  }
-  normalizeExpiryDate(expiryDate) {
-    const value = expiryDate.trim();
-    if (!value) {
-      throw new Error("Expiry Date is required");
-    }
-    if (value.endsWith("Z") || /[+-]\d{2}:\d{2}$/.test(value)) {
-      const date2 = new Date(value);
-      if (Number.isNaN(date2.getTime())) {
-        throw new Error("Invalid Expiry Date");
-      }
-      return date2.toISOString();
-    }
-    const date = /* @__PURE__ */ new Date(`${value}:00+05:30`);
-    if (Number.isNaN(date.getTime())) {
-      throw new Error("Invalid Expiry Date");
-    }
-    return date.toISOString();
-  }
-  async createCoupon(payload) {
-    if (!payload.type) {
-      throw new Error("Coupon type is required");
-    }
-    if (payload.value === void 0 || payload.value === null || payload.value <= 0) {
-      throw new Error("Coupon value must be greater than zero");
-    }
-    if (payload.type === "PERCENTAGE" && payload.value > 100) {
-      throw new Error("Percentage cannot exceed 100");
-    }
-    if (!payload.expiryDate) {
-      throw new Error("Expiry Date is required");
-    }
-    const expiryDate = this.normalizeExpiryDate(
-      payload.expiryDate
-    );
-    if (new Date(expiryDate).getTime() <= Date.now()) {
-      throw new Error("Expiry Date must be a future date");
-    }
-    const couponCode = payload.couponCode?.trim().toUpperCase();
-    if (!couponCode) {
-      throw new Error("Coupon Code is required");
-    }
-    const now = (/* @__PURE__ */ new Date()).toISOString();
-    const coupon = {
-      couponCode,
-      description: payload.description ?? "",
-      type: payload.type,
-      value: payload.value,
-      expiryDate,
-      createdAt: now,
-      updatedAt: now
-    };
-    return await this.repo.createCoupon(coupon);
-  }
-  async getCoupons() {
-    const coupons = await this.repo.listCoupons();
-    return coupons.sort(
-      (a, b) => b.createdAt.localeCompare(a.createdAt)
-    );
-  }
-  async deleteCoupon(couponCode) {
-    if (!couponCode) {
-      throw new Error("Coupon code is required");
-    }
-    await this.repo.deleteCoupon(couponCode);
-  }
-  async validateCoupon(couponCode, orderAmount) {
-    if (!couponCode?.trim()) {
-      throw new Error("Coupon Code is required");
-    }
-    const coupon = await this.repo.getCoupon(
-      couponCode.trim().toUpperCase()
-    );
-    if (!coupon) {
-      throw new Error("Invalid Coupon Code");
-    }
-    const expiryTime = new Date(
-      coupon.expiryDate
-    ).getTime();
-    if (Number.isNaN(expiryTime)) {
-      console.error(
-        "Invalid coupon expiryDate:",
-        coupon.expiryDate
-      );
-      throw new Error("Invalid Coupon Expiry");
-    }
-    if (expiryTime <= Date.now()) {
-      throw new Error("Coupon Expired");
-    }
-    let discount = 0;
-    if (coupon.type === "FLAT") {
-      discount = Math.min(
-        coupon.value,
-        orderAmount
-      );
-    } else {
-      discount = orderAmount * coupon.value / 100;
-    }
-    discount = Math.round(discount);
-    const payable = Math.max(
-      0,
-      orderAmount - discount
-    );
-    return {
-      couponCode: coupon.couponCode,
-      couponType: coupon.type,
-      couponValue: coupon.value,
-      couponDiscount: discount,
-      payable
-    };
-  }
-};
-
-// src/services/order.service.ts
-var CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
-var OrderService = class {
-  constructor(repo = new OrderRepository()) {
-    this.repo = repo;
-    this.couponService = new CouponService();
-    this.pricingService = new OrderPricingService();
-  }
-  async createOrder(input) {
-    const now = Date.now();
-    const orderId = this.generateOrderId(now);
-    const isTamilNadu = input.deliveryState.toLowerCase() === "tamil nadu";
-    const deliveryDays = isTamilNadu ? 5 : 10;
-    const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1e3;
-    const items = await this.repo.buildItemsSnapshot(
-      input.cartItems
-    );
-    const config = await this.repo.getAdminConfig();
-    const amountBeforeDiscount = this.pricingService.calculateAmountBeforeDiscount(
-      items,
-      config
-    );
-    let couponResult;
-    if (input.couponCode) {
-      couponResult = await this.couponService.validateCoupon(
-        input.couponCode,
-        amountBeforeDiscount
-      );
-    }
-    const pricing = this.pricingService.calculate({
-      items,
-      walletUsed: input.walletUsed,
-      state: input.deliveryState,
-      config,
-      couponResult
-    });
-    const user = await this.repo.getUserByMobile(input.userId);
-    const availableCredit = Number(user?.walletCredit || 0);
-    if (input.walletUsed > availableCredit) {
-      throw new Error("Invalid wallet usage");
-    }
-    const paymentMode = input.paymentMode ?? "OFFLINE";
-    const paymentStatus = input.paymentStatus ?? (paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED");
-    const transactionId = input.transactionId ?? null;
-    const order = {
-      orderId,
-      meta: "ORDER",
-      userId: input.userId,
-      address: input.address,
-      deliveryState: input.deliveryState,
-      items,
-      status: "ORDER_PLACED",
-      totalProductAmount: pricing.totalProductAmount,
-      nonComboProductTotal: pricing.nonComboProductTotal,
-      comboPackageTotal: pricing.comboPackageTotal,
-      packagingCharge: pricing.packagingCharge,
-      amountBeforeDiscount: pricing.amountBeforeDiscount,
-      couponCode: pricing.couponCode,
-      couponType: pricing.couponType,
-      couponValue: pricing.couponValue,
-      couponDiscount: pricing.couponDiscount,
-      amountAfterDiscount: pricing.amountAfterDiscount,
-      gstAmount: pricing.gstAmount,
-      grandTotal: pricing.grandTotal,
-      walletUsed: pricing.walletUsed,
-      finalPayable: pricing.finalPayable,
-      paymentMode,
-      paymentStatus,
-      transactionId,
-      expectedDelivery,
-      createdAt: now,
-      updatedAt: now,
-      statusHistory: [
-        {
-          status: "ORDER_PLACED",
-          at: now,
-          by: `USER#${input.userId}`
-        }
-      ]
-    };
-    await this.repo.create(order);
-    if (input.walletUsed > 0) {
-      await this.repo.deductWalletCredit(
-        input.userId,
-        pricing.walletUsed
-      );
-    }
-    if (pricing.couponCode) {
-      await this.couponService.deleteCoupon(
-        pricing.couponCode
-      );
-    }
-    return {
-      orderId,
-      pricing
-    };
-  }
-  generateOrderId(now) {
-    const d = new Date(now);
-    const ymd = d.getFullYear().toString() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
-    const rand = Math.floor(1e3 + Math.random() * 9e3);
-    return `ORD-${ymd}-${rand}`;
-  }
-  async getUserOrders(userId, limit, cursor) {
-    return this.repo.getOrdersByUser(userId, limit, cursor);
-  }
-  async cancelOrder(orderId, userId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) throw new Error("Order not found");
-    if (order.userId !== userId) throw new Error("Unauthorized");
-    if (!CANCELLABLE_STATUSES.includes(order.status)) {
-      throw new Error("Order cannot be cancelled at this stage");
-    }
-    const now = Date.now();
-    await this.repo.updateStatus(orderId, {
-      status: "CANCELLED",
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: `USER#${userId}`,
-      statusHistory: [
-        ...order.statusHistory || [],
-        {
-          status: "CANCELLED",
-          at: now,
-          by: `USER#${userId}`
-        }
-      ]
-    });
-  }
-  async getOrderById(orderId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) throw new Error("Order not found");
-    return order;
-  }
-  async adjustOrder(input) {
-    const {
-      userId,
-      role,
-      orderId,
-      items,
-      walletUsed
-    } = input;
-    if (!orderId) {
-      throw new Error("Order ID required");
-    }
-    if (!Array.isArray(items)) {
-      throw new Error("Invalid items");
-    }
-    const order = await this.repo.getById(orderId);
-    if (!order) {
-      throw new Error("Order not found");
-    }
-    const isAdmin = role === "admin";
-    if (!isAdmin && order.userId !== userId) {
-      throw new Error("Unauthorized");
-    }
-    const blockedStatuses = ["DISPATCHED", "CANCELLED"];
-    if (blockedStatuses.includes(order.status)) {
-      throw new Error("Order cannot be adjusted at this stage");
-    }
-    if (items.length === 0) {
-      throw new Error("Order cannot be empty");
-    }
-    for (const item of items) {
-      if (!item.productId) {
-        throw new Error("Invalid productId");
-      }
-      if (!Number.isInteger(item.quantity) || item.quantity <= 0) {
-        throw new Error("Quantity must be a positive integer");
-      }
-    }
-    const cartItems = items.map((item) => ({
-      itemId: item.productId,
-      quantity: item.quantity
-    }));
-    const updatedItems = await this.repo.buildItemsSnapshot(cartItems);
-    const config = await this.repo.getAdminConfig();
-    let couponResult;
-    if (order.couponCode) {
-      couponResult = {
-        couponCode: order.couponCode,
-        couponType: order.couponType,
-        couponValue: Number(order.couponValue ?? 0),
-        couponDiscount: Number(order.couponDiscount ?? 0)
-      };
-    }
-    const pricing = this.pricingService.calculate({
-      items: updatedItems,
-      walletUsed,
-      state: order.deliveryState ?? order.address,
-      config,
-      couponResult
-    });
-    const now = Date.now();
-    await this.repo.updateItems(orderId, {
-      items: updatedItems,
-      totalProductAmount: pricing.totalProductAmount,
-      nonComboProductTotal: pricing.nonComboProductTotal,
-      comboPackageTotal: pricing.comboPackageTotal,
-      packagingCharge: pricing.packagingCharge,
-      amountBeforeDiscount: pricing.amountBeforeDiscount,
-      couponCode: pricing.couponCode,
-      couponType: pricing.couponType,
-      couponValue: pricing.couponValue,
-      couponDiscount: pricing.couponDiscount,
-      amountAfterDiscount: pricing.amountAfterDiscount,
-      gstAmount: pricing.gstAmount,
-      grandTotal: pricing.grandTotal,
-      walletUsed: pricing.walletUsed,
-      finalPayable: pricing.finalPayable,
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: isAdmin ? "ADMIN" : `USER#${userId}`,
-      statusHistory: [
-        ...order.statusHistory || [],
-        {
-          status: "ORDER_ADJUSTED",
-          at: now,
-          by: isAdmin ? "ADMIN" : `USER#${userId}`
-        }
-      ]
-    });
-    return await this.repo.getById(orderId);
-  }
-};
-
-// src/handlers/cancelOrder.ts
-var service = new OrderService();
-var handler = async (event) => {
+// src/handlers/adminCode.ts
+async function create(event) {
   try {
-    const { userId } = verifyJwt(event);
-    const orderId = event.pathParameters?.orderId;
-    if (!orderId) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: "Order ID required" })
-      };
+    const { userId, role } = verifyJwt(event);
+    if (role !== "admin") {
+      return error("Forbidden");
     }
-    await service.cancelOrder(orderId, userId);
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ success: true })
-    };
-  } catch (err) {
-    console.error("Cancel order failed", err);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        success: false,
-        message: err?.message || "Internal Server Error"
-      })
-    };
+    if (!event.body) {
+      return error("Request body is required.");
+    }
+    const body = JSON.parse(event.body);
+    const code = body.code?.trim();
+    const requestUserId = body.userId?.trim();
+    const schemeId = body.schemeId;
+    const expiryDate = Number(body.expiryDate);
+    if (!code || !requestUserId || !schemeId || !expiryDate) {
+      return error(
+        "Code, User, Scheme and Expiry Date are required."
+      );
+    }
+    const response = await AdminCodeService.createCode({
+      code,
+      userId: requestUserId,
+      schemeId,
+      expiryDate,
+      createdAt: Date.now(),
+      createdBy: userId,
+      status: "ACTIVE"
+    });
+    return success(response);
+  } catch (e) {
+    console.error(
+      "Admin Code Creation Error:",
+      e
+    );
+    return error(
+      e.message || "Unable to create admin code."
+    );
   }
-};
+}
+async function list(event) {
+  try {
+    const { role } = verifyJwt(event);
+    if (role !== "admin") {
+      return error("Forbidden");
+    }
+    const response = await AdminCodeService.listCodes();
+    return success(response);
+  } catch (e) {
+    console.error(
+      "Admin Code List Error:",
+      e
+    );
+    return error(
+      e.message || "Unable to fetch admin codes."
+    );
+  }
+}
+async function remove(event) {
+  try {
+    const { role } = verifyJwt(event);
+    if (role !== "admin") {
+      return error("Forbidden");
+    }
+    const code = event.pathParameters?.code?.trim();
+    if (!code) {
+      return error(
+        "Code is required."
+      );
+    }
+    await AdminCodeService.deleteCode(
+      code
+    );
+    return success({
+      message: "Admin Code deleted successfully."
+    });
+  } catch (e) {
+    console.error(
+      "Admin Code Delete Error:",
+      e
+    );
+    return error(
+      e.message || "Unable to delete admin code."
+    );
+  }
+}
+async function validate(event) {
+  try {
+    if (!event.body) {
+      return error(
+        "Request body is required."
+      );
+    }
+    const body = JSON.parse(
+      event.body
+    );
+    const { userId } = verifyJwt(event);
+    const code = body.code?.trim();
+    const schemeId = body.schemeId?.trim();
+    if (!userId || !code || !schemeId) {
+      return error(
+        "User ID, Code and Scheme are required."
+      );
+    }
+    const response = await AdminCodeService.validateCode(
+      userId,
+      code,
+      schemeId
+    );
+    return success({
+      valid: response.success,
+      schemeId: response.schemeId
+    });
+  } catch (e) {
+    console.error(
+      "Admin Code Validation Error:",
+      e
+    );
+    return error(
+      e.message || "Invalid Admin Code."
+    );
+  }
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  handler
+  create,
+  list,
+  remove,
+  validate
 });
 /*! Bundled license information:
 
 safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 */
-//# sourceMappingURL=cancelOrder.js.map
+//# sourceMappingURL=adminCode.js.map

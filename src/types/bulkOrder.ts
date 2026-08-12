@@ -16,6 +16,7 @@ export interface BulkOrderRequestItem {
 
 export interface CreateBulkOrderRequest {
     schemeId: string;
+    adminCode?: string;
     remarks?: string;
     address: BulkOrderAddress;
     items: BulkOrderRequestItem[];
@@ -27,7 +28,9 @@ export interface BulkOrderItem {
     image?: string;
     brand?: string;
     categoryId?: string;
+    bulkOrderBasePrice: number;
     cartonQty: number;
+    unitPrice: number;
     schemePrice: number;
     quantity: number;
     total: number;
@@ -38,7 +41,7 @@ export interface BulkOrderPricing {
     packagingPercent: number;
     packagingCharge: number;
     gstPercent: number;
-    gstAmount: number
+    gstAmount: number;
     grandTotal: number;
 }
 
@@ -48,19 +51,12 @@ export interface BulkOrder {
     userId: string;
     status: string;
     schemeId: string;
-
     remarks?: string;
-
     address: BulkOrderAddress;
-
     items: BulkOrderItem[];
-
     pricing: BulkOrderPricing;
-
     createdAt: number;
-
     updatedAt: number;
-
     statusHistory: {
         status: string;
         at: number;

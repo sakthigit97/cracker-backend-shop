@@ -23,15 +23,13 @@ export async function handler(
             event.body || "{}"
         );
 
-        const service =
-            new BulkOrderService();
-
+        const service = new BulkOrderService();
         const result = await service.updateStatus(
             orderId,
             body.status,
-            userId
+            userId,
+            body.adminComment
         );
-
         return success(result);
 
     } catch (e: any) {

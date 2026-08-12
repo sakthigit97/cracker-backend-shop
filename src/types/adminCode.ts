@@ -1,7 +1,3 @@
-export type AdminCodeScheme =
-    | "2_TO_5_LAKH"
-    | "ABOVE_5_LAKH";
-
 export type AdminCodeStatus =
     | "ACTIVE"
     | "USED"
@@ -10,7 +6,7 @@ export type AdminCodeStatus =
 export interface AdminCode {
     code: string;
     userId?: string;
-    schemeId: AdminCodeScheme;
+    schemeId: string;
     expiryDate: number;
     status: AdminCodeStatus;
     createdAt: number;
@@ -21,7 +17,7 @@ export interface AdminCode {
 
 export interface CreateAdminCodeRequest {
     userId: string;
-    schemeId: AdminCodeScheme;
+    schemeId: string;
     code: string;
     expiryDate: number;
 }
