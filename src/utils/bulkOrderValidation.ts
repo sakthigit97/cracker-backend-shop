@@ -352,4 +352,141 @@ export class BulkOrderValidation {
             );
         }
     }
+
+    static validateAdjustRequest(
+        request: {
+            orderId?: string;
+            items?: {
+                productId: string;
+                quantity: number;
+                cartonQty?: number;
+            }[];
+        },
+        isAdmin: boolean
+    ): void {
+
+        if (!request) {
+            throw new Error(
+                "Request body is required."
+            );
+        }
+
+        /*
+         * Order ID
+         */
+        const orderId =
+            request.orderId?.trim() ?? "";
+
+        if (!orderId) {
+            throw new Error(
+                "Order ID is required."
+            );
+        }
+
+        if (orderId.length > 100) {
+            throw new Error(
+                "Invalid order ID."
+            );
+        }
+
+        /*
+         * Products
+         */
+        const items =
+            request.items;
+
+        if (!Array.isArray(items)) {
+            throw new Error(
+                "Products are required."
+            );
+        }
+
+        if (items.length === 0) {
+            throw new Error(
+                "Please add at least one product."
+            );
+        }
+        
+        if (items.length > 100) {
+            throw new Error(
+                "You can select a maximum of 100 products per bulk order."
+            );
+        }
+
+        const productIds =
+            new Set<string>();
+
+        for (const item of items) {
+
+            const productId =
+                item?.productId?.trim() ?? "";
+
+            if (!productId) {
+                throw new Error(
+                    "Invalid product."
+                );
+            }
+
+            if (productId.length > 100) {
+                throw new Error(
+                    "Invalid product."
+                );
+            }
+
+            if (productIds.has(productId)) {
+                throw new Error(
+                    "Duplicate products are not allowed."
+                );
+            }
+
+            productIds.add(productId);
+
+            if (
+                !Number.isInteger(
+                    item.quantity
+                ) ||
+                item.quantity <= 0
+            ) {
+                throw new Error(
+                    `Invalid quantity for product ${productId}.`
+                );
+            }
+
+            if (
+                item.quantity > 100000
+            ) {
+                throw new Error(
+                    `Invalid quantity for product ${productId}.`
+                );
+            }
+
+            if (item.cartonQty !== undefined) {
+
+                if (!isAdmin) {
+                    throw new Error(
+                        "Only admin can modify carton quantity."
+                    );
+                }
+
+                if (
+                    !Number.isInteger(
+                        item.cartonQty
+                    ) ||
+                    item.cartonQty <= 0
+                ) {
+                    throw new Error(
+                        `Invalid carton quantity for product ${productId}.`
+                    );
+                }
+
+                if (
+                    item.cartonQty > 100000
+                ) {
+                    throw new Error(
+                        `Invalid carton quantity for product ${productId}.`
+                    );
+                }
+            }
+        }
+    }
 }

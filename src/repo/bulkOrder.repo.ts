@@ -6,7 +6,11 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 
 import { ddb } from "../utils/dynamo";
-import { BulkOrder } from "../types/bulkOrder";
+import {
+    BulkOrder,
+    BulkOrderItem,
+    BulkOrderPricing,
+} from "../types/bulkOrder";
 
 const TABLE_NAME = process.env.BULK_ORDERS_TABLE!;
 const USERS_TABLE = process.env.USERS_TABLE!;
@@ -24,7 +28,9 @@ export class BulkOrderRepository {
 
     }
 
-    async getById(orderId: string) {
+    async getById(
+        orderId: string
+    ): Promise<BulkOrder | null> {
 
         const res = await ddb.send(
             new GetCommand({
@@ -36,8 +42,10 @@ export class BulkOrderRepository {
             })
         );
 
-        return res.Item ?? null;
-
+        return (
+            (res.Item as BulkOrder) ??
+            null
+        );
     }
 
     async getOrdersByUser(
@@ -66,6 +74,57 @@ export class BulkOrderRepository {
             nextCursor: res.LastEvaluatedKey ?? null,
         };
 
+    }
+
+    async updateAdjustment(
+        orderId: string,
+        data: {
+            items: BulkOrderItem[];
+            pricing: BulkOrderPricing;
+            updatedAt: number;
+        }
+    ): Promise<void> {
+
+        await ddb.send(
+            new UpdateCommand({
+                TableName:
+                    TABLE_NAME,
+
+                Key: {
+                    orderId,
+                    meta: "ORDER",
+                },
+
+                UpdateExpression: `
+                    SET
+                        #items = :items,
+                        #pricing = :pricing,
+                        #updatedAt = :updatedAt
+                `,
+
+                ExpressionAttributeNames: {
+                    "#items":
+                        "items",
+
+                    "#pricing":
+                        "pricing",
+
+                    "#updatedAt":
+                        "updatedAt",
+                },
+
+                ExpressionAttributeValues: {
+                    ":items":
+                        data.items,
+
+                    ":pricing":
+                        data.pricing,
+
+                    ":updatedAt":
+                        data.updatedAt,
+                },
+            })
+        );
     }
 
     async updateStatus(

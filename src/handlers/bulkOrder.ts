@@ -3,8 +3,7 @@ import { BulkOrderService } from "../services/bulkOrder.service";
 
 export const handler = async (event: any) => {
     try {
-        const { userId } =
-            verifyJwt(event);
+        const { userId } = verifyJwt(event);
 
         if (!event.body) {
             return {
