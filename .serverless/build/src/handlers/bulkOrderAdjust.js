@@ -834,14 +834,14 @@ var require_decode = __commonJS({
 // node_modules/jsonwebtoken/lib/JsonWebTokenError.js
 var require_JsonWebTokenError = __commonJS({
   "node_modules/jsonwebtoken/lib/JsonWebTokenError.js"(exports2, module2) {
-    var JsonWebTokenError = function(message, error2) {
+    var JsonWebTokenError = function(message, error) {
       Error.call(this, message);
       if (Error.captureStackTrace) {
         Error.captureStackTrace(this, this.constructor);
       }
       this.name = "JsonWebTokenError";
       this.message = message;
-      if (error2) this.inner = error2;
+      if (error) this.inner = error;
     };
     JsonWebTokenError.prototype = Object.create(Error.prototype);
     JsonWebTokenError.prototype.constructor = JsonWebTokenError;
@@ -3793,8 +3793,8 @@ var require_sign = __commonJS({
       } else if (isObjectPayload) {
         try {
           validatePayload(payload);
-        } catch (error2) {
-          return failure(error2);
+        } catch (error) {
+          return failure(error);
         }
         if (!options.mutatePayload) {
           payload = Object.assign({}, payload);
@@ -3815,14 +3815,14 @@ var require_sign = __commonJS({
       }
       try {
         validateOptions(options);
-      } catch (error2) {
-        return failure(error2);
+      } catch (error) {
+        return failure(error);
       }
       if (!options.allowInvalidAsymmetricKeyTypes) {
         try {
           validateAsymmetricKey(header.alg, secretOrPrivateKey);
-        } catch (error2) {
-          return failure(error2);
+        } catch (error) {
+          return failure(error);
         }
       }
       const timestamp = payload.iat || Math.floor(Date.now() / 1e3);
@@ -3899,12 +3899,12 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// src/handlers/getDetailedBulkOrder.ts
-var getDetailedBulkOrder_exports = {};
-__export(getDetailedBulkOrder_exports, {
+// src/handlers/bulkOrderAdjust.ts
+var bulkOrderAdjust_exports = {};
+__export(bulkOrderAdjust_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(getDetailedBulkOrder_exports);
+module.exports = __toCommonJS(bulkOrderAdjust_exports);
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -5569,48 +5569,120 @@ var BulkOrderService = class {
   }
 };
 
-// src/libs/response.ts
-var success = (data, statusCode = 200) => ({
-  statusCode,
-  body: JSON.stringify({
-    success: true,
-    data
-  })
-});
-var error = (message, statusCode = 400) => ({
-  statusCode,
-  body: JSON.stringify({
-    success: false,
-    message
-  })
-});
-
-// src/handlers/getDetailedBulkOrder.ts
-async function handler(event) {
+// src/handlers/bulkOrderAdjust.ts
+var handler = async (event) => {
   try {
-    const user = verifyJwt(event);
-    const orderId = event.pathParameters?.orderId?.trim();
+    const { userId, role } = verifyJwt(event);
+    const orderId = event.pathParameters?.orderId?.trim() ?? "";
     if (!orderId) {
-      return error(
-        "Order Id is required."
-      );
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Order ID is required."
+        })
+      };
     }
+    if (!event.body) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Request body is required."
+        })
+      };
+    }
+    let body;
+    try {
+      body = JSON.parse(
+        event.body
+      );
+    } catch {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Invalid request body."
+        })
+      };
+    }
+    const request = {
+      orderId,
+      items: body?.items
+    };
     const service = new BulkOrderService();
-    const order = await service.getOrder(
-      user.userId,
-      orderId
-    );
-    return success(order);
+    let result;
+    if (role === "admin") {
+      result = await service.adminAdjustOrder(
+        request
+      );
+    } else if (role === "user") {
+      result = await service.adjustOrder(
+        userId,
+        request
+      );
+    } else {
+      return {
+        statusCode: 403,
+        body: JSON.stringify({
+          message: "You are not authorized to adjust bulk orders."
+        })
+      };
+    }
+    return {
+      statusCode: 200,
+      body: JSON.stringify(
+        result
+      )
+    };
   } catch (err) {
     console.error(
-      "Get Bulk Order Error:",
+      "Bulk order adjustment failed",
       err
     );
-    return error(
-      err?.message || "Unable to fetch bulk order."
+    const message = err?.message || "Internal Server Error";
+    const isAuthorizationError = message === "You are not authorized to adjust this bulk order." || message === "You are not authorized to change carton quantity.";
+    const validationErrorMessages = [
+      "Request body is required.",
+      "Invalid request body.",
+      "Order ID is required.",
+      "Invalid order ID.",
+      "Products are required.",
+      "Please keep at least one product in the order.",
+      "You can have a maximum of 100 products per bulk order.",
+      "Duplicate products are not allowed.",
+      "Invalid product.",
+      "This bulk order can no longer be adjusted.",
+      "Bulk order not found.",
+      "Admin configuration not found.",
+      "The bulk scheme for this order is no longer available.",
+      "The bulk scheme for this order is no longer active.",
+      "Bulk schemes are not configured."
+    ];
+    const isValidationError = validationErrorMessages.includes(
+      message
+    ) || message.startsWith(
+      "Invalid quantity for product"
+    ) || message.startsWith(
+      "Invalid carton quantity for product"
+    ) || message.startsWith(
+      "Product not found:"
+    ) || message.startsWith(
+      "Carton quantity is not configured for"
+    ) || message.startsWith(
+      "Bulk price is not configured for"
+    ) || message.startsWith(
+      "Minimum order amount for"
+    ) || message.startsWith(
+      "Maximum order amount for"
+    ) || message.includes(
+      "is not available for bulk orders"
     );
+    return {
+      statusCode: isAuthorizationError ? 403 : isValidationError ? 400 : 500,
+      body: JSON.stringify({
+        message
+      })
+    };
   }
-}
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler
@@ -5620,4 +5692,4 @@ async function handler(event) {
 safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 */
-//# sourceMappingURL=getDetailedBulkOrder.js.map
+//# sourceMappingURL=bulkOrderAdjust.js.map

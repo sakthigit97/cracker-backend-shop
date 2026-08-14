@@ -776,6 +776,13 @@ functions:
           path: /bulk-order/validate-code
           method: POST
 
+  bulkAdjustOrder:
+    handler: src/handlers/bulkOrderAdjust.handler
+    events:
+      - httpApi:
+          path: /bulk-order/{orderId}/adjust
+          method: PUT
+
 resources:
   Resources:
     ProductImagesBucket:

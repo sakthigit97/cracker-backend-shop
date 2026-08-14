@@ -36,6 +36,17 @@ export interface BulkOrderItem {
     total: number;
 }
 
+export interface BulkOrderAdjustRequestItem {
+    productId: string;
+    quantity: number;
+    cartonQty?: number;
+}
+
+export interface BulkOrderAdjustRequest {
+    orderId: string;
+    items: BulkOrderAdjustRequestItem[];
+}
+
 export interface BulkOrderPricing {
     productTotal: number;
     packagingPercent: number;
