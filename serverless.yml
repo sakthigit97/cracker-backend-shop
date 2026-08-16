@@ -489,6 +489,20 @@ functions:
           path: /admin/users
           method: GET
 
+  adminListUserMobiles:
+    handler: src/handlers/adminListUserMobiles.handler
+    events:
+      - httpApi:
+          path: /admin/users/mobiles
+          method: GET
+
+  adminUpdateUser:
+    handler: src/handlers/adminUpdateUser.handler
+    events:
+      - httpApi:
+          path: /admin/users/{mobile}
+          method: PATCH
+
   adminDeleteUser:
     handler: src/handlers/adminDeleteUser.handler
     events:

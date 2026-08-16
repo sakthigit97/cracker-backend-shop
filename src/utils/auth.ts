@@ -8,8 +8,7 @@ export interface JwtPayload {
 }
 
 export function verifyJwt(event: any): JwtPayload {
-    const authHeader =
-        event.headers?.authorization ||
+    const authHeader = event.headers?.authorization ||
         event.headers?.Authorization;
 
     if (!authHeader) {

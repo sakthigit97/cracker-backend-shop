@@ -3985,7 +3985,9 @@ var AdminCreateProductService = class {
     this.repo = repo;
   }
   async createProduct(input) {
-    const sequenceNumber = await this.repo.getNextSequenceNumber(input.categoryId);
+    const sequenceNumber = await this.repo.getNextSequenceNumber(
+      input.categoryId
+    );
     const product = {
       productId: input.productId,
       name: input.name.trim(),
@@ -3996,12 +3998,19 @@ var AdminCreateProductService = class {
       imageUrls: input.imageUrls,
       videoUrl: input.videoUrl || null,
       searchText: input.searchText,
-      sequenceNumber,
       description: input.description.trim(),
       packageTagIds: input.packageTagIds || [],
       aiTags: input.aiTags || [],
       isActive: input.isActive ?? "true",
-      isComboPackage: input.isComboPackage,
+      isComboPackage: input.isComboPackage ?? false,
+      isRetailOnly: input.isRetailOnly ?? false,
+      isBulkOrderOnly: input.isBulkOrderOnly ?? false,
+      bulkOrderBasePrice: input.bulkOrderBasePrice ?? null,
+      cartonQty: input.cartonQty ?? null,
+      packQuantity: Number(input.packQuantity),
+      packUnit: input.packUnit.trim(),
+      isGiftPack: input.isGiftPack ?? false,
+      sequenceNumber,
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
     await this.repo.putProduct(product);
@@ -4015,10 +4024,16 @@ var handler = async (event) => {
   try {
     const { role } = verifyJwt(event);
     if (role !== "admin") {
-      return { statusCode: 403, body: "Forbidden" };
+      return {
+        statusCode: 403,
+        body: "Forbidden"
+      };
     }
     if (!event.body) {
-      return { statusCode: 400, body: "Request body required" };
+      return {
+        statusCode: 400,
+        body: "Request body required"
+      };
     }
     const body = JSON.parse(event.body);
     const {
@@ -4035,7 +4050,14 @@ var handler = async (event) => {
       isActive,
       packageTagIds,
       aiTags,
-      isComboPackage
+      isComboPackage,
+      isRetailOnly,
+      bulkOrderBasePrice,
+      cartonQty,
+      isBulkOrderOnly,
+      packQuantity,
+      packUnit,
+      isGiftPack
     } = body;
     if (!productId || !name || !price || !brandId || !categoryId || !searchText || !description) {
       return {
@@ -4048,6 +4070,32 @@ var handler = async (event) => {
         statusCode: 400,
         body: "quantity is required and cannot be negative"
       };
+    }
+    if (packQuantity === void 0 || packQuantity === null || Number(packQuantity) <= 0) {
+      return {
+        statusCode: 400,
+        body: "packQuantity is required and must be greater than 0"
+      };
+    }
+    if (!packUnit || typeof packUnit !== "string" || !packUnit.trim()) {
+      return {
+        statusCode: 400,
+        body: "packUnit is required"
+      };
+    }
+    if (isBulkOrderOnly) {
+      if (bulkOrderBasePrice === void 0 || bulkOrderBasePrice === null || Number(bulkOrderBasePrice) <= 0) {
+        return {
+          statusCode: 400,
+          body: "bulkOrderBasePrice is required and must be greater than 0 for bulk order products"
+        };
+      }
+      if (cartonQty === void 0 || cartonQty === null || Number(cartonQty) <= 0) {
+        return {
+          statusCode: 400,
+          body: "cartonQty is required and must be greater than 0 for bulk order products"
+        };
+      }
     }
     const product = await service.createProduct({
       productId,
@@ -4063,7 +4111,14 @@ var handler = async (event) => {
       isActive,
       packageTagIds: packageTagIds || [],
       aiTags: aiTags || [],
-      isComboPackage: false
+      isComboPackage: Boolean(isComboPackage),
+      isRetailOnly: Boolean(isRetailOnly),
+      isBulkOrderOnly: Boolean(isBulkOrderOnly),
+      bulkOrderBasePrice: bulkOrderBasePrice !== void 0 && bulkOrderBasePrice !== null && bulkOrderBasePrice !== "" ? Number(bulkOrderBasePrice) : null,
+      cartonQty: cartonQty !== void 0 && cartonQty !== null && cartonQty !== "" ? Number(cartonQty) : null,
+      packQuantity: Number(packQuantity),
+      packUnit: packUnit.trim(),
+      isGiftPack: Boolean(isGiftPack)
     });
     return {
       statusCode: 201,

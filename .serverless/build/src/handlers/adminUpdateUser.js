@@ -3899,12 +3899,12 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// src/handlers/adminOrders.ts
-var adminOrders_exports = {};
-__export(adminOrders_exports, {
+// src/handlers/adminUpdateUser.ts
+var adminUpdateUser_exports = {};
+__export(adminUpdateUser_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(adminOrders_exports);
+module.exports = __toCommonJS(adminUpdateUser_exports);
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -3933,7 +3933,7 @@ function verifyJwt(event) {
   };
 }
 
-// src/repo/adminOrders.repo.ts
+// src/repo/adminUser.repo.ts
 var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
 
 // src/utils/dynamo.ts
@@ -3946,122 +3946,370 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
   }
 });
 
-// src/repo/adminOrders.repo.ts
-var TABLE = process.env.ORDERS_TABLE;
-var AdminOrdersRepository = class {
-  async getOrdersByStatus({
-    status,
+// src/repo/adminUser.repo.ts
+var TABLE = process.env.USERS_TABLE;
+var MAX_SCAN_PAGES = 100;
+var AdminUserRepository = class {
+  async listUsers({
     limit,
     cursor,
-    fromDate,
-    toDate,
-    orderId
+    search
   }) {
-    let items = [];
-    let lastKey = cursor;
+    const searchValue = search?.trim().toLowerCase() || "";
+    let exclusiveStartKey;
+    if (cursor) {
+      exclusiveStartKey = JSON.parse(
+        Buffer.from(
+          cursor,
+          "base64"
+        ).toString("utf-8")
+      );
+    }
+    const items = [];
+    let lastEvaluatedKey = exclusiveStartKey;
+    let scanCount = 0;
     do {
-      const values = {
-        ":s": status,
-        ":m": "ORDER"
-      };
-      let filterParts = [];
-      if (fromDate && toDate) {
-        filterParts.push("createdAt BETWEEN :from AND :to");
-        values[":from"] = fromDate;
-        values[":to"] = toDate;
+      scanCount++;
+      const expressionAttributeNames = {};
+      const expressionAttributeValues = {};
+      let filterExpression;
+      if (searchValue) {
+        expressionAttributeNames["#st"] = "searchText";
+        expressionAttributeValues[":q"] = searchValue;
+        filterExpression = "contains(#st, :q)";
       }
-      if (orderId) {
-        filterParts.push("contains(orderId, :oid)");
-        values[":oid"] = orderId;
-      }
-      const res = await ddb.send(
-        new import_lib_dynamodb2.QueryCommand({
+      const response = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand({
           TableName: TABLE,
-          IndexName: "status-meta-index",
-          KeyConditionExpression: "#status = :s AND #meta = :m",
-          FilterExpression: filterParts.length > 0 ? filterParts.join(" AND ") : void 0,
-          ExpressionAttributeNames: {
-            "#status": "status",
-            "#meta": "meta"
-          },
-          ExpressionAttributeValues: values,
-          ScanIndexForward: false,
-          Limit: 25,
-          ExclusiveStartKey: lastKey
+          Limit: searchValue ? Math.max(limit, 50) : limit,
+          ExclusiveStartKey: lastEvaluatedKey,
+          ...filterExpression ? {
+            FilterExpression: filterExpression,
+            ExpressionAttributeNames: expressionAttributeNames,
+            ExpressionAttributeValues: expressionAttributeValues
+          } : {}
         })
       );
-      const fetched = res.Items || [];
-      items.push(...fetched);
-      lastKey = res.LastEvaluatedKey;
-    } while (items.length < limit && lastKey);
+      if (response.Items?.length) {
+        items.push(
+          ...response.Items
+        );
+      }
+      lastEvaluatedKey = response.LastEvaluatedKey;
+      if (items.length >= limit) {
+        break;
+      }
+      if (scanCount >= MAX_SCAN_PAGES) {
+        break;
+      }
+    } while (lastEvaluatedKey);
+    const pageItems = items.slice(0, limit);
+    const nextCursor = lastEvaluatedKey ? Buffer.from(
+      JSON.stringify(
+        lastEvaluatedKey
+      )
+    ).toString("base64") : void 0;
     return {
-      items: items.slice(0, limit),
-      nextCursor: lastKey || null
+      items: pageItems,
+      nextCursor
     };
   }
-  async getOrderById(orderId) {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.GetCommand({
+  async deleteUser(mobile) {
+    await ddb.send(
+      new import_lib_dynamodb2.DeleteCommand({
         TableName: TABLE,
         Key: {
-          orderId,
-          meta: "ORDER"
+          mobile
         }
       })
     );
-    return res.Item || null;
+  }
+  async listUserMobiles() {
+    const mobiles = [];
+    let lastEvaluatedKey;
+    do {
+      const response = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand({
+          TableName: TABLE,
+          ProjectionExpression: "mobile",
+          ExclusiveStartKey: lastEvaluatedKey
+        })
+      );
+      if (response.Items?.length) {
+        mobiles.push(
+          ...response.Items.map(
+            (item) => String(item.mobile)
+          ).filter(Boolean)
+        );
+      }
+      lastEvaluatedKey = response.LastEvaluatedKey;
+    } while (lastEvaluatedKey);
+    return mobiles;
+  }
+  async updateUser(mobile, input) {
+    const updates = [];
+    const expressionAttributeNames = {};
+    const expressionAttributeValues = {};
+    if (input.name !== void 0) {
+      updates.push(
+        "#name = :name"
+      );
+      expressionAttributeNames["#name"] = "name";
+      expressionAttributeValues[":name"] = input.name.trim();
+    }
+    if (input.role !== void 0) {
+      updates.push(
+        "#role = :role"
+      );
+      expressionAttributeNames["#role"] = "role";
+      expressionAttributeValues[":role"] = input.role.trim();
+    }
+    if (input.address !== void 0) {
+      updates.push(
+        "#address = :address"
+      );
+      expressionAttributeNames["#address"] = "address";
+      expressionAttributeValues[":address"] = input.address.trim();
+    }
+    if (input.city !== void 0) {
+      updates.push(
+        "#city = :city"
+      );
+      expressionAttributeNames["#city"] = "city";
+      expressionAttributeValues[":city"] = input.city.trim();
+    }
+    if (input.state !== void 0) {
+      updates.push(
+        "#state = :state"
+      );
+      expressionAttributeNames["#state"] = "state";
+      expressionAttributeValues[":state"] = input.state.trim();
+    }
+    if (input.pincode !== void 0) {
+      updates.push(
+        "#pincode = :pincode"
+      );
+      expressionAttributeNames["#pincode"] = "pincode";
+      expressionAttributeValues[":pincode"] = input.pincode.trim();
+    }
+    if (updates.length === 0) {
+      throw new Error(
+        "At least one field is required"
+      );
+    }
+    const result = await ddb.send(
+      new import_lib_dynamodb2.UpdateCommand({
+        TableName: TABLE,
+        Key: {
+          mobile
+        },
+        UpdateExpression: `SET ${updates.join(", ")}`,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ConditionExpression: "attribute_exists(mobile)",
+        ReturnValues: "ALL_NEW"
+      })
+    );
+    return result.Attributes;
   }
 };
 
-// src/services/adminOrders.service.ts
-var AdminOrdersService = class {
-  constructor(repo = new AdminOrdersRepository()) {
+// src/services/adminUser.service.ts
+var AdminUserService = class {
+  constructor(repo = new AdminUserRepository()) {
     this.repo = repo;
   }
-  async listOrders(input) {
-    const search = input.orderId?.trim();
-    if (search && search.length > 15) {
-      const order = await this.repo.getOrderById(search);
-      return {
-        items: order ? [order] : [],
-        nextCursor: null
-      };
-    }
-    return this.repo.getOrdersByStatus({
-      status: input.status,
-      limit: input.limit,
-      cursor: input.cursor,
-      fromDate: input.fromDate,
-      toDate: input.toDate,
-      orderId: search
-    });
+  async listUsers(input) {
+    return this.repo.listUsers(input);
+  }
+  async listUserMobiles() {
+    return this.repo.listUserMobiles();
+  }
+  async deleteUser(userId) {
+    return this.repo.deleteUser(userId);
+  }
+  async updateUser(mobile, input) {
+    return this.repo.updateUser(
+      mobile,
+      input
+    );
   }
 };
 
-// src/handlers/adminOrders.ts
-var service = new AdminOrdersService();
+// src/handlers/adminUpdateUser.ts
+var service = new AdminUserService();
 var handler = async (event) => {
   try {
     const { role } = verifyJwt(event);
-    if (role === "user") {
-      return { statusCode: 403, body: "Forbidden" };
+    if (role !== "admin") {
+      return {
+        statusCode: 403,
+        body: "Forbidden"
+      };
     }
-    const q = event.queryStringParameters || {};
-    const data = await service.listOrders({
-      status: q.status || "ORDER_PLACED",
-      limit: Number(q.limit || 10),
-      cursor: q.cursor ? JSON.parse(q.cursor) : void 0,
-      fromDate: q.fromDate ? Number(q.fromDate) : void 0,
-      toDate: q.toDate ? Number(q.toDate) : void 0,
-      orderId: q.orderId
-    });
+    const mobile = event.pathParameters?.mobile;
+    if (!mobile?.trim()) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Mobile number is required"
+        })
+      };
+    }
+    let body;
+    try {
+      body = event.body ? JSON.parse(event.body) : {};
+    } catch {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Invalid JSON body"
+        })
+      };
+    }
+    const allowedFields = [
+      "name",
+      "role",
+      "address",
+      "city",
+      "state",
+      "pincode"
+    ];
+    const hasUnknownField = Object.keys(body).some(
+      (key) => !allowedFields.includes(key)
+    );
+    if (hasUnknownField) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Only name, role, address, city, state and pincode can be updated"
+        })
+      };
+    }
+    const input = {};
+    if (body.name !== void 0) {
+      if (typeof body.name !== "string") {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "Name must be a string"
+          })
+        };
+      }
+      input.name = body.name.trim();
+    }
+    if (body.role !== void 0) {
+      if (typeof body.role !== "string") {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "Role must be a string"
+          })
+        };
+      }
+      const roleValue = body.role.trim();
+      if (roleValue !== "user" && roleValue !== "admin" && roleValue !== "staff") {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "Role must be either user or admin or staff"
+          })
+        };
+      }
+      input.role = roleValue;
+    }
+    if (body.address !== void 0) {
+      if (typeof body.address !== "string") {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "Address must be a string"
+          })
+        };
+      }
+      input.address = body.address.trim();
+    }
+    if (body.city !== void 0) {
+      if (typeof body.city !== "string") {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "City must be a string"
+          })
+        };
+      }
+      input.city = body.city.trim();
+    }
+    if (body.state !== void 0) {
+      if (typeof body.state !== "string") {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "State must be a string"
+          })
+        };
+      }
+      input.state = body.state.trim();
+    }
+    if (body.pincode !== void 0) {
+      if (typeof body.pincode !== "string") {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "Pincode must be a string"
+          })
+        };
+      }
+      const pincode = body.pincode.trim();
+      if (!/^\d{6}$/.test(pincode)) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "Pincode must be a valid 6-digit number"
+          })
+        };
+      }
+      input.pincode = pincode;
+    }
+    const hasUpdate = input.name !== void 0 || input.role !== void 0 || input.address !== void 0 || input.city !== void 0 || input.state !== void 0 || input.pincode !== void 0;
+    if (!hasUpdate) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "At least one field is required"
+        })
+      };
+    }
+    const user = await service.updateUser(
+      mobile.trim(),
+      input
+    );
     return {
       statusCode: 200,
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        message: "User updated successfully",
+        user
+      })
     };
-  } catch (err) {
-    console.error(err);
-    return { statusCode: 500, body: "Internal Server Error" };
+  } catch (error) {
+    console.error(
+      "AdminUpdateUser error",
+      error
+    );
+    if (error?.name === "ConditionalCheckFailedException") {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          message: "User not found"
+        })
+      };
+    }
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Internal Server Error"
+      })
+    };
   }
 };
 // Annotate the CommonJS export names for ESM import in node:
@@ -4073,4 +4321,4 @@ var handler = async (event) => {
 safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 */
-//# sourceMappingURL=adminOrders.js.map
+//# sourceMappingURL=adminUpdateUser.js.map

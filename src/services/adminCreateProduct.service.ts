@@ -10,25 +10,32 @@ interface CreateProductInput {
     imageUrls: string[];
     videoUrl?: string;
     searchText: string;
-    isActive?: string;
     description: string;
+    isActive?: string;
     packageTagIds?: string[];
     aiTags?: string[];
     isComboPackage?: boolean;
-    isBulkOnly?: boolean;
-    cartonQty?: number;
-    bulkOrderBasePrice?: number;
-    isBulkOrderOnly?: boolean;
     isRetailOnly?: boolean;
-    productPer?: number;
-    productMeasurement?: string;
+    isBulkOrderOnly?: boolean;
+    bulkOrderBasePrice?: number | null;
+    cartonQty?: number | null;
+    packQuantity: number;
+    packUnit: string;
+    isGiftPack?: boolean;
 }
 
 export class AdminCreateProductService {
-    constructor(private repo = new AdminCreateProductRepository()) { }
+    constructor(
+        private repo = new AdminCreateProductRepository()
+    ) { }
 
     async createProduct(input: CreateProductInput) {
-        const sequenceNumber = await this.repo.getNextSequenceNumber(input.categoryId);
+
+        const sequenceNumber =
+            await this.repo.getNextSequenceNumber(
+                input.categoryId
+            );
+
         const product = {
             productId: input.productId,
             name: input.name.trim(),
@@ -39,16 +46,35 @@ export class AdminCreateProductService {
             imageUrls: input.imageUrls,
             videoUrl: input.videoUrl || null,
             searchText: input.searchText,
-            sequenceNumber,
             description: input.description.trim(),
-            packageTagIds: input.packageTagIds || [],
-            aiTags: input.aiTags || [],
-            isActive: input.isActive ?? "true",
-            isComboPackage: input.isComboPackage,
+            packageTagIds:
+                input.packageTagIds || [],
+            aiTags:
+                input.aiTags || [],
+            isActive:
+                input.isActive ?? "true",
+            isComboPackage:
+                input.isComboPackage ?? false,
+            isRetailOnly:
+                input.isRetailOnly ?? false,
+            isBulkOrderOnly:
+                input.isBulkOrderOnly ?? false,
+            bulkOrderBasePrice:
+                input.bulkOrderBasePrice ?? null,
+            cartonQty:
+                input.cartonQty ?? null,
+
+            packQuantity: Number(input.packQuantity),
+            packUnit: input.packUnit.trim(),
+            isGiftPack:
+                input.isGiftPack ?? false,
+
+            sequenceNumber,
             createdAt: new Date().toISOString(),
         };
 
         await this.repo.putProduct(product);
+
         return product;
     }
 }

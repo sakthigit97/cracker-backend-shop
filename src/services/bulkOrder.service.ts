@@ -27,6 +27,17 @@ export class BulkOrderService {
         private productService = new ProductService()
     ) { }
 
+
+    private calculateBulkCartonBoxCount(
+        items?: any[]
+    ): number {
+        return (items ?? []).reduce(
+            (sum, item) =>
+                sum + Number(item.quantity || 0),
+            0
+        );
+    }
+
     private calculatePricing(
         items: BulkOrderItem[],
         state: string,
@@ -51,20 +62,11 @@ export class BulkOrderService {
             config?.gstPercent ?? 0
         );
 
-        /*
-         * Keep existing calculation logic.
-         * Example: config 18% => actual calculation 9%.
-         */
-        let gstPercent =
-            configuredGstPercent / 2;
+        let gstPercent = configuredGstPercent / 2;
 
-        const disableGstForTN =
-            config?.disableGstForTN === true;
+        const disableGstForTN = config?.disableGstForTN === true;
 
-        const isTN =
-            state?.trim().toLowerCase() ===
-            "tamil nadu";
-
+        const isTN = state?.trim().toLowerCase() === "tamil nadu";
         if (isTN && disableGstForTN) {
             gstPercent = 0;
         }
@@ -82,8 +84,10 @@ export class BulkOrderService {
             packagingCharge +
             gstAmount;
 
+        const cartonBoxCount = this.calculateBulkCartonBoxCount(items);
         return {
             productTotal,
+            cartonBoxCount,
             packagingPercent,
             packagingCharge,
             gstPercent: isTN && disableGstForTN ? 0 : configuredGstPercent,
@@ -158,16 +162,15 @@ export class BulkOrderService {
             scheme
         );
 
-        const pricing =
-            this.calculatePricing(
-                items,
-                request.address.state,
-                config
-            );
+        const pricing = this.calculatePricing(
+            items,
+            request.address.state,
+            config
+        );
 
         this.validateScheme(
             scheme,
-            pricing.productTotal
+            pricing.grandTotal
         );
 
         const order = this.buildOrder(
@@ -348,27 +351,25 @@ export class BulkOrderService {
     ): BulkOrderItem[] {
         return request.items.map(
             (requestItem) => {
-                const product =
-                    productMap.get(
-                        requestItem.productId
-                    )!;
+                const product = productMap.get(
+                    requestItem.productId
+                )!;
 
-                const bulkOrderBasePrice =
-                    Number(
-                        product.bulkOrderBasePrice ??
-                        0
-                    );
+                const bulkOrderBasePrice = Number(
+                    product.bulkOrderBasePrice ??
+                    0
+                );
 
-                const unitPrice =
-                    this.calculateSchemePrice(
-                        product,
-                        scheme
-                    );
+                const unitPrice = this.calculateSchemePrice(
+                    product,
+                    scheme
+                );
 
-                const cartonQty =
-                    Number(
-                        product.cartonQty ?? 0
-                    );
+                const cartonQty = Number(
+                    product.cartonQty ?? 0
+                );
+
+                const packUnit = product.packUnit ?? "";
 
                 const quantity =
                     Number(
@@ -381,21 +382,18 @@ export class BulkOrderService {
                     quantity;
 
                 return {
-                    productId:
-                        product.productId,
+                    productId: product.productId,
                     name: product.name,
                     image: product.image,
-                    brand:
-                        product.brandName ??
-                        product.brand,
-                    categoryId:
-                        product.categoryId,
+                    brand: product.brandId,
+                    categoryId: product.categoryId,
                     bulkOrderBasePrice,
                     cartonQty,
                     unitPrice,
                     schemePrice: unitPrice,
                     quantity,
                     total,
+                    packUnit,
                 };
             }
         );
@@ -409,26 +407,11 @@ export class BulkOrderService {
             scheme.minAmount ?? 0
         );
 
-        const maxAmount = Number(
-            scheme.maxAmount ?? 0
-        );
-
         if (
             productTotal < minAmount
         ) {
             throw new Error(
                 `Minimum order amount for ${scheme.schemeName} is ₹${minAmount.toLocaleString(
-                    "en-IN"
-                )}.`
-            );
-        }
-
-        if (
-            maxAmount > 0 &&
-            productTotal > maxAmount
-        ) {
-            throw new Error(
-                `Maximum order amount for ${scheme.schemeName} is ₹${maxAmount.toLocaleString(
                     "en-IN"
                 )}.`
             );
@@ -838,10 +821,9 @@ export class BulkOrderService {
             request
         );
 
-        const order =
-            await this.repo.getById(
-                request.orderId
-            );
+        const order = await this.repo.getById(
+            request.orderId
+        );
 
         if (!order) {
             throw new Error(
@@ -849,9 +831,6 @@ export class BulkOrderService {
             );
         }
 
-        /*
-         * User must own the order.
-         */
         if (
             order.userId !== userId
         ) {
@@ -860,52 +839,28 @@ export class BulkOrderService {
             );
         }
 
-        /*
-         * Only ORDER_PLACED can be adjusted.
-         */
         this.validateAdjustmentStatus(
             order.status
         );
 
-        /*
-         * User must not be able to modify cartonQty.
-         */
         this.validateUserAdjustmentCartons(
             request
         );
 
-        /*
-         * Build final order items.
-         *
-         * Existing products:
-         *   preserve stored price + cartonQty
-         *
-         * New products:
-         *   calculate current scheme price
-         */
-        const items =
-            await this.buildAdjustedItems(
-                order,
-                request,
-                false
-            );
+        const items = await this.buildAdjustedItems(
+            order,
+            request,
+            false
+        );
 
-        /*
-         * Product total.
-         */
-        const productTotal =
-            items.reduce(
-                (sum, item) =>
-                    sum +
-                    Number(item.total || 0),
-                0
-            );
+        const productTotal = items.reduce(
+            (sum, item) =>
+                sum +
+                Number(item.total || 0),
+            0
+        );
 
-        /*
-         * Current config.
-         */
-        const config =
-            await this.repo.getAdminConfig();
+        const config = await this.repo.getAdminConfig();
 
         if (!config) {
             throw new Error(
@@ -913,15 +868,10 @@ export class BulkOrderService {
             );
         }
 
-        /*
-         * Existing scheme must still exist
-         * and remain active.
-         */
-        const scheme =
-            this.getScheme(
-                order.schemeId,
-                config
-            );
+        const scheme = this.getScheme(
+            order.schemeId,
+            config
+        );
 
         if (!scheme) {
             throw new Error(
@@ -937,22 +887,18 @@ export class BulkOrderService {
             );
         }
 
-        
-        this.validateScheme(
-            scheme,
-            productTotal
+        const pricing = this.calculatePricing(
+            items,
+            order.address.state,
+            config
         );
 
-        const pricing =
-            this.calculatePricing(
-                items,
-                order.address.state,
-                config
-            );
+        this.validateScheme(
+            scheme,
+            pricing.grandTotal
+        );
 
-        const updatedAt =
-            Date.now();
-
+        const updatedAt = Date.now();
         await this.repo.updateAdjustment(
             order.orderId,
             {
@@ -1033,9 +979,6 @@ export class BulkOrderService {
             );
         }
 
-        /*
-         * Only ORDER_PLACED can be adjusted.
-         */
         this.validateAdjustmentStatus(
             order.status
         );
@@ -1047,17 +990,7 @@ export class BulkOrderService {
                 true
             );
 
-        const productTotal =
-            items.reduce(
-                (sum, item) =>
-                    sum +
-                    Number(item.total || 0),
-                0
-            );
-
-        const config =
-            await this.repo.getAdminConfig();
-
+        const config = await this.repo.getAdminConfig();
         if (!config) {
             throw new Error(
                 "Admin configuration not found."
@@ -1084,24 +1017,17 @@ export class BulkOrderService {
             );
         }
 
-        /*
-         * Validate adjusted product total
-         * against scheme min/max.
-         */
-        this.validateScheme(
-            scheme,
-            productTotal
-        );
-
-        /*
-         * Recalculate all order pricing.
-         */
         const pricing =
             this.calculatePricing(
                 items,
                 order.address.state,
                 config
             );
+
+        this.validateScheme(
+            scheme,
+            pricing.grandTotal
+        );
 
         const updatedAt =
             Date.now();
@@ -1142,13 +1068,6 @@ export class BulkOrderService {
                     item.productId
             );
 
-        /*
-         * Products are needed only for
-         * newly added products.
-         *
-         * Batch fetching all requested IDs is
-         * simple and safe for the current max=100.
-         */
         const products =
             await this.productService
                 .batchGetProducts(
@@ -1269,8 +1188,7 @@ export class BulkOrderService {
                 const unitPrice =
                     existingItem.unitPrice;
 
-                const schemePrice =
-                    existingItem.schemePrice;
+                const schemePrice = existingItem.schemePrice;
 
                 const total =
                     unitPrice *

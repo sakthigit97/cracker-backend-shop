@@ -1,7 +1,6 @@
 import {
   PutItemCommand,
   GetItemCommand,
-  ScanCommand,
   QueryCommand,
 } from "@aws-sdk/client-dynamodb";
 
@@ -74,15 +73,6 @@ export const handler = async (event: any) => {
     const initialCredit = isJoinBonusEnabled ? joinBonusAmount : 0;
     let referredBy = "";
     if (code && isReferralEnabled) {
-      // const referralCheck = await dbClient.send(
-      //   new ScanCommand({
-      //     TableName: USERS_TABLE,
-      //     FilterExpression: "referralCode = :code",
-      //     ExpressionAttributeValues: {
-      //       ":code": { S: code },
-      //     }
-      //   })
-      // );
       const referralCheck = await dbClient.send(
         new QueryCommand({
           TableName: USERS_TABLE,
@@ -108,6 +98,17 @@ export const handler = async (event: any) => {
 
     const myReferralCode = "CRK" + Math.floor(100000 + Math.random() * 900000);
     const passwordHash = await hashPassword(password);
+    const searchText = [
+      name,
+      mobile,
+      myReferralCode,
+      state,
+      city
+    ]
+      .filter(Boolean)
+      .join("  ")
+      .toLowerCase();
+
     await dbClient.send(
       new PutItemCommand({
         TableName: USERS_TABLE,
@@ -121,6 +122,7 @@ export const handler = async (event: any) => {
           state: { S: state || "" },
           pincode: { S: pincode || "" },
           referralCode: { S: myReferralCode },
+          searchText: { S: searchText },
           referredBy: { S: referredBy },
           walletCredit: { N: String(initialCredit) },
           referralRewarded: { BOOL: false },

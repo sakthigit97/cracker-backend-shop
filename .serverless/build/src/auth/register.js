@@ -1950,6 +1950,13 @@ var handler = async (event) => {
     }
     const myReferralCode = "CRK" + Math.floor(1e5 + Math.random() * 9e5);
     const passwordHash = await hashPassword(password);
+    const searchText = [
+      name,
+      mobile,
+      myReferralCode,
+      state,
+      city
+    ].filter(Boolean).join("  ").toLowerCase();
     await dbClient.send(
       new import_client_dynamodb3.PutItemCommand({
         TableName: USERS_TABLE,
@@ -1963,6 +1970,7 @@ var handler = async (event) => {
           state: { S: state || "" },
           pincode: { S: pincode || "" },
           referralCode: { S: myReferralCode },
+          searchText: { S: searchText },
           referredBy: { S: referredBy },
           walletCredit: { N: String(initialCredit) },
           referralRewarded: { BOOL: false },

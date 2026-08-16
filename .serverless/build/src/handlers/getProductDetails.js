@@ -142,8 +142,8 @@ var handler = async (event) => {
       bulkOrderBasePrice: productRes.Item.bulkOrderBasePrice || 0,
       isBulkOrderOnly: productRes.Item.isBulkOrderOnly || false,
       isRetailOnly: productRes.Item.isRetailOnly || false,
-      productPer: productRes.Item.productPer || 0,
-      productMeasurement: productRes.Item.productMeasurement || 0
+      packQuantity: productRes.Item.packQuantity || 0,
+      packUnit: productRes.Item.packUnit || ""
     };
     return success(product);
   } catch (err) {

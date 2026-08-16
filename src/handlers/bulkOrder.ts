@@ -100,9 +100,6 @@ export const handler = async (event: any) => {
             ) ||
             message.startsWith(
                 "Minimum order amount"
-            ) ||
-            message.startsWith(
-                "Maximum order amount"
             );
 
         return {

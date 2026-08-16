@@ -3982,7 +3982,7 @@ var service = new AdminOrderDetailsService();
 var handler = async (event) => {
   try {
     const { role } = verifyJwt(event);
-    if (role !== "admin") {
+    if (role === "user") {
       return { statusCode: 403, body: "Forbidden" };
     }
     const orderId = event.pathParameters?.orderId;

@@ -200,8 +200,8 @@ var handler = async (event) => {
         bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
         isBulkOrderOnly: p.isBulkOrderOnly || false,
         isRetailOnly: p.isRetailOnly || false,
-        productPer: p.productPer || 0,
-        productMeasurement: p.productMeasurement || ""
+        packQuantity: p.packQuantity || 0,
+        packUnit: p.packUnit || ""
       };
     });
     return success({
