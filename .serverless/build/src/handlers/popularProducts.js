@@ -265,7 +265,8 @@ var handler = async () => {
       qty: p.qty,
       searchText: p.searchText,
       isComboPackage: p.isComboPackage || false,
-      isBulkOnly: p.isBulkOnly || false,
+      isBulkOrderOnly: p.isBulkOrderOnly || false,
+      isRetailOnly: p.isRetailOnly || false,
       sequenceNumber: p.sequenceNumber || 0
     }));
     return success({

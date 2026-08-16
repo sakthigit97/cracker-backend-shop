@@ -101,9 +101,7 @@ export const handler = async (event: any) => {
     const searchText = [
       name,
       mobile,
-      myReferralCode,
-      state,
-      city
+      myReferralCode
     ]
       .filter(Boolean)
       .join("  ")

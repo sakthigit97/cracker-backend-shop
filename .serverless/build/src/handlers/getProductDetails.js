@@ -137,7 +137,6 @@ var handler = async (event) => {
       youtubeUrl: productRes.Item.videoUrl ?? null,
       qty: productRes.Item.quantity ?? 0,
       isComboPackage: productRes.Item.isComboPackage || false,
-      isBulkOnly: productRes.Item.isBulkOnly || false,
       cartonQty: productRes.Item.cartonQty || 0,
       bulkOrderBasePrice: productRes.Item.bulkOrderBasePrice || 0,
       isBulkOrderOnly: productRes.Item.isBulkOrderOnly || false,
