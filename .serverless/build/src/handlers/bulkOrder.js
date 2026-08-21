@@ -834,14 +834,14 @@ var require_decode = __commonJS({
 // node_modules/jsonwebtoken/lib/JsonWebTokenError.js
 var require_JsonWebTokenError = __commonJS({
   "node_modules/jsonwebtoken/lib/JsonWebTokenError.js"(exports2, module2) {
-    var JsonWebTokenError = function(message, error) {
+    var JsonWebTokenError = function(message, error2) {
       Error.call(this, message);
       if (Error.captureStackTrace) {
         Error.captureStackTrace(this, this.constructor);
       }
       this.name = "JsonWebTokenError";
       this.message = message;
-      if (error) this.inner = error;
+      if (error2) this.inner = error2;
     };
     JsonWebTokenError.prototype = Object.create(Error.prototype);
     JsonWebTokenError.prototype.constructor = JsonWebTokenError;
@@ -3793,8 +3793,8 @@ var require_sign = __commonJS({
       } else if (isObjectPayload) {
         try {
           validatePayload(payload);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
         if (!options.mutatePayload) {
           payload = Object.assign({}, payload);
@@ -3815,14 +3815,14 @@ var require_sign = __commonJS({
       }
       try {
         validateOptions(options);
-      } catch (error) {
-        return failure(error);
+      } catch (error2) {
+        return failure(error2);
       }
       if (!options.allowInvalidAsymmetricKeyTypes) {
         try {
           validateAsymmetricKey(header.alg, secretOrPrivateKey);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
       }
       const timestamp = payload.iat || Math.floor(Date.now() / 1e3);
@@ -4221,8 +4221,8 @@ var ProductService = class {
         bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
         isBulkOrderOnly: p.isBulkOrderOnly || false,
         isRetailOnly: p.isRetailOnly || false,
-        productPer: p.productPer || 0,
-        productMeasurement: p.productMeasurement || ""
+        packQuantity: p.packQuantity || 0,
+        packUnit: p.packUnit || ""
       };
     });
   }
@@ -4775,6 +4775,12 @@ var BulkOrderService = class {
     this.repo = repo;
     this.productService = productService;
   }
+  calculateBulkCartonBoxCount(items) {
+    return (items ?? []).reduce(
+      (sum, item) => sum + Number(item.quantity || 0),
+      0
+    );
+  }
   calculatePricing(items, state, config) {
     const productTotal = items.reduce(
       (sum, item) => sum + Number(item.total || 0),
@@ -4800,8 +4806,10 @@ var BulkOrderService = class {
       taxableAmount * gstPercent / 100
     );
     const grandTotal = productTotal + packagingCharge + gstAmount;
+    const cartonBoxCount = this.calculateBulkCartonBoxCount(items);
     return {
       productTotal,
+      cartonBoxCount,
       packagingPercent,
       packagingCharge,
       gstPercent: isTN && disableGstForTN ? 0 : configuredGstPercent,
@@ -4868,7 +4876,7 @@ var BulkOrderService = class {
     );
     this.validateScheme(
       scheme,
-      pricing.productTotal
+      pricing.grandTotal
     );
     const order = this.buildOrder(
       userId,
@@ -4986,6 +4994,7 @@ var BulkOrderService = class {
         const cartonQty = Number(
           product.cartonQty ?? 0
         );
+        const packUnit = product.packUnit ?? "";
         const quantity = Number(
           requestItem.quantity
         );
@@ -4994,14 +5003,15 @@ var BulkOrderService = class {
           productId: product.productId,
           name: product.name,
           image: product.image,
-          brand: product.brandName ?? product.brand,
+          brand: product.brandId,
           categoryId: product.categoryId,
           bulkOrderBasePrice,
           cartonQty,
           unitPrice,
           schemePrice: unitPrice,
           quantity,
-          total
+          total,
+          packUnit
         };
       }
     );
@@ -5010,19 +5020,9 @@ var BulkOrderService = class {
     const minAmount = Number(
       scheme.minAmount ?? 0
     );
-    const maxAmount = Number(
-      scheme.maxAmount ?? 0
-    );
     if (productTotal < minAmount) {
       throw new Error(
         `Minimum order amount for ${scheme.schemeName} is \u20B9${minAmount.toLocaleString(
-          "en-IN"
-        )}.`
-      );
-    }
-    if (maxAmount > 0 && productTotal > maxAmount) {
-      throw new Error(
-        `Maximum order amount for ${scheme.schemeName} is \u20B9${maxAmount.toLocaleString(
           "en-IN"
         )}.`
       );
@@ -5119,7 +5119,8 @@ var BulkOrderService = class {
             mobile: order.address?.mobile
           },
           pricing: order.pricing,
-          items: order.items
+          items: order.items,
+          deliveryState: order.address.state
         })
       ),
       nextCursor: result.nextCursor
@@ -5318,14 +5319,14 @@ var BulkOrderService = class {
         "The bulk scheme for this order is no longer active."
       );
     }
-    this.validateScheme(
-      scheme,
-      productTotal
-    );
     const pricing = this.calculatePricing(
       items,
       order.address.state,
       config
+    );
+    this.validateScheme(
+      scheme,
+      pricing.grandTotal
     );
     const updatedAt = Date.now();
     await this.repo.updateAdjustment(
@@ -5384,10 +5385,6 @@ var BulkOrderService = class {
       request,
       true
     );
-    const productTotal = items.reduce(
-      (sum, item) => sum + Number(item.total || 0),
-      0
-    );
     const config = await this.repo.getAdminConfig();
     if (!config) {
       throw new Error(
@@ -5408,14 +5405,14 @@ var BulkOrderService = class {
         "The bulk scheme for this order is no longer active."
       );
     }
-    this.validateScheme(
-      scheme,
-      productTotal
-    );
     const pricing = this.calculatePricing(
       items,
       order.address.state,
       config
+    );
+    this.validateScheme(
+      scheme,
+      pricing.grandTotal
     );
     const updatedAt = Date.now();
     await this.repo.updateAdjustment(
@@ -5569,9 +5566,32 @@ var BulkOrderService = class {
   }
 };
 
+// src/libs/response.ts
+var success = (data, statusCode = 200) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: true,
+    data
+  })
+});
+var error = (message, statusCode = 400) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: false,
+    message
+  })
+});
+
 // src/handlers/bulkOrder.ts
+var import_lib_dynamodb7 = require("@aws-sdk/lib-dynamodb");
+var BULK_ORDERS_TABLE = process.env.BULK_ORDERS_TABLE;
 var handler = async (event) => {
   try {
+    if (event.rawPath === "/bulk-orders/restore") {
+      return await restoreBulkOrder(
+        event
+      );
+    }
     const { userId } = verifyJwt(event);
     if (!event.body) {
       return {
@@ -5649,8 +5669,6 @@ var handler = async (event) => {
       "Bulk price is not configured"
     ) || message.startsWith(
       "Minimum order amount"
-    ) || message.startsWith(
-      "Maximum order amount"
     );
     return {
       statusCode: isValidationError ? 400 : 500,
@@ -5660,6 +5678,140 @@ var handler = async (event) => {
     };
   }
 };
+async function restoreBulkOrder(event) {
+  try {
+    const {
+      userId,
+      role
+    } = verifyJwt(event);
+    if (!userId) {
+      return error(
+        "Unauthorized",
+        401
+      );
+    }
+    const username = role === "admin" ? "Admin" : `USER#${userId}`;
+    let body;
+    try {
+      body = JSON.parse(
+        event.body || "{}"
+      );
+    } catch {
+      return error(
+        "Invalid request body",
+        400
+      );
+    }
+    const {
+      orderId
+    } = body;
+    if (!orderId) {
+      return error(
+        "orderId is required",
+        400
+      );
+    }
+    const res = await ddb.send(
+      new import_lib_dynamodb7.GetCommand({
+        TableName: BULK_ORDERS_TABLE,
+        Key: {
+          orderId,
+          meta: "ORDER"
+        }
+      })
+    );
+    const order = res.Item;
+    if (!order) {
+      return error(
+        "Bulk order not found",
+        404
+      );
+    }
+    if (order.status !== "CANCELLED") {
+      return error(
+        "Only cancelled bulk orders can be restored",
+        400
+      );
+    }
+    const now = Date.now();
+    const updatedAt = Number(
+      order.updatedAt || 0
+    );
+    if (!updatedAt) {
+      return error(
+        "Bulk order cannot be restored because cancellation date is unavailable",
+        400
+      );
+    }
+    const diffDays = (now - updatedAt) / (1e3 * 60 * 60 * 24);
+    if (diffDays > 30) {
+      return error(
+        "Bulk order cannot be restored after 30 days",
+        400
+      );
+    }
+    const statusHistory = [
+      ...Array.isArray(
+        order.statusHistory
+      ) ? order.statusHistory : [],
+      {
+        status: "ORDER_PLACED",
+        at: now,
+        by: username
+      }
+    ];
+    await ddb.send(
+      new import_lib_dynamodb7.UpdateCommand({
+        TableName: BULK_ORDERS_TABLE,
+        Key: {
+          orderId,
+          meta: "ORDER"
+        },
+        UpdateExpression: `
+                    SET
+                        #status = :newStatus,
+                        updatedAt = :now,
+                        modifiedAt = :now,
+                        modifiedBy = :modifiedBy,
+                        statusHistory = :statusHistory
+                `,
+        /*
+         * Prevent restoring an order that
+         * has already been changed.
+         */
+        ConditionExpression: "#status = :expectedStatus",
+        ExpressionAttributeNames: {
+          "#status": "status"
+        },
+        ExpressionAttributeValues: {
+          ":newStatus": "ORDER_PLACED",
+          ":expectedStatus": "CANCELLED",
+          ":now": now,
+          ":modifiedBy": username,
+          ":statusHistory": statusHistory
+        }
+      })
+    );
+    return success({
+      message: "Bulk order restored successfully"
+    });
+  } catch (err) {
+    console.error(
+      "Restore bulk order failed",
+      err
+    );
+    if (err?.name === "ConditionalCheckFailedException") {
+      return error(
+        "Bulk order already modified",
+        400
+      );
+    }
+    return error(
+      "Failed to restore bulk order",
+      500
+    );
+  }
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler

@@ -13,6 +13,10 @@ interface UpdateProductInput {
     isActive?: string;
     packageTagIds?: string[];
     aiTags?: string[];
+    isRetailOnly?: boolean;
+    isBulkOrderOnly?: boolean;
+    bulkOrderBasePrice?: number | null;
+    cartonQty?: number | null;
 }
 
 export class AdminUpdateProductService {

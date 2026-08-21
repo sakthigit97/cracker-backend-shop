@@ -154,13 +154,12 @@ var handler = async () => {
         searchText: p.searchText,
         isComboPackage: p.isComboPackage || false,
         sequenceNumber: p.sequenceNumber || 0,
-        isBulkOnly: p.isBulkOnly || false,
         cartonQty: p.cartonQty || 0,
         bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
         isBulkOrderOnly: p.isBulkOrderOnly || false,
         isRetailOnly: p.isRetailOnly || false,
-        productPer: p.productPer || 0,
-        productMeasurement: p.productMeasurement || ""
+        packQuantity: p.packQuantity || 0,
+        packUnit: p.packUnit || ""
       };
     });
     return success({

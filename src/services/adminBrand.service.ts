@@ -3,8 +3,8 @@ import { AdminBrandRepository } from "../repo/adminBrand.repo";
 export class AdminBrandService {
     constructor(private repo = new AdminBrandRepository()) { }
 
-    async listBrands(filters: any) {
-        return this.repo.listBrands(filters);
+    async listBrands() {
+        return this.repo.listBrands();
     }
 
     async getBrandById(brandId: string) {

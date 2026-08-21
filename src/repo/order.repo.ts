@@ -26,6 +26,9 @@ export class OrderRepository {
                     originalPrice: p.originalPrice || null,
                     discountText: p.discountText || '',
                     isComboPackage: p.isComboPackage || false,
+                    sequenceNumber: p.sequenceNumber || 0,
+                    packQuantity: p.packQuantity || 0,
+                    packUnit: p.packUnit || ''
                 },
             ])
         );
@@ -47,6 +50,9 @@ export class OrderRepository {
                 originalPrice: product.originalPrice,
                 discountText: product.discountText,
                 isComboPackage: product.isComboPackage,
+                sequenceNumber: product.sequenceNumber || 0,
+                packQuantity: product.packQuantity || 0,
+                packUnit: product.packUnit || ''
             };
         });
         return snapshot;

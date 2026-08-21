@@ -42,13 +42,12 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
             youtubeUrl: productRes.Item.videoUrl ?? null,
             qty: productRes.Item.quantity ?? 0,
             isComboPackage: productRes.Item.isComboPackage || false,
-            isBulkOnly: productRes.Item.isBulkOnly || false,
             cartonQty: productRes.Item.cartonQty || 0,
             bulkOrderBasePrice: productRes.Item.bulkOrderBasePrice || 0,
             isBulkOrderOnly: productRes.Item.isBulkOrderOnly || false,
             isRetailOnly: productRes.Item.isRetailOnly || false,
-            productPer: productRes.Item.productPer || 0,
-            productMeasurement: productRes.Item.productMeasurement || 0,
+            packQuantity: productRes.Item.packQuantity || 0,
+            packUnit: productRes.Item.packUnit || "",
         };
 
         return success(product);

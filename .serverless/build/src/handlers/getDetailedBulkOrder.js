@@ -4221,8 +4221,8 @@ var ProductService = class {
         bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
         isBulkOrderOnly: p.isBulkOrderOnly || false,
         isRetailOnly: p.isRetailOnly || false,
-        productPer: p.productPer || 0,
-        productMeasurement: p.productMeasurement || ""
+        packQuantity: p.packQuantity || 0,
+        packUnit: p.packUnit || ""
       };
     });
   }
@@ -4775,6 +4775,12 @@ var BulkOrderService = class {
     this.repo = repo;
     this.productService = productService;
   }
+  calculateBulkCartonBoxCount(items) {
+    return (items ?? []).reduce(
+      (sum, item) => sum + Number(item.quantity || 0),
+      0
+    );
+  }
   calculatePricing(items, state, config) {
     const productTotal = items.reduce(
       (sum, item) => sum + Number(item.total || 0),
@@ -4800,8 +4806,10 @@ var BulkOrderService = class {
       taxableAmount * gstPercent / 100
     );
     const grandTotal = productTotal + packagingCharge + gstAmount;
+    const cartonBoxCount = this.calculateBulkCartonBoxCount(items);
     return {
       productTotal,
+      cartonBoxCount,
       packagingPercent,
       packagingCharge,
       gstPercent: isTN && disableGstForTN ? 0 : configuredGstPercent,
@@ -4868,7 +4876,7 @@ var BulkOrderService = class {
     );
     this.validateScheme(
       scheme,
-      pricing.productTotal
+      pricing.grandTotal
     );
     const order = this.buildOrder(
       userId,
@@ -4986,6 +4994,7 @@ var BulkOrderService = class {
         const cartonQty = Number(
           product.cartonQty ?? 0
         );
+        const packUnit = product.packUnit ?? "";
         const quantity = Number(
           requestItem.quantity
         );
@@ -4994,14 +5003,15 @@ var BulkOrderService = class {
           productId: product.productId,
           name: product.name,
           image: product.image,
-          brand: product.brandName ?? product.brand,
+          brand: product.brandId,
           categoryId: product.categoryId,
           bulkOrderBasePrice,
           cartonQty,
           unitPrice,
           schemePrice: unitPrice,
           quantity,
-          total
+          total,
+          packUnit
         };
       }
     );
@@ -5010,19 +5020,9 @@ var BulkOrderService = class {
     const minAmount = Number(
       scheme.minAmount ?? 0
     );
-    const maxAmount = Number(
-      scheme.maxAmount ?? 0
-    );
     if (productTotal < minAmount) {
       throw new Error(
         `Minimum order amount for ${scheme.schemeName} is \u20B9${minAmount.toLocaleString(
-          "en-IN"
-        )}.`
-      );
-    }
-    if (maxAmount > 0 && productTotal > maxAmount) {
-      throw new Error(
-        `Maximum order amount for ${scheme.schemeName} is \u20B9${maxAmount.toLocaleString(
           "en-IN"
         )}.`
       );
@@ -5119,7 +5119,8 @@ var BulkOrderService = class {
             mobile: order.address?.mobile
           },
           pricing: order.pricing,
-          items: order.items
+          items: order.items,
+          deliveryState: order.address.state
         })
       ),
       nextCursor: result.nextCursor
@@ -5318,14 +5319,14 @@ var BulkOrderService = class {
         "The bulk scheme for this order is no longer active."
       );
     }
-    this.validateScheme(
-      scheme,
-      productTotal
-    );
     const pricing = this.calculatePricing(
       items,
       order.address.state,
       config
+    );
+    this.validateScheme(
+      scheme,
+      pricing.grandTotal
     );
     const updatedAt = Date.now();
     await this.repo.updateAdjustment(
@@ -5384,10 +5385,6 @@ var BulkOrderService = class {
       request,
       true
     );
-    const productTotal = items.reduce(
-      (sum, item) => sum + Number(item.total || 0),
-      0
-    );
     const config = await this.repo.getAdminConfig();
     if (!config) {
       throw new Error(
@@ -5408,14 +5405,14 @@ var BulkOrderService = class {
         "The bulk scheme for this order is no longer active."
       );
     }
-    this.validateScheme(
-      scheme,
-      productTotal
-    );
     const pricing = this.calculatePricing(
       items,
       order.address.state,
       config
+    );
+    this.validateScheme(
+      scheme,
+      pricing.grandTotal
     );
     const updatedAt = Date.now();
     await this.repo.updateAdjustment(

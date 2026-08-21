@@ -2,11 +2,10 @@ import { verifyJwt } from "../utils/auth";
 import { AdminOrdersService } from "../services/adminOrders.service";
 
 const service = new AdminOrdersService();
-
 export const handler = async (event: any) => {
     try {
         const { role } = verifyJwt(event);
-        if (role !== "admin") {
+        if (role === "user") {
             return { statusCode: 403, body: "Forbidden" };
         }
 

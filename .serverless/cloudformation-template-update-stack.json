@@ -314,6 +314,18 @@
         "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminListUsers"
       }
     },
+    "AdminListUserMobilesLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminListUserMobiles"
+      }
+    },
+    "AdminUpdateUserLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/sivakassi-pyropark-shop-backend-dev-adminUpdateUser"
+      }
+    },
     "AdminDeleteUserLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -703,7 +715,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/auth/login.handler",
         "Runtime": "nodejs24.x",
@@ -763,7 +775,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/auth/send-otp.handler",
         "Runtime": "nodejs24.x",
@@ -823,7 +835,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/auth/register.handler",
         "Runtime": "nodejs24.x",
@@ -883,7 +895,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/user/get-profile.main",
         "Runtime": "nodejs24.x",
@@ -943,7 +955,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/user/update-profile.main",
         "Runtime": "nodejs24.x",
@@ -1003,7 +1015,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getProducts.handler",
         "Runtime": "nodejs24.x",
@@ -1063,7 +1075,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getAllProducts.handler",
         "Runtime": "nodejs24.x",
@@ -1123,7 +1135,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getProductDetails.handler",
         "Runtime": "nodejs24.x",
@@ -1183,7 +1195,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getProductsByCategory.handler",
         "Runtime": "nodejs24.x",
@@ -1243,7 +1255,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getProductsByBrand.handler",
         "Runtime": "nodejs24.x",
@@ -1303,7 +1315,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getCategories.handler",
         "Runtime": "nodejs24.x",
@@ -1363,7 +1375,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getBrands.handler",
         "Runtime": "nodejs24.x",
@@ -1423,7 +1435,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cart.getCart",
         "Runtime": "nodejs24.x",
@@ -1483,7 +1495,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cart.addItem",
         "Runtime": "nodejs24.x",
@@ -1543,7 +1555,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cart.removeItem",
         "Runtime": "nodejs24.x",
@@ -1603,7 +1615,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cart.clearCart",
         "Runtime": "nodejs24.x",
@@ -1663,7 +1675,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/productBatch.handler",
         "Runtime": "nodejs24.x",
@@ -1723,7 +1735,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cartMerge.handler",
         "Runtime": "nodejs24.x",
@@ -1783,7 +1795,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cartSync.handler",
         "Runtime": "nodejs24.x",
@@ -1843,7 +1855,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/Orders.handler",
         "Runtime": "nodejs24.x",
@@ -1903,7 +1915,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getOrders.handler",
         "Runtime": "nodejs24.x",
@@ -1963,7 +1975,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cancelOrder.handler",
         "Runtime": "nodejs24.x",
@@ -2023,7 +2035,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adjustOrder.handler",
         "Runtime": "nodejs24.x",
@@ -2083,7 +2095,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDashboard.handler",
         "Runtime": "nodejs24.x",
@@ -2143,7 +2155,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminOrders.handler",
         "Runtime": "nodejs24.x",
@@ -2203,7 +2215,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminOrderDetails.handler",
         "Runtime": "nodejs24.x",
@@ -2263,7 +2275,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateOrder.handler",
         "Runtime": "nodejs24.x",
@@ -2323,7 +2335,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getAdminProducts.handler",
         "Runtime": "nodejs24.x",
@@ -2383,7 +2395,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/createAdminProduct.handler",
         "Runtime": "nodejs24.x",
@@ -2443,7 +2455,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/updateAdminProduct.handler",
         "Runtime": "nodejs24.x",
@@ -2503,7 +2515,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/deactivateAdminProduct.handler",
         "Runtime": "nodejs24.x",
@@ -2563,7 +2575,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getPresignedUrls.handler",
         "Runtime": "nodejs24.x",
@@ -2623,7 +2635,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getAdminProduct.handler",
         "Runtime": "nodejs24.x",
@@ -2683,7 +2695,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminGenerateImportUploadUrl.handler",
         "Runtime": "nodejs24.x",
@@ -2743,7 +2755,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminValidateProductImport.handler",
         "Runtime": "nodejs24.x",
@@ -2803,7 +2815,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminConfirmProductImport.handler",
         "Runtime": "nodejs24.x",
@@ -2863,7 +2875,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminListCategories.handler",
         "Runtime": "nodejs24.x",
@@ -2923,7 +2935,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCreateCategory.handler",
         "Runtime": "nodejs24.x",
@@ -2983,7 +2995,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateCategoryStatus.handler",
         "Runtime": "nodejs24.x",
@@ -3043,7 +3055,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateCategory.handler",
         "Runtime": "nodejs24.x",
@@ -3103,7 +3115,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminGetCategoryById.handler",
         "Runtime": "nodejs24.x",
@@ -3163,7 +3175,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteCategory.handler",
         "Runtime": "nodejs24.x",
@@ -3223,7 +3235,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminPresignCategoryImage.handler",
         "Runtime": "nodejs24.x",
@@ -3283,7 +3295,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cleanupOrphanProductImages.handler",
         "Runtime": "nodejs24.x",
@@ -3343,7 +3355,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminListBrands.handler",
         "Runtime": "nodejs24.x",
@@ -3403,7 +3415,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminGetBrand.handler",
         "Runtime": "nodejs24.x",
@@ -3463,7 +3475,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCreateBrand.handler",
         "Runtime": "nodejs24.x",
@@ -3523,7 +3535,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateBrand.handler",
         "Runtime": "nodejs24.x",
@@ -3583,7 +3595,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateBrandStatus.handler",
         "Runtime": "nodejs24.x",
@@ -3643,7 +3655,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteBrand.handler",
         "Runtime": "nodejs24.x",
@@ -3703,7 +3715,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminPresignBrandLogo.handler",
         "Runtime": "nodejs24.x",
@@ -3763,7 +3775,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminListUsers.handler",
         "Runtime": "nodejs24.x",
@@ -3818,12 +3830,132 @@
         "AdminListUsersLogGroup"
       ]
     },
+    "AdminListUserMobilesLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
+        },
+        "Handler": "src/handlers/adminListUserMobiles.handler",
+        "Runtime": "nodejs24.x",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminListUserMobiles",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+            "CART_TABLE": "Carts-dev",
+            "PRODUCTS_TABLE": "Products-dev",
+            "ORDERS_TABLE": "Orders-dev",
+            "BULK_ORDERS_TABLE": "BulkOrders-dev",
+            "BRAND_TABLE": "Brands-dev",
+            "CATEGORY_TABLE": "Categories-dev",
+            "USERS_TABLE": "Users-dev",
+            "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+            "DISCOUNT_TABLE": "Discounts-dev",
+            "CONTACT_TABLE": "ContactUs-dev",
+            "COUPONS_TABLE": "Coupons-dev",
+            "OTP_TABLE": "OtpTable-dev",
+            "ADMIN_CODES_TABLE": "AdminCodes-dev",
+            "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+            "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+            "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+            "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+            "CART_UPDATED_TID": "6a395e506ca224854303c222",
+            "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+            "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+            "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+            "DOMAIN": "https://www.sivakasicrackers.co.in",
+            "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+            "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+            "MAX_AI_PRODUCT_QTY": "10",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+            "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+            "DISTRIBUTION_ID": "EKBXVKHZI610H",
+            "STAGE": "dev",
+            "NODE_OPTIONS": "--enable-source-maps"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AdminListUserMobilesLogGroup"
+      ]
+    },
+    "AdminUpdateUserLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
+        },
+        "Handler": "src/handlers/adminUpdateUser.handler",
+        "Runtime": "nodejs24.x",
+        "FunctionName": "sivakassi-pyropark-shop-backend-dev-adminUpdateUser",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": "a8F3kL9xQ2vM7nR4tY6pW1zC5sD8hJ0uE3gB9iN6oV4qX7mK2",
+            "CART_TABLE": "Carts-dev",
+            "PRODUCTS_TABLE": "Products-dev",
+            "ORDERS_TABLE": "Orders-dev",
+            "BULK_ORDERS_TABLE": "BulkOrders-dev",
+            "BRAND_TABLE": "Brands-dev",
+            "CATEGORY_TABLE": "Categories-dev",
+            "USERS_TABLE": "Users-dev",
+            "ADMIN_CONFIG_TABLE": "AdminConfig-dev",
+            "DISCOUNT_TABLE": "Discounts-dev",
+            "CONTACT_TABLE": "ContactUs-dev",
+            "COUPONS_TABLE": "Coupons-dev",
+            "OTP_TABLE": "OtpTable-dev",
+            "ADMIN_CODES_TABLE": "AdminCodes-dev",
+            "OTP_TEMPLATE_ID": "6a3763c49f9c731319056313",
+            "CONFIRM_ORDER_TID": "6a395d8f4b2902461708e102",
+            "ORDER_SUBMIT_TID": "6a395d0d69a88cfd4f0186f2",
+            "PAYMENT_CONFIRM_TID": "6a3a014e776d690f4104d462",
+            "CART_UPDATED_TID": "6a395e506ca224854303c222",
+            "ORDER_DISPATCHED_TID": "6a37661e93ca0ddfe209c066",
+            "MSG91_ESTIMATE_TEMPLATE": "order_estimate",
+            "MSG91_EMAIL_FROM": "noreply@mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_DOMAIN": "mail.sivakasicrackers.co.in",
+            "MSG91_EMAIL_FROM_NAME": "Sivakasicrackers",
+            "DOMAIN": "https://www.sivakasicrackers.co.in",
+            "MSG91_AUTH_KEY": "502387AoWEhRSU6w9S69c77cebP1",
+            "RECAPTCHA_SECRET": "6Ld4itMsAAAAAJYbXNZcCsZDr7wYLLVgeBZPWYhh",
+            "MAX_AI_PRODUCT_QTY": "10",
+            "BUCKET_NAME": "sivakasi-pyropark-424006471348-dev",
+            "CLOUDFRONT_DOMAIN": "dyg4a25xn0t4n.cloudfront.net",
+            "DISTRIBUTION_ID": "EKBXVKHZI610H",
+            "STAGE": "dev",
+            "NODE_OPTIONS": "--enable-source-maps"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AdminUpdateUserLogGroup"
+      ]
+    },
     "AdminDeleteUserLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteUser.handler",
         "Runtime": "nodejs24.x",
@@ -3883,7 +4015,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/deleteProduct.handler",
         "Runtime": "nodejs24.x",
@@ -3943,7 +4075,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getConfig.handler",
         "Runtime": "nodejs24.x",
@@ -4003,7 +4135,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateConfig.handler",
         "Runtime": "nodejs24.x",
@@ -4063,7 +4195,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/bulk-upload-aitags.handler",
         "Runtime": "nodejs24.x",
@@ -4123,7 +4255,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminConfigSliderPresign.handler",
         "Runtime": "nodejs24.x",
@@ -4183,7 +4315,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/deleteProductImages.handler",
         "Runtime": "nodejs24.x",
@@ -4243,7 +4375,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminListDiscounts.handler",
         "Runtime": "nodejs24.x",
@@ -4303,7 +4435,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCreateDiscount.handler",
         "Runtime": "nodejs24.x",
@@ -4363,7 +4495,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminGetDiscountById.handler",
         "Runtime": "nodejs24.x",
@@ -4423,7 +4555,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminUpdateDiscount.handler",
         "Runtime": "nodejs24.x",
@@ -4483,7 +4615,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteDiscount.handler",
         "Runtime": "nodejs24.x",
@@ -4543,7 +4675,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getRevenueReport.handler",
         "Runtime": "nodejs24.x",
@@ -4603,7 +4735,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getProductReport.handler",
         "Runtime": "nodejs24.x",
@@ -4663,7 +4795,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/productSampleXls.handler",
         "Runtime": "nodejs24.x",
@@ -4723,7 +4855,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/orderRestore.handler",
         "Runtime": "nodejs24.x",
@@ -4783,7 +4915,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/popularProducts.handler",
         "Runtime": "nodejs24.x",
@@ -4843,7 +4975,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/auth/forgot/send-otp.handler",
         "Runtime": "nodejs24.x",
@@ -4903,7 +5035,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/auth/forgot/reset.handler",
         "Runtime": "nodejs24.x",
@@ -4963,7 +5095,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/contactSubmit.handler",
         "Runtime": "nodejs24.x",
@@ -5023,7 +5155,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/contactList.handler",
         "Runtime": "nodejs24.x",
@@ -5083,7 +5215,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/contactUpdate.handler",
         "Runtime": "nodejs24.x",
@@ -5143,7 +5275,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getPackages.handler",
         "Runtime": "nodejs24.x",
@@ -5203,7 +5335,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getPackageDetails.handler",
         "Runtime": "nodejs24.x",
@@ -5263,7 +5395,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/aiRecommendation.handler",
         "Runtime": "nodejs24.x",
@@ -5323,7 +5455,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/estimateEmail.handler",
         "Runtime": "nodejs24.x",
@@ -5383,7 +5515,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCreateCoupon.handler",
         "Runtime": "nodejs24.x",
@@ -5443,7 +5575,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminGetCoupons.handler",
         "Runtime": "nodejs24.x",
@@ -5503,7 +5635,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminDeleteCoupon.handler",
         "Runtime": "nodejs24.x",
@@ -5563,7 +5695,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/validateCoupon.handler",
         "Runtime": "nodejs24.x",
@@ -5623,7 +5755,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/bulkOrder.handler",
         "Runtime": "nodejs24.x",
@@ -5683,7 +5815,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getBulkOrders.handler",
         "Runtime": "nodejs24.x",
@@ -5743,7 +5875,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/getDetailedBulkOrder.handler",
         "Runtime": "nodejs24.x",
@@ -5803,7 +5935,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminBulkOrder.handler",
         "Runtime": "nodejs24.x",
@@ -5863,7 +5995,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminBulkOrderDetails.handler",
         "Runtime": "nodejs24.x",
@@ -5923,7 +6055,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminBulkOrderStatusUpdate.handler",
         "Runtime": "nodejs24.x",
@@ -5983,7 +6115,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/cancelBulkOrder.handler",
         "Runtime": "nodejs24.x",
@@ -6043,7 +6175,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCode.create",
         "Runtime": "nodejs24.x",
@@ -6103,7 +6235,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCode.list",
         "Runtime": "nodejs24.x",
@@ -6163,7 +6295,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCode.remove",
         "Runtime": "nodejs24.x",
@@ -6223,7 +6355,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/adminCode.validate",
         "Runtime": "nodejs24.x",
@@ -6283,7 +6415,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-ap-south-1-05523700-d247",
-          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1786737686884-2026-08-14T20:01:26.884Z/sivakassi-pyropark-shop-backend.zip"
+          "S3Key": "serverless/sivakassi-pyropark-shop-backend/dev/1787279895977-2026-08-21T02:38:15.977Z/sivakassi-pyropark-shop-backend.zip"
         },
         "Handler": "src/handlers/bulkOrderAdjust.handler",
         "Runtime": "nodejs24.x",
@@ -10244,6 +10376,156 @@
       },
       "DependsOn": "HttpApiIntegrationAdminListUsers"
     },
+    "AdminListUserMobilesLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AdminListUserMobilesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationAdminListUserMobiles": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "AdminListUserMobilesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetAdminUsersMobiles": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /admin/users/mobiles",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationAdminListUserMobiles"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationAdminListUserMobiles"
+    },
+    "AdminUpdateUserLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AdminUpdateUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationAdminUpdateUser": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "AdminUpdateUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePatchAdminUsersMobileVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "PATCH /admin/users/{mobile}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationAdminUpdateUser"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationAdminUpdateUser"
+    },
     "AdminDeleteUserLambdaPermissionHttpApi": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
@@ -12555,6 +12837,27 @@
           "Ref": "HttpApi"
         },
         "RouteKey": "POST /bulk-order",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationBulkCreateOrder"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationBulkCreateOrder"
+    },
+    "HttpApiRoutePostBulkDashordersRestore": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /bulk-orders/restore",
         "Target": {
           "Fn::Join": [
             "/",

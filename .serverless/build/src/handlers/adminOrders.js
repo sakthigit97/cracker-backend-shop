@@ -4043,7 +4043,7 @@ var service = new AdminOrdersService();
 var handler = async (event) => {
   try {
     const { role } = verifyJwt(event);
-    if (role !== "admin") {
+    if (role === "user") {
       return { statusCode: 403, body: "Forbidden" };
     }
     const q = event.queryStringParameters || {};

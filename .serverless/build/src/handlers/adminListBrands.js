@@ -3951,35 +3951,26 @@ var import_crypto = require("crypto");
 var TABLE = process.env.BRAND_TABLE;
 var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
 var AdminBrandRepository = class {
-  async listBrands({ limit, cursor, search, isActive }) {
-    const params = {
-      TableName: TABLE,
-      Limit: limit
-    };
-    if (cursor) {
-      params.ExclusiveStartKey = JSON.parse(
-        Buffer.from(cursor, "base64").toString()
-      );
-    }
-    if (isActive === "true" || isActive === "false") {
-      params.FilterExpression = "isActive = :active";
-      params.ExpressionAttributeValues = {
-        ":active": isActive === "true"
+  async listBrands() {
+    const items = [];
+    let ExclusiveStartKey = void 0;
+    do {
+      const params = {
+        TableName: TABLE
       };
-    }
-    const res = await ddb.send(new import_lib_dynamodb2.ScanCommand(params));
-    let items = res.Items || [];
-    if (search) {
-      const q = search.toLowerCase();
-      items = items.filter(
-        (b) => b.name?.toLowerCase().includes(q)
+      if (ExclusiveStartKey) {
+        params.ExclusiveStartKey = ExclusiveStartKey;
+      }
+      const res = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand(params)
       );
-    }
+      items.push(
+        ...res.Items || []
+      );
+      ExclusiveStartKey = res.LastEvaluatedKey;
+    } while (ExclusiveStartKey);
     return {
-      items,
-      nextCursor: res.LastEvaluatedKey ? Buffer.from(JSON.stringify(res.LastEvaluatedKey)).toString(
-        "base64"
-      ) : void 0
+      items
     };
   }
   async getBrandById(brandId) {
@@ -4067,8 +4058,8 @@ var AdminBrandService = class {
   constructor(repo = new AdminBrandRepository()) {
     this.repo = repo;
   }
-  async listBrands(filters) {
-    return this.repo.listBrands(filters);
+  async listBrands() {
+    return this.repo.listBrands();
   }
   async getBrandById(brandId) {
     return this.repo.getBrandById(brandId);
@@ -4099,14 +4090,7 @@ var handler = async (event) => {
     if (role !== "admin") {
       return { statusCode: 403, body: "Forbidden" };
     }
-    const qs = event.queryStringParameters || {};
-    const limit = Number(qs.limit || 10);
-    const data = await service.listBrands({
-      limit,
-      cursor: qs.cursor,
-      search: qs.search,
-      isActive: qs.isActive
-    });
+    const data = await service.listBrands();
     return {
       statusCode: 200,
       body: JSON.stringify(data)

@@ -489,6 +489,20 @@ functions:
           path: /admin/users
           method: GET
 
+  adminListUserMobiles:
+    handler: src/handlers/adminListUserMobiles.handler
+    events:
+      - httpApi:
+          path: /admin/users/mobiles
+          method: GET
+
+  adminUpdateUser:
+    handler: src/handlers/adminUpdateUser.handler
+    events:
+      - httpApi:
+          path: /admin/users/{mobile}
+          method: PATCH
+
   adminDeleteUser:
     handler: src/handlers/adminDeleteUser.handler
     events:
@@ -705,6 +719,10 @@ functions:
       - httpApi:
           path: /bulk-order
           method: POST
+
+      - httpApi:
+          path: /bulk-orders/restore
+          method: post
 
   getBulkOrder:
     handler: src/handlers/getBulkOrders.handler

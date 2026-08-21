@@ -11,7 +11,6 @@ export const handler = async (event: any) => {
         }
 
         const query = event.queryStringParameters || {};
-
         const search = query.search || "";
         const isActive = query.isActive as "true" | "false" | undefined;
         const cursor = query.cursor;

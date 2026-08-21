@@ -5,7 +5,7 @@ const service = new AdminOrderDetailsService();
 export const handler = async (event: any) => {
     try {
         const { role } = verifyJwt(event);
-        if (role !== "admin") {
+        if (role === "user") {
             return { statusCode: 403, body: "Forbidden" };
         }
 

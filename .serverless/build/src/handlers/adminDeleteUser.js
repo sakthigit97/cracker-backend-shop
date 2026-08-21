@@ -3948,45 +3948,169 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 
 // src/repo/adminUser.repo.ts
 var TABLE = process.env.USERS_TABLE;
+var MAX_SCAN_PAGES = 100;
 var AdminUserRepository = class {
   async listUsers({
     limit,
     cursor,
     search
   }) {
-    const params = {
-      TableName: TABLE,
-      Limit: limit
-    };
+    const searchValue = search?.trim().toLowerCase() || "";
+    let exclusiveStartKey;
     if (cursor) {
-      params.ExclusiveStartKey = JSON.parse(
-        Buffer.from(cursor, "base64").toString()
+      exclusiveStartKey = JSON.parse(
+        Buffer.from(
+          cursor,
+          "base64"
+        ).toString("utf-8")
       );
     }
-    const res = await ddb.send(new import_lib_dynamodb2.ScanCommand(params));
-    let items = res.Items || [];
-    if (search?.trim()) {
-      const q = search.toLowerCase();
-      items = items.filter((u) => {
-        const nameMatch = u.name?.toLowerCase().includes(q);
-        const mobileMatch = u.mobile && String(u.mobile).includes(q);
-        return nameMatch || mobileMatch;
-      });
-    }
+    const items = [];
+    let lastEvaluatedKey = exclusiveStartKey;
+    let scanCount = 0;
+    do {
+      scanCount++;
+      const expressionAttributeNames = {};
+      const expressionAttributeValues = {};
+      let filterExpression;
+      if (searchValue) {
+        expressionAttributeNames["#st"] = "searchText";
+        expressionAttributeValues[":q"] = searchValue;
+        filterExpression = "contains(#st, :q)";
+      }
+      const response = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand({
+          TableName: TABLE,
+          Limit: searchValue ? Math.max(limit, 50) : limit,
+          ExclusiveStartKey: lastEvaluatedKey,
+          ...filterExpression ? {
+            FilterExpression: filterExpression,
+            ExpressionAttributeNames: expressionAttributeNames,
+            ExpressionAttributeValues: expressionAttributeValues
+          } : {}
+        })
+      );
+      if (response.Items?.length) {
+        items.push(
+          ...response.Items
+        );
+      }
+      lastEvaluatedKey = response.LastEvaluatedKey;
+      if (items.length >= limit) {
+        break;
+      }
+      if (scanCount >= MAX_SCAN_PAGES) {
+        break;
+      }
+    } while (lastEvaluatedKey);
+    const pageItems = items.slice(0, limit);
+    const nextCursor = lastEvaluatedKey ? Buffer.from(
+      JSON.stringify(
+        lastEvaluatedKey
+      )
+    ).toString("base64") : void 0;
     return {
-      items,
-      nextCursor: res.LastEvaluatedKey ? Buffer.from(
-        JSON.stringify(res.LastEvaluatedKey)
-      ).toString("base64") : void 0
+      items: pageItems,
+      nextCursor
     };
   }
   async deleteUser(mobile) {
     await ddb.send(
       new import_lib_dynamodb2.DeleteCommand({
         TableName: TABLE,
-        Key: { mobile }
+        Key: {
+          mobile
+        }
       })
     );
+  }
+  async listUserMobiles() {
+    const mobiles = [];
+    let lastEvaluatedKey;
+    do {
+      const response = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand({
+          TableName: TABLE,
+          ProjectionExpression: "mobile",
+          ExclusiveStartKey: lastEvaluatedKey
+        })
+      );
+      if (response.Items?.length) {
+        mobiles.push(
+          ...response.Items.map(
+            (item) => String(item.mobile)
+          ).filter(Boolean)
+        );
+      }
+      lastEvaluatedKey = response.LastEvaluatedKey;
+    } while (lastEvaluatedKey);
+    return mobiles;
+  }
+  async updateUser(mobile, input) {
+    const updates = [];
+    const expressionAttributeNames = {};
+    const expressionAttributeValues = {};
+    if (input.name !== void 0) {
+      updates.push(
+        "#name = :name"
+      );
+      expressionAttributeNames["#name"] = "name";
+      expressionAttributeValues[":name"] = input.name.trim();
+    }
+    if (input.role !== void 0) {
+      updates.push(
+        "#role = :role"
+      );
+      expressionAttributeNames["#role"] = "role";
+      expressionAttributeValues[":role"] = input.role.trim();
+    }
+    if (input.address !== void 0) {
+      updates.push(
+        "#address = :address"
+      );
+      expressionAttributeNames["#address"] = "address";
+      expressionAttributeValues[":address"] = input.address.trim();
+    }
+    if (input.city !== void 0) {
+      updates.push(
+        "#city = :city"
+      );
+      expressionAttributeNames["#city"] = "city";
+      expressionAttributeValues[":city"] = input.city.trim();
+    }
+    if (input.state !== void 0) {
+      updates.push(
+        "#state = :state"
+      );
+      expressionAttributeNames["#state"] = "state";
+      expressionAttributeValues[":state"] = input.state.trim();
+    }
+    if (input.pincode !== void 0) {
+      updates.push(
+        "#pincode = :pincode"
+      );
+      expressionAttributeNames["#pincode"] = "pincode";
+      expressionAttributeValues[":pincode"] = input.pincode.trim();
+    }
+    if (updates.length === 0) {
+      throw new Error(
+        "At least one field is required"
+      );
+    }
+    const result = await ddb.send(
+      new import_lib_dynamodb2.UpdateCommand({
+        TableName: TABLE,
+        Key: {
+          mobile
+        },
+        UpdateExpression: `SET ${updates.join(", ")}`,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ConditionExpression: "attribute_exists(mobile)",
+        ReturnValues: "ALL_NEW"
+      })
+    );
+    return result.Attributes;
   }
 };
 
@@ -3998,8 +4122,17 @@ var AdminUserService = class {
   async listUsers(input) {
     return this.repo.listUsers(input);
   }
+  async listUserMobiles() {
+    return this.repo.listUserMobiles();
+  }
   async deleteUser(userId) {
     return this.repo.deleteUser(userId);
+  }
+  async updateUser(mobile, input) {
+    return this.repo.updateUser(
+      mobile,
+      input
+    );
   }
 };
 

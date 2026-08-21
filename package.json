@@ -34,6 +34,7 @@
     "@types/node": "^25.9.5",
     "@types/pdfkit": "^0.17.5",
     "serverless": "^4.29.4",
+    "serverless-plugin-split-stacks": "^1.15.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

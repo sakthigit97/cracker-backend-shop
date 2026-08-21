@@ -10,7 +10,7 @@ export async function handler(
     try {
 
         const { role, userId } = verifyJwt(event);
-        if (role !== "admin") {
+        if (role === "user") {
             return { statusCode: 403, body: "Forbidden" };
         }
 

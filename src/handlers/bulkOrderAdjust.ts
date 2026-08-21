@@ -59,7 +59,7 @@ export const handler = async (
 
         let result;
 
-        if (role === "admin") {
+        if (role === "admin" || role === "staff") {
             result =
                 await service.adminAdjustOrder(
                     request
@@ -141,9 +141,6 @@ export const handler = async (
             ) ||
             message.startsWith(
                 "Minimum order amount for"
-            ) ||
-            message.startsWith(
-                "Maximum order amount for"
             ) ||
             message.includes(
                 "is not available for bulk orders"

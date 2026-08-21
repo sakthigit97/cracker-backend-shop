@@ -161,8 +161,8 @@ var ProductService = class {
         bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
         isBulkOrderOnly: p.isBulkOrderOnly || false,
         isRetailOnly: p.isRetailOnly || false,
-        productPer: p.productPer || 0,
-        productMeasurement: p.productMeasurement || ""
+        packQuantity: p.packQuantity || 0,
+        packUnit: p.packUnit || ""
       };
     });
   }
@@ -265,7 +265,8 @@ var handler = async () => {
       qty: p.qty,
       searchText: p.searchText,
       isComboPackage: p.isComboPackage || false,
-      isBulkOnly: p.isBulkOnly || false,
+      isBulkOrderOnly: p.isBulkOrderOnly || false,
+      isRetailOnly: p.isRetailOnly || false,
       sequenceNumber: p.sequenceNumber || 0
     }));
     return success({

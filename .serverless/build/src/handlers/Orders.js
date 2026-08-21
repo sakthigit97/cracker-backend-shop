@@ -4170,8 +4170,8 @@ var ProductService = class {
         bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
         isBulkOrderOnly: p.isBulkOrderOnly || false,
         isRetailOnly: p.isRetailOnly || false,
-        productPer: p.productPer || 0,
-        productMeasurement: p.productMeasurement || ""
+        packQuantity: p.packQuantity || 0,
+        packUnit: p.packUnit || ""
       };
     });
   }
@@ -4200,7 +4200,10 @@ var OrderRepository = class {
           image: p.image || null,
           originalPrice: p.originalPrice || null,
           discountText: p.discountText || "",
-          isComboPackage: p.isComboPackage || false
+          isComboPackage: p.isComboPackage || false,
+          sequenceNumber: p.sequenceNumber || 0,
+          packQuantity: p.packQuantity || 0,
+          packUnit: p.packUnit || ""
         }
       ])
     );
@@ -4220,7 +4223,10 @@ var OrderRepository = class {
         total: product.price * c.quantity,
         originalPrice: product.originalPrice,
         discountText: product.discountText,
-        isComboPackage: product.isComboPackage
+        isComboPackage: product.isComboPackage,
+        sequenceNumber: product.sequenceNumber || 0,
+        packQuantity: product.packQuantity || 0,
+        packUnit: product.packUnit || ""
       };
     });
     return snapshot;
@@ -4867,7 +4873,7 @@ var OrderService = class {
     if (!order) {
       throw new Error("Order not found");
     }
-    const isAdmin = role === "admin";
+    const isAdmin = role !== "user";
     if (!isAdmin && order.userId !== userId) {
       throw new Error("Unauthorized");
     }

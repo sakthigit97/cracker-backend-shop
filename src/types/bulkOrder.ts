@@ -49,6 +49,7 @@ export interface BulkOrderAdjustRequest {
 
 export interface BulkOrderPricing {
     productTotal: number;
+    cartonBoxCount: number;
     packagingPercent: number;
     packagingCharge: number;
     gstPercent: number;

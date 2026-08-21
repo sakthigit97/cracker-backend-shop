@@ -22,19 +22,13 @@ export async function handler(
         const { role } =
             verifyJwt(event);
 
-        if (role !== "admin") {
+        if (role === "user") {
             return errorResponse(
                 "Forbidden",
                 403
             );
         }
 
-        /*
-         * Pagination
-         *
-         * Default: 20
-         * Maximum: 100
-         */
         const requestedLimit =
             Number(
                 event.queryStringParameters
@@ -54,9 +48,6 @@ export async function handler(
                 )
                 : 20;
 
-        /*
-         * Status filter
-         */
         const rawStatus =
             event.queryStringParameters
                 ?.status
@@ -74,9 +65,6 @@ export async function handler(
             );
         }
 
-        /*
-         * Pagination cursor
-         */
         let cursor:
             | any
             | undefined;
