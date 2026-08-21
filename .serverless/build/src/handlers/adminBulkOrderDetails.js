@@ -5119,7 +5119,8 @@ var BulkOrderService = class {
             mobile: order.address?.mobile
           },
           pricing: order.pricing,
-          items: order.items
+          items: order.items,
+          deliveryState: order.address.state
         })
       ),
       nextCursor: result.nextCursor

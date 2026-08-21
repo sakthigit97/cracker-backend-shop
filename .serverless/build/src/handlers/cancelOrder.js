@@ -4773,7 +4773,7 @@ var OrderService = class {
     if (!order) {
       throw new Error("Order not found");
     }
-    const isAdmin = role === "admin";
+    const isAdmin = role !== "user";
     if (!isAdmin && order.userId !== userId) {
       throw new Error("Unauthorized");
     }

@@ -10,15 +10,7 @@ export const handler = async (event: any) => {
             return { statusCode: 403, body: "Forbidden" };
         }
 
-        const qs = event.queryStringParameters || {};
-        const limit = Number(qs.limit || 10);
-        const data = await service.listBrands({
-            limit,
-            cursor: qs.cursor,
-            search: qs.search,
-            isActive: qs.isActive,
-        });
-
+        const data = await service.listBrands();
         return {
             statusCode: 200,
             body: JSON.stringify(data),

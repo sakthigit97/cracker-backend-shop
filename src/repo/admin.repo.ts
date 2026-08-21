@@ -82,8 +82,7 @@ export class AdminRepository {
                 },
                 ScanIndexForward: false,
                 Limit: limit,
-                ProjectionExpression:
-                    "orderId, #status, grandTotal, createdAt",
+                ProjectionExpression: "orderId, #status, finalPayable, createdAt",
             })
         );
 

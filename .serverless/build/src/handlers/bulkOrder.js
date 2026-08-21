@@ -834,14 +834,14 @@ var require_decode = __commonJS({
 // node_modules/jsonwebtoken/lib/JsonWebTokenError.js
 var require_JsonWebTokenError = __commonJS({
   "node_modules/jsonwebtoken/lib/JsonWebTokenError.js"(exports2, module2) {
-    var JsonWebTokenError = function(message, error) {
+    var JsonWebTokenError = function(message, error2) {
       Error.call(this, message);
       if (Error.captureStackTrace) {
         Error.captureStackTrace(this, this.constructor);
       }
       this.name = "JsonWebTokenError";
       this.message = message;
-      if (error) this.inner = error;
+      if (error2) this.inner = error2;
     };
     JsonWebTokenError.prototype = Object.create(Error.prototype);
     JsonWebTokenError.prototype.constructor = JsonWebTokenError;
@@ -3793,8 +3793,8 @@ var require_sign = __commonJS({
       } else if (isObjectPayload) {
         try {
           validatePayload(payload);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
         if (!options.mutatePayload) {
           payload = Object.assign({}, payload);
@@ -3815,14 +3815,14 @@ var require_sign = __commonJS({
       }
       try {
         validateOptions(options);
-      } catch (error) {
-        return failure(error);
+      } catch (error2) {
+        return failure(error2);
       }
       if (!options.allowInvalidAsymmetricKeyTypes) {
         try {
           validateAsymmetricKey(header.alg, secretOrPrivateKey);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
       }
       const timestamp = payload.iat || Math.floor(Date.now() / 1e3);
@@ -5119,7 +5119,8 @@ var BulkOrderService = class {
             mobile: order.address?.mobile
           },
           pricing: order.pricing,
-          items: order.items
+          items: order.items,
+          deliveryState: order.address.state
         })
       ),
       nextCursor: result.nextCursor
@@ -5565,9 +5566,32 @@ var BulkOrderService = class {
   }
 };
 
+// src/libs/response.ts
+var success = (data, statusCode = 200) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: true,
+    data
+  })
+});
+var error = (message, statusCode = 400) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: false,
+    message
+  })
+});
+
 // src/handlers/bulkOrder.ts
+var import_lib_dynamodb7 = require("@aws-sdk/lib-dynamodb");
+var BULK_ORDERS_TABLE = process.env.BULK_ORDERS_TABLE;
 var handler = async (event) => {
   try {
+    if (event.rawPath === "/bulk-orders/restore") {
+      return await restoreBulkOrder(
+        event
+      );
+    }
     const { userId } = verifyJwt(event);
     if (!event.body) {
       return {
@@ -5654,6 +5678,140 @@ var handler = async (event) => {
     };
   }
 };
+async function restoreBulkOrder(event) {
+  try {
+    const {
+      userId,
+      role
+    } = verifyJwt(event);
+    if (!userId) {
+      return error(
+        "Unauthorized",
+        401
+      );
+    }
+    const username = role === "admin" ? "Admin" : `USER#${userId}`;
+    let body;
+    try {
+      body = JSON.parse(
+        event.body || "{}"
+      );
+    } catch {
+      return error(
+        "Invalid request body",
+        400
+      );
+    }
+    const {
+      orderId
+    } = body;
+    if (!orderId) {
+      return error(
+        "orderId is required",
+        400
+      );
+    }
+    const res = await ddb.send(
+      new import_lib_dynamodb7.GetCommand({
+        TableName: BULK_ORDERS_TABLE,
+        Key: {
+          orderId,
+          meta: "ORDER"
+        }
+      })
+    );
+    const order = res.Item;
+    if (!order) {
+      return error(
+        "Bulk order not found",
+        404
+      );
+    }
+    if (order.status !== "CANCELLED") {
+      return error(
+        "Only cancelled bulk orders can be restored",
+        400
+      );
+    }
+    const now = Date.now();
+    const updatedAt = Number(
+      order.updatedAt || 0
+    );
+    if (!updatedAt) {
+      return error(
+        "Bulk order cannot be restored because cancellation date is unavailable",
+        400
+      );
+    }
+    const diffDays = (now - updatedAt) / (1e3 * 60 * 60 * 24);
+    if (diffDays > 30) {
+      return error(
+        "Bulk order cannot be restored after 30 days",
+        400
+      );
+    }
+    const statusHistory = [
+      ...Array.isArray(
+        order.statusHistory
+      ) ? order.statusHistory : [],
+      {
+        status: "ORDER_PLACED",
+        at: now,
+        by: username
+      }
+    ];
+    await ddb.send(
+      new import_lib_dynamodb7.UpdateCommand({
+        TableName: BULK_ORDERS_TABLE,
+        Key: {
+          orderId,
+          meta: "ORDER"
+        },
+        UpdateExpression: `
+                    SET
+                        #status = :newStatus,
+                        updatedAt = :now,
+                        modifiedAt = :now,
+                        modifiedBy = :modifiedBy,
+                        statusHistory = :statusHistory
+                `,
+        /*
+         * Prevent restoring an order that
+         * has already been changed.
+         */
+        ConditionExpression: "#status = :expectedStatus",
+        ExpressionAttributeNames: {
+          "#status": "status"
+        },
+        ExpressionAttributeValues: {
+          ":newStatus": "ORDER_PLACED",
+          ":expectedStatus": "CANCELLED",
+          ":now": now,
+          ":modifiedBy": username,
+          ":statusHistory": statusHistory
+        }
+      })
+    );
+    return success({
+      message: "Bulk order restored successfully"
+    });
+  } catch (err) {
+    console.error(
+      "Restore bulk order failed",
+      err
+    );
+    if (err?.name === "ConditionalCheckFailedException") {
+      return error(
+        "Bulk order already modified",
+        400
+      );
+    }
+    return error(
+      "Failed to restore bulk order",
+      500
+    );
+  }
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler

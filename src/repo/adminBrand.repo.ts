@@ -19,42 +19,38 @@ interface ListBrandInput {
 }
 
 export class AdminBrandRepository {
-    async listBrands({ limit, cursor, search, isActive }: ListBrandInput) {
-        const params: any = {
-            TableName: TABLE,
-            Limit: limit,
-        };
 
-        if (cursor) {
-            params.ExclusiveStartKey = JSON.parse(
-                Buffer.from(cursor, "base64").toString()
-            );
-        }
+    async listBrands() {
+        const items: any[] = [];
 
-        if (isActive === "true" || isActive === "false") {
-            params.FilterExpression = "isActive = :active";
-            params.ExpressionAttributeValues = {
-                ":active": isActive === "true",
+        let ExclusiveStartKey: any = undefined;
+
+        do {
+            const params: any = {
+                TableName: TABLE,
             };
-        }
 
-        const res = await ddb.send(new ScanCommand(params));
+            if (ExclusiveStartKey) {
+                params.ExclusiveStartKey =
+                    ExclusiveStartKey;
+            }
 
-        let items = res.Items || [];
-        if (search) {
-            const q = search.toLowerCase();
-            items = items.filter((b: any) =>
-                b.name?.toLowerCase().includes(q)
+            const res =
+                await ddb.send(
+                    new ScanCommand(params)
+                );
+
+            items.push(
+                ...(res.Items || [])
             );
-        }
+
+            ExclusiveStartKey =
+                res.LastEvaluatedKey;
+
+        } while (ExclusiveStartKey);
 
         return {
             items,
-            nextCursor: res.LastEvaluatedKey
-                ? Buffer.from(JSON.stringify(res.LastEvaluatedKey)).toString(
-                    "base64"
-                )
-                : undefined,
         };
     }
 

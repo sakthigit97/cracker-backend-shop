@@ -4017,7 +4017,7 @@ var AdminRepository = class {
         },
         ScanIndexForward: false,
         Limit: limit,
-        ProjectionExpression: "orderId, #status, grandTotal, createdAt"
+        ProjectionExpression: "orderId, #status, finalPayable, createdAt"
       })
     );
     return res.Items ?? [];

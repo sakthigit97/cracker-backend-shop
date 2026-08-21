@@ -1953,9 +1953,7 @@ var handler = async (event) => {
     const searchText = [
       name,
       mobile,
-      myReferralCode,
-      state,
-      city
+      myReferralCode
     ].filter(Boolean).join("  ").toLowerCase();
     await dbClient.send(
       new import_client_dynamodb3.PutItemCommand({

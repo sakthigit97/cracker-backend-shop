@@ -587,6 +587,7 @@ export class BulkOrderService {
                         order.pricing,
                     items:
                         order.items,
+                    deliveryState: order.address.state
                 })
             ),
             nextCursor:

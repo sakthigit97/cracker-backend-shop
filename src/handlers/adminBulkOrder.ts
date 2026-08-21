@@ -48,9 +48,6 @@ export async function handler(
                 )
                 : 20;
 
-        /*
-         * Status filter
-         */
         const rawStatus =
             event.queryStringParameters
                 ?.status
@@ -68,9 +65,6 @@ export async function handler(
             );
         }
 
-        /*
-         * Pagination cursor
-         */
         let cursor:
             | any
             | undefined;

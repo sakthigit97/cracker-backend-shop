@@ -720,6 +720,10 @@ functions:
           path: /bulk-order
           method: POST
 
+      - httpApi:
+          path: /bulk-orders/restore
+          method: post
+
   getBulkOrder:
     handler: src/handlers/getBulkOrders.handler
     events:
