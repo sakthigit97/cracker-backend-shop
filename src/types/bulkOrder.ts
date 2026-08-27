@@ -40,6 +40,7 @@ export interface BulkOrderAdjustRequestItem {
     productId: string;
     quantity: number;
     cartonQty?: number;
+    unitPrice?: number;
 }
 
 export interface BulkOrderAdjustRequest {
@@ -47,8 +48,24 @@ export interface BulkOrderAdjustRequest {
     items: BulkOrderAdjustRequestItem[];
 }
 
+export interface BulkOrderDiscountRequest {
+    orderId: string;
+    discountType:
+    | "FLAT"
+    | "PERCENTAGE";
+    discountValue: number;
+}
+
+export type BulkOrderDiscountType =
+    | "FLAT"
+    | "PERCENTAGE";
+
 export interface BulkOrderPricing {
     productTotal: number;
+    discountType?: BulkOrderDiscountType;
+    discountValue?: number;
+    discountAmount?: number;
+    discountedProductTotal?: number;
     cartonBoxCount: number;
     packagingPercent: number;
     packagingCharge: number;

@@ -82,6 +82,7 @@ export class BulkOrderRepository {
             items: BulkOrderItem[];
             pricing: BulkOrderPricing;
             updatedAt: number;
+            statusHistory: any;
         }
     ): Promise<void> {
 
@@ -99,7 +100,8 @@ export class BulkOrderRepository {
                     SET
                         #items = :items,
                         #pricing = :pricing,
-                        #updatedAt = :updatedAt
+                        #updatedAt = :updatedAt,
+                        #statusHistory = :statusHistory
                 `,
 
                 ExpressionAttributeNames: {
@@ -111,6 +113,9 @@ export class BulkOrderRepository {
 
                     "#updatedAt":
                         "updatedAt",
+
+                    "#statusHistory":
+                        "statusHistory",
                 },
 
                 ExpressionAttributeValues: {
@@ -122,6 +127,47 @@ export class BulkOrderRepository {
 
                     ":updatedAt":
                         data.updatedAt,
+                    ":statusHistory": data.statusHistory,
+                },
+            })
+        );
+    }
+
+    async updateDiscount(
+        orderId: string,
+        data: {
+            pricing: BulkOrderPricing;
+            updatedAt: number;
+            statusHistory: any[];
+        }
+    ): Promise<void> {
+
+        await ddb.send(
+            new UpdateCommand({
+                TableName: TABLE_NAME,
+
+                Key: {
+                    orderId,
+                    meta: "ORDER",
+                },
+
+                UpdateExpression: `
+                SET
+                    #pricing = :pricing,
+                    #updatedAt = :updatedAt,
+                    #statusHistory = :statusHistory
+            `,
+
+                ExpressionAttributeNames: {
+                    "#pricing": "pricing",
+                    "#updatedAt": "updatedAt",
+                    "#statusHistory": "statusHistory",
+                },
+
+                ExpressionAttributeValues: {
+                    ":pricing": data.pricing,
+                    ":updatedAt": data.updatedAt,
+                    ":statusHistory": data.statusHistory,
                 },
             })
         );

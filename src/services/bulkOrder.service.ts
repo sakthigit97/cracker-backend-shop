@@ -10,6 +10,7 @@ import {
     BulkOrderPricing,
     CreateBulkOrderRequest,
     BulkOrderAdjustRequest,
+    BulkOrderDiscountRequest,
 } from "../types/bulkOrder";
 
 const STATUS_ORDER = [
@@ -62,10 +63,9 @@ export class BulkOrderService {
             config?.gstPercent ?? 0
         );
 
-        let gstPercent = configuredGstPercent / 2;
-
+        const gstDenominator = Number(config?.gstDenominator ?? 2);
+        let gstPercent = configuredGstPercent / gstDenominator;
         const disableGstForTN = config?.disableGstForTN === true;
-
         const isTN = state?.trim().toLowerCase() === "tamil nadu";
         if (isTN && disableGstForTN) {
             gstPercent = 0;
@@ -185,6 +185,310 @@ export class BulkOrderService {
         return {
             orderId: order.orderId,
             pricing,
+        };
+    }
+
+    private calculateDiscountedPricing(
+        items: BulkOrderItem[],
+        state: string,
+        config: any,
+        discountType: "FLAT" | "PERCENTAGE",
+        discountValue: number
+    ): BulkOrderPricing {
+
+        const productTotal = items.reduce(
+            (sum, item) =>
+                sum + Number(item.total || 0),
+            0
+        );
+
+        let discountAmount = 0;
+
+        if (discountType === "PERCENTAGE") {
+
+            if (
+                !Number.isFinite(discountValue) ||
+                discountValue < 0 ||
+                discountValue > 100
+            ) {
+                throw new Error(
+                    "Percentage discount must be between 0 and 100."
+                );
+            }
+
+            discountAmount = Math.round(
+                (productTotal * discountValue) / 100
+            );
+
+        } else if (discountType === "FLAT") {
+
+            if (
+                !Number.isFinite(discountValue) ||
+                discountValue < 0
+            ) {
+                throw new Error(
+                    "Invalid discount value."
+                );
+            }
+
+            if (
+                discountValue > productTotal
+            ) {
+                throw new Error(
+                    "Flat discount cannot exceed the product total."
+                );
+            }
+
+            discountAmount =
+                Math.round(discountValue);
+
+        } else {
+
+            throw new Error(
+                "Invalid discount type."
+            );
+        }
+
+        const discountedProductTotal =
+            productTotal - discountAmount;
+
+        const packagingPercent =
+            Number(
+                config?.packagingPercent ?? 0
+            );
+
+        const packagingCharge =
+            Math.round(
+                (
+                    discountedProductTotal *
+                    packagingPercent
+                ) / 100
+            );
+
+        const configuredGstPercent =
+            Number(
+                config?.gstPercent ?? 0
+            );
+
+        const gstDenominator = Number(config?.gstDenominator ?? 2);
+        let gstPercent = configuredGstPercent / gstDenominator;
+        const disableGstForTN =
+            config?.disableGstForTN === true;
+
+        const isTN =
+            state?.trim().toLowerCase() ===
+            "tamil nadu";
+
+        if (
+            isTN &&
+            disableGstForTN
+        ) {
+            gstPercent = 0;
+        }
+
+        const taxableAmount =
+            discountedProductTotal +
+            packagingCharge;
+
+        const gstAmount =
+            Math.round(
+                (
+                    taxableAmount *
+                    gstPercent
+                ) / 100
+            );
+
+        const grandTotal =
+            discountedProductTotal +
+            packagingCharge +
+            gstAmount;
+
+        const cartonBoxCount =
+            this.calculateBulkCartonBoxCount(
+                items
+            );
+
+        return {
+
+            productTotal,
+
+            discountType,
+
+            discountValue,
+
+            discountAmount,
+
+            discountedProductTotal,
+
+            cartonBoxCount,
+
+            packagingPercent,
+
+            packagingCharge,
+
+            gstPercent: isTN && disableGstForTN
+                ? 0
+                : configuredGstPercent,
+
+            gstAmount,
+
+            grandTotal,
+        };
+    }
+    private calculateAdjustedPricing(
+        order: BulkOrder,
+        items: BulkOrderItem[],
+        config: any
+    ): BulkOrderPricing {
+
+        const existingDiscountType =
+            order.pricing?.discountType;
+
+        const existingDiscountValue =
+            order.pricing?.discountValue;
+
+        /*
+         * No discount was previously applied.
+         * Keep the existing pricing logic exactly as it is.
+         */
+        if (
+            existingDiscountType === undefined ||
+            existingDiscountValue === undefined
+        ) {
+            return this.calculatePricing(
+                items,
+                order.address.state,
+                config
+            );
+        }
+
+        /*
+         * Existing discount is present.
+         *
+         * Recalculate the discount against
+         * the NEW product total.
+         *
+         * This will also recalculate:
+         * - discountedProductTotal
+         * - packaging
+         * - GST
+         * - grandTotal
+         */
+        return this.calculateDiscountedPricing(
+            items,
+            order.address.state,
+            config,
+            existingDiscountType,
+            Number(existingDiscountValue)
+        );
+    }
+
+    async applyDiscount(
+        orderId: string,
+        discountType: "FLAT" | "PERCENTAGE",
+        discountValue: number,
+        role: string,
+        userId: string
+    ) {
+
+
+        if (
+            role !== "admin" &&
+            role !== "staff"
+        ) {
+            throw new Error(
+                "You are not authorized to apply discount."
+            );
+        }
+
+        const order =
+            await this.repo.getById(orderId);
+
+        if (!order) {
+            throw new Error(
+                "Bulk order not found."
+            );
+        }
+
+        this.validateAdjustmentStatus(
+            order.status
+        );
+
+        const config =
+            await this.repo.getAdminConfig();
+
+        if (!config) {
+            throw new Error(
+                "Admin configuration not found."
+            );
+        }
+
+        const pricing =
+            this.calculateDiscountedPricing(
+                order.items,
+                order.address.state,
+                config,
+                discountType,
+                discountValue
+            );
+
+        const scheme =
+            this.getScheme(
+                order.schemeId,
+                config
+            );
+
+        if (!scheme) {
+            throw new Error(
+                "The bulk scheme for this order is no longer available."
+            );
+        }
+
+        if (
+            scheme.isActive === false
+        ) {
+            throw new Error(
+                "The bulk scheme for this order is no longer active."
+            );
+        }
+
+        const discountedProductTotal =
+            pricing.discountedProductTotal ??
+            pricing.productTotal;
+
+        this.validateScheme(
+            scheme,
+            discountedProductTotal
+        );
+
+        const updatedAt =
+            Date.now();
+
+        const actor =
+            role === "staff"
+                ? `STAFF#${userId}`
+                : `ADMIN#${userId}`;
+
+        const statusHistory =
+            this.addStatusHistory(
+                order.statusHistory,
+                "ORDER_DISCOUNT_APPLIED",
+                actor
+            );
+
+        await this.repo.updateDiscount(
+            orderId,
+            {
+                pricing,
+                updatedAt,
+                statusHistory,
+            }
+        );
+
+        return {
+            orderId,
+            pricing,
+            updatedAt,
         };
     }
 
@@ -455,8 +759,7 @@ export class BulkOrderService {
 
             statusHistory: [
                 {
-                    status:
-                        "ORDER_PLACED",
+                    status: "ORDER_PLACED",
                     at: now,
                     by: `USER#${userId}`,
                 },
@@ -761,10 +1064,9 @@ export class BulkOrderService {
         userId: string,
         orderId: string
     ) {
-        const order =
-            await this.repo.getById(
-                orderId
-            );
+        const order = await this.repo.getById(
+            orderId
+        );
 
         if (!order) {
             throw new Error(
@@ -801,8 +1103,7 @@ export class BulkOrderService {
                     "CANCELLED",
                 updatedAt: now,
                 modifiedAt: now,
-                modifiedBy:
-                    `USER#${userId}`,
+                modifiedBy: `USER#${userId}`,
                 statusHistory,
             }
         );
@@ -844,7 +1145,7 @@ export class BulkOrderService {
             order.status
         );
 
-        this.validateUserAdjustmentCartons(
+        this.validateUserAdjustmentFields(
             request
         );
 
@@ -852,13 +1153,6 @@ export class BulkOrderService {
             order,
             request,
             false
-        );
-
-        const productTotal = items.reduce(
-            (sum, item) =>
-                sum +
-                Number(item.total || 0),
-            0
         );
 
         const config = await this.repo.getAdminConfig();
@@ -888,15 +1182,20 @@ export class BulkOrderService {
             );
         }
 
-        const pricing = this.calculatePricing(
-            items,
-            order.address.state,
-            config
-        );
+        const pricing =
+            this.calculateAdjustedPricing(
+                order,
+                items,
+                config
+            );
+
+        const schemeAmount =
+            pricing.discountedProductTotal ??
+            pricing.productTotal;
 
         this.validateScheme(
             scheme,
-            pricing.grandTotal
+            schemeAmount
         );
 
         const updatedAt = Date.now();
@@ -906,6 +1205,14 @@ export class BulkOrderService {
                 items,
                 pricing,
                 updatedAt,
+                statusHistory: [
+                    ...(order.statusHistory || []),
+                    {
+                        status: "ORDER_ADJUSTED",
+                        at: updatedAt,
+                        by: `USER#${userId}`,
+                    },
+                ],
             }
         );
 
@@ -924,10 +1231,10 @@ export class BulkOrderService {
     private validateAdjustmentStatus(
         status: string
     ): void {
-
         if (
-            status !==
-            "ORDER_PLACED"
+            status === "ORDER_PACKED" ||
+            status === "DISPATCHED" ||
+            status === "CANCELLED"
         ) {
             throw new Error(
                 "This bulk order can no longer be adjusted."
@@ -935,14 +1242,7 @@ export class BulkOrderService {
         }
     }
 
-
-    /*
-     * --------------------------------------------------
-     * User carton protection
-     * --------------------------------------------------
-     */
-
-    private validateUserAdjustmentCartons(
+    private validateUserAdjustmentFields(
         request: BulkOrderAdjustRequest
     ): void {
 
@@ -951,28 +1251,36 @@ export class BulkOrderService {
         ) {
 
             if (
-                item.cartonQty !==
-                undefined
+                item.cartonQty !== undefined
             ) {
                 throw new Error(
                     "You are not authorized to change carton quantity."
+                );
+            }
+
+            if (
+                item.unitPrice !== undefined
+            ) {
+                throw new Error(
+                    "You are not authorized to change unit price."
                 );
             }
         }
     }
 
     async adminAdjustOrder(
-        request: BulkOrderAdjustRequest
+        request: BulkOrderAdjustRequest,
+        role: string,
+        userId: string
     ) {
 
         BulkOrderAdjustValidation.validateRequest(
             request
         );
 
-        const order =
-            await this.repo.getById(
-                request.orderId
-            );
+        const order = await this.repo.getById(
+            request.orderId
+        );
 
         if (!order) {
             throw new Error(
@@ -984,12 +1292,11 @@ export class BulkOrderService {
             order.status
         );
 
-        const items =
-            await this.buildAdjustedItems(
-                order,
-                request,
-                true
-            );
+        const items = await this.buildAdjustedItems(
+            order,
+            request,
+            true
+        );
 
         const config = await this.repo.getAdminConfig();
         if (!config) {
@@ -1019,26 +1326,38 @@ export class BulkOrderService {
         }
 
         const pricing =
-            this.calculatePricing(
+            this.calculateAdjustedPricing(
+                order,
                 items,
-                order.address.state,
                 config
             );
 
+        const schemeAmount =
+            pricing.discountedProductTotal ??
+            pricing.productTotal;
+
         this.validateScheme(
             scheme,
-            pricing.grandTotal
+            schemeAmount
         );
 
-        const updatedAt =
-            Date.now();
-
+        const updatedAt = Date.now();
         await this.repo.updateAdjustment(
             order.orderId,
             {
                 items,
                 pricing,
                 updatedAt,
+                statusHistory: [
+                    ...(order.statusHistory || []),
+                    {
+                        status: "ORDER_ADJUSTED",
+                        at: updatedAt,
+                        by: role === "STAFF"
+                            ? `STAFF#${userId}`
+                            : `ADMIN#${userId}`
+                    },
+                ],
             }
         );
 
@@ -1060,9 +1379,6 @@ export class BulkOrderService {
         isAdmin: boolean
     ): Promise<BulkOrderItem[]> {
 
-        /*
-         * IDs from final requested list.
-         */
         const productIds =
             request.items.map(
                 (item) =>
@@ -1085,9 +1401,6 @@ export class BulkOrderService {
                 )
             );
 
-        /*
-         * Existing order items.
-         */
         const existingItemMap =
             new Map(
                 order.items.map(
@@ -1139,35 +1452,92 @@ export class BulkOrderService {
                     requestItem.productId
                 );
 
-            /*
-             * ------------------------------------------------
-             * Existing item
-             * ------------------------------------------------
-             */
+
+            // if (existingItem) {
+
+            //     let cartonQty =
+            //         existingItem.cartonQty;
+
+            //     if (
+            //         isAdmin &&
+            //         requestItem.cartonQty !==
+            //         undefined
+            //     ) {
+            //         cartonQty =
+            //             requestItem.cartonQty;
+            //     }
+
+            //     if (
+            //         !Number.isInteger(
+            //             cartonQty
+            //         ) ||
+            //         cartonQty <= 0
+            //     ) {
+            //         throw new Error(
+            //             `Invalid carton quantity for product ${existingItem.name}.`
+            //         );
+            //     }
+
+            //     const quantity =
+            //         requestItem.quantity;
+
+            //     const unitPrice =
+            //         existingItem.unitPrice;
+
+            //     const schemePrice = existingItem.schemePrice;
+
+            //     const total =
+            //         unitPrice *
+            //         cartonQty *
+            //         quantity;
+
+            //     result.push({
+            //         ...existingItem,
+
+            //         cartonQty,
+
+            //         unitPrice,
+
+            //         schemePrice,
+
+            //         quantity,
+
+            //         total,
+            //     });
+
+            //     continue;
+            // }
 
             if (existingItem) {
 
                 /*
-                 * User keeps the original cartonQty.
+                 * Existing product
                  *
-                 * Admin may provide a new cartonQty.
+                 * USER:
+                 * - cartonQty cannot change
+                 * - unitPrice cannot change
+                 *
+                 * ADMIN / STAFF:
+                 * - cartonQty can change
+                 * - unitPrice can change
+                 *
+                 * If ADMIN / STAFF does not provide a new value,
+                 * preserve the existing value.
                  */
+
                 let cartonQty =
                     existingItem.cartonQty;
 
                 if (
                     isAdmin &&
-                    requestItem.cartonQty !==
-                    undefined
+                    requestItem.cartonQty !== undefined
                 ) {
                     cartonQty =
                         requestItem.cartonQty;
                 }
 
                 if (
-                    !Number.isInteger(
-                        cartonQty
-                    ) ||
+                    !Number.isInteger(cartonQty) ||
                     cartonQty <= 0
                 ) {
                     throw new Error(
@@ -1175,21 +1545,29 @@ export class BulkOrderService {
                     );
                 }
 
-                const quantity =
-                    requestItem.quantity;
 
-                /*
-                 * IMPORTANT:
-                 *
-                 * Preserve the existing agreed price.
-                 *
-                 * Do not recalculate it from the current
-                 * product base price or current scheme.
-                 */
-                const unitPrice =
+                let unitPrice =
                     existingItem.unitPrice;
 
-                const schemePrice = existingItem.schemePrice;
+                if (
+                    isAdmin &&
+                    requestItem.unitPrice !== undefined
+                ) {
+                    unitPrice =
+                        requestItem.unitPrice;
+                }
+
+                if (
+                    !Number.isFinite(unitPrice) ||
+                    unitPrice <= 0
+                ) {
+                    throw new Error(
+                        `Invalid price for product ${existingItem.name}.`
+                    );
+                }
+
+                const quantity =
+                    requestItem.quantity;
 
                 const total =
                     unitPrice *
@@ -1202,8 +1580,8 @@ export class BulkOrderService {
                     cartonQty,
 
                     unitPrice,
-
-                    schemePrice,
+                    schemePrice:
+                        unitPrice,
 
                     quantity,
 
@@ -1213,12 +1591,6 @@ export class BulkOrderService {
                 continue;
             }
 
-
-            /*
-             * ------------------------------------------------
-             * New product
-             * ------------------------------------------------
-             */
 
             const product =
                 productMap.get(
@@ -1231,10 +1603,6 @@ export class BulkOrderService {
                 );
             }
 
-            /*
-             * Only products eligible for bulk order
-             * adjustment may be newly added.
-             */
             if (
                 product.isBulkOrderOnly !==
                 true

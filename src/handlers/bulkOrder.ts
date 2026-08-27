@@ -252,9 +252,6 @@ async function restoreBulkOrder(
             );
         }
 
-        /*
-         * Append restore event to history.
-         */
         const statusHistory = [
             ...(Array.isArray(
                 order.statusHistory
@@ -263,19 +260,12 @@ async function restoreBulkOrder(
                 : []),
 
             {
-                status:
-                    "ORDER_PLACED",
-
+                status: "ORDER_PLACED",
                 at: now,
-
                 by: username,
             },
         ];
 
-        /*
-         * Restore only fields that belong
-         * to the bulk-order schema.
-         */
         await ddb.send(
             new UpdateCommand({
                 TableName:

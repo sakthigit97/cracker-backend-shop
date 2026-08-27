@@ -1,0 +1,138 @@
+service: sivakassi-pyropark-shop-v2
+
+custom:
+  stage: dev
+  region: ap-south-1
+
+provider:
+  name: aws
+  runtime: nodejs24.x
+  versionFunctions: false
+  stage: ${self:custom.stage}
+  timeout: 60
+
+  environment:
+    JWT_SECRET: ${env:JWT_SECRET}
+    CART_TABLE: Carts-${self:custom.stage}
+    PRODUCTS_TABLE: Products-${self:custom.stage}
+    ORDERS_TABLE: Orders-${self:custom.stage}
+    BULK_ORDERS_TABLE: BulkOrders-${self:custom.stage}
+    BRAND_TABLE: Brands-${self:custom.stage}
+    CATEGORY_TABLE: Categories-${self:custom.stage}
+    USERS_TABLE: Users-${self:custom.stage}
+    ADMIN_CONFIG_TABLE: AdminConfig-${self:custom.stage}
+    DISCOUNT_TABLE: Discounts-${self:custom.stage}
+    CONTACT_TABLE: ContactUs-${self:custom.stage}
+    COUPONS_TABLE: Coupons-${self:custom.stage}
+    OTP_TABLE: OtpTable-${self:custom.stage}
+    ADMIN_CODES_TABLE: AdminCodes-${self:custom.stage}
+    OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
+    CONFIRM_ORDER_TID: ${env:CONFIRM_ORDER_TID}
+    ORDER_SUBMIT_TID: ${env:ORDER_SUBMIT_TID}
+    PAYMENT_CONFIRM_TID: ${env:PAYMENT_CONFIRM_TID}
+    CART_UPDATED_TID: ${env:CART_UPDATED_TID}
+    ORDER_DISPATCHED_TID: ${env:ORDER_DISPATCHED_TID}
+    MSG91_ESTIMATE_TEMPLATE: ${env:MSG91_ESTIMATE_TEMPLATE}
+    MSG91_EMAIL_FROM: ${env:MSG91_EMAIL_FROM}
+    MSG91_EMAIL_DOMAIN: ${env:MSG91_EMAIL_DOMAIN}
+    MSG91_EMAIL_FROM_NAME: ${env:MSG91_EMAIL_FROM_NAME}
+    DOMAIN: ${env:DOMAIN}
+    MSG91_AUTH_KEY: ${env:MSG91_AUTH_KEY}
+    RECAPTCHA_SECRET: ${env:RECAPTCHA_SECRET}
+    MAX_AI_PRODUCT_QTY: 10
+    BUCKET_NAME: sivakasi-pyropark-${aws:accountId}-${self:provider.stage}
+    CLOUDFRONT_DOMAIN: ${env:CLOUDFRONT_DOMAIN}
+    DISTRIBUTION_ID: ${env:DISTRIBUTION_ID}
+    STAGE: ${self:custom.stage}
+
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:5173
+        - https://frontend-cracker-shop.vercel.app
+        - https://d1wqhtxjg6zqoo.cloudfront.net
+        - https://sivakasipyropark.co.in
+        - https://www.sivakasipyropark.co.in
+        - https://dz9f4nfbnyjk1.cloudfront.net
+        - https://www.sivakasicrackers.co.in
+        - https://sivakasicrackers.co.in
+
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+        - x-guest-id
+
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - PATCH
+
+      allowCredentials: false
+
+    binaryMediaTypes:
+      - application/pdf
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:DeleteItem
+            - dynamodb:BatchGetItem
+            - dynamodb:BatchWriteItem
+          Resource:
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Users-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Products-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Products-${self:custom.stage}/index/*
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Categories-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Brands-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Discounts-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Carts-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Orders-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Orders-${self:custom.stage}/index/*
+            - arn:aws:dynamodb:${self:custom.region}:*:table/BulkOrders-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/BulkOrders-${self:custom.stage}/index/*
+            - arn:aws:dynamodb:${self:custom.region}:*:table/AdminConfig-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/ContactUs-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/OtpTable-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Coupons-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/AdminCodes-${self:custom.stage}
+
+        - Effect: Allow
+          Action:
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}
+
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:DeleteObject
+          Resource:
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/products/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/imports/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/brands/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/categories/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/config/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/templates/*
+
+functions:
+  bulkAdjustOrder:
+    handler: src/handlers/bulkOrderAdjust.handler
+
+    events:
+      - httpApi:
+          path: /bulk-order/{orderId}/adjust
+          method: PUT
+
+      - httpApi:
+          path: /bulk-order/{orderId}/discount
+          method: PUT
