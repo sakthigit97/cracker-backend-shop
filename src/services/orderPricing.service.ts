@@ -61,8 +61,9 @@ export class OrderPricingService {
             return 0;
         }
 
+        const gstDenominator = Number(config?.gstDenominator ?? 2);
         const effectivePercent =
-            config.gstPercent / 2;
+            config.gstPercent / gstDenominator;
 
         return Math.round(
             (discountedGrossTotal * effectivePercent) / 100

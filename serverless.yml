@@ -1,8 +1,8 @@
-service: sivakassi-pyropark-shop-api
+service: sivakassi-pyropark-shop-backend
 
 custom:
-  stage: prod
-  region: us-east-1
+  stage: dev
+  region: ap-south-1
 
 provider:
   name: aws
@@ -793,13 +793,6 @@ functions:
       - httpApi:
           path: /bulk-order/validate-code
           method: POST
-
-  bulkAdjustOrder:
-    handler: src/handlers/bulkOrderAdjust.handler
-    events:
-      - httpApi:
-          path: /bulk-order/{orderId}/adjust
-          method: PUT
 
 resources:
   Resources:

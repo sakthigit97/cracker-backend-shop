@@ -25,12 +25,6 @@ export class BulkOrderAdjustValidation {
     }
 
 
-    /*
-     * --------------------------------------------------
-     * Order ID
-     * --------------------------------------------------
-     */
-
     private static validateOrderId(
         orderId?: string
     ): void {
@@ -73,7 +67,7 @@ export class BulkOrderAdjustValidation {
             );
         }
 
-        const productIds =new Set<string>();
+        const productIds = new Set<string>();
 
         for (const item of items) {
 
@@ -164,6 +158,18 @@ export class BulkOrderAdjustValidation {
             ) {
                 throw new Error(
                     `Invalid carton quantity for product ${productId}.`
+                );
+            }
+        }
+
+        if (item.unitPrice !== undefined) {
+            if (
+                !Number.isFinite(item.unitPrice) ||
+                item.unitPrice <= 0 ||
+                item.unitPrice > 100000000
+            ) {
+                throw new Error(
+                    `Invalid price for product ${productId}.`
                 );
             }
         }

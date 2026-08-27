@@ -279,7 +279,7 @@ export class OrderService {
                 {
                     status: "ORDER_ADJUSTED",
                     at: now,
-                    by: isAdmin ? "ADMIN" : `USER#${userId}`,
+                    by: isAdmin ? `ADMIN#${userId}` : `USER#${userId}`,
                 },
             ],
         });

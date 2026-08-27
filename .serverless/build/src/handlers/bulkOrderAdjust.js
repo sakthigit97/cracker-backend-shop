@@ -3902,6 +3902,7 @@ var require_jsonwebtoken = __commonJS({
 // src/handlers/bulkOrderAdjust.ts
 var bulkOrderAdjust_exports = {};
 __export(bulkOrderAdjust_exports, {
+  applyDiscount: () => applyDiscount2,
   handler: () => handler
 });
 module.exports = __toCommonJS(bulkOrderAdjust_exports);
@@ -4002,17 +4003,47 @@ var BulkOrderRepository = class {
                     SET
                         #items = :items,
                         #pricing = :pricing,
-                        #updatedAt = :updatedAt
+                        #updatedAt = :updatedAt,
+                        #statusHistory = :statusHistory
                 `,
         ExpressionAttributeNames: {
           "#items": "items",
           "#pricing": "pricing",
-          "#updatedAt": "updatedAt"
+          "#updatedAt": "updatedAt",
+          "#statusHistory": "statusHistory"
         },
         ExpressionAttributeValues: {
           ":items": data.items,
           ":pricing": data.pricing,
-          ":updatedAt": data.updatedAt
+          ":updatedAt": data.updatedAt,
+          ":statusHistory": data.statusHistory
+        }
+      })
+    );
+  }
+  async updateDiscount(orderId, data) {
+    await ddb.send(
+      new import_lib_dynamodb2.UpdateCommand({
+        TableName: TABLE_NAME,
+        Key: {
+          orderId,
+          meta: "ORDER"
+        },
+        UpdateExpression: `
+                SET
+                    #pricing = :pricing,
+                    #updatedAt = :updatedAt,
+                    #statusHistory = :statusHistory
+            `,
+        ExpressionAttributeNames: {
+          "#pricing": "pricing",
+          "#updatedAt": "updatedAt",
+          "#statusHistory": "statusHistory"
+        },
+        ExpressionAttributeValues: {
+          ":pricing": data.pricing,
+          ":updatedAt": data.updatedAt,
+          ":statusHistory": data.statusHistory
         }
       })
     );
@@ -4663,11 +4694,6 @@ var BulkOrderAdjustValidation = class {
       request.items
     );
   }
-  /*
-   * --------------------------------------------------
-   * Order ID
-   * --------------------------------------------------
-   */
   static validateOrderId(orderId) {
     const value = orderId?.trim() ?? "";
     if (!value) {
@@ -4758,6 +4784,13 @@ var BulkOrderAdjustValidation = class {
         );
       }
     }
+    if (item.unitPrice !== void 0) {
+      if (!Number.isFinite(item.unitPrice) || item.unitPrice <= 0 || item.unitPrice > 1e8) {
+        throw new Error(
+          `Invalid price for product ${productId}.`
+        );
+      }
+    }
   }
 };
 
@@ -4795,7 +4828,8 @@ var BulkOrderService = class {
     const configuredGstPercent = Number(
       config?.gstPercent ?? 0
     );
-    let gstPercent = configuredGstPercent / 2;
+    const gstDenominator = Number(config?.gstDenominator ?? 2);
+    let gstPercent = configuredGstPercent / gstDenominator;
     const disableGstForTN = config?.disableGstForTN === true;
     const isTN = state?.trim().toLowerCase() === "tamil nadu";
     if (isTN && disableGstForTN) {
@@ -4888,6 +4922,163 @@ var BulkOrderService = class {
     return {
       orderId: order.orderId,
       pricing
+    };
+  }
+  calculateDiscountedPricing(items, state, config, discountType, discountValue) {
+    const productTotal = items.reduce(
+      (sum, item) => sum + Number(item.total || 0),
+      0
+    );
+    let discountAmount = 0;
+    if (discountType === "PERCENTAGE") {
+      if (!Number.isFinite(discountValue) || discountValue < 0 || discountValue > 100) {
+        throw new Error(
+          "Percentage discount must be between 0 and 100."
+        );
+      }
+      discountAmount = Math.round(
+        productTotal * discountValue / 100
+      );
+    } else if (discountType === "FLAT") {
+      if (!Number.isFinite(discountValue) || discountValue < 0) {
+        throw new Error(
+          "Invalid discount value."
+        );
+      }
+      if (discountValue > productTotal) {
+        throw new Error(
+          "Flat discount cannot exceed the product total."
+        );
+      }
+      discountAmount = Math.round(discountValue);
+    } else {
+      throw new Error(
+        "Invalid discount type."
+      );
+    }
+    const discountedProductTotal = productTotal - discountAmount;
+    const packagingPercent = Number(
+      config?.packagingPercent ?? 0
+    );
+    const packagingCharge = Math.round(
+      discountedProductTotal * packagingPercent / 100
+    );
+    const configuredGstPercent = Number(
+      config?.gstPercent ?? 0
+    );
+    const gstDenominator = Number(config?.gstDenominator ?? 2);
+    let gstPercent = configuredGstPercent / gstDenominator;
+    const disableGstForTN = config?.disableGstForTN === true;
+    const isTN = state?.trim().toLowerCase() === "tamil nadu";
+    if (isTN && disableGstForTN) {
+      gstPercent = 0;
+    }
+    const taxableAmount = discountedProductTotal + packagingCharge;
+    const gstAmount = Math.round(
+      taxableAmount * gstPercent / 100
+    );
+    const grandTotal = discountedProductTotal + packagingCharge + gstAmount;
+    const cartonBoxCount = this.calculateBulkCartonBoxCount(
+      items
+    );
+    return {
+      productTotal,
+      discountType,
+      discountValue,
+      discountAmount,
+      discountedProductTotal,
+      cartonBoxCount,
+      packagingPercent,
+      packagingCharge,
+      gstPercent: isTN && disableGstForTN ? 0 : configuredGstPercent,
+      gstAmount,
+      grandTotal
+    };
+  }
+  calculateAdjustedPricing(order, items, config) {
+    const existingDiscountType = order.pricing?.discountType;
+    const existingDiscountValue = order.pricing?.discountValue;
+    if (existingDiscountType === void 0 || existingDiscountValue === void 0) {
+      return this.calculatePricing(
+        items,
+        order.address.state,
+        config
+      );
+    }
+    return this.calculateDiscountedPricing(
+      items,
+      order.address.state,
+      config,
+      existingDiscountType,
+      Number(existingDiscountValue)
+    );
+  }
+  async applyDiscount(orderId, discountType, discountValue, role, userId) {
+    if (role !== "admin" && role !== "staff") {
+      throw new Error(
+        "You are not authorized to apply discount."
+      );
+    }
+    const order = await this.repo.getById(orderId);
+    if (!order) {
+      throw new Error(
+        "Bulk order not found."
+      );
+    }
+    this.validateAdjustmentStatus(
+      order.status
+    );
+    const config = await this.repo.getAdminConfig();
+    if (!config) {
+      throw new Error(
+        "Admin configuration not found."
+      );
+    }
+    const pricing = this.calculateDiscountedPricing(
+      order.items,
+      order.address.state,
+      config,
+      discountType,
+      discountValue
+    );
+    const scheme = this.getScheme(
+      order.schemeId,
+      config
+    );
+    if (!scheme) {
+      throw new Error(
+        "The bulk scheme for this order is no longer available."
+      );
+    }
+    if (scheme.isActive === false) {
+      throw new Error(
+        "The bulk scheme for this order is no longer active."
+      );
+    }
+    const discountedProductTotal = pricing.discountedProductTotal ?? pricing.productTotal;
+    this.validateScheme(
+      scheme,
+      discountedProductTotal
+    );
+    const updatedAt = Date.now();
+    const actor = role === "staff" ? `STAFF#${userId}` : `ADMIN#${userId}`;
+    const statusHistory = this.addStatusHistory(
+      order.statusHistory,
+      "ORDER_DISCOUNT_APPLIED",
+      actor
+    );
+    await this.repo.updateDiscount(
+      orderId,
+      {
+        pricing,
+        updatedAt,
+        statusHistory
+      }
+    );
+    return {
+      orderId,
+      pricing,
+      updatedAt
     };
   }
   async loadProducts(request) {
@@ -5287,17 +5478,13 @@ var BulkOrderService = class {
     this.validateAdjustmentStatus(
       order.status
     );
-    this.validateUserAdjustmentCartons(
+    this.validateUserAdjustmentFields(
       request
     );
     const items = await this.buildAdjustedItems(
       order,
       request,
       false
-    );
-    const productTotal = items.reduce(
-      (sum, item) => sum + Number(item.total || 0),
-      0
     );
     const config = await this.repo.getAdminConfig();
     if (!config) {
@@ -5319,14 +5506,15 @@ var BulkOrderService = class {
         "The bulk scheme for this order is no longer active."
       );
     }
-    const pricing = this.calculatePricing(
+    const pricing = this.calculateAdjustedPricing(
+      order,
       items,
-      order.address.state,
       config
     );
+    const schemeAmount = pricing.discountedProductTotal ?? pricing.productTotal;
     this.validateScheme(
       scheme,
-      pricing.grandTotal
+      schemeAmount
     );
     const updatedAt = Date.now();
     await this.repo.updateAdjustment(
@@ -5334,7 +5522,15 @@ var BulkOrderService = class {
       {
         items,
         pricing,
-        updatedAt
+        updatedAt,
+        statusHistory: [
+          ...order.statusHistory || [],
+          {
+            status: "ORDER_ADJUSTED",
+            at: updatedAt,
+            by: `USER#${userId}`
+          }
+        ]
       }
     );
     return {
@@ -5345,27 +5541,27 @@ var BulkOrderService = class {
     };
   }
   validateAdjustmentStatus(status) {
-    if (status !== "ORDER_PLACED") {
+    if (status === "ORDER_PACKED" || status === "DISPATCHED" || status === "CANCELLED") {
       throw new Error(
         "This bulk order can no longer be adjusted."
       );
     }
   }
-  /*
-   * --------------------------------------------------
-   * User carton protection
-   * --------------------------------------------------
-   */
-  validateUserAdjustmentCartons(request) {
+  validateUserAdjustmentFields(request) {
     for (const item of request.items) {
       if (item.cartonQty !== void 0) {
         throw new Error(
           "You are not authorized to change carton quantity."
         );
       }
+      if (item.unitPrice !== void 0) {
+        throw new Error(
+          "You are not authorized to change unit price."
+        );
+      }
     }
   }
-  async adminAdjustOrder(request) {
+  async adminAdjustOrder(request, role, userId) {
     BulkOrderAdjustValidation.validateRequest(
       request
     );
@@ -5405,14 +5601,15 @@ var BulkOrderService = class {
         "The bulk scheme for this order is no longer active."
       );
     }
-    const pricing = this.calculatePricing(
+    const pricing = this.calculateAdjustedPricing(
+      order,
       items,
-      order.address.state,
       config
     );
+    const schemeAmount = pricing.discountedProductTotal ?? pricing.productTotal;
     this.validateScheme(
       scheme,
-      pricing.grandTotal
+      schemeAmount
     );
     const updatedAt = Date.now();
     await this.repo.updateAdjustment(
@@ -5420,7 +5617,15 @@ var BulkOrderService = class {
       {
         items,
         pricing,
-        updatedAt
+        updatedAt,
+        statusHistory: [
+          ...order.statusHistory || [],
+          {
+            status: "ORDER_ADJUSTED",
+            at: updatedAt,
+            by: role === "STAFF" ? `STAFF#${userId}` : `ADMIN#${userId}`
+          }
+        ]
       }
     );
     return {
@@ -5483,22 +5688,27 @@ var BulkOrderService = class {
         if (isAdmin && requestItem.cartonQty !== void 0) {
           cartonQty2 = requestItem.cartonQty;
         }
-        if (!Number.isInteger(
-          cartonQty2
-        ) || cartonQty2 <= 0) {
+        if (!Number.isInteger(cartonQty2) || cartonQty2 <= 0) {
           throw new Error(
             `Invalid carton quantity for product ${existingItem.name}.`
           );
         }
+        let unitPrice2 = existingItem.unitPrice;
+        if (isAdmin && requestItem.unitPrice !== void 0) {
+          unitPrice2 = requestItem.unitPrice;
+        }
+        if (!Number.isFinite(unitPrice2) || unitPrice2 <= 0) {
+          throw new Error(
+            `Invalid price for product ${existingItem.name}.`
+          );
+        }
         const quantity2 = requestItem.quantity;
-        const unitPrice2 = existingItem.unitPrice;
-        const schemePrice = existingItem.schemePrice;
         const total2 = unitPrice2 * cartonQty2 * quantity2;
         result.push({
           ...existingItem,
           cartonQty: cartonQty2,
           unitPrice: unitPrice2,
-          schemePrice,
+          schemePrice: unitPrice2,
           quantity: quantity2,
           total: total2
         });
@@ -5569,6 +5779,13 @@ var BulkOrderService = class {
 // src/handlers/bulkOrderAdjust.ts
 var handler = async (event) => {
   try {
+    if (event.rawPath?.endsWith(
+      "/discount"
+    )) {
+      return await applyDiscount2(
+        event
+      );
+    }
     const { userId, role } = verifyJwt(event);
     const orderId = event.pathParameters?.orderId?.trim() ?? "";
     if (!orderId) {
@@ -5608,7 +5825,9 @@ var handler = async (event) => {
     let result;
     if (role === "admin" || role === "staff") {
       result = await service.adminAdjustOrder(
-        request
+        request,
+        role,
+        userId
       );
     } else if (role === "user") {
       result = await service.adjustOrder(
@@ -5678,8 +5897,103 @@ var handler = async (event) => {
     };
   }
 };
+var applyDiscount2 = async (event) => {
+  try {
+    const {
+      userId,
+      role
+    } = verifyJwt(event);
+    if (role !== "admin" && role !== "staff") {
+      return {
+        statusCode: 403,
+        body: JSON.stringify({
+          message: "You are not authorized to apply discount."
+        })
+      };
+    }
+    const orderId = event.pathParameters?.orderId?.trim() ?? "";
+    if (!orderId) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Order ID is required."
+        })
+      };
+    }
+    if (!event.body) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Request body is required."
+        })
+      };
+    }
+    let body;
+    try {
+      body = JSON.parse(
+        event.body
+      );
+    } catch {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Invalid request body."
+        })
+      };
+    }
+    const discountType = body?.discountType;
+    const discountValue = body?.discountValue;
+    if (discountType !== "FLAT" && discountType !== "PERCENTAGE") {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Invalid discount type."
+        })
+      };
+    }
+    if (typeof discountValue !== "number" || !Number.isFinite(
+      discountValue
+    )) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Invalid discount value."
+        })
+      };
+    }
+    const service = new BulkOrderService();
+    const result = await service.applyDiscount(
+      orderId,
+      discountType,
+      discountValue,
+      role,
+      userId
+    );
+    return {
+      statusCode: 200,
+      body: JSON.stringify(
+        result
+      )
+    };
+  } catch (err) {
+    console.error(
+      "Bulk order discount update failed",
+      err
+    );
+    const message = err?.message || "Internal Server Error";
+    const isAuthorizationError = message === "You are not authorized to apply discount.";
+    const isValidationError = message === "Order ID is required." || message === "Request body is required." || message === "Invalid request body." || message === "Invalid discount type." || message === "Invalid discount value." || message === "Percentage discount must be between 0 and 100." || message === "Discount amount cannot be negative." || message === "Discount amount cannot exceed the product total." || message === "Bulk order not found." || message === "Admin configuration not found." || message === "This bulk order can no longer be adjusted." || message === "The bulk scheme for this order is no longer available." || message === "The bulk scheme for this order is no longer active.";
+    return {
+      statusCode: isAuthorizationError ? 403 : isValidationError ? 400 : 500,
+      body: JSON.stringify({
+        message
+      })
+    };
+  }
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  applyDiscount,
   handler
 });
 /*! Bundled license information:
