@@ -7,12 +7,14 @@ const handler = async (event: any) => {
   const mobile = event.user.sub;
   const body = JSON.parse(event.body || "{}");
   const USERS_TABLE = process.env.USERS_TABLE!;
+
   const {
     title,
     name,
     address,
     email,
     city,
+    district,
     state,
     pincode,
   } = body;
@@ -33,6 +35,7 @@ const handler = async (event: any) => {
           title = :title,
           address = :address,
           city = :city,
+          district = :district,
           email = :email,
           #state = :state,
           pincode = :pincode
@@ -46,6 +49,7 @@ const handler = async (event: any) => {
         ":name": { S: name },
         ":address": { S: address },
         ":city": { S: city || "" },
+        ":district": { S: district || "" },
         ":state": { S: state || "" },
         ":email": { S: email || "" },
         ":pincode": { S: pincode || "" },

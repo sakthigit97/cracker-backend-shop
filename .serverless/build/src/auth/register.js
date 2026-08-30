@@ -1890,6 +1890,7 @@ var handler = async (event) => {
       password,
       address,
       city,
+      district,
       state,
       pincode,
       referralCodeUsed
@@ -1984,6 +1985,7 @@ var handler = async (event) => {
           role: { S: "user" },
           address: { S: address },
           city: { S: city || "" },
+          district: { S: district || "" },
           state: { S: state || "" },
           pincode: { S: pincode || "" },
           referralCode: { S: myReferralCode },

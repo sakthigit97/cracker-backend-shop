@@ -3969,6 +3969,7 @@ var handler = async (event) => {
     address,
     email,
     city,
+    district,
     state,
     pincode
   } = body;
@@ -3987,6 +3988,7 @@ var handler = async (event) => {
           title = :title,
           address = :address,
           city = :city,
+          district = :district,
           email = :email,
           #state = :state,
           pincode = :pincode
@@ -4000,6 +4002,7 @@ var handler = async (event) => {
         ":name": { S: name },
         ":address": { S: address },
         ":city": { S: city || "" },
+        ":district": { S: district || "" },
         ":state": { S: state || "" },
         ":email": { S: email || "" },
         ":pincode": { S: pincode || "" }

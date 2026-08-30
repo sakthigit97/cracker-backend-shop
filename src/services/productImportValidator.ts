@@ -229,9 +229,9 @@ function validateDiscount(row: any): string | null {
 
     const discountValue = Number(value);
 
-    if (discountValue <= 0) {
-        return "Discount Value must be greater than 0";
-    }
+    // if (discountValue <= 0) {
+    //     return "Discount Value must be greater than 0";
+    // }
 
     if (mode === "PERCENT" && discountValue > 100) {
         return "Percentage discount cannot exceed 100";

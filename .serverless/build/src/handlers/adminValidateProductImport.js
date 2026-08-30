@@ -37366,9 +37366,6 @@ function validateDiscount(row) {
     return "Discount Mode must be PERCENT or FLAT";
   }
   const discountValue = Number(value);
-  if (discountValue <= 0) {
-    return "Discount Value must be greater than 0";
-  }
   if (mode === "PERCENT" && discountValue > 100) {
     return "Percentage discount cannot exceed 100";
   }

@@ -201,7 +201,8 @@ var handler = async (event) => {
         isBulkOrderOnly: p.isBulkOrderOnly || false,
         isRetailOnly: p.isRetailOnly || false,
         packQuantity: p.packQuantity || 0,
-        packUnit: p.packUnit || ""
+        packUnit: p.packUnit || "",
+        isGiftPack: p.isGiftPack || false
       };
     });
     return success({

@@ -42,17 +42,17 @@ export const handler = async (event: any) => {
             };
         }
 
-        if (
-            !Number.isFinite(discountValue) ||
-            discountValue <= 0
-        ) {
-            return {
-                statusCode: 400,
-                body: JSON.stringify({
-                    message: "Discount value must be greater than 0",
-                }),
-            };
-        }
+        // if (
+        //     !Number.isFinite(discountValue) ||
+        //     discountValue <= 0
+        // ) {
+        //     return {
+        //         statusCode: 400,
+        //         body: JSON.stringify({
+        //             message: "Discount value must be greater than 0",
+        //         }),
+        //     };
+        // }
 
         if (
             discountType === "PERCENTAGE" &&

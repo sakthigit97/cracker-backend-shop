@@ -272,7 +272,6 @@ export class OrderService {
                 {
                     status: "ADDITIONAL_DISCOUNT_APPLIED",
                     at: now,
-
                     by:
                         role === "STAFF"
                             ? `STAFF#${userId}`

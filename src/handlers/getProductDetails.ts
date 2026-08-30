@@ -48,6 +48,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
             isRetailOnly: productRes.Item.isRetailOnly || false,
             packQuantity: productRes.Item.packQuantity || 0,
             packUnit: productRes.Item.packUnit || "",
+            isGiftPack: productRes.Item.isGiftPack || false,
         };
 
         return success(product);

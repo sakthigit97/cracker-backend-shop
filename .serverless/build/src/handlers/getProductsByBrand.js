@@ -193,7 +193,8 @@ var handler = async (event) => {
         isComboPackage: p.isComboPackage || false,
         isBulkOrderOnly: p.isBulkOrderOnly || false,
         isRetailOnly: p.isRetailOnly || false,
-        sequenceNumber: p.sequenceNumber || 0
+        sequenceNumber: p.sequenceNumber || 0,
+        isGiftPack: p.isGiftPack || false
       };
     }) || [];
     return success({

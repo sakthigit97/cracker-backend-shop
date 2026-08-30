@@ -33,6 +33,7 @@ export const handler: APIGatewayProxyHandlerV2 = async () => {
                 isRetailOnly: p.isRetailOnly || false,
                 packQuantity: p.packQuantity || 0,
                 packUnit: p.packUnit || "",
+                isGiftPack: p.isGiftPack || false,
             };
         });
 

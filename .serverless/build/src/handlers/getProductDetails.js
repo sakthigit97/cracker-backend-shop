@@ -142,7 +142,8 @@ var handler = async (event) => {
       isBulkOrderOnly: productRes.Item.isBulkOrderOnly || false,
       isRetailOnly: productRes.Item.isRetailOnly || false,
       packQuantity: productRes.Item.packQuantity || 0,
-      packUnit: productRes.Item.packUnit || ""
+      packUnit: productRes.Item.packUnit || "",
+      isGiftPack: productRes.Item.isGiftPack || false
     };
     return success(product);
   } catch (err) {
