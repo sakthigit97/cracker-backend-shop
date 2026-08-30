@@ -136,3 +136,10 @@ functions:
       - httpApi:
           path: /bulk-order/{orderId}/discount
           method: PUT
+
+  applyOrderDiscount:
+    handler: src/handlers/orderDiscount.handler
+    events:
+      - httpApi:
+          path: /admin/orders/{orderId}/discount
+          method: PUT

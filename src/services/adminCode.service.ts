@@ -41,6 +41,22 @@ export class AdminCodeService {
 
     }
 
+    static async listCodesForUser(
+        userId: string
+    ) {
+
+        const codes =
+            await AdminCodeRepository.listByUserId(
+                userId
+            );
+
+        return codes.sort(
+            (a, b) =>
+                b.createdAt -
+                a.createdAt
+        );
+    }
+
     static async deleteCode(
         code: string
     ) {

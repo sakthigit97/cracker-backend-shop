@@ -21,6 +21,6 @@ npx ts-node scripts/import-admin-config.ts
 npx ts-node scripts/import-products.ts
 
 
-npx ts-node scripts/add-product-flag.ts ap-south-1 Products-dev
+npx ts-node scripts/add-product-flag.ts us-east-1 Products-prod
 
-npx ts-node scripts/add-user-search-text.ts ap-south-1 Users-dev
+npx ts-node scripts/add-user-search-text.ts us-east-1 Users-prod

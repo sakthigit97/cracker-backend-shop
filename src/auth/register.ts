@@ -73,24 +73,53 @@ export const handler = async (event: any) => {
     const initialCredit = isJoinBonusEnabled ? joinBonusAmount : 0;
     let referredBy = "";
     if (code && isReferralEnabled) {
-      const referralCheck = await dbClient.send(
-        new QueryCommand({
-          TableName: USERS_TABLE,
-          IndexName: "referralCode-index",
-          KeyConditionExpression: "referralCode = :code",
-          ExpressionAttributeValues: {
-            ":code": { S: code },
-          },
-        })
-      );
+      let referralCheck;
 
-      if (!referralCheck.Items || referralCheck.Items.length === 0) {
-        return error("Invalid referral code or not available", 400);
+      try {
+        referralCheck = await dbClient.send(
+          new QueryCommand({
+            TableName: USERS_TABLE,
+            IndexName: "referralCode-index",
+            KeyConditionExpression:
+              "referralCode = :code",
+            ExpressionAttributeValues: {
+              ":code": { S: code },
+            },
+            Limit: 1,
+          })
+        );
+      } catch (err) {
+        console.error(
+          "Referral code validation failed",
+          err
+        );
+
+        return error(
+          "Unable to validate referral code. Please try again.",
+          500
+        );
       }
 
-      const refUser = referralCheck.Items[0];
-      if (refUser.mobile?.S === mobile) {
-        return error("You cannot use your own referral code", 400);
+      if (
+        !referralCheck.Items ||
+        referralCheck.Items.length === 0
+      ) {
+        return error(
+          "Invalid referral code or not available",
+          400
+        );
+      }
+
+      const refUser =
+        referralCheck.Items[0];
+
+      if (
+        refUser.mobile?.S === mobile
+      ) {
+        return error(
+          "You cannot use your own referral code",
+          400
+        );
       }
 
       referredBy = code;

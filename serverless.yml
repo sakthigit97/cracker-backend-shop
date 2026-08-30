@@ -780,6 +780,13 @@ functions:
           path: /admin/codes
           method: GET
 
+  adminCodeUserList:
+    handler: src/handlers/adminCode.listMine
+    events:
+      - httpApi:
+          path: /admin/user-codes
+          method: GET
+
   adminCodeDelete:
     handler: src/handlers/adminCode.remove
     events:
