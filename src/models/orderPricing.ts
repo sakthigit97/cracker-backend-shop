@@ -18,6 +18,7 @@ export interface PricingInput {
         couponValue: number;
         couponDiscount: number;
     } | null;
+    additionalDiscount?: number;
 }
 
 
@@ -48,6 +49,8 @@ export interface PricingResult {
     grandTotal: number;
 
     walletUsed: number;
+
+    additionalDiscount: number;
 
     finalPayable: number;
 }

@@ -58,6 +58,73 @@ export class OrderRepository {
         return snapshot;
     }
 
+    async updateDiscount(orderId: string, data: any) {
+        await ddb.send(
+            new UpdateCommand({
+                TableName: ORDERS_TABLE,
+
+                Key: {
+                    orderId,
+                    meta: "ORDER",
+                },
+
+                UpdateExpression: `
+                SET
+                    additionalDiscount = :additionalDiscount,
+                    additionalDiscountType = :additionalDiscountType,
+                    additionalDiscountValue = :additionalDiscountValue,
+                    amountAfterDiscount = :amountAfterDiscount,
+                    gstAmount = :gstAmount,
+                    grandTotal = :grandTotal,
+                    walletUsed = :walletUsed,
+                    finalPayable = :finalPayable,
+                    updatedAt = :updatedAt,
+                    modifiedAt = :modifiedAt,
+                    modifiedBy = :modifiedBy,
+                    statusHistory = :statusHistory
+            `,
+
+                ExpressionAttributeValues: {
+                    ":additionalDiscount":
+                        data.additionalDiscount ?? 0,
+
+                    ":additionalDiscountType":
+                        data.additionalDiscountType ?? null,
+
+                    ":additionalDiscountValue":
+                        data.additionalDiscountValue ?? null,
+
+                    ":amountAfterDiscount":
+                        data.amountAfterDiscount,
+
+                    ":gstAmount":
+                        data.gstAmount,
+
+                    ":grandTotal":
+                        data.grandTotal,
+
+                    ":walletUsed":
+                        data.walletUsed,
+
+                    ":finalPayable":
+                        data.finalPayable,
+
+                    ":updatedAt":
+                        data.updatedAt,
+
+                    ":modifiedAt":
+                        data.modifiedAt,
+
+                    ":modifiedBy":
+                        data.modifiedBy,
+
+                    ":statusHistory":
+                        data.statusHistory,
+                },
+            })
+        );
+    }
+
     async create(order: any) {
         await ddb.send(
             new PutCommand({
@@ -271,6 +338,9 @@ export class OrderRepository {
                     couponType = :couponType,
                     couponValue = :couponValue,
                     couponDiscount = :couponDiscount,
+                    additionalDiscount = :additionalDiscount,
+                    additionalDiscountType = :additionalDiscountType,
+                    additionalDiscountValue = :additionalDiscountValue,
                     packagingCharge = :packagingCharge,
                     amountBeforeDiscount = :amountBeforeDiscount,
                     amountAfterDiscount = :amountAfterDiscount,
@@ -295,6 +365,14 @@ export class OrderRepository {
                     ":couponType": data.couponType ?? null,
                     ":couponValue": data.couponValue ?? null,
                     ":couponDiscount": data.couponDiscount ?? 0,
+                    ":additionalDiscount":
+                        data.additionalDiscount ?? 0,
+
+                    ":additionalDiscountType":
+                        data.additionalDiscountType ?? null,
+
+                    ":additionalDiscountValue":
+                        data.additionalDiscountValue ?? null,
                     ":packagingCharge": data.packagingCharge,
                     ":amountBeforeDiscount": data.amountBeforeDiscount,
                     ":amountAfterDiscount": data.amountAfterDiscount,

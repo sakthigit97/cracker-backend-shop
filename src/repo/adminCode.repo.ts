@@ -56,6 +56,38 @@ export class AdminCodeRepository {
             : [];
 
     }
+
+
+    static async listByUserId(
+        userId: string
+    ): Promise<AdminCode[]> {
+
+        const now = Date.now();
+
+        const result = await ddb.send(
+            new ScanCommand({
+                TableName: TABLE,
+                FilterExpression:
+                    "#userId = :userId AND #status = :status AND #expiryDate > :now",
+                ExpressionAttributeNames: {
+                    "#userId": "userId",
+                    "#status": "status",
+                    "#expiryDate": "expiryDate",
+                },
+                ExpressionAttributeValues: {
+                    ":userId": userId,
+                    ":status": "ACTIVE",
+                    ":now": now,
+                },
+            })
+        );
+
+        return Array.isArray(result.Items)
+            ? (result.Items as AdminCode[])
+            : [];
+    }
+
+
     static async delete(
         code: string
     ) {

@@ -125,6 +125,169 @@ export class OrderService {
         };
     }
 
+    async applyAdditionalDiscount(input: {
+        orderId: string;
+        userId: string;
+        role: string;
+        discountType: "FLAT" | "PERCENTAGE";
+        discountValue: number;
+    }) {
+        const {
+            orderId,
+            userId,
+            role,
+            discountType,
+            discountValue,
+        } = input;
+
+        if (!orderId) {
+            throw new Error("Order ID required");
+        }
+
+        const order = await this.repo.getById(orderId);
+
+        if (!order) {
+            throw new Error("Order not found");
+        }
+
+        const allowedStatuses = [
+            "ORDER_PLACED",
+            "ORDER_CONFIRMED",
+        ];
+
+        if (!allowedStatuses.includes(order.status)) {
+            throw new Error(
+                "Additional discount cannot be applied at this stage"
+            );
+        }
+
+        if (
+            !Number.isFinite(discountValue) ||
+            discountValue <= 0
+        ) {
+            throw new Error(
+                "Discount value must be greater than 0"
+            );
+        }
+
+        if (
+            discountType !== "FLAT" &&
+            discountType !== "PERCENTAGE"
+        ) {
+            throw new Error(
+                "Invalid discount type"
+            );
+        }
+
+        if (
+            discountType === "PERCENTAGE" &&
+            discountValue > 100
+        ) {
+            throw new Error(
+                "Percentage discount cannot exceed 100%"
+            );
+        }
+
+        const config = await this.repo.getAdminConfig();
+
+        const productTotal = Number(
+            order.totalProductAmount ?? 0
+        );
+
+        const amountBeforeDiscount = Number(
+            order.amountBeforeDiscount ?? 0
+        );
+
+        const couponDiscount = Number(
+            order.couponDiscount ?? 0
+        );
+
+        let additionalDiscount = 0;
+
+        if (discountType === "PERCENTAGE") {
+            additionalDiscount = Math.round(
+                (productTotal * discountValue) / 100
+            );
+        } else {
+            additionalDiscount = discountValue;
+        }
+
+        additionalDiscount = Math.min(
+            Math.max(additionalDiscount, 0),
+            productTotal,
+            Math.max(
+                0,
+                amountBeforeDiscount - couponDiscount
+            )
+        );
+
+        const amountAfterDiscount =
+            amountBeforeDiscount -
+            couponDiscount -
+            additionalDiscount;
+
+        const gstAmount = this.pricingService.calculateGSTForAdditionalDiscount(
+            amountAfterDiscount,
+            order.deliveryState,
+            config
+        );
+
+        const grandTotal =
+            amountAfterDiscount + gstAmount;
+
+        const previousWalletUsed = Number(
+            order.walletUsed ?? 0
+        );
+
+        const walletUsed = Math.min(
+            Math.max(0, previousWalletUsed),
+            grandTotal
+        );
+
+        const finalPayable = Math.max(
+            0,
+            grandTotal - walletUsed
+        );
+
+        const now = Date.now();
+        await this.repo.updateDiscount(orderId, {
+            additionalDiscount,
+            additionalDiscountType: discountType,
+            additionalDiscountValue: discountValue,
+            amountAfterDiscount,
+            gstAmount,
+            grandTotal,
+            walletUsed,
+            finalPayable,
+            updatedAt: now,
+            modifiedAt: now,
+            modifiedBy:
+                role === "STAFF"
+                    ? `STAFF#${userId}`
+                    : `ADMIN#${userId}`,
+
+            statusHistory: [
+                ...(order.statusHistory || []),
+
+                {
+                    status: "ADDITIONAL_DISCOUNT_APPLIED",
+                    at: now,
+
+                    by:
+                        role === "STAFF"
+                            ? `STAFF#${userId}`
+                            : `ADMIN#${userId}`,
+
+                    additionalDiscount,
+                    additionalDiscountType: discountType,
+                    additionalDiscountValue: discountValue,
+                },
+            ],
+        });
+
+        return await this.repo.getById(orderId);
+    }
+
     private generateOrderId(now: number): string {
         const d = new Date(now);
 
@@ -246,40 +409,126 @@ export class OrderService {
                 couponDiscount: Number(order.couponDiscount ?? 0),
             };
         }
+
+
+        const additionalDiscountType =
+            order.additionalDiscountType ?? null;
+
+        const additionalDiscountValue =
+            Number(order.additionalDiscountValue ?? 0);
+
+        let additionalDiscount = 0;
+
+        const productTotal =
+            updatedItems.reduce(
+                (total, item) =>
+                    total + Number(item.total ?? 0),
+                0
+            );
+
+        if (
+            additionalDiscountType === "PERCENTAGE" &&
+            additionalDiscountValue > 0
+        ) {
+            additionalDiscount = Math.round(
+                (productTotal * additionalDiscountValue) / 100
+            );
+        } else if (
+            additionalDiscountType === "FLAT" &&
+            additionalDiscountValue > 0
+        ) {
+            additionalDiscount =
+                additionalDiscountValue;
+        }
+
+        additionalDiscount = Math.min(
+            Math.max(additionalDiscount, 0),
+            productTotal
+        );
+
         const pricing = this.pricingService.calculate({
             items: updatedItems,
             walletUsed,
             state: order.deliveryState ?? order.address,
             config,
             couponResult,
+            additionalDiscount,
         });
 
         const now = Date.now();
+
         await this.repo.updateItems(orderId, {
             items: updatedItems,
-            totalProductAmount: pricing.totalProductAmount,
-            nonComboProductTotal: pricing.nonComboProductTotal,
-            comboPackageTotal: pricing.comboPackageTotal,
-            packagingCharge: pricing.packagingCharge,
-            amountBeforeDiscount: pricing.amountBeforeDiscount,
-            couponCode: pricing.couponCode,
-            couponType: pricing.couponType,
-            couponValue: pricing.couponValue,
-            couponDiscount: pricing.couponDiscount,
-            amountAfterDiscount: pricing.amountAfterDiscount,
-            gstAmount: pricing.gstAmount,
-            grandTotal: pricing.grandTotal,
-            walletUsed: pricing.walletUsed,
-            finalPayable: pricing.finalPayable,
+
+            totalProductAmount:
+                pricing.totalProductAmount,
+
+            nonComboProductTotal:
+                pricing.nonComboProductTotal,
+
+            comboPackageTotal:
+                pricing.comboPackageTotal,
+
+            packagingCharge:
+                pricing.packagingCharge,
+
+            amountBeforeDiscount:
+                pricing.amountBeforeDiscount,
+
+            couponCode:
+                pricing.couponCode,
+
+            couponType:
+                pricing.couponType,
+
+            couponValue:
+                pricing.couponValue,
+
+            couponDiscount:
+                pricing.couponDiscount,
+
+            additionalDiscount:
+                pricing.additionalDiscount,
+
+            additionalDiscountType:
+                additionalDiscountType,
+
+            additionalDiscountValue:
+                additionalDiscountValue,
+
+            amountAfterDiscount:
+                pricing.amountAfterDiscount,
+
+            gstAmount:
+                pricing.gstAmount,
+
+            grandTotal:
+                pricing.grandTotal,
+
+            walletUsed:
+                pricing.walletUsed,
+
+            finalPayable:
+                pricing.finalPayable,
+
             updatedAt: now,
+
             modifiedAt: now,
-            modifiedBy: isAdmin ? "ADMIN" : `USER#${userId}`,
+
+            modifiedBy:
+                isAdmin
+                    ? "ADMIN"
+                    : `USER#${userId}`,
+
             statusHistory: [
                 ...(order.statusHistory || []),
                 {
                     status: "ORDER_ADJUSTED",
                     at: now,
-                    by: isAdmin ? `ADMIN#${userId}` : `USER#${userId}`,
+                    by:
+                        isAdmin
+                            ? `ADMIN#${userId}`
+                            : `USER#${userId}`,
                 },
             ],
         });

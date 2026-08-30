@@ -76,9 +76,7 @@ export async function list(
             return error("Forbidden");
         }
 
-        const response =
-            await AdminCodeService.listCodes();
-
+        const response = await AdminCodeService.listCodes();
         return success(response);
 
     } catch (e: any) {
@@ -95,7 +93,6 @@ export async function list(
 
     }
 }
-
 
 export async function remove(
     event: APIGatewayProxyEventV2
@@ -196,6 +193,39 @@ export async function validate(
         return error(
             e.message ||
             "Invalid Admin Code."
+        );
+    }
+}
+
+export async function listMine(
+    event: APIGatewayProxyEventV2
+) {
+    try {
+
+        const { userId } =
+            verifyJwt(event);
+
+        if (!userId) {
+            return error("Unauthorized");
+        }
+
+        const response =
+            await AdminCodeService.listCodesForUser(
+                userId
+            );
+
+        return success(response);
+
+    } catch (e: any) {
+
+        console.error(
+            "User Admin Code List Error:",
+            e
+        );
+
+        return error(
+            e.message ||
+            "Unable to fetch admin codes."
         );
     }
 }

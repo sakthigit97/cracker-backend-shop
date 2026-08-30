@@ -11,7 +11,6 @@ export class OrderPricingService {
         for (const item of items) {
 
             totalProductAmount += item.total;
-
             if (item.isComboPackage) {
                 comboPackageTotal += item.total;
             } else {
@@ -43,17 +42,31 @@ export class OrderPricingService {
         );
     }
 
+
+    public calculateGSTForAdditionalDiscount(
+        discountedGrossTotal: number,
+        state: string | undefined,
+        config: PricingInput["config"]
+    ) {
+        return this.calculateGST(
+            discountedGrossTotal,
+            state,
+            config
+        );
+    }
+
     private calculateGST(
         discountedGrossTotal: number,
         state: string | undefined,
         config: PricingInput["config"]
     ) {
-
         if (config.enableGst === false) {
             return 0;
         }
 
-        const isTamilNadu = state?.toLowerCase().includes("tamil nadu");
+        const isTamilNadu =
+            state?.toLowerCase().includes("tamil nadu");
+
         if (
             isTamilNadu &&
             config.disableGstForTN
@@ -61,7 +74,9 @@ export class OrderPricingService {
             return 0;
         }
 
-        const gstDenominator = Number(config?.gstDenominator ?? 2);
+        const gstDenominator =
+            Number(config?.gstDenominator ?? 2);
+
         const effectivePercent =
             config.gstPercent / gstDenominator;
 
@@ -97,51 +112,126 @@ export class OrderPricingService {
     calculate(input: PricingInput): PricingResult {
 
         const totals = this.calculateProductTotals(input.items);
+
         const packagingCharge = this.calculatePackaging(
             totals.nonComboProductTotal,
             input.config
         );
 
-        const amountBeforeDiscount = totals.totalProductAmount + packagingCharge;
-        const couponCode = input.couponResult?.couponCode ?? null;
-        const couponType = input.couponResult?.couponType ?? null;
-        const couponValue = input.couponResult?.couponValue ?? null;
+        const amountBeforeDiscount =
+            totals.totalProductAmount +
+            packagingCharge;
+
+        const couponCode =
+            input.couponResult?.couponCode ?? null;
+
+        const couponType =
+            input.couponResult?.couponType ?? null;
+
+        const couponValue =
+            input.couponResult?.couponValue ?? null;
+
         let couponDiscount = 0;
-        if (couponCode && couponType && couponValue != null) {
+
+        if (
+            couponCode &&
+            couponType &&
+            couponValue != null
+        ) {
             if (couponType === "PERCENTAGE") {
+
                 couponDiscount = Math.round(
                     (amountBeforeDiscount * couponValue) / 100
                 );
+
             } else {
+
                 couponDiscount = couponValue;
             }
-            couponDiscount = Math.min(couponDiscount, amountBeforeDiscount);
+
+            couponDiscount = Math.min(
+                couponDiscount,
+                amountBeforeDiscount
+            );
         }
 
-        const amountAfterDiscount = amountBeforeDiscount - couponDiscount;
+
+        const productTotal =
+            totals.totalProductAmount;
+
+        const requestedAdditionalDiscount =
+            Number(input.additionalDiscount ?? 0);
+
+        const appliedAdditionalDiscount =
+            Math.min(
+                Math.max(requestedAdditionalDiscount, 0),
+                productTotal,
+                Math.max(
+                    0,
+                    amountBeforeDiscount - couponDiscount
+                )
+            );
+
+
+        const amountAfterDiscount =
+            amountBeforeDiscount -
+            couponDiscount -
+            appliedAdditionalDiscount;
+
         const gstAmount = this.calculateGST(
             amountAfterDiscount,
             input.state,
             input.config
         );
 
-        const grandTotal = amountAfterDiscount + gstAmount;
-        const appliedWallet = Math.min(input.walletUsed, grandTotal);
-        const finalPayable = this.calculateFinalPayable(grandTotal, appliedWallet);
+        const grandTotal =
+            amountAfterDiscount +
+            gstAmount;
+
+        const appliedWallet =
+            Math.min(
+                input.walletUsed,
+                grandTotal
+            );
+
+        const finalPayable =
+            this.calculateFinalPayable(
+                grandTotal,
+                appliedWallet
+            );
+
         return {
-            totalProductAmount: totals.totalProductAmount,
-            nonComboProductTotal: totals.nonComboProductTotal,
-            comboPackageTotal: totals.comboPackageTotal,
+            totalProductAmount:
+                totals.totalProductAmount,
+
+            nonComboProductTotal:
+                totals.nonComboProductTotal,
+
+            comboPackageTotal:
+                totals.comboPackageTotal,
+
             packagingCharge,
+
             amountBeforeDiscount,
+
             couponCode,
+
             couponType,
+
             couponValue,
+
             couponDiscount,
+
+            additionalDiscount: appliedAdditionalDiscount,
             amountAfterDiscount,
+
             gstAmount,
+
             grandTotal,
-            walletUsed: appliedWallet,
+
+            walletUsed:
+                appliedWallet,
+
             finalPayable,
         };
     }
