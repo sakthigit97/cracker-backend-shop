@@ -3949,20 +3949,34 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 // src/repo/adminDiscount.repo.ts
 var import_crypto = require("crypto");
 var TABLE = process.env.DISCOUNT_TABLE;
+var STATE_ID = "__PRODUCT_DISCOUNT_STATE__";
+var LEGACY_GROUP = "LEGACY";
 var AdminDiscountRepo = class {
   async listDiscounts() {
-    const res = await ddb.send(
-      new import_lib_dynamodb2.ScanCommand({
-        TableName: TABLE
-      })
-    );
-    return res.Items || [];
+    const items = [];
+    let ExclusiveStartKey = void 0;
+    do {
+      const res = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand({
+          TableName: TABLE,
+          ExclusiveStartKey
+        })
+      );
+      const normalItems = (res.Items || []).filter(
+        (item) => item.discountId !== STATE_ID
+      );
+      items.push(...normalItems);
+      ExclusiveStartKey = res.LastEvaluatedKey;
+    } while (ExclusiveStartKey);
+    return items;
   }
   async getDiscountById(discountId) {
     const res = await ddb.send(
       new import_lib_dynamodb2.GetCommand({
         TableName: TABLE,
-        Key: { discountId }
+        Key: {
+          discountId
+        }
       })
     );
     return res.Item || null;
@@ -3986,17 +4000,306 @@ var AdminDiscountRepo = class {
     );
     return item;
   }
+  async createDiscountForAllProducts(products, input) {
+    if (input.discountType !== "PRODUCT") {
+      return {
+        success: false,
+        message: "Apply to All is supported only for PRODUCT discounts."
+      };
+    }
+    const groupId = await this.getNextGroupId();
+    const state = await this.getProductDiscountState();
+    const previousGroupId = state?.currentGroupId ?? LEGACY_GROUP;
+    const allDiscounts = await this.listAllDiscountRecords();
+    const productDiscounts = allDiscounts.filter(
+      (discount) => String(
+        discount.discountType || ""
+      ).toUpperCase() === "PRODUCT"
+    );
+    const activeProductDiscounts = productDiscounts.filter(
+      (discount) => discount.isActive === true
+    );
+    const eligibleProducts = products.filter(
+      (product) => {
+        if (product.isComboPackage === true) {
+          return false;
+        }
+        if (product.isGiftPack === true) {
+          return false;
+        }
+        return Boolean(
+          product.productId
+        );
+      }
+    );
+    if (eligibleProducts.length === 0) {
+      return {
+        success: false,
+        message: "No eligible products found for Apply to All."
+      };
+    }
+    const operations = [];
+    for (const discount of activeProductDiscounts) {
+      operations.push({
+        Update: {
+          TableName: TABLE,
+          Key: {
+            discountId: discount.discountId
+          },
+          UpdateExpression: "SET isActive = :inactive, restoreGroupId = :restoreGroupId, previousIsActive = :previousIsActive",
+          ExpressionAttributeValues: {
+            ":inactive": false,
+            ":restoreGroupId": groupId,
+            ":previousIsActive": true
+          }
+        }
+      });
+    }
+    const created = [];
+    for (const product of eligibleProducts) {
+      const item = {
+        discountId: `disc-${(0, import_crypto.randomUUID)()}`,
+        discountMode: input.discountMode,
+        discountType: "PRODUCT",
+        discountValue: input.discountValue,
+        priority: input.priority,
+        targetId: product.productId,
+        isActive: input.isActive ?? true,
+        groupId,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      created.push(item);
+      operations.push({
+        Put: {
+          TableName: TABLE,
+          Item: item
+        }
+      });
+    }
+    await this.executeTransactionChunks(
+      operations
+    );
+    await this.setProductDiscountState({
+      currentGroupId: groupId,
+      previousGroupId
+    });
+    return {
+      success: true,
+      groupId,
+      previousGroupId,
+      count: created.length,
+      discounts: created
+    };
+  }
+  async restoreProductDiscounts() {
+    const stateRes = await ddb.send(
+      new import_lib_dynamodb2.GetCommand({
+        TableName: TABLE,
+        Key: {
+          discountId: "__PRODUCT_DISCOUNT_STATE__"
+        }
+      })
+    );
+    const state = stateRes.Item;
+    if (!state) {
+      return {
+        success: false,
+        message: "No product discount restore state is available."
+      };
+    }
+    const currentGroupId = state.currentGroupId;
+    const previousGroupId = state.previousGroupId;
+    if (previousGroupId === "LEGACY") {
+      let ExclusiveStartKey2 = void 0;
+      const updates2 = [];
+      do {
+        const res = await ddb.send(
+          new import_lib_dynamodb2.ScanCommand({
+            TableName: TABLE,
+            ExclusiveStartKey: ExclusiveStartKey2
+          })
+        );
+        for (const discount of res.Items || []) {
+          if (discount.discountId === "__PRODUCT_DISCOUNT_STATE__") {
+            continue;
+          }
+          if (discount.discountType !== "PRODUCT") {
+            continue;
+          }
+          if (discount.groupId !== void 0) {
+            continue;
+          }
+          if (typeof discount.previousIsActive !== "boolean") {
+            continue;
+          }
+          updates2.push({
+            Update: {
+              TableName: TABLE,
+              Key: {
+                discountId: discount.discountId
+              },
+              UpdateExpression: "SET isActive = :active",
+              ExpressionAttributeValues: {
+                ":active": discount.previousIsActive
+              }
+            }
+          });
+        }
+        ExclusiveStartKey2 = res.LastEvaluatedKey;
+      } while (ExclusiveStartKey2);
+      let currentStartKey = void 0;
+      do {
+        const res = await ddb.send(
+          new import_lib_dynamodb2.ScanCommand({
+            TableName: TABLE,
+            ExclusiveStartKey: currentStartKey,
+            FilterExpression: "discountType = :type AND groupId = :groupId",
+            ExpressionAttributeValues: {
+              ":type": "PRODUCT",
+              ":groupId": currentGroupId
+            }
+          })
+        );
+        for (const discount of res.Items || []) {
+          updates2.push({
+            Update: {
+              TableName: TABLE,
+              Key: {
+                discountId: discount.discountId
+              },
+              UpdateExpression: "SET isActive = :active",
+              ExpressionAttributeValues: {
+                ":active": false
+              }
+            }
+          });
+        }
+        currentStartKey = res.LastEvaluatedKey;
+      } while (currentStartKey);
+      for (let i = 0; i < updates2.length; i += 100) {
+        await ddb.send(
+          new import_lib_dynamodb2.TransactWriteCommand({
+            TransactItems: updates2.slice(
+              i,
+              i + 100
+            )
+          })
+        );
+      }
+      await ddb.send(
+        new import_lib_dynamodb2.UpdateCommand({
+          TableName: TABLE,
+          Key: {
+            discountId: "__PRODUCT_DISCOUNT_STATE__"
+          },
+          UpdateExpression: `
+                    SET currentGroupId = :current
+                `,
+          ExpressionAttributeValues: {
+            ":current": null
+          }
+        })
+      );
+      return {
+        success: true,
+        restored: "LEGACY",
+        deactivatedGroup: currentGroupId,
+        updated: updates2.length
+      };
+    }
+    let ExclusiveStartKey = void 0;
+    const updates = [];
+    do {
+      const res = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand({
+          TableName: TABLE,
+          ExclusiveStartKey,
+          FilterExpression: "discountType = :type AND (groupId = :current OR groupId = :previous)",
+          ExpressionAttributeValues: {
+            ":type": "PRODUCT",
+            ":current": currentGroupId,
+            ":previous": Number(previousGroupId)
+          }
+        })
+      );
+      for (const discount of res.Items || []) {
+        if (discount.groupId === currentGroupId) {
+          updates.push({
+            Update: {
+              TableName: TABLE,
+              Key: {
+                discountId: discount.discountId
+              },
+              UpdateExpression: "SET isActive = :active",
+              ExpressionAttributeValues: {
+                ":active": false
+              }
+            }
+          });
+        }
+        if (discount.groupId === Number(previousGroupId)) {
+          updates.push({
+            Update: {
+              TableName: TABLE,
+              Key: {
+                discountId: discount.discountId
+              },
+              UpdateExpression: "SET isActive = :active",
+              ExpressionAttributeValues: {
+                ":active": true
+              }
+            }
+          });
+        }
+      }
+      ExclusiveStartKey = res.LastEvaluatedKey;
+    } while (ExclusiveStartKey);
+    for (let i = 0; i < updates.length; i += 100) {
+      await ddb.send(
+        new import_lib_dynamodb2.TransactWriteCommand({
+          TransactItems: updates.slice(
+            i,
+            i + 100
+          )
+        })
+      );
+    }
+    await ddb.send(
+      new import_lib_dynamodb2.UpdateCommand({
+        TableName: TABLE,
+        Key: {
+          discountId: "__PRODUCT_DISCOUNT_STATE__"
+        },
+        UpdateExpression: `
+            SET currentGroupId = :current,
+                previousGroupId = :previous
+        `,
+        ExpressionAttributeValues: {
+          ":current": Number(previousGroupId),
+          ":previous": Number(currentGroupId)
+        }
+      })
+    );
+    return {
+      success: true,
+      restoredGroup: Number(previousGroupId),
+      deactivatedGroup: Number(currentGroupId),
+      updated: updates.length
+    };
+  }
   async updateDiscount(discountId, input) {
     await ddb.send(
       new import_lib_dynamodb2.UpdateCommand({
         TableName: TABLE,
-        Key: { discountId },
+        Key: {
+          discountId
+        },
         UpdateExpression: `
-                SET discountMode = :m,
-                    discountValue = :v,
-                    priority = :p,
-                    isActive = :a
-            `,
+                    SET discountMode = :m,
+                        discountValue = :v,
+                        priority = :p,
+                        isActive = :a
+                `,
         ExpressionAttributeValues: {
           ":m": input.discountMode,
           ":v": input.discountValue,
@@ -4020,27 +4323,275 @@ var AdminDiscountRepo = class {
     );
     return (res.Items?.length ?? 0) > 0;
   }
+  async listAllDiscountRecords() {
+    const items = [];
+    let ExclusiveStartKey = void 0;
+    do {
+      const res = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand({
+          TableName: TABLE,
+          ExclusiveStartKey
+        })
+      );
+      if (res.Items?.length) {
+        items.push(...res.Items);
+      }
+      ExclusiveStartKey = res.LastEvaluatedKey;
+    } while (ExclusiveStartKey);
+    return items.filter(
+      (item) => item.discountId !== STATE_ID
+    );
+  }
+  async getProductDiscountState() {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.GetCommand({
+        TableName: TABLE,
+        Key: {
+          discountId: STATE_ID
+        }
+      })
+    );
+    return res.Item || null;
+  }
+  async getNextGroupId() {
+    const res = await ddb.send(
+      new import_lib_dynamodb2.UpdateCommand({
+        TableName: TABLE,
+        Key: {
+          discountId: STATE_ID
+        },
+        UpdateExpression: "SET nextGroupId = if_not_exists(nextGroupId, :zero) + :one",
+        ExpressionAttributeValues: {
+          ":zero": 0,
+          ":one": 1
+        },
+        ReturnValues: "UPDATED_NEW"
+      })
+    );
+    return Number(
+      res.Attributes?.nextGroupId
+    );
+  }
+  async setProductDiscountState(input) {
+    await ddb.send(
+      new import_lib_dynamodb2.UpdateCommand({
+        TableName: TABLE,
+        Key: {
+          discountId: STATE_ID
+        },
+        UpdateExpression: `
+                    SET currentGroupId = :currentGroupId,
+                        previousGroupId = :previousGroupId,
+                        recordType = :recordType
+                `,
+        ExpressionAttributeValues: {
+          ":currentGroupId": input.currentGroupId,
+          ":previousGroupId": input.previousGroupId,
+          ":recordType": "PRODUCT_DISCOUNT_STATE"
+        }
+      })
+    );
+  }
+  getStateRecords(discounts, groupId, snapshotGroupId) {
+    if (groupId === LEGACY_GROUP) {
+      if (snapshotGroupId === void 0) {
+        return [];
+      }
+      return discounts.filter(
+        (discount) => !discount.groupId && discount.restoreGroupId === snapshotGroupId
+      );
+    }
+    return discounts.filter(
+      (discount) => discount.groupId === groupId
+    );
+  }
+  async executeTransactionChunks(operations) {
+    const CHUNK_SIZE = 100;
+    for (let i = 0; i < operations.length; i += CHUNK_SIZE) {
+      const chunk = operations.slice(
+        i,
+        i + CHUNK_SIZE
+      );
+      if (chunk.length === 0) {
+        continue;
+      }
+      await ddb.send(
+        new import_lib_dynamodb2.TransactWriteCommand({
+          TransactItems: chunk
+        })
+      );
+    }
+  }
+};
+
+// src/repo/adminProducts.repo.ts
+var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
+var TABLE2 = process.env.PRODUCTS_TABLE;
+var AdminProductsRepository = class {
+  async fetchProducts(params) {
+    const {
+      brandId,
+      categoryId,
+      isActive,
+      search,
+      limit,
+      cursor
+    } = params;
+    let command;
+    let baseFilter = "none";
+    if (brandId) {
+      baseFilter = "brandId";
+      command = new import_lib_dynamodb3.QueryCommand({
+        TableName: TABLE2,
+        IndexName: "brandId-index",
+        KeyConditionExpression: "brandId = :bid",
+        ExpressionAttributeValues: {
+          ":bid": brandId
+        },
+        Limit: limit,
+        ExclusiveStartKey: cursor
+      });
+    } else if (categoryId) {
+      baseFilter = "categoryId";
+      command = new import_lib_dynamodb3.QueryCommand({
+        TableName: TABLE2,
+        IndexName: "categoryId-index",
+        KeyConditionExpression: "categoryId = :cid",
+        ExpressionAttributeValues: {
+          ":cid": categoryId
+        },
+        Limit: limit,
+        ExclusiveStartKey: cursor
+      });
+    } else if (isActive) {
+      baseFilter = "isActive";
+      command = new import_lib_dynamodb3.QueryCommand({
+        TableName: TABLE2,
+        IndexName: "isActive-index",
+        KeyConditionExpression: "isActive = :ia",
+        ExpressionAttributeValues: {
+          ":ia": isActive
+        },
+        Limit: limit,
+        ExclusiveStartKey: cursor
+      });
+    } else {
+      command = new import_lib_dynamodb3.ScanCommand({
+        TableName: TABLE2,
+        Limit: limit,
+        ExclusiveStartKey: cursor
+      });
+    }
+    const filterExpressions = [];
+    const names = {};
+    const values = {
+      ...command.input.ExpressionAttributeValues || {}
+    };
+    if (brandId && baseFilter !== "brandId") {
+      filterExpressions.push(
+        "#brandId = :brandId"
+      );
+      names["#brandId"] = "brandId";
+      values[":brandId"] = brandId;
+    }
+    if (categoryId && baseFilter !== "categoryId") {
+      filterExpressions.push(
+        "#categoryId = :categoryId"
+      );
+      names["#categoryId"] = "categoryId";
+      values[":categoryId"] = categoryId;
+    }
+    if (isActive && baseFilter !== "isActive") {
+      filterExpressions.push(
+        "#isActive = :isActive"
+      );
+      names["#isActive"] = "isActive";
+      values[":isActive"] = isActive;
+    }
+    if (search) {
+      filterExpressions.push(
+        "contains(#st, :q)"
+      );
+      names["#st"] = "searchText";
+      values[":q"] = search.trim();
+    }
+    if (filterExpressions.length) {
+      command.input.FilterExpression = filterExpressions.join(" AND ");
+      command.input.ExpressionAttributeNames = {
+        ...command.input.ExpressionAttributeNames || {},
+        ...names
+      };
+      command.input.ExpressionAttributeValues = values;
+    }
+    const res = await ddb.send(command);
+    return {
+      items: res.Items || [],
+      nextCursor: res.LastEvaluatedKey ? Buffer.from(
+        JSON.stringify(
+          res.LastEvaluatedKey
+        ),
+        "utf8"
+      ).toString("base64") : null
+    };
+  }
+  async listAllProducts() {
+    const products = [];
+    let ExclusiveStartKey = void 0;
+    do {
+      const res = await ddb.send(
+        new import_lib_dynamodb3.ScanCommand({
+          TableName: TABLE2,
+          ExclusiveStartKey
+        })
+      );
+      if (res.Items?.length) {
+        products.push(...res.Items);
+      }
+      ExclusiveStartKey = res.LastEvaluatedKey;
+    } while (ExclusiveStartKey);
+    return products;
+  }
 };
 
 // src/services/adminDiscount.service.ts
 var AdminDiscountService = class {
-  constructor(repo = new AdminDiscountRepo()) {
+  constructor(repo = new AdminDiscountRepo(), productsRepo = new AdminProductsRepository()) {
     this.repo = repo;
+    this.productsRepo = productsRepo;
   }
   async listDiscounts() {
     return this.repo.listDiscounts();
   }
   async getDiscountById(discountId) {
-    return this.repo.getDiscountById(discountId);
+    return this.repo.getDiscountById(
+      discountId
+    );
   }
   async createDiscount(payload) {
-    return this.repo.createDiscount(payload);
+    return this.repo.createDiscount(
+      payload
+    );
   }
   async updateDiscount(discountId, payload) {
-    return this.repo.updateDiscount(discountId, payload);
+    return this.repo.updateDiscount(
+      discountId,
+      payload
+    );
   }
   async existsByTargetId(targetId) {
-    return this.repo.existsByTargetId(targetId);
+    return this.repo.existsByTargetId(
+      targetId
+    );
+  }
+  async createDiscountForAllProducts(payload) {
+    const products = await this.productsRepo.listAllProducts();
+    return this.repo.createDiscountForAllProducts(
+      products,
+      payload
+    );
+  }
+  async restoreProductDiscounts() {
+    return this.repo.restoreProductDiscounts();
   }
 };
 

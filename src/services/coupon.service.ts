@@ -64,15 +64,13 @@ export class CouponService {
             throw new Error("Expiry Date must be a future date");
         }
 
-        const couponCode =
-            payload.couponCode?.trim().toUpperCase();
+        const couponCode = payload.couponCode?.trim().toUpperCase();
 
         if (!couponCode) {
             throw new Error("Coupon Code is required");
         }
 
         const now = new Date().toISOString();
-
         const coupon: Coupon = {
             couponCode,
             description: payload.description ?? "",

@@ -16,8 +16,7 @@ export class AdminCodeRepository {
             new PutCommand({
                 TableName: TABLE,
                 Item: code,
-                ConditionExpression:
-                    "attribute_not_exists(#code)",
+                ConditionExpression: "attribute_not_exists(#code)",
                 ExpressionAttributeNames: {
                     "#code": "code",
                 },

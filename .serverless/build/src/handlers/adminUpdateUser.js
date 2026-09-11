@@ -4092,6 +4092,13 @@ var AdminUserRepository = class {
       expressionAttributeNames["#pincode"] = "pincode";
       expressionAttributeValues[":pincode"] = input.pincode.trim();
     }
+    if (input.walletCredit !== void 0) {
+      updates.push(
+        "#walletCredit = :walletCredit"
+      );
+      expressionAttributeNames["#walletCredit"] = "walletCredit";
+      expressionAttributeValues[":walletCredit"] = input.walletCredit;
+    }
     if (updates.length === 0) {
       throw new Error(
         "At least one field is required"
@@ -4108,6 +4115,25 @@ var AdminUserRepository = class {
         ExpressionAttributeValues: expressionAttributeValues,
         ConditionExpression: "attribute_exists(mobile)",
         ReturnValues: "ALL_NEW"
+      })
+    );
+    return result.Attributes;
+  }
+  async setBulkUser(mobile, isBulkUser) {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.UpdateCommand({
+        TableName: TABLE,
+        Key: {
+          mobile
+        },
+        UpdateExpression: "SET #isBulkUser = :isBulkUser",
+        ExpressionAttributeNames: {
+          "#isBulkUser": "isBulkUser"
+        },
+        ExpressionAttributeValues: {
+          ":isBulkUser": isBulkUser
+        },
+        ConditionExpression: "attribute_exists(mobile)"
       })
     );
     return result.Attributes;
@@ -4132,6 +4158,12 @@ var AdminUserService = class {
     return this.repo.updateUser(
       mobile,
       input
+    );
+  }
+  async setBulkUser(mobile, isBulkUser) {
+    return this.repo.setBulkUser(
+      mobile,
+      isBulkUser
     );
   }
 };
@@ -4173,7 +4205,8 @@ var handler = async (event) => {
       "address",
       "city",
       "state",
-      "pincode"
+      "pincode",
+      "walletCredit"
     ];
     const hasUnknownField = Object.keys(body).some(
       (key) => !allowedFields.includes(key)
@@ -4182,7 +4215,7 @@ var handler = async (event) => {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: "Only name, role, address, city, state and pincode can be updated"
+          message: "Only name, role, address, city, state, pincode and walletCredit can be updated"
         })
       };
     }
@@ -4271,7 +4304,18 @@ var handler = async (event) => {
       }
       input.pincode = pincode;
     }
-    const hasUpdate = input.name !== void 0 || input.role !== void 0 || input.address !== void 0 || input.city !== void 0 || input.state !== void 0 || input.pincode !== void 0;
+    if (body.walletCredit !== void 0) {
+      if (typeof body.walletCredit !== "number" || !Number.isFinite(body.walletCredit) || body.walletCredit < 0) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "Wallet credit must be a valid non-negative number"
+          })
+        };
+      }
+      input.walletCredit = body.walletCredit;
+    }
+    const hasUpdate = input.name !== void 0 || input.role !== void 0 || input.address !== void 0 || input.city !== void 0 || input.state !== void 0 || input.pincode !== void 0 || input.walletCredit !== void 0;
     if (!hasUpdate) {
       return {
         statusCode: 400,

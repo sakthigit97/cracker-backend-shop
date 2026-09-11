@@ -143,3 +143,10 @@ functions:
       - httpApi:
           path: /admin/orders/{orderId}/discount
           method: PUT
+
+  adminRestoreProductsDiscounts:
+    handler: src/handlers/adminRestoreProductDiscount.handler
+    events:
+      - httpApi:
+          path: /admin/discounts/products/restore
+          method: POST

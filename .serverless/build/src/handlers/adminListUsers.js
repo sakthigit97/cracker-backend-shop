@@ -4092,6 +4092,13 @@ var AdminUserRepository = class {
       expressionAttributeNames["#pincode"] = "pincode";
       expressionAttributeValues[":pincode"] = input.pincode.trim();
     }
+    if (input.walletCredit !== void 0) {
+      updates.push(
+        "#walletCredit = :walletCredit"
+      );
+      expressionAttributeNames["#walletCredit"] = "walletCredit";
+      expressionAttributeValues[":walletCredit"] = input.walletCredit;
+    }
     if (updates.length === 0) {
       throw new Error(
         "At least one field is required"
@@ -4108,6 +4115,25 @@ var AdminUserRepository = class {
         ExpressionAttributeValues: expressionAttributeValues,
         ConditionExpression: "attribute_exists(mobile)",
         ReturnValues: "ALL_NEW"
+      })
+    );
+    return result.Attributes;
+  }
+  async setBulkUser(mobile, isBulkUser) {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.UpdateCommand({
+        TableName: TABLE,
+        Key: {
+          mobile
+        },
+        UpdateExpression: "SET #isBulkUser = :isBulkUser",
+        ExpressionAttributeNames: {
+          "#isBulkUser": "isBulkUser"
+        },
+        ExpressionAttributeValues: {
+          ":isBulkUser": isBulkUser
+        },
+        ConditionExpression: "attribute_exists(mobile)"
       })
     );
     return result.Attributes;
@@ -4132,6 +4158,12 @@ var AdminUserService = class {
     return this.repo.updateUser(
       mobile,
       input
+    );
+  }
+  async setBulkUser(mobile, isBulkUser) {
+    return this.repo.setBulkUser(
+      mobile,
+      isBulkUser
     );
   }
 };

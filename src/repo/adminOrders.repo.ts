@@ -55,7 +55,7 @@ export class AdminOrdersRepository {
                     },
                     ExpressionAttributeValues: values,
                     ScanIndexForward: false,
-                    Limit: 25,
+                    Limit: limit,
                     ExclusiveStartKey: lastKey,
                 })
             );

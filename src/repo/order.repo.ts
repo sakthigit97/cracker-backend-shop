@@ -28,7 +28,8 @@ export class OrderRepository {
                     isComboPackage: p.isComboPackage || false,
                     sequenceNumber: p.sequenceNumber || 0,
                     packQuantity: p.packQuantity || 0,
-                    packUnit: p.packUnit || ''
+                    packUnit: p.packUnit || '',
+                    categoryId: p.categoryId || ''
                 },
             ])
         );
@@ -52,7 +53,8 @@ export class OrderRepository {
                 isComboPackage: product.isComboPackage,
                 sequenceNumber: product.sequenceNumber || 0,
                 packQuantity: product.packQuantity || 0,
-                packUnit: product.packUnit || ''
+                packUnit: product.packUnit || '',
+                categoryId: product.categoryId || ''
             };
         });
         return snapshot;

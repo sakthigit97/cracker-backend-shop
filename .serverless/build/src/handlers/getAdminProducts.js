@@ -4009,22 +4009,30 @@ var AdminProductsRepository = class {
       ...command.input.ExpressionAttributeValues || {}
     };
     if (brandId && baseFilter !== "brandId") {
-      filterExpressions.push("#brandId = :brandId");
+      filterExpressions.push(
+        "#brandId = :brandId"
+      );
       names["#brandId"] = "brandId";
       values[":brandId"] = brandId;
     }
     if (categoryId && baseFilter !== "categoryId") {
-      filterExpressions.push("#categoryId = :categoryId");
+      filterExpressions.push(
+        "#categoryId = :categoryId"
+      );
       names["#categoryId"] = "categoryId";
       values[":categoryId"] = categoryId;
     }
     if (isActive && baseFilter !== "isActive") {
-      filterExpressions.push("#isActive = :isActive");
+      filterExpressions.push(
+        "#isActive = :isActive"
+      );
       names["#isActive"] = "isActive";
       values[":isActive"] = isActive;
     }
     if (search) {
-      filterExpressions.push("contains(#st, :q)");
+      filterExpressions.push(
+        "contains(#st, :q)"
+      );
       names["#st"] = "searchText";
       values[":q"] = search.trim();
     }
@@ -4040,10 +4048,29 @@ var AdminProductsRepository = class {
     return {
       items: res.Items || [],
       nextCursor: res.LastEvaluatedKey ? Buffer.from(
-        JSON.stringify(res.LastEvaluatedKey),
+        JSON.stringify(
+          res.LastEvaluatedKey
+        ),
         "utf8"
       ).toString("base64") : null
     };
+  }
+  async listAllProducts() {
+    const products = [];
+    let ExclusiveStartKey = void 0;
+    do {
+      const res = await ddb.send(
+        new import_lib_dynamodb2.ScanCommand({
+          TableName: TABLE,
+          ExclusiveStartKey
+        })
+      );
+      if (res.Items?.length) {
+        products.push(...res.Items);
+      }
+      ExclusiveStartKey = res.LastEvaluatedKey;
+    } while (ExclusiveStartKey);
+    return products;
   }
 };
 

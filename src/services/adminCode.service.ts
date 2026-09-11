@@ -1,5 +1,7 @@
 import { AdminCodeRepository } from "../repo/adminCode.repo";
 import { AdminCode } from "../types/adminCode";
+import { AdminUserService } from "./adminUser.service";
+const adminUserService = new AdminUserService();
 
 export class AdminCodeService {
 
@@ -7,13 +9,11 @@ export class AdminCodeService {
         code: AdminCode
     ) {
 
-        const existing =
-            await AdminCodeRepository.getByCode(
-                code.code
-            );
+        const existing = await AdminCodeRepository.getByCode(
+            code.code
+        );
 
         if (existing) {
-
             throw new Error(
                 "Code already exists"
             );
@@ -22,6 +22,11 @@ export class AdminCodeService {
 
         await AdminCodeRepository.create(
             code
+        );
+
+        await adminUserService.setBulkUser(
+            code.userId || '',
+            true
         );
 
         return code;

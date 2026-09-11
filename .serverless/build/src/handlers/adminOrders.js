@@ -3986,7 +3986,7 @@ var AdminOrdersRepository = class {
           },
           ExpressionAttributeValues: values,
           ScanIndexForward: false,
-          Limit: 25,
+          Limit: limit,
           ExclusiveStartKey: lastKey
         })
       );

@@ -4204,7 +4204,8 @@ var OrderRepository = class {
           isComboPackage: p.isComboPackage || false,
           sequenceNumber: p.sequenceNumber || 0,
           packQuantity: p.packQuantity || 0,
-          packUnit: p.packUnit || ""
+          packUnit: p.packUnit || "",
+          categoryId: p.categoryId || ""
         }
       ])
     );
@@ -4227,7 +4228,8 @@ var OrderRepository = class {
         isComboPackage: product.isComboPackage,
         sequenceNumber: product.sequenceNumber || 0,
         packQuantity: product.packQuantity || 0,
-        packUnit: product.packUnit || ""
+        packUnit: product.packUnit || "",
+        categoryId: product.categoryId || ""
       };
     });
     return snapshot;
@@ -4915,11 +4917,6 @@ var OrderService = class {
     if (!allowedStatuses.includes(order.status)) {
       throw new Error(
         "Additional discount cannot be applied at this stage"
-      );
-    }
-    if (!Number.isFinite(discountValue) || discountValue <= 0) {
-      throw new Error(
-        "Discount value must be greater than 0"
       );
     }
     if (discountType !== "FLAT" && discountType !== "PERCENTAGE") {

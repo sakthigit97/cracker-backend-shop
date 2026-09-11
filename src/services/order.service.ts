@@ -162,15 +162,6 @@ export class OrderService {
         }
 
         if (
-            !Number.isFinite(discountValue) ||
-            discountValue <= 0
-        ) {
-            throw new Error(
-                "Discount value must be greater than 0"
-            );
-        }
-
-        if (
             discountType !== "FLAT" &&
             discountType !== "PERCENTAGE"
         ) {

@@ -4628,7 +4628,231 @@ var AdminCodeRepository = class {
   }
 };
 
+// src/repo/adminUser.repo.ts
+var import_lib_dynamodb7 = require("@aws-sdk/lib-dynamodb");
+var TABLE2 = process.env.USERS_TABLE;
+var MAX_SCAN_PAGES = 100;
+var AdminUserRepository = class {
+  async listUsers({
+    limit,
+    cursor,
+    search
+  }) {
+    const searchValue = search?.trim().toLowerCase() || "";
+    let exclusiveStartKey;
+    if (cursor) {
+      exclusiveStartKey = JSON.parse(
+        Buffer.from(
+          cursor,
+          "base64"
+        ).toString("utf-8")
+      );
+    }
+    const items = [];
+    let lastEvaluatedKey = exclusiveStartKey;
+    let scanCount = 0;
+    do {
+      scanCount++;
+      const expressionAttributeNames = {};
+      const expressionAttributeValues = {};
+      let filterExpression;
+      if (searchValue) {
+        expressionAttributeNames["#st"] = "searchText";
+        expressionAttributeValues[":q"] = searchValue;
+        filterExpression = "contains(#st, :q)";
+      }
+      const response = await ddb.send(
+        new import_lib_dynamodb7.ScanCommand({
+          TableName: TABLE2,
+          Limit: searchValue ? Math.max(limit, 50) : limit,
+          ExclusiveStartKey: lastEvaluatedKey,
+          ...filterExpression ? {
+            FilterExpression: filterExpression,
+            ExpressionAttributeNames: expressionAttributeNames,
+            ExpressionAttributeValues: expressionAttributeValues
+          } : {}
+        })
+      );
+      if (response.Items?.length) {
+        items.push(
+          ...response.Items
+        );
+      }
+      lastEvaluatedKey = response.LastEvaluatedKey;
+      if (items.length >= limit) {
+        break;
+      }
+      if (scanCount >= MAX_SCAN_PAGES) {
+        break;
+      }
+    } while (lastEvaluatedKey);
+    const pageItems = items.slice(0, limit);
+    const nextCursor = lastEvaluatedKey ? Buffer.from(
+      JSON.stringify(
+        lastEvaluatedKey
+      )
+    ).toString("base64") : void 0;
+    return {
+      items: pageItems,
+      nextCursor
+    };
+  }
+  async deleteUser(mobile) {
+    await ddb.send(
+      new import_lib_dynamodb7.DeleteCommand({
+        TableName: TABLE2,
+        Key: {
+          mobile
+        }
+      })
+    );
+  }
+  async listUserMobiles() {
+    const mobiles = [];
+    let lastEvaluatedKey;
+    do {
+      const response = await ddb.send(
+        new import_lib_dynamodb7.ScanCommand({
+          TableName: TABLE2,
+          ProjectionExpression: "mobile",
+          ExclusiveStartKey: lastEvaluatedKey
+        })
+      );
+      if (response.Items?.length) {
+        mobiles.push(
+          ...response.Items.map(
+            (item) => String(item.mobile)
+          ).filter(Boolean)
+        );
+      }
+      lastEvaluatedKey = response.LastEvaluatedKey;
+    } while (lastEvaluatedKey);
+    return mobiles;
+  }
+  async updateUser(mobile, input) {
+    const updates = [];
+    const expressionAttributeNames = {};
+    const expressionAttributeValues = {};
+    if (input.name !== void 0) {
+      updates.push(
+        "#name = :name"
+      );
+      expressionAttributeNames["#name"] = "name";
+      expressionAttributeValues[":name"] = input.name.trim();
+    }
+    if (input.role !== void 0) {
+      updates.push(
+        "#role = :role"
+      );
+      expressionAttributeNames["#role"] = "role";
+      expressionAttributeValues[":role"] = input.role.trim();
+    }
+    if (input.address !== void 0) {
+      updates.push(
+        "#address = :address"
+      );
+      expressionAttributeNames["#address"] = "address";
+      expressionAttributeValues[":address"] = input.address.trim();
+    }
+    if (input.city !== void 0) {
+      updates.push(
+        "#city = :city"
+      );
+      expressionAttributeNames["#city"] = "city";
+      expressionAttributeValues[":city"] = input.city.trim();
+    }
+    if (input.state !== void 0) {
+      updates.push(
+        "#state = :state"
+      );
+      expressionAttributeNames["#state"] = "state";
+      expressionAttributeValues[":state"] = input.state.trim();
+    }
+    if (input.pincode !== void 0) {
+      updates.push(
+        "#pincode = :pincode"
+      );
+      expressionAttributeNames["#pincode"] = "pincode";
+      expressionAttributeValues[":pincode"] = input.pincode.trim();
+    }
+    if (input.walletCredit !== void 0) {
+      updates.push(
+        "#walletCredit = :walletCredit"
+      );
+      expressionAttributeNames["#walletCredit"] = "walletCredit";
+      expressionAttributeValues[":walletCredit"] = input.walletCredit;
+    }
+    if (updates.length === 0) {
+      throw new Error(
+        "At least one field is required"
+      );
+    }
+    const result = await ddb.send(
+      new import_lib_dynamodb7.UpdateCommand({
+        TableName: TABLE2,
+        Key: {
+          mobile
+        },
+        UpdateExpression: `SET ${updates.join(", ")}`,
+        ExpressionAttributeNames: expressionAttributeNames,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ConditionExpression: "attribute_exists(mobile)",
+        ReturnValues: "ALL_NEW"
+      })
+    );
+    return result.Attributes;
+  }
+  async setBulkUser(mobile, isBulkUser) {
+    const result = await ddb.send(
+      new import_lib_dynamodb7.UpdateCommand({
+        TableName: TABLE2,
+        Key: {
+          mobile
+        },
+        UpdateExpression: "SET #isBulkUser = :isBulkUser",
+        ExpressionAttributeNames: {
+          "#isBulkUser": "isBulkUser"
+        },
+        ExpressionAttributeValues: {
+          ":isBulkUser": isBulkUser
+        },
+        ConditionExpression: "attribute_exists(mobile)"
+      })
+    );
+    return result.Attributes;
+  }
+};
+
+// src/services/adminUser.service.ts
+var AdminUserService = class {
+  constructor(repo = new AdminUserRepository()) {
+    this.repo = repo;
+  }
+  async listUsers(input) {
+    return this.repo.listUsers(input);
+  }
+  async listUserMobiles() {
+    return this.repo.listUserMobiles();
+  }
+  async deleteUser(userId) {
+    return this.repo.deleteUser(userId);
+  }
+  async updateUser(mobile, input) {
+    return this.repo.updateUser(
+      mobile,
+      input
+    );
+  }
+  async setBulkUser(mobile, isBulkUser) {
+    return this.repo.setBulkUser(
+      mobile,
+      isBulkUser
+    );
+  }
+};
+
 // src/services/adminCode.service.ts
+var adminUserService = new AdminUserService();
 var AdminCodeService = class {
   static async createCode(code) {
     const existing = await AdminCodeRepository.getByCode(
@@ -4641,6 +4865,10 @@ var AdminCodeService = class {
     }
     await AdminCodeRepository.create(
       code
+    );
+    await adminUserService.setBulkUser(
+      code.userId || "",
+      true
     );
     return code;
   }

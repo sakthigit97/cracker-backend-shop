@@ -19,7 +19,6 @@ export async function create(
         }
 
         const body = JSON.parse(event.body);
-
         const code = body.code?.trim();
         const requestUserId = body.userId?.trim();
         const schemeId = body.schemeId;
@@ -36,16 +35,15 @@ export async function create(
             );
         }
 
-        const response =
-            await AdminCodeService.createCode({
-                code,
-                userId: requestUserId,
-                schemeId,
-                expiryDate,
-                createdAt: Date.now(),
-                createdBy: userId,
-                status: "ACTIVE",
-            });
+        const response = await AdminCodeService.createCode({
+            code,
+            userId: requestUserId,
+            schemeId,
+            expiryDate,
+            createdAt: Date.now(),
+            createdBy: userId,
+            status: "ACTIVE",
+        });
 
         return success(response);
 

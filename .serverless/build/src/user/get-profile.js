@@ -3979,6 +3979,7 @@ var handler = async (event) => {
     name: result.Item.name?.S,
     address: result.Item.address?.S,
     city: result.Item.city?.S,
+    district: result.Item.district?.S || "",
     state: result.Item.state?.S,
     pincode: result.Item.pincode?.S,
     role: result.Item.role?.S,

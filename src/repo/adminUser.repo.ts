@@ -20,9 +20,7 @@ export class AdminUserRepository {
         cursor?: string;
         search?: string;
     }) {
-        const searchValue =
-            search?.trim().toLowerCase() || "";
-
+        const searchValue = search?.trim().toLowerCase() || "";
         let exclusiveStartKey:
             | Record<string, any>
             | undefined;
@@ -195,10 +193,10 @@ export class AdminUserRepository {
             city?: string;
             state?: string;
             pincode?: string;
+            walletCredit?: number;
         }
     ) {
         const updates: string[] = [];
-
         const expressionAttributeNames: Record<
             string,
             string
@@ -209,9 +207,6 @@ export class AdminUserRepository {
             any
         > = {};
 
-        /*
-         * Name
-         */
         if (input.name !== undefined) {
             updates.push(
                 "#name = :name"
@@ -226,9 +221,6 @@ export class AdminUserRepository {
             ] = input.name.trim();
         }
 
-        /*
-         * Role
-         */
         if (input.role !== undefined) {
             updates.push(
                 "#role = :role"
@@ -243,9 +235,6 @@ export class AdminUserRepository {
             ] = input.role.trim();
         }
 
-        /*
-         * Address
-         */
         if (input.address !== undefined) {
             updates.push(
                 "#address = :address"
@@ -260,9 +249,6 @@ export class AdminUserRepository {
             ] = input.address.trim();
         }
 
-        /*
-         * City
-         */
         if (input.city !== undefined) {
             updates.push(
                 "#city = :city"
@@ -277,9 +263,6 @@ export class AdminUserRepository {
             ] = input.city.trim();
         }
 
-        /*
-         * State
-         */
         if (input.state !== undefined) {
             updates.push(
                 "#state = :state"
@@ -306,6 +289,21 @@ export class AdminUserRepository {
             expressionAttributeValues[
                 ":pincode"
             ] = input.pincode.trim();
+        }
+
+
+        if (input.walletCredit !== undefined) {
+            updates.push(
+                "#walletCredit = :walletCredit"
+            );
+
+            expressionAttributeNames[
+                "#walletCredit"
+            ] = "walletCredit";
+
+            expressionAttributeValues[
+                ":walletCredit"
+            ] = input.walletCredit;
         }
 
         if (updates.length === 0) {
@@ -338,6 +336,29 @@ export class AdminUserRepository {
             })
         );
 
+        return result.Attributes;
+    }
+
+    async setBulkUser(
+        mobile: string,
+        isBulkUser: boolean
+    ) {
+        const result = await ddb.send(
+            new UpdateCommand({
+                TableName: TABLE,
+                Key: {
+                    mobile,
+                },
+                UpdateExpression: "SET #isBulkUser = :isBulkUser",
+                ExpressionAttributeNames: {
+                    "#isBulkUser": "isBulkUser",
+                },
+                ExpressionAttributeValues: {
+                    ":isBulkUser": isBulkUser,
+                },
+                ConditionExpression: "attribute_exists(mobile)",
+            })
+        );
         return result.Attributes;
     }
 }
