@@ -1,26 +1,60 @@
 import { AdminDiscountRepo } from "../repo/adminDiscount.repo";
+import { AdminProductsRepository } from "../repo/adminProducts.repo";
 
 export class AdminDiscountService {
-    constructor(private repo = new AdminDiscountRepo()) { }
+    constructor(
+        private repo = new AdminDiscountRepo(),
+        private productsRepo =
+            new AdminProductsRepository()
+    ) { }
 
     async listDiscounts() {
         return this.repo.listDiscounts();
     }
 
-    async getDiscountById(discountId: string) {
-        return this.repo.getDiscountById(discountId);
+    async getDiscountById(
+        discountId: string
+    ) {
+        return this.repo.getDiscountById(
+            discountId
+        );
     }
 
     async createDiscount(payload: any) {
-        return this.repo.createDiscount(payload);
+        return this.repo.createDiscount(
+            payload
+        );
     }
 
-    async updateDiscount(discountId: string, payload: any) {
-        return this.repo.updateDiscount(discountId, payload);
+    async updateDiscount(
+        discountId: string,
+        payload: any
+    ) {
+        return this.repo.updateDiscount(
+            discountId,
+            payload
+        );
     }
 
-    async existsByTargetId(targetId: string) {
-        return this.repo.existsByTargetId(targetId);
+    async existsByTargetId(
+        targetId: string
+    ) {
+        return this.repo.existsByTargetId(
+            targetId
+        );
     }
 
+    async createDiscountForAllProducts(
+        payload: any
+    ) {
+        const products = await this.productsRepo.listAllProducts();
+        return this.repo.createDiscountForAllProducts(
+            products,
+            payload
+        );
+    }
+
+    async restoreProductDiscounts() {
+        return this.repo.restoreProductDiscounts();
+    }
 }

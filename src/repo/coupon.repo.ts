@@ -12,7 +12,6 @@ const TABLE = process.env.COUPONS_TABLE!;
 export class CouponRepository {
 
     async getCoupon(code: string) {
-
         const result = await ddb.send(
             new GetCommand({
                 TableName: TABLE,
@@ -31,8 +30,7 @@ export class CouponRepository {
             new PutCommand({
                 TableName: TABLE,
                 Item: coupon,
-                ConditionExpression:
-                    "attribute_not_exists(couponCode)",
+                ConditionExpression: "attribute_not_exists(couponCode)",
             })
         );
 

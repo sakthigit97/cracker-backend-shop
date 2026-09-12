@@ -25,11 +25,12 @@ const handler = async (event: any) => {
     name: result.Item.name?.S,
     address: result.Item.address?.S,
     city: result.Item.city?.S,
+    district: result.Item.district?.S || '',
     state: result.Item.state?.S,
     pincode: result.Item.pincode?.S,
     role: result.Item.role?.S,
     walletCredit: result.Item.walletCredit?.N || 0,
-    referralCode: result.Item.referralCode.S || ''
+    referralCode: result.Item.referralCode.S || '',
   });
 };
 

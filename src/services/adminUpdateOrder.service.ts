@@ -21,6 +21,7 @@ export class AdminUpdateOrderService {
         status?: string;
         adminComment?: string;
         adminId: string;
+        paymentAccountId?: string;
     }) {
         if (input.status === undefined && input.adminComment === undefined) {
             throw {
@@ -44,12 +45,23 @@ export class AdminUpdateOrderService {
             };
         }
 
+        if (
+            input.status === "PAYMENT_CONFIRMED" &&
+            !input.paymentAccountId?.trim()
+        ) {
+            throw {
+                statusCode: 400,
+                message: "Payment account is required when confirming payment",
+            };
+        }
+
         const updatedOrder = await this.repo.updateOrder({
             orderId: input.orderId,
             status: input.status,
             adminComment: input.adminComment,
             adminId: input.adminId,
             previousStatus: existing.status,
+            paymentAccountId: input.paymentAccountId,
         });
 
         if (

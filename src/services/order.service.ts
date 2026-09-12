@@ -162,15 +162,6 @@ export class OrderService {
         }
 
         if (
-            !Number.isFinite(discountValue) ||
-            discountValue <= 0
-        ) {
-            throw new Error(
-                "Discount value must be greater than 0"
-            );
-        }
-
-        if (
             discountType !== "FLAT" &&
             discountType !== "PERCENTAGE"
         ) {
@@ -272,7 +263,6 @@ export class OrderService {
                 {
                     status: "ADDITIONAL_DISCOUNT_APPLIED",
                     at: now,
-
                     by:
                         role === "STAFF"
                             ? `STAFF#${userId}`
@@ -534,5 +524,48 @@ export class OrderService {
         });
 
         return await this.repo.getById(orderId);
+    }
+
+    async refreshOrderAmount(input: {
+        orderId: string;
+        userId: string;
+        role: string;
+    }) {
+        const {
+            orderId,
+            userId,
+            role,
+        } = input;
+
+        if (!orderId) {
+            throw new Error("Order ID required");
+        }
+
+        const order = await this.repo.getById(orderId);
+
+        if (!order) {
+            throw new Error("Order not found");
+        }
+
+        const items = (order.items || []).map(
+            (item: any) => ({
+                productId: item.productId,
+                quantity: item.quantity,
+            })
+        );
+
+        if (items.length === 0) {
+            throw new Error("Order cannot be empty");
+        }
+
+        return await this.adjustOrder({
+            orderId,
+            userId,
+            role,
+            items,
+            walletUsed: Number(
+                order.walletUsed ?? 0
+            ),
+        });
     }
 }

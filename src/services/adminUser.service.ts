@@ -31,11 +31,22 @@ export class AdminUserService {
             city?: string;
             state?: string;
             pincode?: string;
+            walletCredit?: number;
         }
     ) {
         return this.repo.updateUser(
             mobile,
             input
+        );
+    }
+
+    async setBulkUser(
+        mobile: string,
+        isBulkUser: boolean
+    ) {
+        return this.repo.setBulkUser(
+            mobile,
+            isBulkUser
         );
     }
 }

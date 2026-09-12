@@ -2,6 +2,7 @@ import { QueryCommand, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "../utils/dynamo";
 
 const TABLE = process.env.PRODUCTS_TABLE!;
+
 interface FetchParams {
     brandId?: string;
     categoryId?: string;
@@ -11,7 +12,12 @@ interface FetchParams {
     cursor?: any;
 }
 
-type BaseFilter = "brandId" | "categoryId" | "isActive" | "none";
+type BaseFilter =
+    | "brandId"
+    | "categoryId"
+    | "isActive"
+    | "none";
+
 export class AdminProductsRepository {
     async fetchProducts(params: FetchParams) {
         const {
@@ -28,10 +34,12 @@ export class AdminProductsRepository {
 
         if (brandId) {
             baseFilter = "brandId";
+
             command = new QueryCommand({
                 TableName: TABLE,
                 IndexName: "brandId-index",
-                KeyConditionExpression: "brandId = :bid",
+                KeyConditionExpression:
+                    "brandId = :bid",
                 ExpressionAttributeValues: {
                     ":bid": brandId,
                 },
@@ -40,10 +48,12 @@ export class AdminProductsRepository {
             });
         } else if (categoryId) {
             baseFilter = "categoryId";
+
             command = new QueryCommand({
                 TableName: TABLE,
                 IndexName: "categoryId-index",
-                KeyConditionExpression: "categoryId = :cid",
+                KeyConditionExpression:
+                    "categoryId = :cid",
                 ExpressionAttributeValues: {
                     ":cid": categoryId,
                 },
@@ -52,10 +62,12 @@ export class AdminProductsRepository {
             });
         } else if (isActive) {
             baseFilter = "isActive";
+
             command = new QueryCommand({
                 TableName: TABLE,
                 IndexName: "isActive-index",
-                KeyConditionExpression: "isActive = :ia",
+                KeyConditionExpression:
+                    "isActive = :ia",
                 ExpressionAttributeValues: {
                     ":ia": isActive,
                 },
@@ -73,40 +85,67 @@ export class AdminProductsRepository {
         const filterExpressions: string[] = [];
         const names: Record<string, string> = {};
         const values: Record<string, any> = {
-            ...(command.input.ExpressionAttributeValues || {}),
+            ...(command.input.ExpressionAttributeValues ||
+                {}),
         };
 
-        if (brandId && baseFilter !== "brandId") {
-            filterExpressions.push("#brandId = :brandId");
+        if (
+            brandId &&
+            baseFilter !== "brandId"
+        ) {
+            filterExpressions.push(
+                "#brandId = :brandId"
+            );
+
             names["#brandId"] = "brandId";
             values[":brandId"] = brandId;
         }
 
-        if (categoryId && baseFilter !== "categoryId") {
-            filterExpressions.push("#categoryId = :categoryId");
+        if (
+            categoryId &&
+            baseFilter !== "categoryId"
+        ) {
+            filterExpressions.push(
+                "#categoryId = :categoryId"
+            );
+
             names["#categoryId"] = "categoryId";
             values[":categoryId"] = categoryId;
         }
 
-        if (isActive && baseFilter !== "isActive") {
-            filterExpressions.push("#isActive = :isActive");
+        if (
+            isActive &&
+            baseFilter !== "isActive"
+        ) {
+            filterExpressions.push(
+                "#isActive = :isActive"
+            );
+
             names["#isActive"] = "isActive";
             values[":isActive"] = isActive;
         }
 
         if (search) {
-            filterExpressions.push("contains(#st, :q)");
+            filterExpressions.push(
+                "contains(#st, :q)"
+            );
+
             names["#st"] = "searchText";
             values[":q"] = search.trim();
         }
 
         if (filterExpressions.length) {
-            command.input.FilterExpression = filterExpressions.join(" AND ");
+            command.input.FilterExpression =
+                filterExpressions.join(" AND ");
+
             command.input.ExpressionAttributeNames = {
-                ...(command.input.ExpressionAttributeNames || {}),
+                ...(command.input
+                    .ExpressionAttributeNames || {}),
                 ...names,
             };
-            command.input.ExpressionAttributeValues = values;
+
+            command.input.ExpressionAttributeValues =
+                values;
         }
 
         const res = await ddb.send(command);
@@ -115,10 +154,36 @@ export class AdminProductsRepository {
             items: res.Items || [],
             nextCursor: res.LastEvaluatedKey
                 ? Buffer.from(
-                    JSON.stringify(res.LastEvaluatedKey),
+                    JSON.stringify(
+                        res.LastEvaluatedKey
+                    ),
                     "utf8"
                 ).toString("base64")
                 : null,
         };
+    }
+
+    async listAllProducts() {
+        const products: any[] = [];
+
+        let ExclusiveStartKey: any = undefined;
+
+        do {
+            const res = await ddb.send(
+                new ScanCommand({
+                    TableName: TABLE,
+                    ExclusiveStartKey,
+                })
+            );
+
+            if (res.Items?.length) {
+                products.push(...res.Items);
+            }
+
+            ExclusiveStartKey =
+                res.LastEvaluatedKey;
+        } while (ExclusiveStartKey);
+
+        return products;
     }
 }

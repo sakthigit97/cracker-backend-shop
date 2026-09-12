@@ -181,37 +181,61 @@ export class BulkOrderRepository {
             modifiedAt: number;
             modifiedBy: string;
             statusHistory: any[];
+            paymentAccountId?: string;
         }
     ) {
+        const updateExpressions = [
+            "#status = :status",
+            "updatedAt = :updatedAt",
+            "modifiedAt = :modifiedAt",
+            "modifiedBy = :modifiedBy",
+            "statusHistory = :statusHistory",
+        ];
+
+        const expressionAttributeValues: Record<string, any> = {
+            ":status": data.status,
+            ":updatedAt": data.updatedAt,
+            ":modifiedAt": data.modifiedAt,
+            ":modifiedBy": data.modifiedBy,
+            ":statusHistory": data.statusHistory,
+        };
+
+        if (data.status === "PAYMENT_CONFIRMED") {
+            if (!data.paymentAccountId?.trim()) {
+                throw new Error(
+                    "Payment account is required when confirming payment."
+                );
+            }
+
+            updateExpressions.push(
+                "paymentAccountId = :paymentAccountId"
+            );
+
+            expressionAttributeValues[":paymentAccountId"] =
+                data.paymentAccountId.trim();
+        }
 
         await ddb.send(
             new UpdateCommand({
                 TableName: TABLE_NAME,
+
                 Key: {
                     orderId,
                     meta: "ORDER",
                 },
+
                 UpdateExpression: `
-                    SET
-                        #status = :status,
-                        updatedAt = :updatedAt,
-                        modifiedAt = :modifiedAt,
-                        modifiedBy = :modifiedBy,
-                        statusHistory = :statusHistory
-                `,
+                SET ${updateExpressions.join(", ")}
+            `,
+
                 ExpressionAttributeNames: {
                     "#status": "status",
                 },
-                ExpressionAttributeValues: {
-                    ":status": data.status,
-                    ":updatedAt": data.updatedAt,
-                    ":modifiedAt": data.modifiedAt,
-                    ":modifiedBy": data.modifiedBy,
-                    ":statusHistory": data.statusHistory,
-                },
+
+                ExpressionAttributeValues:
+                    expressionAttributeValues,
             })
         );
-
     }
 
     async getAdminConfig() {

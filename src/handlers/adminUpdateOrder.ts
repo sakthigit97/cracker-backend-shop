@@ -12,7 +12,7 @@ export const handler = async (event: any) => {
     const config = await configservice.getConfig();
     try {
         const { role, userId } = verifyJwt(event);
-        if (role !== "admin") {
+        if (role === "user") {
             return { statusCode: 403, body: "Forbidden" };
         }
 
@@ -29,6 +29,7 @@ export const handler = async (event: any) => {
             status: body.status,
             adminComment: body.adminComment,
             adminId: userId,
+            paymentAccountId: body.paymentAccountId,
         });
 
         if (body.status == 'ORDER_CONFIRMED' && (config.IsOrderConfirmSMSEnabled || false)) {

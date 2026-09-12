@@ -1014,7 +1014,7 @@ export class BulkOrderService {
         status: string,
         adminId: string,
         comment?: string,
-        role?: string,
+        paymentAccountId?: string
     ) {
         const order =
             await this.repo.getById(
@@ -1036,13 +1036,24 @@ export class BulkOrderService {
             status
         );
 
+        if (
+            status === "PAYMENT_CONFIRMED" &&
+            !paymentAccountId?.trim()
+        ) {
+            throw new Error(
+                "Payment account is required when confirming payment."
+            );
+        }
+
         const now = Date.now();
-        const statusHistory = this.addStatusHistory(
-            order.statusHistory,
-            status,
-            adminId,
-            comment
-        );
+
+        const statusHistory =
+            this.addStatusHistory(
+                order.statusHistory,
+                status,
+                adminId,
+                comment
+            );
 
         await this.repo.updateStatus(
             orderId,
@@ -1052,6 +1063,7 @@ export class BulkOrderService {
                 modifiedAt: now,
                 modifiedBy: adminId,
                 statusHistory,
+                paymentAccountId,
             }
         );
 

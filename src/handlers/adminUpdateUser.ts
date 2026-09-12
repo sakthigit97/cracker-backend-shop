@@ -2,11 +2,9 @@ import { verifyJwt } from "../utils/auth";
 import { AdminUserService } from "../services/adminUser.service";
 
 const service = new AdminUserService();
-
 export const handler = async (event: any) => {
     try {
         const { role } = verifyJwt(event);
-
         if (role !== "admin") {
             return {
                 statusCode: 403,
@@ -14,9 +12,7 @@ export const handler = async (event: any) => {
             };
         }
 
-        const mobile =
-            event.pathParameters?.mobile;
-
+        const mobile = event.pathParameters?.mobile;
         if (!mobile?.trim()) {
             return {
                 statusCode: 400,
@@ -43,13 +39,6 @@ export const handler = async (event: any) => {
             };
         }
 
-        /*
-         * Only these fields are allowed to be
-         * updated through this admin API.
-         *
-         * Mobile number is the DynamoDB key,
-         * so it cannot be changed.
-         */
         const allowedFields = [
             "name",
             "role",
@@ -57,6 +46,7 @@ export const handler = async (event: any) => {
             "city",
             "state",
             "pincode",
+            "walletCredit"
         ];
 
         const hasUnknownField =
@@ -70,7 +60,7 @@ export const handler = async (event: any) => {
                 statusCode: 400,
                 body: JSON.stringify({
                     message:
-                        "Only name, role, address, city, state and pincode can be updated",
+                        "Only name, role, address, city, state, pincode and walletCredit can be updated",
                 }),
             };
         }
@@ -82,11 +72,9 @@ export const handler = async (event: any) => {
             city?: string;
             state?: string;
             pincode?: string;
+            walletCredit?: number;
         } = {};
 
-        /*
-         * Name
-         */
         if (body.name !== undefined) {
             if (
                 typeof body.name !== "string"
@@ -104,9 +92,6 @@ export const handler = async (event: any) => {
                 body.name.trim();
         }
 
-        /*
-         * Role
-         */
         if (body.role !== undefined) {
             if (
                 typeof body.role !== "string"
@@ -123,13 +108,9 @@ export const handler = async (event: any) => {
             const roleValue =
                 body.role.trim();
 
-            /*
-             * Keep this restricted to the roles
-             * currently supported by the application.
-             */
             if (
                 roleValue !== "user" &&
-                roleValue !== "admin"&&
+                roleValue !== "admin" &&
                 roleValue !== "staff"
             ) {
                 return {
@@ -144,9 +125,6 @@ export const handler = async (event: any) => {
             input.role = roleValue;
         }
 
-        /*
-         * Address
-         */
         if (body.address !== undefined) {
             if (
                 typeof body.address !== "string"
@@ -184,9 +162,6 @@ export const handler = async (event: any) => {
                 body.city.trim();
         }
 
-        /*
-         * State
-         */
         if (body.state !== undefined) {
             if (
                 typeof body.state !== "string"
@@ -204,9 +179,6 @@ export const handler = async (event: any) => {
                 body.state.trim();
         }
 
-        /*
-         * Pincode
-         */
         if (body.pincode !== undefined) {
             if (
                 typeof body.pincode !== "string"
@@ -220,9 +192,7 @@ export const handler = async (event: any) => {
                 };
             }
 
-            const pincode =
-                body.pincode.trim();
-
+            const pincode = body.pincode.trim();
             if (
                 !/^\d{6}$/.test(pincode)
             ) {
@@ -238,16 +208,32 @@ export const handler = async (event: any) => {
             input.pincode = pincode;
         }
 
-        /*
-         * At least one field must be supplied.
-         */
+        if (body.walletCredit !== undefined) {
+            if (
+                typeof body.walletCredit !== "number" ||
+                !Number.isFinite(body.walletCredit) ||
+                body.walletCredit < 0
+            ) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({
+                        message:
+                            "Wallet credit must be a valid non-negative number",
+                    }),
+                };
+            }
+
+            input.walletCredit = body.walletCredit;
+        }
+
         const hasUpdate =
             input.name !== undefined ||
             input.role !== undefined ||
             input.address !== undefined ||
             input.city !== undefined ||
             input.state !== undefined ||
-            input.pincode !== undefined;
+            input.pincode !== undefined ||
+            input.walletCredit !== undefined;
 
         if (!hasUpdate) {
             return {
@@ -259,11 +245,10 @@ export const handler = async (event: any) => {
             };
         }
 
-        const user =
-            await service.updateUser(
-                mobile.trim(),
-                input
-            );
+        const user = await service.updateUser(
+            mobile.trim(),
+            input
+        );
 
         return {
             statusCode: 200,

@@ -23,8 +23,11 @@ export class AdminUpdateOrderRepository {
         adminComment?: string;
         adminId: string;
         previousStatus: string;
+        paymentAccountId?: string;
     }) {
         const updates: string[] = [];
+
+
 
         const values: Record<string, any> = {
             ":now": Date.now(),
@@ -54,6 +57,9 @@ export class AdminUpdateOrderRepository {
             if (input.status === "PAYMENT_CONFIRMED") {
                 updates.push("paymentStatus = :success");
                 values[":success"] = "SUCCESS";
+
+                updates.push("paymentAccountId = :paymentAccountId");
+                values[":paymentAccountId"] = input.paymentAccountId;
             }
         }
 

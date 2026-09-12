@@ -127,7 +127,6 @@ export const handler = async (event: any) => {
             name,
             price: Number(price),
             quantity: Number(quantity),
-
             brandId,
             categoryId,
             imageUrls: imageUrls || [],

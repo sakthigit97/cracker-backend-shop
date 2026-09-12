@@ -9,7 +9,6 @@ export const handler = async (event: any) => {
         verifyJwt(event);
         const body = JSON.parse(event.body ?? "{}");
         const coupon = await service.createCoupon(body);
-
         return {
             statusCode: 201,
             body: JSON.stringify({
