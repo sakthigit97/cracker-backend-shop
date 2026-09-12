@@ -123,6 +123,7 @@ provider:
             - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/categories/*
             - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/config/*
             - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/templates/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/invoices/*
 
 functions:
   bulkAdjustOrder:
@@ -150,3 +151,17 @@ functions:
       - httpApi:
           path: /admin/discounts/products/restore
           method: POST
+
+  adminInvoicePresign:
+    handler: src/handlers/adminInvoicePresign.handler
+    events:
+      - httpApi:
+          path: /admin/orders/{orderId}/invoice/presign
+          method: POST
+
+  orderInvoice:
+    handler: src/handlers/orderInvoice.handler
+    events:
+      - httpApi:
+          path: /orders/{orderId}/invoice
+          method: GET

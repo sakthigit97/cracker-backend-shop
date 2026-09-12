@@ -28,7 +28,8 @@ export async function handler(
             orderId,
             body.status,
             userId,
-            body.adminComment
+            body.adminComment,
+            body.paymentAccountId
         );
         return success(result);
 

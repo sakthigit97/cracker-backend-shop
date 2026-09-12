@@ -35,3 +35,24 @@ export async function getPresignedUploads(
         })
     );
 }
+
+export async function getPresignedInvoiceUpload(
+    orderId: string
+) {
+    const key = `invoices/${orderId}.pdf`;
+    const uploadUrl = await getSignedUrl(
+        s3,
+        new PutObjectCommand({
+            Bucket: BUCKET,
+            Key: key,
+            ContentType: "application/pdf",
+        }),
+        { expiresIn: 300 }
+    );
+
+    return {
+        uploadUrl,
+        key,
+    };
+}
+
