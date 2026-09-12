@@ -165,3 +165,10 @@ functions:
       - httpApi:
           path: /orders/{orderId}/invoice
           method: GET
+
+  adminRefreshOrderAmount:
+    handler: src/handlers/adminRefreshOrderAmount.handler
+    events:
+      - httpApi:
+          path: /admin/orders/{orderId}/refresh-amount
+          method: POST

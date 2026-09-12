@@ -3963,12 +3963,12 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// src/handlers/orderDiscount.ts
-var orderDiscount_exports = {};
-__export(orderDiscount_exports, {
+// src/handlers/adminRefreshOrderAmount.ts
+var adminRefreshOrderAmount_exports = {};
+__export(adminRefreshOrderAmount_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(orderDiscount_exports);
+module.exports = __toCommonJS(adminRefreshOrderAmount_exports);
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -5147,16 +5147,19 @@ var OrderService = class {
   }
 };
 
-// src/handlers/orderDiscount.ts
+// src/handlers/adminRefreshOrderAmount.ts
 var orderService = new OrderService();
-var handler = async (event) => {
+async function handler(event) {
   try {
-    const { userId, role } = verifyJwt(event);
+    const {
+      userId,
+      role
+    } = verifyJwt(event);
     if (role !== "admin" && role !== "staff") {
       return {
         statusCode: 403,
         body: JSON.stringify({
-          message: "You are not authorized to apply discount"
+          message: "Forbidden"
         })
       };
     }
@@ -5169,60 +5172,31 @@ var handler = async (event) => {
         })
       };
     }
-    const body = JSON.parse(event.body || "{}");
-    const discountType = typeof body.discountType === "string" ? body.discountType.trim().toUpperCase() : "FLAT";
-    const discountValue = Number(body.discountValue);
-    if (!["FLAT", "PERCENTAGE"].includes(discountType)) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: "Invalid discount type"
-        })
-      };
-    }
-    if (discountType === "PERCENTAGE" && discountValue > 100) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: "Percentage discount cannot exceed 100%"
-        })
-      };
-    }
-    const order = await orderService.applyAdditionalDiscount({
+    const order = await orderService.refreshOrderAmount({
       orderId,
       userId,
-      role,
-      discountType,
-      discountValue
+      role
     });
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: "Additional discount applied successfully",
+        message: "Order amount refreshed successfully",
         order
       })
     };
-  } catch (err) {
+  } catch (error) {
     console.error(
-      "Apply order discount failed:",
-      err
+      "Admin Refresh Order Amount Error:",
+      error
     );
-    const message = err?.message || "Failed to apply additional discount";
-    let statusCode = 500;
-    if (message === "Order not found" || message === "Order ID required") {
-      statusCode = 404;
-    }
-    if (message.includes("cannot") || message.includes("Invalid") || message.includes("authorized")) {
-      statusCode = 400;
-    }
     return {
-      statusCode,
+      statusCode: 500,
       body: JSON.stringify({
-        message
+        message: error?.message || "Unable to refresh order amount"
       })
     };
   }
-};
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler
@@ -5232,4 +5206,4 @@ var handler = async (event) => {
 safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 */
-//# sourceMappingURL=orderDiscount.js.map
+//# sourceMappingURL=adminRefreshOrderAmount.js.map
