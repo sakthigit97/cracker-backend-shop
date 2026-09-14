@@ -114,4 +114,59 @@ export class AdminUpdateOrderRepository {
 
         return res.Attributes;
     }
+
+    async updateOrderAddress(input: {
+        orderId: string;
+        address: {
+            fullName: string;
+            mobile: string;
+            addressLine1: string;
+            addressLine2?: string;
+            city: string;
+            district?: string;
+            state: string;
+            pincode: string;
+        };
+        adminId: string;
+    }) {
+        const now = Date.now();
+
+        const address = [
+            input.address.fullName.trim(),
+            input.address.mobile.trim(),
+            input.address.addressLine1.trim(),
+            input.address.addressLine2?.trim(),
+            `${input.address.city.trim()}, ${input.address.district?.trim() || ""}, ${input.address.state.trim()} - ${input.address.pincode.trim()}`,
+        ]
+            .filter(Boolean)
+            .join("\n");
+
+        const res = await ddb.send(
+            new UpdateCommand({
+                TableName: TABLE,
+                Key: {
+                    orderId: input.orderId,
+                    meta: "ORDER",
+                },
+                UpdateExpression:
+                    "SET address = :address, modifiedAt = :now, modifiedBy = :by",
+                ConditionExpression:
+                    "#status <> :cancelled AND #status <> :dispatched",
+                ExpressionAttributeNames: {
+                    "#status": "status",
+                },
+                ExpressionAttributeValues: {
+                    ":address": address,
+                    ":now": now,
+                    ":by": `ADMIN#${input.adminId}`,
+                    ":cancelled": "CANCELLED",
+                    ":dispatched": "DISPATCHED",
+                },
+                ReturnValues: "ALL_NEW",
+            })
+        );
+
+        return res.Attributes;
+    }
+
 }

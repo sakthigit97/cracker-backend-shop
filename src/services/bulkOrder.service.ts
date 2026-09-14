@@ -10,7 +10,6 @@ import {
     BulkOrderPricing,
     CreateBulkOrderRequest,
     BulkOrderAdjustRequest,
-    BulkOrderDiscountRequest,
 } from "../types/bulkOrder";
 
 const STATUS_ORDER = [
@@ -1714,5 +1713,82 @@ export class BulkOrderService {
         return result;
     }
 
+    async updateAddress(
+        orderId: string,
+        address: any,
+        adminId: string
+    ) {
+        const order = await this.repo.getById(orderId);
 
+        if (!order) {
+            throw new Error("Bulk order not found.");
+        }
+
+        if (order.status === "CANCELLED") {
+            throw new Error(
+                "Cancelled orders cannot be updated."
+            );
+        }
+
+        if (order.status === "DISPATCHED") {
+            throw new Error(
+                "Dispatched orders cannot be updated."
+            );
+        }
+
+        if (!address) {
+            throw new Error("Address is required.");
+        }
+
+        const updatedAddress = {
+            fullName: String(address.fullName ?? "").trim(),
+            mobile: String(address.mobile ?? "").trim(),
+            addressLine1: String(address.addressLine1 ?? "").trim(),
+            addressLine2: String(address.addressLine2 ?? "").trim(),
+            city: String(address.city ?? "").trim(),
+            district: String(address.district ?? "").trim(),
+            state: String(address.state ?? "").trim(),
+            pincode: String(address.pincode ?? "").trim(),
+        };
+
+        if (!updatedAddress.fullName) {
+            throw new Error("Full name is required.");
+        }
+
+        if (!updatedAddress.mobile) {
+            throw new Error("Mobile number is required.");
+        }
+
+        if (!updatedAddress.addressLine1) {
+            throw new Error("Address Line 1 is required.");
+        }
+
+        if (!updatedAddress.city) {
+            throw new Error("City is required.");
+        }
+
+        if (!updatedAddress.state) {
+            throw new Error("State is required.");
+        }
+
+        if (!updatedAddress.pincode) {
+            throw new Error("Pincode is required.");
+        }
+
+        const now = Date.now();
+
+        await this.repo.updateAddress(
+            orderId,
+            updatedAddress,
+            now,
+            adminId
+        );
+
+        return {
+            message: "Bulk order address updated successfully.",
+            orderId,
+            address: updatedAddress,
+            updatedAt: now,
+        };
+    }
 }

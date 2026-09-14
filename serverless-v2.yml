@@ -207,3 +207,31 @@ functions:
       - httpApi:
           path: /admin/reports/account-credits
           method: GET
+
+  adminBulkAccountCreditReport:
+    handler: src/handlers/adminBulkAccountCreditReport.handler
+    events:
+      - httpApi:
+          path: /admin/reports/bulk-account-credits
+          method: GET
+
+  adminBulkSalesReport:
+    handler: src/handlers/adminBulkSalesReport.handler
+    events:
+      - httpApi:
+          path: /admin/reports/bulk-sales
+          method: GET
+
+  adminBulkUpdateAddress:
+    handler: src/handlers/adminUpdateBulkOrderAddress.handler
+    events:
+      - httpApi:
+          path: /admin/bulk-orders/{orderId}/address
+          method: PUT
+
+  adminUpdateOrderAddress:
+    handler: src/handlers/adminUpdateOrderAddress.handler
+    events:
+      - httpApi:
+          path: /admin/orders/{orderId}/address
+          method: PUT
