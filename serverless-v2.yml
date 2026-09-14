@@ -89,6 +89,7 @@ provider:
             - dynamodb:BatchWriteItem
           Resource:
             - arn:aws:dynamodb:${self:custom.region}:*:table/Users-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Users-${self:custom.stage}/index/*
             - arn:aws:dynamodb:${self:custom.region}:*:table/Products-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/Products-${self:custom.stage}/index/*
             - arn:aws:dynamodb:${self:custom.region}:*:table/Categories-${self:custom.stage}
