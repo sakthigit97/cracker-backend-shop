@@ -31,10 +31,9 @@ export class AdminCreateProductService {
 
     async createProduct(input: CreateProductInput) {
 
-        const sequenceNumber =
-            await this.repo.getNextSequenceNumber(
-                input.categoryId
-            );
+        const sequenceNumber = await this.repo.getNextSequenceNumber(
+            input.categoryId
+        );
 
         const product = {
             productId: input.productId,

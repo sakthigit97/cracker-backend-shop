@@ -172,3 +172,38 @@ functions:
       - httpApi:
           path: /admin/orders/{orderId}/refresh-amount
           method: POST
+
+  adminCreateComboPackage:
+    handler: src/handlers/adminCreateComboPackage.handler
+    events:
+      - httpApi:
+          path: /admin/combo-packages
+          method: POST
+
+  adminGetComboPackages:
+    handler: src/handlers/adminGetComboPackages.handler
+    events:
+      - httpApi:
+          path: /admin/combo-packages
+          method: GET
+
+  adminGetComboPackage:
+    handler: src/handlers/adminGetComboPackage.handler
+    events:
+      - httpApi:
+          path: /admin/combo-packages/{comboId}
+          method: GET
+
+  adminUpdateComboPackage:
+    handler: src/handlers/adminUpdateComboPackage.handler
+    events:
+      - httpApi:
+          path: /admin/combo-packages/{comboId}
+          method: PUT
+
+  adminAccountCreditReport:
+    handler: src/handlers/adminAccountCreditReport.handler
+    events:
+      - httpApi:
+          path: /admin/reports/account-credits
+          method: GET

@@ -29,4 +29,14 @@ export class AdminUpdateProductService {
 
         return this.repo.updateProduct(productId, input);
     }
+
+    async addPackageTagId(
+        productId: string,
+        packageTagId: string
+    ) {
+        return this.repo.addPackageTagId(
+            productId,
+            packageTagId
+        );
+    }
 }
