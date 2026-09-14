@@ -921,6 +921,8 @@ resources:
             AttributeType: N
           - AttributeName: status
             AttributeType: S
+          - AttributeName: paymentAccountId
+            AttributeType: S
 
         KeySchema:
           - AttributeName: orderId
@@ -959,6 +961,15 @@ resources:
           - IndexName: status-createdAt-index
             KeySchema:
               - AttributeName: status
+                KeyType: HASH
+              - AttributeName: createdAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+          - IndexName: paymentAccountId-createdAt-index
+            KeySchema:
+              - AttributeName: paymentAccountId
                 KeyType: HASH
               - AttributeName: createdAt
                 KeyType: RANGE

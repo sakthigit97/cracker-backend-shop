@@ -30,4 +30,30 @@ export class AdminUpdateProductRepository {
 
         return res.Attributes || null;
     }
+
+    async addPackageTagId(
+        productId: string,
+        packageTagId: string
+    ) {
+        const res = await ddb.send(
+            new UpdateCommand({
+                TableName: TABLE,
+                Key: { productId },
+                UpdateExpression: `
+                SET packageTagIds = list_append(
+                    if_not_exists(packageTagIds, :emptyList),
+                    :packageTagId
+                )
+            `,
+                ExpressionAttributeValues: {
+                    ":emptyList": [],
+                    ":packageTagId": [packageTagId],
+                },
+                ConditionExpression: "attribute_exists(productId)",
+                ReturnValues: "ALL_NEW",
+            })
+        );
+
+        return res.Attributes || null;
+    }
 }
