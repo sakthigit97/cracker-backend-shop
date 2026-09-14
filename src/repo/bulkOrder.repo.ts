@@ -300,4 +300,37 @@ export class BulkOrderRepository {
         };
 
     }
+
+    async updateAddress(
+        orderId: string,
+        address: any,
+        modifiedAt: number,
+        modifiedBy: string
+    ) {
+        await ddb.send(
+            new UpdateCommand({
+                TableName: TABLE_NAME,
+
+                Key: {
+                    orderId,
+                    meta: "ORDER",
+                },
+
+                UpdateExpression: `
+                SET
+                    address = :address,
+                    updatedAt = :updatedAt,
+                    modifiedAt = :modifiedAt,
+                    modifiedBy = :modifiedBy
+            `,
+
+                ExpressionAttributeValues: {
+                    ":address": address,
+                    ":updatedAt": modifiedAt,
+                    ":modifiedAt": modifiedAt,
+                    ":modifiedBy": modifiedBy,
+                },
+            })
+        );
+    }
 }

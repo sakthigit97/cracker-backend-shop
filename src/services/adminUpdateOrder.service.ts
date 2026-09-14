@@ -135,4 +135,102 @@ export class AdminUpdateOrderService {
             rewardAmount
         );
     }
+
+    async updateOrderAddress(input: {
+        orderId: string;
+        address: {
+            fullName: string;
+            mobile: string;
+            addressLine1: string;
+            addressLine2?: string;
+            city: string;
+            district?: string;
+            state: string;
+            pincode: string;
+        };
+        adminId: string;
+    }) {
+        const existing = await this.repo.getOrderById(input.orderId);
+
+        if (!existing) {
+            throw {
+                statusCode: 404,
+                message: "Order not found",
+            };
+        }
+
+        if (
+            existing.status === "CANCELLED" ||
+            existing.status === "DISPATCHED"
+        ) {
+            throw {
+                statusCode: 400,
+                message: "Address cannot be updated for this order",
+            };
+        }
+
+        const address = input.address;
+
+        if (!address.fullName?.trim()) {
+            throw {
+                statusCode: 400,
+                message: "Full name is required",
+            };
+        }
+
+        if (!address.mobile?.trim()) {
+            throw {
+                statusCode: 400,
+                message: "Mobile number is required",
+            };
+        }
+
+        if (!address.addressLine1?.trim()) {
+            throw {
+                statusCode: 400,
+                message: "Address is required",
+            };
+        }
+
+        if (!address.city?.trim()) {
+            throw {
+                statusCode: 400,
+                message: "City is required",
+            };
+        }
+
+        if (!address.state?.trim()) {
+            throw {
+                statusCode: 400,
+                message: "State is required",
+            };
+        }
+
+        if (!address.pincode?.trim()) {
+            throw {
+                statusCode: 400,
+                message: "Pincode is required",
+            };
+        }
+
+        const pincode = address.pincode
+            .replace(/\D/g, "")
+            .trim();
+
+        if (pincode.length !== 6) {
+            throw {
+                statusCode: 400,
+                message: "Pincode must be 6 digits",
+            };
+        }
+
+        return await this.repo.updateOrderAddress({
+            orderId: input.orderId,
+            address: {
+                ...address,
+                pincode,
+            },
+            adminId: input.adminId,
+        });
+    }
 }

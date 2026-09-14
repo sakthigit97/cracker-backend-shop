@@ -1,7 +1,21 @@
-import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
+import {
+    DynamoDBClient,
+    ScanCommand,
+} from "@aws-sdk/client-dynamodb";
 
 const client = new DynamoDBClient({});
-const ORDERS_TABLE = process.env.ORDERS_TABLE!;
+
+const ORDERS_TABLE =
+    process.env.ORDERS_TABLE!;
+
+const VALID_STATUSES = new Set([
+    "PAYMENT_CONFIRMED",
+    "ORDER_PACKED",
+    "DISPATCHED",
+]);
+
+const DAY_MS =
+    24 * 60 * 60 * 1000;
 
 export class RevenueService {
     async getRevenueReport(params: {
@@ -9,97 +23,355 @@ export class RevenueService {
         fromDate?: string;
         toDate?: string;
     }) {
-        const { range, fromDate, toDate } = params;
-        const now = Date.now();
-        let fromTime: number;
-        let toTime = now;
+        const {
+            range,
+            fromDate,
+            toDate,
+        } = params;
+
+        let currentFromTime: number;
+        let currentToTime: number;
 
         if (fromDate && toDate) {
-            fromTime = new Date(fromDate).getTime();
-            toTime = new Date(toDate).getTime() + 86400000;
+            const from = this.parseDate(
+                fromDate,
+                "fromDate"
+            );
+
+            const to = this.parseDate(
+                toDate,
+                "toDate"
+            );
+
+            if (from > to) {
+                throw new Error(
+                    "fromDate cannot be greater than toDate"
+                );
+            }
+
+            currentFromTime =
+                this.startOfDay(from).getTime();
+
+            currentToTime =
+                this.endOfDay(to).getTime();
         } else {
-            const days = this.getDays(range || "7d");
-            fromTime = now - days * 24 * 60 * 60 * 1000;
+            const days =
+                this.getDays(range || "7d");
+
+            const today =
+                new Date();
+
+            const todayStart =
+                this.startOfDay(today);
+
+            const currentFrom =
+                new Date(todayStart);
+
+            currentFrom.setDate(
+                currentFrom.getDate() -
+                (days - 1)
+            );
+
+            currentFromTime =
+                currentFrom.getTime();
+
+            currentToTime =
+                this.endOfDay(today).getTime();
         }
 
-        const data = await client.send(
-            new ScanCommand({
-                TableName: ORDERS_TABLE,
-            })
+        const currentStartDate =
+            new Date(currentFromTime);
+
+        const currentEndDate =
+            new Date(currentToTime);
+
+        const periodDays =
+            this.getInclusiveDayCount(
+                currentStartDate,
+                currentEndDate
+            );
+
+        const previousEndDate =
+            new Date(currentStartDate);
+
+        previousEndDate.setDate(
+            previousEndDate.getDate() - 1
         );
 
-        const items = data.Items || [];
+        const previousStartDate =
+            new Date(previousEndDate);
+
+        previousStartDate.setDate(
+            previousStartDate.getDate() -
+            (periodDays - 1)
+        );
+
+        const previousFromTime =
+            this.startOfDay(
+                previousStartDate
+            ).getTime();
+
+        const previousToTime =
+            this.endOfDay(
+                previousEndDate
+            ).getTime();
+
+        let lastEvaluatedKey:
+            Record<string, any> | undefined =
+            undefined;
+
         let totalRevenue = 0;
         let totalOrders = 0;
-        let todayRevenue = 0;
-        let yesterdayRevenue = 0;
-        const todayStart = new Date();
-        todayStart.setHours(0, 0, 0, 0);
-        const yesterdayStart = new Date(todayStart);
-        yesterdayStart.setDate(todayStart.getDate() - 1);
-        const trendMap: Record<string, number> = {};
 
-        const validStatuses = new Set([
-            "PAYMENT_CONFIRMED",
-            "ORDER_PACKED",
-            "DISPATCHED",
-        ]);
+        let previousRevenue = 0;
 
-        items.forEach((item: any) => {
-            const status = item.status?.S;
-            const amount = Number(item.grandTotal?.N || 0);
-            const createdAt = Number(item.createdAt?.N);
+        const trendMap: Record<
+            string,
+            number
+        > = {};
 
-            if (!validStatuses.has(status)) return;
+        do {
+            const result: any =
+                await client.send(
+                    new ScanCommand({
+                        TableName:
+                            ORDERS_TABLE,
 
-            if (createdAt < fromTime || createdAt > toTime) return;
+                        ExclusiveStartKey:
+                            lastEvaluatedKey,
+                    })
+                );
 
-            totalRevenue += amount;
-            totalOrders++;
+            const items =
+                result.Items || [];
 
-            const date = new Date(createdAt).toISOString().split("T")[0];
-            trendMap[date] = (trendMap[date] || 0) + amount;
+            for (const item of items) {
+                const status =
+                    item.status?.S;
 
-            if (createdAt >= todayStart.getTime()) {
-                todayRevenue += amount;
-            } else if (
-                createdAt >= yesterdayStart.getTime() &&
-                createdAt < todayStart.getTime()
-            ) {
-                yesterdayRevenue += amount;
+                if (
+                    !VALID_STATUSES.has(
+                        status || ""
+                    )
+                ) {
+                    continue;
+                }
+
+                const createdAt =
+                    Number(
+                        item.createdAt?.N || 0
+                    );
+
+                if (!createdAt) {
+                    continue;
+                }
+
+                const amount =
+                    Number(
+                        item.finalPayable?.N ||
+                        0
+                    ) > 0
+                        ? Number(
+                            item.finalPayable
+                                ?.N || 0
+                        )
+                        : Number(
+                            item.grandTotal
+                                ?.N || 0
+                        );
+
+                if (
+                    createdAt >=
+                    currentFromTime &&
+                    createdAt <=
+                    currentToTime
+                ) {
+                    totalRevenue += amount;
+                    totalOrders += 1;
+
+                    const date =
+                        new Date(
+                            createdAt
+                        )
+                            .toISOString()
+                            .split("T")[0];
+
+                    trendMap[date] =
+                        (trendMap[date] || 0) +
+                        amount;
+                }
+
+
+                if (
+                    createdAt >=
+                    previousFromTime &&
+                    createdAt <=
+                    previousToTime
+                ) {
+                    previousRevenue +=
+                        amount;
+                }
             }
-        });
 
-        const trend = Object.entries(trendMap)
-            .map(([date, revenue]) => ({
-                date,
-                revenue,
-            }))
-            .sort((a, b) => a.date.localeCompare(b.date));
+            lastEvaluatedKey =
+                result.LastEvaluatedKey;
+        } while (lastEvaluatedKey);
+
+
+        const trend = Object.entries(
+            trendMap
+        )
+            .map(
+                ([
+                    date,
+                    revenue,
+                ]) => ({
+                    date,
+                    revenue,
+                })
+            )
+            .sort(
+                (a, b) =>
+                    a.date.localeCompare(
+                        b.date
+                    )
+            );
 
         const avgOrderValue =
-            totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
-
-        const growth =
-            yesterdayRevenue > 0
-                ? ((todayRevenue - yesterdayRevenue) / yesterdayRevenue) * 100
+            totalOrders > 0
+                ? Math.round(
+                    totalRevenue /
+                    totalOrders
+                )
                 : 0;
+
+        let growth = 0;
+        if (previousRevenue > 0) {
+            growth =
+                ((totalRevenue -
+                    previousRevenue) /
+                    previousRevenue) *
+                100;
+        } else if (
+            totalRevenue > 0
+        ) {
+            growth = 100;
+        }
 
         return {
             totalRevenue,
             totalOrders,
             avgOrderValue,
-            todayRevenue,
-            yesterdayRevenue,
+            todayRevenue:
+                totalRevenue,
+
+            yesterdayRevenue:
+                previousRevenue,
+
             growth,
+
             trend,
         };
     }
 
     getDays(range: string) {
-        if (range === "1d") return 1;
-        if (range === "7d") return 7;
-        if (range === "30d") return 30;
+        if (range === "1d") {
+            return 1;
+        }
+
+        if (range === "7d") {
+            return 7;
+        }
+
+        if (range === "30d") {
+            return 30;
+        }
+
         return 7;
+    }
+
+    private parseDate(
+        value: string,
+        fieldName: string
+    ) {
+        const match =
+            /^\d{4}-\d{2}-\d{2}$/.test(
+                value
+            );
+
+        if (!match) {
+            throw new Error(
+                `${fieldName} must be in YYYY-MM-DD format`
+            );
+        }
+
+        const date =
+            new Date(
+                `${value}T00:00:00`
+            );
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+            throw new Error(
+                `Invalid ${fieldName}`
+            );
+        }
+
+        return date;
+    }
+
+    private startOfDay(
+        date: Date
+    ) {
+        const result =
+            new Date(date);
+
+        result.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+        return result;
+    }
+
+
+    private endOfDay(
+        date: Date
+    ) {
+        const result =
+            new Date(date);
+
+        result.setHours(
+            23,
+            59,
+            59,
+            999
+        );
+
+        return result;
+    }
+
+    private getInclusiveDayCount(
+        from: Date,
+        to: Date
+    ) {
+        const fromDay =
+            this.startOfDay(from);
+
+        const toDay =
+            this.startOfDay(to);
+
+        return (
+            Math.floor(
+                (toDay.getTime() -
+                    fromDay.getTime()) /
+                DAY_MS
+            ) + 1
+        );
     }
 }
