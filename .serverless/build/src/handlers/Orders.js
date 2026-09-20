@@ -4530,6 +4530,7 @@ var OrderRepository = class {
                     gstAmount = :gstAmount,
                     grandTotal = :grandTotal,
                     walletUsed = :walletUsed,
+                    chitAmount = :chitAmount,
                     finalPayable = :finalPayable,
                     updatedAt = :updatedAt,
                     modifiedAt = :modifiedAt,
@@ -4557,6 +4558,7 @@ var OrderRepository = class {
           ":gstAmount": data.gstAmount,
           ":grandTotal": data.grandTotal,
           ":walletUsed": data.walletUsed,
+          ":chitAmount": data.chitAmount ?? 0,
           ":finalPayable": data.finalPayable,
           ":updatedAt": data.updatedAt,
           ":modifiedAt": data.modifiedAt,
@@ -5119,6 +5121,10 @@ var OrderService = class {
     if (!order) {
       throw new Error("Order not found");
     }
+    const existingChitAmount = Math.max(
+      0,
+      Number(order.chitAmount ?? 0)
+    );
     const isAdmin = role !== "user";
     if (!isAdmin && order.userId !== userId) {
       throw new Error("Unauthorized");
@@ -5179,6 +5185,17 @@ var OrderService = class {
       couponResult,
       additionalDiscount
     });
+    const effectiveChitAmount = Math.min(
+      existingChitAmount,
+      Math.max(
+        Number(pricing.grandTotal) - Number(pricing.walletUsed ?? 0),
+        0
+      )
+    );
+    const finalPayable = Math.max(
+      Number(pricing.finalPayable ?? 0) - effectiveChitAmount,
+      0
+    );
     const now = Date.now();
     await this.repo.updateItems(orderId, {
       items: updatedItems,
@@ -5198,7 +5215,8 @@ var OrderService = class {
       gstAmount: pricing.gstAmount,
       grandTotal: pricing.grandTotal,
       walletUsed: pricing.walletUsed,
-      finalPayable: pricing.finalPayable,
+      chitAmount: effectiveChitAmount,
+      finalPayable,
       updatedAt: now,
       modifiedAt: now,
       modifiedBy: isAdmin ? "ADMIN" : `USER#${userId}`,

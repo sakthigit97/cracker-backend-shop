@@ -1929,6 +1929,7 @@ var handler = async (event) => {
     const joinBonusAmount = config.joinBonusAmount?.N ? Number(config.joinBonusAmount.N) : config.joinBonusAmount?.S ? Number(config.joinBonusAmount.S) : 0;
     const initialCredit = isJoinBonusEnabled ? joinBonusAmount : 0;
     let referredBy = "";
+    let referrerMobile = "";
     if (code && isReferralEnabled) {
       let referralCheck;
       try {
@@ -1966,6 +1967,7 @@ var handler = async (event) => {
           400
         );
       }
+      referrerMobile = refUser.mobile?.S || "";
       referredBy = code;
     }
     const myReferralCode = "CRK" + Math.floor(1e5 + Math.random() * 9e5);
@@ -1975,6 +1977,7 @@ var handler = async (event) => {
       mobile,
       myReferralCode
     ].filter(Boolean).join("  ").toLowerCase();
+    const maskedMobile = mobile.length >= 4 ? `${mobile.slice(0, 2)}******${mobile.slice(-2)}` : mobile;
     await dbClient.send(
       new import_client_dynamodb3.PutItemCommand({
         TableName: USERS_TABLE,
@@ -1997,6 +2000,38 @@ var handler = async (event) => {
         }
       })
     );
+    if (referrerMobile) {
+      await dbClient.send(
+        new import_client_dynamodb3.UpdateItemCommand({
+          TableName: USERS_TABLE,
+          Key: {
+            mobile: {
+              S: referrerMobile
+            }
+          },
+          UpdateExpression: "SET myReferredPeople = list_append(if_not_exists(myReferredPeople, :emptyList), :person)",
+          ExpressionAttributeValues: {
+            ":emptyList": {
+              L: []
+            },
+            ":person": {
+              L: [
+                {
+                  M: {
+                    name: {
+                      S: name.trim()
+                    },
+                    mobile: {
+                      S: maskedMobile
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        })
+      );
+    }
     return success({
       message: "Registration successful. Please login.",
       referralCode: myReferralCode

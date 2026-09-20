@@ -2,6 +2,7 @@ import {
     ScanCommand,
     DeleteCommand,
     UpdateCommand,
+    GetCommand,
 } from "@aws-sdk/lib-dynamodb";
 
 import { ddb } from "../utils/dynamo";
@@ -15,10 +16,12 @@ export class AdminUserRepository {
         limit,
         cursor,
         search,
+        isBulkUser
     }: {
         limit: number;
         cursor?: string;
         search?: string;
+        isBulkUser?: boolean;
     }) {
         const searchValue = search?.trim().toLowerCase() || "";
         let exclusiveStartKey:
@@ -35,10 +38,7 @@ export class AdminUserRepository {
         }
 
         const items: any[] = [];
-
-        let lastEvaluatedKey =
-            exclusiveStartKey;
-
+        let lastEvaluatedKey = exclusiveStartKey;
         let scanCount = 0;
 
         do {
@@ -51,7 +51,7 @@ export class AdminUserRepository {
 
             const expressionAttributeValues: Record<
                 string,
-                string
+                any
             > = {};
 
             let filterExpression:
@@ -67,6 +67,18 @@ export class AdminUserRepository {
 
                 filterExpression =
                     "contains(#st, :q)";
+            }
+
+            if (isBulkUser !== undefined) {
+                expressionAttributeNames["#bulk"] =
+                    "isBulkUser";
+
+                expressionAttributeValues[":bulk"] =
+                    isBulkUser;
+
+                filterExpression = filterExpression
+                    ? `${filterExpression} AND #bulk = :bulk`
+                    : "#bulk = :bulk";
             }
 
             const response =
@@ -194,6 +206,7 @@ export class AdminUserRepository {
             state?: string;
             pincode?: string;
             walletCredit?: number;
+            chitBalance?: number;
         }
     ) {
         const updates: string[] = [];
@@ -306,6 +319,20 @@ export class AdminUserRepository {
             ] = input.walletCredit;
         }
 
+        if (input.chitBalance !== undefined) {
+            updates.push(
+                "#chitBalance = :chitBalance"
+            );
+
+            expressionAttributeNames[
+                "#chitBalance"
+            ] = "chitBalance";
+
+            expressionAttributeValues[
+                ":chitBalance"
+            ] = input.chitBalance;
+        }
+
         if (updates.length === 0) {
             throw new Error(
                 "At least one field is required"
@@ -360,5 +387,18 @@ export class AdminUserRepository {
             })
         );
         return result.Attributes;
+    }
+
+    async getUserByMobile(mobile: string) {
+        const result = await ddb.send(
+            new GetCommand({
+                TableName: TABLE,
+                Key: {
+                    mobile,
+                },
+            })
+        );
+
+        return result.Item ?? null;
     }
 }

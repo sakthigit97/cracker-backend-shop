@@ -855,13 +855,15 @@ export class BulkOrderService {
     async adminGetOrders(
         limit: number,
         cursor?: any,
-        status?: string
+        status?: string,
+        orderId?: string
     ) {
         const result =
             await this.repo.getAdminOrders(
                 limit,
                 cursor,
-                status
+                status,
+                orderId
             );
 
         return {

@@ -1,6 +1,5 @@
 import { verifyJwt } from "../utils/auth";
 import { AdminGetComboPackagesService } from "../services/adminGetComboPackages.service";
-
 const service = new AdminGetComboPackagesService();
 
 export const handler = async (event: any) => {

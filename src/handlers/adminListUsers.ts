@@ -15,10 +15,15 @@ export const handler = async (event: any) => {
         const isActive = query.isActive as "true" | "false" | undefined;
         const cursor = query.cursor;
         const limit = query.limit ? Number(query.limit) : 20;
+        const isBulkUser =
+            query.isBulkUser === undefined
+                ? undefined
+                : query.isBulkUser === "true";
 
         const data = await service.listUsers({
             search,
             isActive,
+            isBulkUser,
             cursor,
             limit,
         });

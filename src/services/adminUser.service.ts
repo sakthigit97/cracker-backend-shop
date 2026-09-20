@@ -7,6 +7,7 @@ export class AdminUserService {
 
     async listUsers(input: {
         search?: string;
+        isBulkUser?: boolean;
         isActive?: "true" | "false";
         cursor?: string;
         limit: number;
@@ -32,6 +33,7 @@ export class AdminUserService {
             state?: string;
             pincode?: string;
             walletCredit?: number;
+            chitBalance?: number;
         }
     ) {
         return this.repo.updateUser(
@@ -48,5 +50,8 @@ export class AdminUserService {
             mobile,
             isBulkUser
         );
+    }
+    async getUserByMobile(mobile: string) {
+        return this.repo.getUserByMobile(mobile);
     }
 }

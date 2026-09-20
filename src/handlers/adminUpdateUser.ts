@@ -46,7 +46,8 @@ export const handler = async (event: any) => {
             "city",
             "state",
             "pincode",
-            "walletCredit"
+            "walletCredit",
+            "chitBalance",
         ];
 
         const hasUnknownField =
@@ -60,7 +61,7 @@ export const handler = async (event: any) => {
                 statusCode: 400,
                 body: JSON.stringify({
                     message:
-                        "Only name, role, address, city, state, pincode and walletCredit can be updated",
+                        "Only name, role, address, city, state, pincode, walletCredit and chitBalance can be updated",
                 }),
             };
         }
@@ -73,6 +74,7 @@ export const handler = async (event: any) => {
             state?: string;
             pincode?: string;
             walletCredit?: number;
+            chitBalance?: number;
         } = {};
 
         if (body.name !== undefined) {
@@ -225,6 +227,24 @@ export const handler = async (event: any) => {
 
             input.walletCredit = body.walletCredit;
         }
+        
+        if (body.chitBalance !== undefined) {
+            if (
+                typeof body.chitBalance !== "number" ||
+                !Number.isFinite(body.chitBalance) ||
+                body.chitBalance < 0
+            ) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({
+                        message:
+                            "Chit balance must be a valid non-negative number",
+                    }),
+                };
+            }
+
+            input.chitBalance = body.chitBalance;
+        }
 
         const hasUpdate =
             input.name !== undefined ||
@@ -233,7 +253,8 @@ export const handler = async (event: any) => {
             input.city !== undefined ||
             input.state !== undefined ||
             input.pincode !== undefined ||
-            input.walletCredit !== undefined;
+            input.walletCredit !== undefined ||
+            input.chitBalance !== undefined;
 
         if (!hasUpdate) {
             return {

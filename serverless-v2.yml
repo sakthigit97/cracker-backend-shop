@@ -236,3 +236,24 @@ functions:
       - httpApi:
           path: /admin/orders/{orderId}/address
           method: PUT
+
+  adminDeleteComboPackage:
+    handler: src/handlers/adminDeleteComboPackage.handler
+    events:
+      - httpApi:
+          path: /admin/combo-packages/{comboId}
+          method: DELETE
+
+  getUserByMobile:
+    handler: src/handlers/getUserByMobile.handler
+    events:
+      - httpApi:
+          path: /admin/users/{mobile}
+          method: GET
+
+  adminApplyChitBalance:
+    handler: src/handlers/adminApplyChitBalance.handler
+    events:
+      - httpApi:
+          path: /admin/orders/{orderId}/apply-chit-balance
+          method: POST

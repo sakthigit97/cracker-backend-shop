@@ -269,36 +269,74 @@ export class BulkOrderRepository {
     async getAdminOrders(
         limit: number,
         cursor?: any,
-        status?: string
+        status?: string,
+        orderId?: string
     ) {
+        const items: any[] = [];
+        let lastEvaluatedKey = cursor;
 
-        const params: any = {
-            TableName: TABLE_NAME,
-            IndexName: "meta-createdAt-index",
-            KeyConditionExpression: "meta = :meta",
-            ExpressionAttributeValues: {
-                ":meta": "ORDER",
-            },
-            ScanIndexForward: false,
-            Limit: limit,
-            ExclusiveStartKey: cursor,
-        };
-
-        if (status) {
-            params.FilterExpression = "#status = :status";
-            params.ExpressionAttributeNames = {
-                "#status": "status",
+        do {
+            const params: any = {
+                TableName: TABLE_NAME,
+                IndexName: "meta-createdAt-index",
+                KeyConditionExpression: "meta = :meta",
+                ExpressionAttributeValues: {
+                    ":meta": "ORDER",
+                },
+                ScanIndexForward: false,
+                Limit: limit,
+                ExclusiveStartKey: lastEvaluatedKey,
             };
-            params.ExpressionAttributeValues[":status"] = status;
-        }
-        const res = await ddb.send(
-            new QueryCommand(params)
-        );
-        return {
-            items: res.Items ?? [],
-            nextCursor: res.LastEvaluatedKey ?? null,
-        };
 
+            const filterParts: string[] = [];
+
+            if (status) {
+                filterParts.push("#status = :status");
+
+                params.ExpressionAttributeNames = {
+                    "#status": "status",
+                };
+
+                params.ExpressionAttributeValues[":status"] =
+                    status;
+            }
+
+            if (orderId) {
+                filterParts.push(
+                    "contains(orderId, :oid)"
+                );
+
+                params.ExpressionAttributeValues[":oid"] =
+                    orderId;
+            }
+
+            if (filterParts.length > 0) {
+                params.FilterExpression =
+                    filterParts.join(" AND ");
+            }
+
+            const res = await ddb.send(
+                new QueryCommand(params)
+            );
+
+            if (res.Items?.length) {
+                items.push(...res.Items);
+            }
+
+            lastEvaluatedKey =
+                res.LastEvaluatedKey;
+
+            if (!lastEvaluatedKey) {
+                break;
+            }
+
+        } while (items.length < limit);
+
+        return {
+            items: items.slice(0, limit),
+            nextCursor:
+                lastEvaluatedKey ?? null,
+        };
     }
 
     async updateAddress(

@@ -4012,6 +4012,7 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
 
 // src/repo/adminUpdateOrder.repo.ts
 var TABLE = process.env.ORDERS_TABLE;
+var USERS_TABLE = process.env.USERS_TABLE;
 var AdminUpdateOrderRepository = class {
   async getOrderById(orderId) {
     const res = await ddb.send(
@@ -4128,6 +4129,53 @@ var AdminUpdateOrderRepository = class {
       })
     );
     return res.Attributes;
+  }
+  async applyChitBalance(input) {
+    const now = Date.now();
+    await ddb.send(
+      new import_lib_dynamodb2.TransactWriteCommand({
+        TransactItems: [
+          {
+            Update: {
+              TableName: TABLE,
+              Key: {
+                orderId: input.orderId,
+                meta: "ORDER"
+              },
+              UpdateExpression: "SET finalPayable = :finalPayable, chitAmount = :chitAmount, modifiedAt = :now, modifiedBy = :by",
+              ConditionExpression: "#status <> :cancelled AND #status <> :dispatched AND (attribute_not_exists(chitAmount) OR chitAmount = :zero) AND finalPayable = :expectedFinalPayable",
+              ExpressionAttributeNames: {
+                "#status": "status"
+              },
+              ExpressionAttributeValues: {
+                ":finalPayable": input.finalPayable,
+                ":chitAmount": input.chitAmount,
+                ":expectedFinalPayable": input.expectedFinalPayable,
+                ":now": now,
+                ":by": `ADMIN#${input.adminId}`,
+                ":cancelled": "CANCELLED",
+                ":dispatched": "DISPATCHED",
+                ":zero": 0
+              }
+            }
+          },
+          {
+            Update: {
+              TableName: USERS_TABLE,
+              Key: {
+                mobile: input.userId
+              },
+              UpdateExpression: "SET chitBalance = chitBalance - :chitAmount",
+              ConditionExpression: "attribute_exists(mobile) AND chitBalance >= :chitAmount",
+              ExpressionAttributeValues: {
+                ":chitAmount": input.chitAmount
+              }
+            }
+          }
+        ]
+      })
+    );
+    return await this.getOrderById(input.orderId);
   }
 };
 
@@ -4271,7 +4319,7 @@ var ProductService = class {
 
 // src/repo/order.repo.ts
 var ORDERS_TABLE = process.env.ORDERS_TABLE;
-var USERS_TABLE = process.env.USERS_TABLE;
+var USERS_TABLE2 = process.env.USERS_TABLE;
 var ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE;
 var OrderRepository = class {
   constructor() {
@@ -4433,7 +4481,7 @@ var OrderRepository = class {
   async getUserByMobile(mobile) {
     const res = await ddb.send(
       new import_lib_dynamodb6.GetCommand({
-        TableName: USERS_TABLE,
+        TableName: USERS_TABLE2,
         Key: { mobile }
       })
     );
@@ -4443,7 +4491,7 @@ var OrderRepository = class {
     if (usedAmount <= 0) return;
     await ddb.send(
       new import_lib_dynamodb6.UpdateCommand({
-        TableName: USERS_TABLE,
+        TableName: USERS_TABLE2,
         Key: { mobile },
         UpdateExpression: "SET walletCredit = walletCredit - :amt",
         ConditionExpression: "walletCredit >= :amt",
@@ -4457,7 +4505,7 @@ var OrderRepository = class {
     try {
       await ddb.send(
         new import_lib_dynamodb6.UpdateCommand({
-          TableName: USERS_TABLE,
+          TableName: USERS_TABLE2,
           Key: { mobile },
           UpdateExpression: "SET referralRewarded = :t",
           ConditionExpression: "attribute_not_exists(referralRewarded) OR referralRewarded = :f",
@@ -4482,7 +4530,7 @@ var OrderRepository = class {
     do {
       const res = await ddb.send(
         new import_lib_dynamodb6.QueryCommand({
-          TableName: USERS_TABLE,
+          TableName: USERS_TABLE2,
           IndexName: "referralCode-index",
           KeyConditionExpression: "referralCode = :c",
           ExpressionAttributeValues: {
@@ -4506,7 +4554,7 @@ var OrderRepository = class {
     );
     await ddb.send(
       new import_lib_dynamodb6.UpdateCommand({
-        TableName: USERS_TABLE,
+        TableName: USERS_TABLE2,
         Key: { mobile: refUser.mobile },
         UpdateExpression: "SET walletCredit = if_not_exists(walletCredit, :z) + :amt",
         ExpressionAttributeValues: {
@@ -4554,6 +4602,7 @@ var OrderRepository = class {
                     gstAmount = :gstAmount,
                     grandTotal = :grandTotal,
                     walletUsed = :walletUsed,
+                    chitAmount = :chitAmount,
                     finalPayable = :finalPayable,
                     updatedAt = :updatedAt,
                     modifiedAt = :modifiedAt,
@@ -4581,6 +4630,7 @@ var OrderRepository = class {
           ":gstAmount": data.gstAmount,
           ":grandTotal": data.grandTotal,
           ":walletUsed": data.walletUsed,
+          ":chitAmount": data.chitAmount ?? 0,
           ":finalPayable": data.finalPayable,
           ":updatedAt": data.updatedAt,
           ":modifiedAt": data.modifiedAt,
@@ -4755,6 +4805,83 @@ var AdminUpdateOrderService = class {
         ...address,
         pincode
       },
+      adminId: input.adminId
+    });
+  }
+  async applyChitBalance(input) {
+    const existing = await this.repo.getOrderById(input.orderId);
+    if (!existing) {
+      throw {
+        statusCode: 404,
+        message: "Order not found"
+      };
+    }
+    if (existing.status === "CANCELLED" || existing.status === "DISPATCHED") {
+      throw {
+        statusCode: 400,
+        message: "Chit balance cannot be applied to this order"
+      };
+    }
+    const finalPayable = Number(existing.finalPayable ?? 0);
+    const chitAmount = Number(input.chitAmount ?? 0);
+    if (finalPayable <= 0) {
+      throw {
+        statusCode: 400,
+        message: "Final payable amount is already zero"
+      };
+    }
+    if (!Number.isFinite(chitAmount) || chitAmount <= 0) {
+      throw {
+        statusCode: 400,
+        message: "Invalid chit amount"
+      };
+    }
+    if (Number(existing.chitAmount ?? 0) > 0) {
+      throw {
+        statusCode: 400,
+        message: "Chit balance has already been applied to this order"
+      };
+    }
+    const userId = existing.userId;
+    if (!userId) {
+      throw {
+        statusCode: 400,
+        message: "User not found for this order"
+      };
+    }
+    const user = await this.orderRepo.getUserByMobile(userId);
+    if (!user) {
+      throw {
+        statusCode: 404,
+        message: "User not found"
+      };
+    }
+    const availableChitBalance = Number(
+      user.chitBalance ?? 0
+    );
+    if (!Number.isFinite(availableChitBalance) || availableChitBalance <= 0) {
+      throw {
+        statusCode: 400,
+        message: "User has no chit balance available"
+      };
+    }
+    const appliedChitAmount = Math.min(
+      chitAmount,
+      availableChitBalance,
+      finalPayable
+    );
+    if (appliedChitAmount <= 0) {
+      throw {
+        statusCode: 400,
+        message: "No chit balance can be applied"
+      };
+    }
+    return await this.repo.applyChitBalance({
+      orderId: input.orderId,
+      userId,
+      chitAmount: appliedChitAmount,
+      finalPayable: finalPayable - appliedChitAmount,
+      expectedFinalPayable: finalPayable,
       adminId: input.adminId
     });
   }

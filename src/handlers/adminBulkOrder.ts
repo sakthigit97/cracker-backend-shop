@@ -56,6 +56,14 @@ export async function handler(
         const status =
             rawStatus || undefined;
 
+        const rawOrderId =
+            event.queryStringParameters
+                ?.orderId
+                ?.trim();
+
+        const orderId =
+            rawOrderId || undefined;
+
         if (
             status &&
             !VALID_STATUSES.has(status)
@@ -94,7 +102,8 @@ export async function handler(
             await service.adminGetOrders(
                 limit,
                 cursor,
-                status
+                status,
+                orderId
             );
 
         return success(result);

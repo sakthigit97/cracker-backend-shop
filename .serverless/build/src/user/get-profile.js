@@ -4048,7 +4048,13 @@ var handler = async (event) => {
     pincode: result.Item.pincode?.S,
     role: result.Item.role?.S,
     walletCredit: result.Item.walletCredit?.N || 0,
-    referralCode: result.Item.referralCode.S || ""
+    referralCode: result.Item.referralCode.S || "",
+    myReferredPeople: result.Item.myReferredPeople?.L?.map(
+      (person) => ({
+        name: person.M?.name?.S || "",
+        mobile: person.M?.mobile?.S || ""
+      })
+    ) || []
   });
 };
 var main = withAuth(handler);

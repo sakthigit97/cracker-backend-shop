@@ -360,6 +360,11 @@ export class OrderService {
             throw new Error("Order not found");
         }
 
+        const existingChitAmount = Math.max(
+            0,
+            Number(order.chitAmount ?? 0)
+        );
+
         const isAdmin = role !== "user";
         if (!isAdmin && order.userId !== userId) {
             throw new Error("Unauthorized");
@@ -445,8 +450,23 @@ export class OrderService {
             additionalDiscount,
         });
 
-        const now = Date.now();
 
+        const effectiveChitAmount = Math.min(
+            existingChitAmount,
+            Math.max(
+                Number(pricing.grandTotal) -
+                Number(pricing.walletUsed ?? 0),
+                0
+            )
+        );
+
+        const finalPayable = Math.max(
+            Number(pricing.finalPayable ?? 0) -
+            effectiveChitAmount,
+            0
+        );
+
+        const now = Date.now();
         await this.repo.updateItems(orderId, {
             items: updatedItems,
 
@@ -498,8 +518,11 @@ export class OrderService {
             walletUsed:
                 pricing.walletUsed,
 
+            chitAmount:
+                effectiveChitAmount,
+
             finalPayable:
-                pricing.finalPayable,
+                finalPayable,
 
             updatedAt: now,
 

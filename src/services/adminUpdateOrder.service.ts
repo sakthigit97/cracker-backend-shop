@@ -233,4 +233,103 @@ export class AdminUpdateOrderService {
             adminId: input.adminId,
         });
     }
+
+    async applyChitBalance(input: {
+        orderId: string;
+        chitAmount: number;
+        adminId: string;
+    }) {
+        const existing = await this.repo.getOrderById(input.orderId);
+        if (!existing) {
+            throw {
+                statusCode: 404,
+                message: "Order not found",
+            };
+        }
+
+        if (
+            existing.status === "CANCELLED" ||
+            existing.status === "DISPATCHED"
+        ) {
+            throw {
+                statusCode: 400,
+                message: "Chit balance cannot be applied to this order",
+            };
+        }
+
+        const finalPayable = Number(existing.finalPayable ?? 0);
+        const chitAmount = Number(input.chitAmount ?? 0);
+        if (finalPayable <= 0) {
+            throw {
+                statusCode: 400,
+                message: "Final payable amount is already zero",
+            };
+        }
+
+        if (!Number.isFinite(chitAmount) || chitAmount <= 0) {
+            throw {
+                statusCode: 400,
+                message: "Invalid chit amount",
+            };
+        }
+
+        if (Number(existing.chitAmount ?? 0) > 0) {
+            throw {
+                statusCode: 400,
+                message: "Chit balance has already been applied to this order",
+            };
+        }
+        const userId = existing.userId;
+        if (!userId) {
+            throw {
+                statusCode: 400,
+                message: "User not found for this order",
+            };
+        }
+
+        const user = await this.orderRepo.getUserByMobile(userId);
+
+        if (!user) {
+            throw {
+                statusCode: 404,
+                message: "User not found",
+            };
+        }
+
+        const availableChitBalance = Number(
+            user.chitBalance ?? 0
+        );
+
+        if (
+            !Number.isFinite(availableChitBalance) ||
+            availableChitBalance <= 0
+        ) {
+            throw {
+                statusCode: 400,
+                message: "User has no chit balance available",
+            };
+        }
+
+        const appliedChitAmount = Math.min(
+            chitAmount,
+            availableChitBalance,
+            finalPayable
+        );
+
+        if (appliedChitAmount <= 0) {
+            throw {
+                statusCode: 400,
+                message: "No chit balance can be applied",
+            };
+        }
+
+        return await this.repo.applyChitBalance({
+            orderId: input.orderId,
+            userId,
+            chitAmount: appliedChitAmount,
+            finalPayable: finalPayable - appliedChitAmount,
+            expectedFinalPayable: finalPayable,
+            adminId: input.adminId,
+        });
+    }
 }

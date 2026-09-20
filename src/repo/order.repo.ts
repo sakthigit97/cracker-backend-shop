@@ -349,6 +349,7 @@ export class OrderRepository {
                     gstAmount = :gstAmount,
                     grandTotal = :grandTotal,
                     walletUsed = :walletUsed,
+                    chitAmount = :chitAmount,
                     finalPayable = :finalPayable,
                     updatedAt = :updatedAt,
                     modifiedAt = :modifiedAt,
@@ -367,9 +368,7 @@ export class OrderRepository {
                     ":couponType": data.couponType ?? null,
                     ":couponValue": data.couponValue ?? null,
                     ":couponDiscount": data.couponDiscount ?? 0,
-                    ":additionalDiscount":
-                        data.additionalDiscount ?? 0,
-
+                    ":additionalDiscount": data.additionalDiscount ?? 0,
                     ":additionalDiscountType":
                         data.additionalDiscountType ?? null,
 
@@ -381,6 +380,7 @@ export class OrderRepository {
                     ":gstAmount": data.gstAmount,
                     ":grandTotal": data.grandTotal,
                     ":walletUsed": data.walletUsed,
+                    ":chitAmount": data.chitAmount ?? 0,
                     ":finalPayable": data.finalPayable,
                     ":updatedAt": data.updatedAt,
                     ":modifiedAt": data.modifiedAt,

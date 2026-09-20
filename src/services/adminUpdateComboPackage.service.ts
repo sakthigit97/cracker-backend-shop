@@ -24,7 +24,6 @@ export class AdminUpdateComboPackageService {
             );
         }
 
-        // Remove duplicate product IDs
         const uniqueProductIds = [
             ...new Set(
                 productIds.filter(
@@ -44,6 +43,18 @@ export class AdminUpdateComboPackageService {
         return this.repo.updateComboPackage(
             comboId.trim(),
             uniqueProductIds
+        );
+    }
+
+    async deleteComboPackage(
+        comboId: string
+    ) {
+        if (!comboId || !comboId.trim()) {
+            throw new Error("comboId is required");
+        }
+
+        return this.repo.deleteComboPackage(
+            comboId.trim()
         );
     }
 }

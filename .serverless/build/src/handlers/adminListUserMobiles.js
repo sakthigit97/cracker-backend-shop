@@ -4017,7 +4017,8 @@ var AdminUserRepository = class {
   async listUsers({
     limit,
     cursor,
-    search
+    search,
+    isBulkUser
   }) {
     const searchValue = search?.trim().toLowerCase() || "";
     let exclusiveStartKey;
@@ -4041,6 +4042,11 @@ var AdminUserRepository = class {
         expressionAttributeNames["#st"] = "searchText";
         expressionAttributeValues[":q"] = searchValue;
         filterExpression = "contains(#st, :q)";
+      }
+      if (isBulkUser !== void 0) {
+        expressionAttributeNames["#bulk"] = "isBulkUser";
+        expressionAttributeValues[":bulk"] = isBulkUser;
+        filterExpression = filterExpression ? `${filterExpression} AND #bulk = :bulk` : "#bulk = :bulk";
       }
       const response = await ddb.send(
         new import_lib_dynamodb2.ScanCommand({
@@ -4163,6 +4169,13 @@ var AdminUserRepository = class {
       expressionAttributeNames["#walletCredit"] = "walletCredit";
       expressionAttributeValues[":walletCredit"] = input.walletCredit;
     }
+    if (input.chitBalance !== void 0) {
+      updates.push(
+        "#chitBalance = :chitBalance"
+      );
+      expressionAttributeNames["#chitBalance"] = "chitBalance";
+      expressionAttributeValues[":chitBalance"] = input.chitBalance;
+    }
     if (updates.length === 0) {
       throw new Error(
         "At least one field is required"
@@ -4202,6 +4215,17 @@ var AdminUserRepository = class {
     );
     return result.Attributes;
   }
+  async getUserByMobile(mobile) {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.GetCommand({
+        TableName: TABLE,
+        Key: {
+          mobile
+        }
+      })
+    );
+    return result.Item ?? null;
+  }
 };
 
 // src/services/adminUser.service.ts
@@ -4229,6 +4253,9 @@ var AdminUserService = class {
       mobile,
       isBulkUser
     );
+  }
+  async getUserByMobile(mobile) {
+    return this.repo.getUserByMobile(mobile);
   }
 };
 

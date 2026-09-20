@@ -4176,31 +4176,52 @@ var BulkOrderRepository = class {
     );
     return res.Item ?? null;
   }
-  async getAdminOrders(limit, cursor, status) {
-    const params = {
-      TableName: TABLE_NAME,
-      IndexName: "meta-createdAt-index",
-      KeyConditionExpression: "meta = :meta",
-      ExpressionAttributeValues: {
-        ":meta": "ORDER"
-      },
-      ScanIndexForward: false,
-      Limit: limit,
-      ExclusiveStartKey: cursor
-    };
-    if (status) {
-      params.FilterExpression = "#status = :status";
-      params.ExpressionAttributeNames = {
-        "#status": "status"
+  async getAdminOrders(limit, cursor, status, orderId) {
+    const items = [];
+    let lastEvaluatedKey = cursor;
+    do {
+      const params = {
+        TableName: TABLE_NAME,
+        IndexName: "meta-createdAt-index",
+        KeyConditionExpression: "meta = :meta",
+        ExpressionAttributeValues: {
+          ":meta": "ORDER"
+        },
+        ScanIndexForward: false,
+        Limit: limit,
+        ExclusiveStartKey: lastEvaluatedKey
       };
-      params.ExpressionAttributeValues[":status"] = status;
-    }
-    const res = await ddb.send(
-      new import_lib_dynamodb2.QueryCommand(params)
-    );
+      const filterParts = [];
+      if (status) {
+        filterParts.push("#status = :status");
+        params.ExpressionAttributeNames = {
+          "#status": "status"
+        };
+        params.ExpressionAttributeValues[":status"] = status;
+      }
+      if (orderId) {
+        filterParts.push(
+          "contains(orderId, :oid)"
+        );
+        params.ExpressionAttributeValues[":oid"] = orderId;
+      }
+      if (filterParts.length > 0) {
+        params.FilterExpression = filterParts.join(" AND ");
+      }
+      const res = await ddb.send(
+        new import_lib_dynamodb2.QueryCommand(params)
+      );
+      if (res.Items?.length) {
+        items.push(...res.Items);
+      }
+      lastEvaluatedKey = res.LastEvaluatedKey;
+      if (!lastEvaluatedKey) {
+        break;
+      }
+    } while (items.length < limit);
     return {
-      items: res.Items ?? [],
-      nextCursor: res.LastEvaluatedKey ?? null
+      items: items.slice(0, limit),
+      nextCursor: lastEvaluatedKey ?? null
     };
   }
   async updateAddress(orderId, address, modifiedAt, modifiedBy) {
@@ -4738,7 +4759,8 @@ var AdminUserRepository = class {
   async listUsers({
     limit,
     cursor,
-    search
+    search,
+    isBulkUser
   }) {
     const searchValue = search?.trim().toLowerCase() || "";
     let exclusiveStartKey;
@@ -4762,6 +4784,11 @@ var AdminUserRepository = class {
         expressionAttributeNames["#st"] = "searchText";
         expressionAttributeValues[":q"] = searchValue;
         filterExpression = "contains(#st, :q)";
+      }
+      if (isBulkUser !== void 0) {
+        expressionAttributeNames["#bulk"] = "isBulkUser";
+        expressionAttributeValues[":bulk"] = isBulkUser;
+        filterExpression = filterExpression ? `${filterExpression} AND #bulk = :bulk` : "#bulk = :bulk";
       }
       const response = await ddb.send(
         new import_lib_dynamodb7.ScanCommand({
@@ -4884,6 +4911,13 @@ var AdminUserRepository = class {
       expressionAttributeNames["#walletCredit"] = "walletCredit";
       expressionAttributeValues[":walletCredit"] = input.walletCredit;
     }
+    if (input.chitBalance !== void 0) {
+      updates.push(
+        "#chitBalance = :chitBalance"
+      );
+      expressionAttributeNames["#chitBalance"] = "chitBalance";
+      expressionAttributeValues[":chitBalance"] = input.chitBalance;
+    }
     if (updates.length === 0) {
       throw new Error(
         "At least one field is required"
@@ -4923,6 +4957,17 @@ var AdminUserRepository = class {
     );
     return result.Attributes;
   }
+  async getUserByMobile(mobile) {
+    const result = await ddb.send(
+      new import_lib_dynamodb7.GetCommand({
+        TableName: TABLE2,
+        Key: {
+          mobile
+        }
+      })
+    );
+    return result.Item ?? null;
+  }
 };
 
 // src/services/adminUser.service.ts
@@ -4950,6 +4995,9 @@ var AdminUserService = class {
       mobile,
       isBulkUser
     );
+  }
+  async getUserByMobile(mobile) {
+    return this.repo.getUserByMobile(mobile);
   }
 };
 
@@ -5649,11 +5697,12 @@ var BulkOrderService = class {
     }
     return order;
   }
-  async adminGetOrders(limit, cursor, status) {
+  async adminGetOrders(limit, cursor, status, orderId) {
     const result = await this.repo.getAdminOrders(
       limit,
       cursor,
-      status
+      status,
+      orderId
     );
     return {
       items: result.items.map(
@@ -6248,6 +6297,8 @@ async function handler(event) {
     ) : 20;
     const rawStatus = event.queryStringParameters?.status?.trim();
     const status = rawStatus || void 0;
+    const rawOrderId = event.queryStringParameters?.orderId?.trim();
+    const orderId = rawOrderId || void 0;
     if (status && !VALID_STATUSES.has(status)) {
       return error(
         "Invalid order status."
@@ -6272,7 +6323,8 @@ async function handler(event) {
     const result = await service.adminGetOrders(
       limit,
       cursor,
-      status
+      status,
+      orderId
     );
     return success(result);
   } catch (e) {

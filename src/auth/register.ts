@@ -2,6 +2,7 @@ import {
   PutItemCommand,
   GetItemCommand,
   QueryCommand,
+  UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
 
 import { dbClient } from "../libs/db";
@@ -73,6 +74,7 @@ export const handler = async (event: any) => {
 
     const initialCredit = isJoinBonusEnabled ? joinBonusAmount : 0;
     let referredBy = "";
+    let referrerMobile = "";
     if (code && isReferralEnabled) {
       let referralCheck;
 
@@ -111,9 +113,7 @@ export const handler = async (event: any) => {
         );
       }
 
-      const refUser =
-        referralCheck.Items[0];
-
+      const refUser = referralCheck.Items[0];
       if (
         refUser.mobile?.S === mobile
       ) {
@@ -122,7 +122,7 @@ export const handler = async (event: any) => {
           400
         );
       }
-
+      referrerMobile = refUser.mobile?.S || "";
       referredBy = code;
     }
 
@@ -136,6 +136,11 @@ export const handler = async (event: any) => {
       .filter(Boolean)
       .join("  ")
       .toLowerCase();
+
+    const maskedMobile =
+      mobile.length >= 4
+        ? `${mobile.slice(0, 2)}******${mobile.slice(-2)}`
+        : mobile;
 
     await dbClient.send(
       new PutItemCommand({
@@ -159,6 +164,40 @@ export const handler = async (event: any) => {
         },
       })
     );
+
+    if (referrerMobile) {
+      await dbClient.send(
+        new UpdateItemCommand({
+          TableName: USERS_TABLE,
+          Key: {
+            mobile: {
+              S: referrerMobile,
+            },
+          },
+          UpdateExpression: "SET myReferredPeople = list_append(if_not_exists(myReferredPeople, :emptyList), :person)",
+          ExpressionAttributeValues: {
+            ":emptyList": {
+              L: [],
+            },
+
+            ":person": {
+              L: [
+                {
+                  M: {
+                    name: {
+                      S: name.trim(),
+                    },
+                    mobile: {
+                      S: maskedMobile,
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        })
+      );
+    }
 
     return success({
       message: "Registration successful. Please login.",
