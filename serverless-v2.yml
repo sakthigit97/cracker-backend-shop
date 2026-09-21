@@ -257,3 +257,10 @@ functions:
       - httpApi:
           path: /admin/orders/{orderId}/apply-chit-balance
           method: POST
+
+  adminRevertChitBalance:
+    handler: src/handlers/adminRevertChitBalance.handler
+    events:
+      - httpApi:
+          path: /admin/orders/{orderId}/revert-chit-balance
+          method: POST

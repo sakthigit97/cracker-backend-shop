@@ -30,7 +30,9 @@ const handler = async (event: any) => {
     pincode: result.Item.pincode?.S,
     role: result.Item.role?.S,
     walletCredit: result.Item.walletCredit?.N || 0,
+    isBulkUser: result.Item.isBulkUser?.BOOL || false,
     referralCode: result.Item.referralCode.S || '',
+    chitBalance: result.Item.chitBalance?.N || 0,
     myReferredPeople:
       result.Item.myReferredPeople?.L?.map(
         (person: any) => ({

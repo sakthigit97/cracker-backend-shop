@@ -48,28 +48,27 @@ export class AdminCreateComboPackageService {
 
         const comboProductId = `prod-${crypto.randomUUID()}`;
         const comboId = crypto.randomUUID();
-        const comboProduct =
-            await this.productService.createProduct({
-                productId: comboProductId,
-                name: comboName,
-                price: Number(input.price),
-                quantity: 1,
-                brandId: "brand-fa700591-52d8-4ef0-9e22-1b4000b6baa9",
-                categoryId: "cat-4b7df8e5-4e0a-49f8-a2dd-0f2b345d4222",
-                imageUrls: [],
-                searchText: comboName,
-                description: comboName,
-                packageTagIds: [],
-                aiTags: [],
-                isComboPackage: true,
-                isRetailOnly: true,
-                isBulkOrderOnly: false,
-                bulkOrderBasePrice: null,
-                cartonQty: null,
-                packQuantity: 1,
-                packUnit: "PACK",
-                isGiftPack: false,
-            });
+        const comboProduct = await this.productService.createProduct({
+            productId: comboProductId,
+            name: comboName,
+            price: Number(input.price),
+            quantity: 1,
+            brandId: "brand-fa700591-52d8-4ef0-9e22-1b4000b6baa9",
+            categoryId: "cat-4b7df8e5-4e0a-49f8-a2dd-0f2b345d4222",
+            imageUrls: [],
+            searchText: comboName,
+            description: comboName,
+            packageTagIds: [],
+            aiTags: [],
+            isComboPackage: true,
+            isRetailOnly: true,
+            isBulkOrderOnly: false,
+            bulkOrderBasePrice: null,
+            cartonQty: null,
+            packQuantity: 1,
+            packUnit: "PACK",
+            isGiftPack: false,
+        });
 
         await this.configService.updateConfig({
             packageTags: [
@@ -79,6 +78,7 @@ export class AdminCreateComboPackageService {
                     name: comboName,
                     imageUrl: "",
                     productId: comboProduct.productId,
+                    offerPrice: Number(input.price),
                 },
             ],
         });

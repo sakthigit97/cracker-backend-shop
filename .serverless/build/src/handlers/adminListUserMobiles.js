@@ -4148,6 +4148,13 @@ var AdminUserRepository = class {
       expressionAttributeNames["#city"] = "city";
       expressionAttributeValues[":city"] = input.city.trim();
     }
+    if (input.district !== void 0) {
+      updates.push(
+        "#district = :district"
+      );
+      expressionAttributeNames["#district"] = "district";
+      expressionAttributeValues[":district"] = input.district.trim();
+    }
     if (input.state !== void 0) {
       updates.push(
         "#state = :state"
@@ -4175,6 +4182,13 @@ var AdminUserRepository = class {
       );
       expressionAttributeNames["#chitBalance"] = "chitBalance";
       expressionAttributeValues[":chitBalance"] = input.chitBalance;
+    }
+    if (input.isBulkUser !== void 0) {
+      updates.push(
+        "#isBulkUser = :isBulkUser"
+      );
+      expressionAttributeNames["#isBulkUser"] = "isBulkUser";
+      expressionAttributeValues[":isBulkUser"] = input.isBulkUser;
     }
     if (updates.length === 0) {
       throw new Error(

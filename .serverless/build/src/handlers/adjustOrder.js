@@ -4509,7 +4509,7 @@ var OrderPricingService = class {
     if (config.enableGst === false) {
       return 0;
     }
-    const isTamilNadu = state?.toLowerCase().includes("tamil nadu");
+    const isTamilNadu = state?.toLowerCase().includes("tamil nadu") || state?.toLowerCase().includes("pondicherry") || state?.toLowerCase().includes("puducherry");
     if (isTamilNadu && config.disableGstForTN) {
       return 0;
     }
@@ -4775,7 +4775,7 @@ var OrderService = class {
   async createOrder(input) {
     const now = Date.now();
     const orderId = this.generateOrderId(now);
-    const isTamilNadu = input.deliveryState.toLowerCase() === "tamil nadu";
+    const isTamilNadu = input.deliveryState.toLowerCase() === "tamil nadu" || input.deliveryState.toLowerCase() === "pondicherry" || input.deliveryState.toLowerCase() === "puducherry";
     const deliveryDays = isTamilNadu ? 5 : 10;
     const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1e3;
     const items = await this.repo.buildItemsSnapshot(

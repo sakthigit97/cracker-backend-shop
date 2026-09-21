@@ -26,7 +26,10 @@ export class OrderService {
     async createOrder(input: CreateOrderInput): Promise<any> {
         const now = Date.now();
         const orderId = this.generateOrderId(now);
-        const isTamilNadu = input.deliveryState.toLowerCase() === "tamil nadu";
+        const isTamilNadu =
+            input.deliveryState.toLowerCase() === "tamil nadu" ||
+            input.deliveryState.toLowerCase() === "pondicherry" ||
+            input.deliveryState.toLowerCase() === "puducherry";
         const deliveryDays = isTamilNadu ? 5 : 10;
         const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1000;
         const items = await this.repo.buildItemsSnapshot(

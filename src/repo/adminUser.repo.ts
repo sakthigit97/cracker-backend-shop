@@ -203,10 +203,12 @@ export class AdminUserRepository {
             role?: string;
             address?: string;
             city?: string;
+            district?: string;
             state?: string;
             pincode?: string;
             walletCredit?: number;
             chitBalance?: number;
+            isBulkUser?: boolean;
         }
     ) {
         const updates: string[] = [];
@@ -276,6 +278,20 @@ export class AdminUserRepository {
             ] = input.city.trim();
         }
 
+        if (input.district !== undefined) {
+            updates.push(
+                "#district = :district"
+            );
+
+            expressionAttributeNames[
+                "#district"
+            ] = "district";
+
+            expressionAttributeValues[
+                ":district"
+            ] = input.district.trim();
+        }
+
         if (input.state !== undefined) {
             updates.push(
                 "#state = :state"
@@ -331,6 +347,20 @@ export class AdminUserRepository {
             expressionAttributeValues[
                 ":chitBalance"
             ] = input.chitBalance;
+        }
+
+        if (input.isBulkUser !== undefined) {
+            updates.push(
+                "#isBulkUser = :isBulkUser"
+            );
+
+            expressionAttributeNames[
+                "#isBulkUser"
+            ] = "isBulkUser";
+
+            expressionAttributeValues[
+                ":isBulkUser"
+            ] = input.isBulkUser;
         }
 
         if (updates.length === 0) {

@@ -31,9 +31,11 @@ export class AdminUserService {
             address?: string;
             city?: string;
             state?: string;
+            district?: string;
             pincode?: string;
             walletCredit?: number;
             chitBalance?: number;
+            isBulkUser?: boolean;
         }
     ) {
         return this.repo.updateUser(

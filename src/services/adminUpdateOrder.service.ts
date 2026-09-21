@@ -288,7 +288,6 @@ export class AdminUpdateOrderService {
         }
 
         const user = await this.orderRepo.getUserByMobile(userId);
-
         if (!user) {
             throw {
                 statusCode: 404,
@@ -330,6 +329,76 @@ export class AdminUpdateOrderService {
             finalPayable: finalPayable - appliedChitAmount,
             expectedFinalPayable: finalPayable,
             adminId: input.adminId,
+            status: existing.status,
+        });
+    }
+
+    async revertChitBalance(input: {
+        orderId: string;
+        adminId: string;
+    }) {
+        const existing = await this.repo.getOrderById(input.orderId);
+
+        if (!existing) {
+            throw {
+                statusCode: 404,
+                message: "Order not found",
+            };
+        }
+
+        if (
+            existing.status === "CANCELLED" ||
+            existing.status === "DISPATCHED"
+        ) {
+            throw {
+                statusCode: 400,
+                message: "Chit balance cannot be reverted for this order",
+            };
+        }
+
+        const chitAmount = Number(existing.chitAmount ?? 0);
+        const finalPayable = Number(existing.finalPayable ?? 0);
+
+        if (!Number.isFinite(chitAmount) || chitAmount <= 0) {
+            throw {
+                statusCode: 400,
+                message: "No chit balance is applied to this order",
+            };
+        }
+
+        if (!Number.isFinite(finalPayable)) {
+            throw {
+                statusCode: 400,
+                message: "Invalid final payable amount",
+            };
+        }
+
+        const userId = existing.userId;
+
+        if (!userId) {
+            throw {
+                statusCode: 400,
+                message: "User not found for this order",
+            };
+        }
+
+        const user = await this.orderRepo.getUserByMobile(userId);
+
+        if (!user) {
+            throw {
+                statusCode: 404,
+                message: "User not found",
+            };
+        }
+
+        return await this.repo.revertChitBalance({
+            orderId: input.orderId,
+            userId,
+            chitAmount,
+            finalPayable: finalPayable + chitAmount,
+            expectedFinalPayable: finalPayable,
+            adminId: input.adminId,
+            status: existing.status,
         });
     }
 }

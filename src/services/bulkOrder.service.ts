@@ -65,7 +65,11 @@ export class BulkOrderService {
         const gstDenominator = Number(config?.gstDenominator ?? 2);
         let gstPercent = configuredGstPercent / gstDenominator;
         const disableGstForTN = config?.disableGstForTN === true;
-        const isTN = state?.trim().toLowerCase() === "tamil nadu";
+        const isTN =
+            state?.trim().toLowerCase() === "tamil nadu" ||
+            state?.trim().toLowerCase() === "pondicherry" ||
+            state?.trim().toLowerCase() === "puducherry";
+
         if (isTN && disableGstForTN) {
             gstPercent = 0;
         }
@@ -275,8 +279,9 @@ export class BulkOrderService {
             config?.disableGstForTN === true;
 
         const isTN =
-            state?.trim().toLowerCase() ===
-            "tamil nadu";
+            state?.trim().toLowerCase() === "tamil nadu" ||
+            state?.trim().toLowerCase() === "pondicherry" ||
+            state?.trim().toLowerCase() === "puducherry";
 
         if (
             isTN &&
@@ -1052,7 +1057,7 @@ export class BulkOrderService {
             this.addStatusHistory(
                 order.statusHistory,
                 status,
-                adminId,
+                `ADMIN#${adminId}`,
                 comment
             );
 

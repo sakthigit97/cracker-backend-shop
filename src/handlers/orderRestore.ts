@@ -17,7 +17,11 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
                 }),
             };
         }
-        const username = userId;
+        const username =
+            role === "admin"
+                ? `ADMIN#${userId}`
+                : `USER#${userId}`;
+
         const body = JSON.parse(event.body || "{}");
         const { orderId } = body;
         if (!orderId) {

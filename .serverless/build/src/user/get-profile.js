@@ -4048,7 +4048,9 @@ var handler = async (event) => {
     pincode: result.Item.pincode?.S,
     role: result.Item.role?.S,
     walletCredit: result.Item.walletCredit?.N || 0,
+    isBulkUser: result.Item.isBulkUser?.BOOL || false,
     referralCode: result.Item.referralCode.S || "",
+    chitBalance: result.Item.chitBalance?.N || 0,
     myReferredPeople: result.Item.myReferredPeople?.L?.map(
       (person) => ({
         name: person.M?.name?.S || "",

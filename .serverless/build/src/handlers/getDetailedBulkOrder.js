@@ -4890,6 +4890,13 @@ var AdminUserRepository = class {
       expressionAttributeNames["#city"] = "city";
       expressionAttributeValues[":city"] = input.city.trim();
     }
+    if (input.district !== void 0) {
+      updates.push(
+        "#district = :district"
+      );
+      expressionAttributeNames["#district"] = "district";
+      expressionAttributeValues[":district"] = input.district.trim();
+    }
     if (input.state !== void 0) {
       updates.push(
         "#state = :state"
@@ -4917,6 +4924,13 @@ var AdminUserRepository = class {
       );
       expressionAttributeNames["#chitBalance"] = "chitBalance";
       expressionAttributeValues[":chitBalance"] = input.chitBalance;
+    }
+    if (input.isBulkUser !== void 0) {
+      updates.push(
+        "#isBulkUser = :isBulkUser"
+      );
+      expressionAttributeNames["#isBulkUser"] = "isBulkUser";
+      expressionAttributeValues[":isBulkUser"] = input.isBulkUser;
     }
     if (updates.length === 0) {
       throw new Error(
@@ -5237,7 +5251,7 @@ var BulkOrderService = class {
     const gstDenominator = Number(config?.gstDenominator ?? 2);
     let gstPercent = configuredGstPercent / gstDenominator;
     const disableGstForTN = config?.disableGstForTN === true;
-    const isTN = state?.trim().toLowerCase() === "tamil nadu";
+    const isTN = state?.trim().toLowerCase() === "tamil nadu" || state?.trim().toLowerCase() === "pondicherry" || state?.trim().toLowerCase() === "puducherry";
     if (isTN && disableGstForTN) {
       gstPercent = 0;
     }
@@ -5375,7 +5389,7 @@ var BulkOrderService = class {
     const gstDenominator = Number(config?.gstDenominator ?? 2);
     let gstPercent = configuredGstPercent / gstDenominator;
     const disableGstForTN = config?.disableGstForTN === true;
-    const isTN = state?.trim().toLowerCase() === "tamil nadu";
+    const isTN = state?.trim().toLowerCase() === "tamil nadu" || state?.trim().toLowerCase() === "pondicherry" || state?.trim().toLowerCase() === "puducherry";
     if (isTN && disableGstForTN) {
       gstPercent = 0;
     }
@@ -5816,7 +5830,7 @@ var BulkOrderService = class {
     const statusHistory = this.addStatusHistory(
       order.statusHistory,
       status,
-      adminId,
+      `ADMIN#${adminId}`,
       comment
     );
     await this.repo.updateStatus(

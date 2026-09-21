@@ -4142,7 +4142,7 @@ var AdminUpdateOrderRepository = class {
                 orderId: input.orderId,
                 meta: "ORDER"
               },
-              UpdateExpression: "SET finalPayable = :finalPayable, chitAmount = :chitAmount, modifiedAt = :now, modifiedBy = :by",
+              UpdateExpression: "SET finalPayable = :finalPayable, chitAmount = :chitAmount, modifiedAt = :now, modifiedBy = :by, statusHistory = list_append(if_not_exists(statusHistory, :emptyHistory), :historyEntry)",
               ConditionExpression: "#status <> :cancelled AND #status <> :dispatched AND (attribute_not_exists(chitAmount) OR chitAmount = :zero) AND finalPayable = :expectedFinalPayable",
               ExpressionAttributeNames: {
                 "#status": "status"
@@ -4155,7 +4155,16 @@ var AdminUpdateOrderRepository = class {
                 ":by": `ADMIN#${input.adminId}`,
                 ":cancelled": "CANCELLED",
                 ":dispatched": "DISPATCHED",
-                ":zero": 0
+                ":zero": 0,
+                ":emptyHistory": [],
+                ":historyEntry": [
+                  {
+                    status: input.status,
+                    at: now,
+                    by: `ADMIN#${input.adminId}`,
+                    comment: `Chit balance applied: \u20B9${input.chitAmount}`
+                  }
+                ]
               }
             }
           },
@@ -4167,6 +4176,62 @@ var AdminUpdateOrderRepository = class {
               },
               UpdateExpression: "SET chitBalance = chitBalance - :chitAmount",
               ConditionExpression: "attribute_exists(mobile) AND chitBalance >= :chitAmount",
+              ExpressionAttributeValues: {
+                ":chitAmount": input.chitAmount
+              }
+            }
+          }
+        ]
+      })
+    );
+    return await this.getOrderById(input.orderId);
+  }
+  async revertChitBalance(input) {
+    const now = Date.now();
+    await ddb.send(
+      new import_lib_dynamodb2.TransactWriteCommand({
+        TransactItems: [
+          {
+            Update: {
+              TableName: TABLE,
+              Key: {
+                orderId: input.orderId,
+                meta: "ORDER"
+              },
+              UpdateExpression: "SET finalPayable = :finalPayable, chitAmount = :zero, modifiedAt = :now, modifiedBy = :by, statusHistory = list_append(if_not_exists(statusHistory, :emptyHistory), :historyEntry)",
+              ConditionExpression: "#status <> :cancelled AND #status <> :dispatched AND chitAmount = :chitAmount AND finalPayable = :expectedFinalPayable",
+              ExpressionAttributeNames: {
+                "#status": "status"
+              },
+              ExpressionAttributeValues: {
+                ":finalPayable": input.finalPayable,
+                ":zero": 0,
+                ":chitAmount": input.chitAmount,
+                ":expectedFinalPayable": input.expectedFinalPayable,
+                ":now": now,
+                ":by": `ADMIN#${input.adminId}`,
+                ":cancelled": "CANCELLED",
+                ":dispatched": "DISPATCHED",
+                ":emptyHistory": [],
+                ":historyEntry": [
+                  {
+                    status: input.status,
+                    at: now,
+                    by: `ADMIN#${input.adminId}`,
+                    comment: `Chit balance reverted: \u20B9${input.chitAmount}`
+                  }
+                ]
+              }
+            }
+          },
+          {
+            Update: {
+              TableName: USERS_TABLE,
+              Key: {
+                mobile: input.userId
+              },
+              UpdateExpression: "SET chitBalance = chitBalance + :chitAmount",
+              ConditionExpression: "attribute_exists(mobile)",
               ExpressionAttributeValues: {
                 ":chitAmount": input.chitAmount
               }
@@ -4882,7 +4947,60 @@ var AdminUpdateOrderService = class {
       chitAmount: appliedChitAmount,
       finalPayable: finalPayable - appliedChitAmount,
       expectedFinalPayable: finalPayable,
-      adminId: input.adminId
+      adminId: input.adminId,
+      status: existing.status
+    });
+  }
+  async revertChitBalance(input) {
+    const existing = await this.repo.getOrderById(input.orderId);
+    if (!existing) {
+      throw {
+        statusCode: 404,
+        message: "Order not found"
+      };
+    }
+    if (existing.status === "CANCELLED" || existing.status === "DISPATCHED") {
+      throw {
+        statusCode: 400,
+        message: "Chit balance cannot be reverted for this order"
+      };
+    }
+    const chitAmount = Number(existing.chitAmount ?? 0);
+    const finalPayable = Number(existing.finalPayable ?? 0);
+    if (!Number.isFinite(chitAmount) || chitAmount <= 0) {
+      throw {
+        statusCode: 400,
+        message: "No chit balance is applied to this order"
+      };
+    }
+    if (!Number.isFinite(finalPayable)) {
+      throw {
+        statusCode: 400,
+        message: "Invalid final payable amount"
+      };
+    }
+    const userId = existing.userId;
+    if (!userId) {
+      throw {
+        statusCode: 400,
+        message: "User not found for this order"
+      };
+    }
+    const user = await this.orderRepo.getUserByMobile(userId);
+    if (!user) {
+      throw {
+        statusCode: 404,
+        message: "User not found"
+      };
+    }
+    return await this.repo.revertChitBalance({
+      orderId: input.orderId,
+      userId,
+      chitAmount,
+      finalPayable: finalPayable + chitAmount,
+      expectedFinalPayable: finalPayable,
+      adminId: input.adminId,
+      status: existing.status
     });
   }
 };

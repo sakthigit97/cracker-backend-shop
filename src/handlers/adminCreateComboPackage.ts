@@ -60,12 +60,11 @@ export const handler = async (event: any) => {
             };
         }
 
-        const result =
-            await service.createComboPackage({
-                name: name.trim(),
-                price: Number(price),
-                productIds,
-            });
+        const result = await service.createComboPackage({
+            name: name.trim(),
+            price: Number(price),
+            productIds,
+        });
 
         return {
             statusCode: 201,

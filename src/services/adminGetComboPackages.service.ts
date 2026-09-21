@@ -5,7 +5,7 @@ export class AdminGetComboPackagesService {
     constructor(
         private comboRepo = new AdminGetComboPackagesRepository(),
         private configRepo = new AdminConfigRepo()
-    ) {}
+    ) { }
 
     async listComboPackages() {
         const [comboProducts, allProducts, config] =
@@ -18,30 +18,46 @@ export class AdminGetComboPackagesService {
         const packageTags = config?.packageTags || [];
 
         const combos = comboProducts.map((comboProduct: any) => {
-            const packageTag = packageTags.find(
-                (tag: any) =>
-                    tag?.productId === comboProduct.productId
-            );
+            const normalizeComboName = (value: any) =>
+                String(value ?? "")
+                    .trim()
+                    .toLowerCase()
+                    .replace(/\s+/g, " ");
+
+            const packageTag =
+                packageTags.find(
+                    (tag: any) =>
+                        tag?.productId === comboProduct.productId
+                ) ||
+                packageTags.find(
+                    (tag: any) =>
+                        normalizeComboName(tag?.name) ===
+                        normalizeComboName(comboProduct.name)
+                );
 
             const comboId = packageTag?.id || null;
-
             const relatedProducts = comboId
                 ? allProducts.filter(
-                      (product: any) =>
-                          product.isComboPackage !== true &&
-                          Array.isArray(product.packageTagIds) &&
-                          product.packageTagIds.includes(comboId)
-                  )
+                    (product: any) =>
+                        product.isComboPackage !== true &&
+                        Array.isArray(product.packageTagIds) &&
+                        product.packageTagIds.includes(comboId)
+                )
                 : [];
 
             const products = relatedProducts.map(
                 (product: any) => ({
                     productId: product.productId,
                     name: product.name,
+                    mrp: Number(
+                        product.mrp ??
+                        product.price ??
+                        0
+                    ),
                     price: Number(
                         product.discountedPrice ??
-                            product.price ??
-                            0
+                        product.price ??
+                        0
                     ),
                     imageUrl:
                         product.imageUrls?.[0] ||

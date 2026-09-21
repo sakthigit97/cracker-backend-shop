@@ -4148,6 +4148,13 @@ var AdminUserRepository = class {
       expressionAttributeNames["#city"] = "city";
       expressionAttributeValues[":city"] = input.city.trim();
     }
+    if (input.district !== void 0) {
+      updates.push(
+        "#district = :district"
+      );
+      expressionAttributeNames["#district"] = "district";
+      expressionAttributeValues[":district"] = input.district.trim();
+    }
     if (input.state !== void 0) {
       updates.push(
         "#state = :state"
@@ -4175,6 +4182,13 @@ var AdminUserRepository = class {
       );
       expressionAttributeNames["#chitBalance"] = "chitBalance";
       expressionAttributeValues[":chitBalance"] = input.chitBalance;
+    }
+    if (input.isBulkUser !== void 0) {
+      updates.push(
+        "#isBulkUser = :isBulkUser"
+      );
+      expressionAttributeNames["#isBulkUser"] = "isBulkUser";
+      expressionAttributeValues[":isBulkUser"] = input.isBulkUser;
     }
     if (updates.length === 0) {
       throw new Error(
@@ -4296,9 +4310,11 @@ var handler = async (event) => {
       "address",
       "city",
       "state",
+      "district",
       "pincode",
       "walletCredit",
-      "chitBalance"
+      "chitBalance",
+      "isBulkUser"
     ];
     const hasUnknownField = Object.keys(body).some(
       (key) => !allowedFields.includes(key)
@@ -4307,7 +4323,7 @@ var handler = async (event) => {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: "Only name, role, address, city, state, pincode, walletCredit and chitBalance can be updated"
+          message: "Only name, role, address, city, state, district, pincode, walletCredit, chitBalance and isBulkUser can be updated"
         })
       };
     }
@@ -4365,6 +4381,17 @@ var handler = async (event) => {
       }
       input.city = body.city.trim();
     }
+    if (body.district !== void 0) {
+      if (typeof body.district !== "string") {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "District must be a string"
+          })
+        };
+      }
+      input.district = body.district.trim();
+    }
     if (body.state !== void 0) {
       if (typeof body.state !== "string") {
         return {
@@ -4418,7 +4445,18 @@ var handler = async (event) => {
       }
       input.chitBalance = body.chitBalance;
     }
-    const hasUpdate = input.name !== void 0 || input.role !== void 0 || input.address !== void 0 || input.city !== void 0 || input.state !== void 0 || input.pincode !== void 0 || input.walletCredit !== void 0 || input.chitBalance !== void 0;
+    if (body.isBulkUser !== void 0) {
+      if (typeof body.isBulkUser !== "boolean") {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({
+            message: "isBulkUser must be a boolean"
+          })
+        };
+      }
+      input.isBulkUser = body.isBulkUser;
+    }
+    const hasUpdate = input.name !== void 0 || input.role !== void 0 || input.address !== void 0 || input.city !== void 0 || input.district !== void 0 || input.state !== void 0 || input.pincode !== void 0 || input.walletCredit !== void 0 || input.chitBalance !== void 0 || input.isBulkUser !== void 0;
     if (!hasUpdate) {
       return {
         statusCode: 400,
