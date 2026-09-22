@@ -19,11 +19,13 @@ export const handler = async (event: any) => {
             query.isBulkUser === undefined
                 ? undefined
                 : query.isBulkUser === "true";
+        const rolefilter = query.role || undefined;
 
         const data = await service.listUsers({
             search,
             isActive,
             isBulkUser,
+            rolefilter,
             cursor,
             limit,
         });

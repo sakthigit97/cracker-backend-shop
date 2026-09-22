@@ -8,6 +8,7 @@ export class AdminUserService {
     async listUsers(input: {
         search?: string;
         isBulkUser?: boolean;
+        rolefilter?: string;
         isActive?: "true" | "false";
         cursor?: string;
         limit: number;

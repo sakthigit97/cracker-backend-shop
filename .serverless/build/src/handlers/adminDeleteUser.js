@@ -4018,7 +4018,8 @@ var AdminUserRepository = class {
     limit,
     cursor,
     search,
-    isBulkUser
+    isBulkUser,
+    rolefilter
   }) {
     const searchValue = search?.trim().toLowerCase() || "";
     let exclusiveStartKey;
@@ -4047,6 +4048,11 @@ var AdminUserRepository = class {
         expressionAttributeNames["#bulk"] = "isBulkUser";
         expressionAttributeValues[":bulk"] = isBulkUser;
         filterExpression = filterExpression ? `${filterExpression} AND #bulk = :bulk` : "#bulk = :bulk";
+      }
+      if (rolefilter !== void 0) {
+        expressionAttributeNames["#role"] = "role";
+        expressionAttributeValues[":role"] = rolefilter;
+        filterExpression = filterExpression ? `${filterExpression} AND #role = :role` : "#role = :role";
       }
       const response = await ddb.send(
         new import_lib_dynamodb2.ScanCommand({

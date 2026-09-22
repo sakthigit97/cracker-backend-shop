@@ -4018,7 +4018,8 @@ var AdminUserRepository = class {
     limit,
     cursor,
     search,
-    isBulkUser
+    isBulkUser,
+    rolefilter
   }) {
     const searchValue = search?.trim().toLowerCase() || "";
     let exclusiveStartKey;
@@ -4047,6 +4048,11 @@ var AdminUserRepository = class {
         expressionAttributeNames["#bulk"] = "isBulkUser";
         expressionAttributeValues[":bulk"] = isBulkUser;
         filterExpression = filterExpression ? `${filterExpression} AND #bulk = :bulk` : "#bulk = :bulk";
+      }
+      if (rolefilter !== void 0) {
+        expressionAttributeNames["#role"] = "role";
+        expressionAttributeValues[":role"] = rolefilter;
+        filterExpression = filterExpression ? `${filterExpression} AND #role = :role` : "#role = :role";
       }
       const response = await ddb.send(
         new import_lib_dynamodb2.ScanCommand({
@@ -4287,10 +4293,12 @@ var handler = async (event) => {
     const cursor = query.cursor;
     const limit = query.limit ? Number(query.limit) : 20;
     const isBulkUser = query.isBulkUser === void 0 ? void 0 : query.isBulkUser === "true";
+    const rolefilter = query.role || void 0;
     const data = await service.listUsers({
       search,
       isActive,
       isBulkUser,
+      rolefilter,
       cursor,
       limit
     });

@@ -16,12 +16,14 @@ export class AdminUserRepository {
         limit,
         cursor,
         search,
-        isBulkUser
+        isBulkUser,
+        rolefilter
     }: {
         limit: number;
         cursor?: string;
         search?: string;
         isBulkUser?: boolean;
+        rolefilter?: string;
     }) {
         const searchValue = search?.trim().toLowerCase() || "";
         let exclusiveStartKey:
@@ -79,6 +81,13 @@ export class AdminUserRepository {
                 filterExpression = filterExpression
                     ? `${filterExpression} AND #bulk = :bulk`
                     : "#bulk = :bulk";
+            }
+
+            if (rolefilter !== undefined) {
+                expressionAttributeNames["#role"] = "role";
+                expressionAttributeValues[":role"] = rolefilter;
+                filterExpression = filterExpression ? `${filterExpression} AND #role = :role`
+                    : "#role = :role";
             }
 
             const response =
