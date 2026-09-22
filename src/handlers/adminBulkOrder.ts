@@ -64,6 +64,14 @@ export async function handler(
         const orderId =
             rawOrderId || undefined;
 
+        const rawMobile =
+            event.queryStringParameters
+                ?.mobile
+                ?.trim();
+
+        const mobile =
+            rawMobile || undefined;
+
         if (
             status &&
             !VALID_STATUSES.has(status)
@@ -103,7 +111,8 @@ export async function handler(
                 limit,
                 cursor,
                 status,
-                orderId
+                orderId,
+                mobile
             );
 
         return success(result);

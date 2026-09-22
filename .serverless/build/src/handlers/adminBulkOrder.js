@@ -4176,7 +4176,7 @@ var BulkOrderRepository = class {
     );
     return res.Item ?? null;
   }
-  async getAdminOrders(limit, cursor, status, orderId) {
+  async getAdminOrders(limit, cursor, status, orderId, mobile) {
     const items = [];
     let lastEvaluatedKey = cursor;
     do {
@@ -4204,6 +4204,12 @@ var BulkOrderRepository = class {
           "contains(orderId, :oid)"
         );
         params.ExpressionAttributeValues[":oid"] = orderId;
+      }
+      if (mobile) {
+        filterParts.push(
+          "contains(userId, :mobile)"
+        );
+        params.ExpressionAttributeValues[":mobile"] = mobile;
       }
       if (filterParts.length > 0) {
         params.FilterExpression = filterParts.join(" AND ");
@@ -5717,12 +5723,13 @@ var BulkOrderService = class {
     }
     return order;
   }
-  async adminGetOrders(limit, cursor, status, orderId) {
+  async adminGetOrders(limit, cursor, status, orderId, mobile) {
     const result = await this.repo.getAdminOrders(
       limit,
       cursor,
       status,
-      orderId
+      orderId,
+      mobile
     );
     return {
       items: result.items.map(
@@ -6319,6 +6326,8 @@ async function handler(event) {
     const status = rawStatus || void 0;
     const rawOrderId = event.queryStringParameters?.orderId?.trim();
     const orderId = rawOrderId || void 0;
+    const rawMobile = event.queryStringParameters?.mobile?.trim();
+    const mobile = rawMobile || void 0;
     if (status && !VALID_STATUSES.has(status)) {
       return error(
         "Invalid order status."
@@ -6344,7 +6353,8 @@ async function handler(event) {
       limit,
       cursor,
       status,
-      orderId
+      orderId,
+      mobile
     );
     return success(result);
   } catch (e) {

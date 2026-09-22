@@ -4176,7 +4176,7 @@ var BulkOrderRepository = class {
     );
     return res.Item ?? null;
   }
-  async getAdminOrders(limit, cursor, status, orderId) {
+  async getAdminOrders(limit, cursor, status, orderId, mobile) {
     const items = [];
     let lastEvaluatedKey = cursor;
     do {
@@ -4204,6 +4204,12 @@ var BulkOrderRepository = class {
           "contains(orderId, :oid)"
         );
         params.ExpressionAttributeValues[":oid"] = orderId;
+      }
+      if (mobile) {
+        filterParts.push(
+          "contains(userId, :mobile)"
+        );
+        params.ExpressionAttributeValues[":mobile"] = mobile;
       }
       if (filterParts.length > 0) {
         params.FilterExpression = filterParts.join(" AND ");
@@ -5717,12 +5723,13 @@ var BulkOrderService = class {
     }
     return order;
   }
-  async adminGetOrders(limit, cursor, status, orderId) {
+  async adminGetOrders(limit, cursor, status, orderId, mobile) {
     const result = await this.repo.getAdminOrders(
       limit,
       cursor,
       status,
-      orderId
+      orderId,
+      mobile
     );
     return {
       items: result.items.map(

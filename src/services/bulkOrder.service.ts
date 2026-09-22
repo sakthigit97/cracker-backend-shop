@@ -861,14 +861,16 @@ export class BulkOrderService {
         limit: number,
         cursor?: any,
         status?: string,
-        orderId?: string
+        orderId?: string,
+        mobile?: string
     ) {
         const result =
             await this.repo.getAdminOrders(
                 limit,
                 cursor,
                 status,
-                orderId
+                orderId,
+                mobile
             );
 
         return {

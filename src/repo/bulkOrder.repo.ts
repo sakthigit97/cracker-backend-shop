@@ -270,7 +270,8 @@ export class BulkOrderRepository {
         limit: number,
         cursor?: any,
         status?: string,
-        orderId?: string
+        orderId?: string,
+        mobile?: string
     ) {
         const items: any[] = [];
         let lastEvaluatedKey = cursor;
@@ -308,6 +309,15 @@ export class BulkOrderRepository {
 
                 params.ExpressionAttributeValues[":oid"] =
                     orderId;
+            }
+
+            if (mobile) {
+                filterParts.push(
+                    "contains(userId, :mobile)"
+                );
+
+                params.ExpressionAttributeValues[":mobile"] =
+                    mobile;
             }
 
             if (filterParts.length > 0) {
