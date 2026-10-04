@@ -342,14 +342,14 @@ var require_buffer_equal_constant_time = __commonJS({
 var require_jwa = __commonJS({
   "node_modules/jwa/index.js"(exports2, module2) {
     var Buffer2 = require_safe_buffer().Buffer;
-    var crypto = require("crypto");
+    var crypto2 = require("crypto");
     var formatEcdsa = require_ecdsa_sig_formatter();
     var util = require("util");
     var MSG_INVALID_ALGORITHM = '"%s" is not a valid algorithm.\n  Supported algorithms are:\n  "HS256", "HS384", "HS512", "RS256", "RS384", "RS512", "PS256", "PS384", "PS512", "ES256", "ES384", "ES512" and "none".';
     var MSG_INVALID_SECRET = "secret must be a string or buffer";
     var MSG_INVALID_VERIFIER_KEY = "key must be a string or a buffer";
     var MSG_INVALID_SIGNER_KEY = "key must be a string, a buffer or an object";
-    var supportsKeyObjects = typeof crypto.createPublicKey === "function";
+    var supportsKeyObjects = typeof crypto2.createPublicKey === "function";
     if (supportsKeyObjects) {
       MSG_INVALID_VERIFIER_KEY += " or a KeyObject";
       MSG_INVALID_SECRET += "or a KeyObject";
@@ -439,17 +439,17 @@ var require_jwa = __commonJS({
       return function sign(thing, secret) {
         checkIsSecretKey(secret);
         thing = normalizeInput(thing);
-        var hmac = crypto.createHmac("sha" + bits, secret);
+        var hmac = crypto2.createHmac("sha" + bits, secret);
         var sig = (hmac.update(thing), hmac.digest("base64"));
         return fromBase64(sig);
       };
     }
     var bufferEqual;
-    var timingSafeEqual = "timingSafeEqual" in crypto ? function timingSafeEqual2(a, b) {
+    var timingSafeEqual = "timingSafeEqual" in crypto2 ? function timingSafeEqual2(a, b) {
       if (a.byteLength !== b.byteLength) {
         return false;
       }
-      return crypto.timingSafeEqual(a, b);
+      return crypto2.timingSafeEqual(a, b);
     } : function timingSafeEqual2(a, b) {
       if (!bufferEqual) {
         bufferEqual = require_buffer_equal_constant_time();
@@ -466,7 +466,7 @@ var require_jwa = __commonJS({
       return function sign(thing, privateKey) {
         checkIsPrivateKey(privateKey);
         thing = normalizeInput(thing);
-        var signer = crypto.createSign("RSA-SHA" + bits);
+        var signer = crypto2.createSign("RSA-SHA" + bits);
         var sig = (signer.update(thing), signer.sign(privateKey, "base64"));
         return fromBase64(sig);
       };
@@ -476,7 +476,7 @@ var require_jwa = __commonJS({
         checkIsPublicKey(publicKey);
         thing = normalizeInput(thing);
         signature = toBase64(signature);
-        var verifier = crypto.createVerify("RSA-SHA" + bits);
+        var verifier = crypto2.createVerify("RSA-SHA" + bits);
         verifier.update(thing);
         return verifier.verify(publicKey, signature, "base64");
       };
@@ -485,11 +485,11 @@ var require_jwa = __commonJS({
       return function sign(thing, privateKey) {
         checkIsPrivateKey(privateKey);
         thing = normalizeInput(thing);
-        var signer = crypto.createSign("RSA-SHA" + bits);
+        var signer = crypto2.createSign("RSA-SHA" + bits);
         var sig = (signer.update(thing), signer.sign({
           key: privateKey,
-          padding: crypto.constants.RSA_PKCS1_PSS_PADDING,
-          saltLength: crypto.constants.RSA_PSS_SALTLEN_DIGEST
+          padding: crypto2.constants.RSA_PKCS1_PSS_PADDING,
+          saltLength: crypto2.constants.RSA_PSS_SALTLEN_DIGEST
         }, "base64"));
         return fromBase64(sig);
       };
@@ -499,12 +499,12 @@ var require_jwa = __commonJS({
         checkIsPublicKey(publicKey);
         thing = normalizeInput(thing);
         signature = toBase64(signature);
-        var verifier = crypto.createVerify("RSA-SHA" + bits);
+        var verifier = crypto2.createVerify("RSA-SHA" + bits);
         verifier.update(thing);
         return verifier.verify({
           key: publicKey,
-          padding: crypto.constants.RSA_PKCS1_PSS_PADDING,
-          saltLength: crypto.constants.RSA_PSS_SALTLEN_DIGEST
+          padding: crypto2.constants.RSA_PKCS1_PSS_PADDING,
+          saltLength: crypto2.constants.RSA_PSS_SALTLEN_DIGEST
         }, signature, "base64");
       };
     }
@@ -834,14 +834,14 @@ var require_decode = __commonJS({
 // node_modules/jsonwebtoken/lib/JsonWebTokenError.js
 var require_JsonWebTokenError = __commonJS({
   "node_modules/jsonwebtoken/lib/JsonWebTokenError.js"(exports2, module2) {
-    var JsonWebTokenError = function(message, error) {
+    var JsonWebTokenError = function(message, error2) {
       Error.call(this, message);
       if (Error.captureStackTrace) {
         Error.captureStackTrace(this, this.constructor);
       }
       this.name = "JsonWebTokenError";
       this.message = message;
-      if (error) this.inner = error;
+      if (error2) this.inner = error2;
     };
     JsonWebTokenError.prototype = Object.create(Error.prototype);
     JsonWebTokenError.prototype.constructor = JsonWebTokenError;
@@ -3857,8 +3857,8 @@ var require_sign = __commonJS({
       } else if (isObjectPayload) {
         try {
           validatePayload(payload);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
         if (!options.mutatePayload) {
           payload = Object.assign({}, payload);
@@ -3879,14 +3879,14 @@ var require_sign = __commonJS({
       }
       try {
         validateOptions(options);
-      } catch (error) {
-        return failure(error);
+      } catch (error2) {
+        return failure(error2);
       }
       if (!options.allowInvalidAsymmetricKeyTypes) {
         try {
           validateAsymmetricKey(header.alg, secretOrPrivateKey);
-        } catch (error) {
-          return failure(error);
+        } catch (error2) {
+          return failure(error2);
         }
       }
       const timestamp = payload.iat || Math.floor(Date.now() / 1e3);
@@ -3963,12 +3963,16 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// src/handlers/adminRefreshOrderAmount.ts
-var adminRefreshOrderAmount_exports = {};
-__export(adminRefreshOrderAmount_exports, {
-  handler: () => handler
+// src/handlers/flashSale.ts
+var flashSale_exports = {};
+__export(flashSale_exports, {
+  cancelHandler: () => cancelHandler,
+  createHandler: () => createHandler,
+  getHandler: () => getHandler,
+  listHandler: () => listHandler,
+  updateHandler: () => updateHandler
 });
-module.exports = __toCommonJS(adminRefreshOrderAmount_exports);
+module.exports = __toCommonJS(flashSale_exports);
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -3997,8 +4001,24 @@ function verifyJwt(event) {
   };
 }
 
-// src/repo/order.repo.ts
-var import_lib_dynamodb5 = require("@aws-sdk/lib-dynamodb");
+// src/libs/response.ts
+var success = (data, statusCode = 200) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: true,
+    data
+  })
+});
+var error = (message, statusCode = 400) => ({
+  statusCode,
+  body: JSON.stringify({
+    success: false,
+    message
+  })
+});
+
+// src/services/flashSale.service.ts
+var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
 
 // src/utils/dynamo.ts
 var import_client_dynamodb = require("@aws-sdk/client-dynamodb");
@@ -4010,1223 +4030,881 @@ var ddb = import_lib_dynamodb.DynamoDBDocumentClient.from(client, {
   }
 });
 
-// src/services/product.service.ts
-var import_lib_dynamodb4 = require("@aws-sdk/lib-dynamodb");
-
-// src/repo/product.repo.ts
-var import_lib_dynamodb2 = require("@aws-sdk/lib-dynamodb");
-var TABLE_NAME = process.env.PRODUCTS_TABLE;
-var ProductRepository = class {
-  async batchGet(productIds) {
-    if (productIds.length === 0) return [];
-    const keys = productIds.map((productId) => ({
-      productId
-    }));
-    const res = await ddb.send(
-      new import_lib_dynamodb2.BatchGetCommand({
-        RequestItems: {
-          [TABLE_NAME]: { Keys: keys }
-        }
-      })
-    );
-    return res.Responses?.[TABLE_NAME] ?? [];
-  }
-  async deleteProduct(productId) {
-    await ddb.send(
-      new import_lib_dynamodb2.DeleteCommand({
-        TableName: process.env.PRODUCTS_TABLE,
-        Key: { productId }
-      })
-    );
-  }
-};
-
-// src/services/discount.service.ts
-var import_lib_dynamodb3 = require("@aws-sdk/lib-dynamodb");
-var DISCOUNT_TABLE = process.env.DISCOUNT_TABLE;
-async function getActiveDiscounts() {
-  const res = await ddb.send(
-    new import_lib_dynamodb3.ScanCommand({
-      TableName: DISCOUNT_TABLE,
-      FilterExpression: "isActive = :true",
-      ExpressionAttributeValues: {
-        ":true": true
-      }
-    })
-  );
-  return res.Items || [];
+// src/services/flashSale.service.ts
+var FLASH_SALES_TABLE = process.env.FLASH_SALES_TABLE;
+var PRODUCTS_TABLE = process.env.PRODUCTS_TABLE;
+var PRODUCT_INDEX = "productId-startAt-index";
+function nowIso() {
+  return (/* @__PURE__ */ new Date()).toISOString();
 }
-
-// src/services/price.service.ts
-function applyDiscount(product, discounts) {
-  let applied = null;
-  applied = discounts.find(
-    (d) => d.discountType === "PRODUCT" && d.targetId === product.productId
-  ) || discounts.find(
-    (d) => d.discountType === "CATEGORY" && d.targetId === product.categoryId
-  ) || discounts.find(
-    (d) => d.discountType === "BRAND" && d.targetId === product.brandId
-  );
-  if (!applied) {
-    return {
-      price: product.price,
-      originalPrice: null,
-      discountText: null
-    };
+function normalizeDate(value, fieldName) {
+  if (!value || typeof value !== "string") {
+    throw new Error(`${fieldName} is required`);
   }
-  let finalPrice = product.price;
-  if (applied.discountMode === "PERCENT") {
-    finalPrice = Math.round(
-      product.price - product.price * applied.discountValue / 100
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    throw new Error(`Invalid ${fieldName}`);
+  }
+  return date.toISOString();
+}
+function validateDates(startAt, endAt) {
+  const normalizedStartAt = normalizeDate(
+    startAt,
+    "start date"
+  );
+  const normalizedEndAt = normalizeDate(
+    endAt,
+    "end date"
+  );
+  const start = new Date(normalizedStartAt).getTime();
+  const end = new Date(normalizedEndAt).getTime();
+  const now = Date.now();
+  if (start >= end) {
+    throw new Error(
+      "Start date must be before end date"
     );
   }
-  if (applied.discountMode === "FLAT") {
-    finalPrice = Math.max(
-      0,
-      product.price - applied.discountValue
+  if (end <= now) {
+    throw new Error(
+      "Flash sale end date must be in the future"
     );
   }
   return {
-    price: finalPrice,
-    originalPrice: product.price,
-    discountText: applied.discountMode === "PERCENT" ? `${applied.discountValue}% OFF` : `\u20B9${applied.discountValue} OFF`
+    startAt: normalizedStartAt,
+    endAt: normalizedEndAt
   };
 }
-
-// src/services/product.service.ts
-var PRODUCT_TABLE = process.env.PRODUCTS_TABLE;
-var ProductService = class {
-  constructor(repo = new ProductRepository()) {
-    this.repo = repo;
+function getStatus(startAt, endAt) {
+  const now = Date.now();
+  const start = new Date(startAt).getTime();
+  const end = new Date(endAt).getTime();
+  if (now < start) {
+    return "SCHEDULED";
   }
-  async batchGetProducts(productIds) {
-    const uniqueIds = [...new Set(productIds)];
-    const allProducts = [];
-    for (let i = 0; i < uniqueIds.length; i += 100) {
-      const chunk = uniqueIds.slice(i, i + 100);
-      const products = await this.repo.batchGet(chunk);
-      if (products?.length) {
-        allProducts.push(...products);
+  if (now >= start && now < end) {
+    return "ACTIVE";
+  }
+  return "EXPIRED";
+}
+async function getProduct(productId) {
+  const result = await ddb.send(
+    new import_lib_dynamodb2.GetCommand({
+      TableName: PRODUCTS_TABLE,
+      Key: {
+        productId
       }
+    })
+  );
+  return result.Item ?? null;
+}
+async function getProductFlashSales(productId) {
+  const items = [];
+  let ExclusiveStartKey;
+  do {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.QueryCommand({
+        TableName: FLASH_SALES_TABLE,
+        IndexName: PRODUCT_INDEX,
+        KeyConditionExpression: "productId = :productId",
+        ExpressionAttributeValues: {
+          ":productId": productId
+        },
+        ExclusiveStartKey
+      })
+    );
+    items.push(
+      ...result.Items ?? []
+    );
+    ExclusiveStartKey = result.LastEvaluatedKey;
+  } while (ExclusiveStartKey);
+  return items;
+}
+function isOverlapping(startAt, endAt, existingStartAt, existingEndAt) {
+  const start = new Date(startAt).getTime();
+  const end = new Date(endAt).getTime();
+  const existingStart = new Date(
+    existingStartAt
+  ).getTime();
+  const existingEnd = new Date(
+    existingEndAt
+  ).getTime();
+  return start < existingEnd && end > existingStart;
+}
+async function validateNoOverlap(productId, startAt, endAt, excludeFlashSaleId) {
+  const sales = await getProductFlashSales(productId);
+  const overlappingSale = sales.find((sale) => {
+    if (sale.flashSaleId === excludeFlashSaleId) {
+      return false;
     }
-    if (allProducts.length === 0) return [];
-    const discounts = await getActiveDiscounts();
-    const productMap = new Map(
-      allProducts.map((p) => [p.productId, p])
+    if (sale.status === "CANCELLED" || sale.status === "EXPIRED") {
+      return false;
+    }
+    return isOverlapping(
+      startAt,
+      endAt,
+      sale.startAt,
+      sale.endAt
     );
-    return uniqueIds.map((id) => productMap.get(id)).filter((p) => Boolean(p)).filter((p) => p.isActive === "true" || p.isActive === true).map((p) => {
-      const priceInfo = applyDiscount(p, discounts);
-      return {
-        productId: p.productId,
-        name: p.name,
-        description: p.description ?? null,
-        image: p.imageUrls?.[0] ?? null,
-        price: priceInfo.price,
-        originalPrice: priceInfo.originalPrice > priceInfo.price ? priceInfo.originalPrice : void 0,
-        discountText: priceInfo.discountText,
-        categoryId: p.categoryId,
-        brandId: p.brandId,
-        qty: p.quantity,
-        searchText: p.searchText,
-        isComboPackage: p.isComboPackage || false,
-        sequenceNumber: p.sequenceNumber || 0,
-        cartonQty: p.cartonQty || 0,
-        bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
-        flashSalePrice: p.flashSalePrice || 0,
-        isFlashSale: p.isFlashSale || false,
-        isBulkOrderOnly: p.isBulkOrderOnly || false,
-        isRetailOnly: p.isRetailOnly || false,
-        packQuantity: p.packQuantity || 0,
-        packUnit: p.packUnit || "",
-        isGiftPack: p.isGiftPack || false
-      };
-    });
-  }
-  async deleteProduct(productId) {
-    return this.repo.deleteProduct(productId);
-  }
-};
-
-// src/repo/order.repo.ts
-var ORDERS_TABLE = process.env.ORDERS_TABLE;
-var USERS_TABLE = process.env.USERS_TABLE;
-var ADMIN_CONFIG_TABLE = process.env.ADMIN_CONFIG_TABLE;
-var OrderRepository = class {
-  constructor() {
-    this.productService = new ProductService();
-  }
-  async buildItemsSnapshot(cartItems) {
-    const productIds = cartItems.map((c) => c.itemId);
-    const products = await this.productService.batchGetProducts(productIds);
-    const map = new Map(
-      products.map((p) => [
-        p.productId,
-        {
-          name: p.name,
-          price: p.price,
-          image: p.image || null,
-          originalPrice: p.originalPrice || null,
-          discountText: p.discountText || "",
-          isFlashSale: p.isFlashSale || false,
-          flashSalePrice: p.flashSalePrice || null,
-          isComboPackage: p.isComboPackage || false,
-          sequenceNumber: p.sequenceNumber || 0,
-          packQuantity: p.packQuantity || 0,
-          packUnit: p.packUnit || "",
-          categoryId: p.categoryId || ""
-        }
-      ])
+  });
+  if (overlappingSale) {
+    throw new Error(
+      `Product already has a flash sale between ${overlappingSale.startAt} and ${overlappingSale.endAt}`
     );
-    const snapshot = cartItems.map((c) => {
-      const product = map.get(c.itemId);
-      if (!product) {
-        throw new Error(
-          `Product ${c.itemId} not found`
-        );
-      }
-      const effectivePrice = product.isFlashSale === true && typeof product.flashSalePrice === "number" && product.flashSalePrice > 0 ? product.flashSalePrice : product.price;
-      return {
-        productId: c.itemId,
-        name: product.name,
-        image: product.image,
-        price: effectivePrice,
-        quantity: c.quantity,
-        total: effectivePrice * c.quantity,
-        originalPrice: product.originalPrice,
-        discountText: product.discountText,
-        isComboPackage: product.isComboPackage,
-        sequenceNumber: product.sequenceNumber || 0,
-        packQuantity: product.packQuantity || 0,
-        packUnit: product.packUnit || "",
-        categoryId: product.categoryId || ""
-      };
-    });
-    return snapshot;
   }
-  async updateDiscount(orderId, data) {
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: ORDERS_TABLE,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        },
-        UpdateExpression: `
-                SET
-                    additionalDiscount = :additionalDiscount,
-                    additionalDiscountType = :additionalDiscountType,
-                    additionalDiscountValue = :additionalDiscountValue,
-                    amountAfterDiscount = :amountAfterDiscount,
-                    gstAmount = :gstAmount,
-                    grandTotal = :grandTotal,
-                    walletUsed = :walletUsed,
-                    finalPayable = :finalPayable,
-                    updatedAt = :updatedAt,
-                    modifiedAt = :modifiedAt,
-                    modifiedBy = :modifiedBy,
-                    statusHistory = :statusHistory
+}
+async function activateProductFlashSale(sale) {
+  await ddb.send(
+    new import_lib_dynamodb2.UpdateCommand({
+      TableName: PRODUCTS_TABLE,
+      Key: {
+        productId: sale.productId
+      },
+      UpdateExpression: `
+                SET isFlashSale = :isFlashSale,
+                    flashSaleId = :flashSaleId,
+                    flashSalePrice = :flashSalePrice
             `,
-        ExpressionAttributeValues: {
-          ":additionalDiscount": data.additionalDiscount ?? 0,
-          ":additionalDiscountType": data.additionalDiscountType ?? null,
-          ":additionalDiscountValue": data.additionalDiscountValue ?? null,
-          ":amountAfterDiscount": data.amountAfterDiscount,
-          ":gstAmount": data.gstAmount,
-          ":grandTotal": data.grandTotal,
-          ":walletUsed": data.walletUsed,
-          ":finalPayable": data.finalPayable,
-          ":updatedAt": data.updatedAt,
-          ":modifiedAt": data.modifiedAt,
-          ":modifiedBy": data.modifiedBy,
-          ":statusHistory": data.statusHistory
-        }
-      })
+      ExpressionAttributeValues: {
+        ":isFlashSale": true,
+        ":flashSaleId": sale.flashSaleId,
+        ":flashSalePrice": sale.salePrice
+      },
+      ConditionExpression: `
+                attribute_not_exists(flashSaleId)
+                OR flashSaleId = :flashSaleId
+            `
+    })
+  );
+}
+async function deactivateProductFlashSale(sale) {
+  await ddb.send(
+    new import_lib_dynamodb2.UpdateCommand({
+      TableName: PRODUCTS_TABLE,
+      Key: {
+        productId: sale.productId
+      },
+      UpdateExpression: `
+                REMOVE isFlashSale,
+                       flashSaleId,
+                       flashSalePrice
+            `,
+      ConditionExpression: "flashSaleId = :flashSaleId",
+      ExpressionAttributeValues: {
+        ":flashSaleId": sale.flashSaleId
+      }
+    })
+  );
+}
+async function createFlashSale(input) {
+  const {
+    productId,
+    header,
+    imageUrl,
+    salePrice,
+    startAt,
+    endAt
+  } = input;
+  if (!productId?.trim()) {
+    throw new Error("Product ID is required");
+  }
+  if (!header?.trim()) {
+    throw new Error(
+      "Flash sale header is required"
     );
   }
-  async create(order) {
-    await ddb.send(
-      new import_lib_dynamodb5.PutCommand({
-        TableName: ORDERS_TABLE,
-        Item: order
-      })
+  if (!imageUrl?.trim()) {
+    throw new Error(
+      "Flash sale image is required"
     );
   }
-  async getOrdersByUser(userId, limit, cursor) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.QueryCommand({
-        TableName: ORDERS_TABLE,
-        IndexName: "userId-createdAt-index",
-        KeyConditionExpression: "userId = :uid",
-        ExpressionAttributeValues: {
-          ":uid": userId
-        },
-        ScanIndexForward: false,
-        Limit: limit,
-        ExclusiveStartKey: cursor
-      })
+  if (!Number.isFinite(salePrice) || salePrice <= 0) {
+    throw new Error(
+      "Sale price must be greater than zero"
     );
-    return {
-      items: res.Items || [],
-      nextCursor: res.LastEvaluatedKey || null
-    };
   }
-  async getById(orderId) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: ORDERS_TABLE,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        }
-      })
+  const normalizedDates = validateDates(
+    startAt,
+    endAt
+  );
+  const product = await getProduct(
+    productId.trim()
+  );
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  const originalPrice = Number(
+    product.price
+  );
+  if (!Number.isFinite(originalPrice) || originalPrice <= 0) {
+    throw new Error(
+      "Product has an invalid price"
     );
-    return res.Item;
   }
-  async updateStatus(orderId, data) {
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: ORDERS_TABLE,
-        Key: {
-          orderId,
-          meta: "ORDER"
-        },
-        UpdateExpression: `
-                SET 
-                    #status = :status,
-                    updatedAt = :updatedAt,
-                    modifiedAt = :modifiedAt,
-                    modifiedBy = :modifiedBy,
-                    statusHistory = :statusHistory
-                `,
+  if (salePrice >= originalPrice) {
+    throw new Error(
+      "Flash sale price must be lower than the original price"
+    );
+  }
+  await validateNoOverlap(
+    productId.trim(),
+    normalizedDates.startAt,
+    normalizedDates.endAt
+  );
+  const timestamp = nowIso();
+  const status = getStatus(
+    normalizedDates.startAt,
+    normalizedDates.endAt
+  );
+  const flashSale = {
+    flashSaleId: crypto.randomUUID(),
+    productId: productId.trim(),
+    header: header.trim(),
+    imageUrl: imageUrl.trim(),
+    originalPrice,
+    salePrice,
+    startAt: normalizedDates.startAt,
+    endAt: normalizedDates.endAt,
+    status,
+    createdAt: timestamp,
+    updatedAt: timestamp
+  };
+  await ddb.send(
+    new import_lib_dynamodb2.PutCommand({
+      TableName: FLASH_SALES_TABLE,
+      Item: flashSale,
+      ConditionExpression: "attribute_not_exists(flashSaleId)"
+    })
+  );
+  if (status === "ACTIVE") {
+    try {
+      await activateProductFlashSale(
+        flashSale
+      );
+    } catch (error2) {
+      console.error(
+        "Failed to activate product for flash sale:",
+        error2
+      );
+      throw new Error(
+        "Flash sale was created but could not be activated on the product"
+      );
+    }
+  }
+  return flashSale;
+}
+async function getFlashSale(flashSaleId) {
+  if (!flashSaleId?.trim()) {
+    throw new Error(
+      "Flash sale ID is required"
+    );
+  }
+  const result = await ddb.send(
+    new import_lib_dynamodb2.GetCommand({
+      TableName: FLASH_SALES_TABLE,
+      Key: {
+        flashSaleId: flashSaleId.trim()
+      }
+    })
+  );
+  return result.Item ?? null;
+}
+async function getFlashSalesByStatus(status) {
+  const items = [];
+  let ExclusiveStartKey;
+  do {
+    const result = await ddb.send(
+      new import_lib_dynamodb2.QueryCommand({
+        TableName: FLASH_SALES_TABLE,
+        IndexName: "status-endAt-index",
+        KeyConditionExpression: "#status = :status",
         ExpressionAttributeNames: {
           "#status": "status"
         },
         ExpressionAttributeValues: {
-          ":status": data.status,
-          ":updatedAt": data.updatedAt,
-          ":modifiedAt": data.modifiedAt,
-          ":modifiedBy": data.modifiedBy,
-          ":statusHistory": data.statusHistory
-        }
-      })
-    );
-  }
-  async getUserByMobile(mobile) {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: USERS_TABLE,
-        Key: { mobile }
-      })
-    );
-    return res.Item || null;
-  }
-  async deductWalletCredit(mobile, usedAmount) {
-    if (usedAmount <= 0) return;
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: USERS_TABLE,
-        Key: { mobile },
-        UpdateExpression: "SET walletCredit = walletCredit - :amt",
-        ConditionExpression: "walletCredit >= :amt",
-        ExpressionAttributeValues: {
-          ":amt": usedAmount
-        }
-      })
-    );
-  }
-  async markReferralRewarded(mobile) {
-    try {
-      await ddb.send(
-        new import_lib_dynamodb5.UpdateCommand({
-          TableName: USERS_TABLE,
-          Key: { mobile },
-          UpdateExpression: "SET referralRewarded = :t",
-          ConditionExpression: "attribute_not_exists(referralRewarded) OR referralRewarded = :f",
-          ExpressionAttributeValues: {
-            ":t": true,
-            ":f": false
-          }
-        })
-      );
-      return true;
-    } catch (err) {
-      if (err.name === "ConditionalCheckFailedException") {
-        return false;
-      }
-      throw err;
-    }
-  }
-  async addWalletCreditByReferralCode(referralCode, amount) {
-    if (!referralCode || amount <= 0) return;
-    let lastKey;
-    let refUser = null;
-    do {
-      const res = await ddb.send(
-        new import_lib_dynamodb5.QueryCommand({
-          TableName: USERS_TABLE,
-          IndexName: "referralCode-index",
-          KeyConditionExpression: "referralCode = :c",
-          ExpressionAttributeValues: {
-            ":c": referralCode
-          },
-          ExclusiveStartKey: lastKey
-        })
-      );
-      if (res.Items?.length) {
-        refUser = res.Items[0];
-        break;
-      }
-      lastKey = res.LastEvaluatedKey;
-    } while (lastKey);
-    if (!refUser) {
-      console.log("Referral user not found:", referralCode);
-      return;
-    }
-    console.log(
-      `Crediting \u20B9${amount} to ${refUser.mobile} (${referralCode})`
-    );
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: USERS_TABLE,
-        Key: { mobile: refUser.mobile },
-        UpdateExpression: "SET walletCredit = if_not_exists(walletCredit, :z) + :amt",
-        ExpressionAttributeValues: {
-          ":amt": amount,
-          ":z": 0
-        }
-      })
-    );
-  }
-  async getAdminConfig() {
-    const res = await ddb.send(
-      new import_lib_dynamodb5.GetCommand({
-        TableName: ADMIN_CONFIG_TABLE,
-        Key: {
-          configId: "global"
-        }
-      })
-    );
-    return res.Item || {};
-  }
-  async updateItems(orderId, data) {
-    await ddb.send(
-      new import_lib_dynamodb5.UpdateCommand({
-        TableName: ORDERS_TABLE,
-        Key: {
-          orderId,
-          meta: "ORDER"
+          ":status": status
         },
-        UpdateExpression: `
-                SET
-                    #items = :items,
-                    totalProductAmount = :totalProductAmount,
-                    nonComboProductTotal = :nonComboProductTotal,
-                    comboPackageTotal = :comboPackageTotal,
-                    couponCode = :couponCode,
-                    couponType = :couponType,
-                    couponValue = :couponValue,
-                    couponDiscount = :couponDiscount,
-                    additionalDiscount = :additionalDiscount,
-                    additionalDiscountType = :additionalDiscountType,
-                    additionalDiscountValue = :additionalDiscountValue,
-                    packagingCharge = :packagingCharge,
-                    amountBeforeDiscount = :amountBeforeDiscount,
-                    amountAfterDiscount = :amountAfterDiscount,
-                    gstAmount = :gstAmount,
-                    grandTotal = :grandTotal,
-                    walletUsed = :walletUsed,
-                    chitAmount = :chitAmount,
-                    finalPayable = :finalPayable,
-                    updatedAt = :updatedAt,
-                    modifiedAt = :modifiedAt,
-                    modifiedBy = :modifiedBy,
-                    statusHistory = :statusHistory
+        ExclusiveStartKey
+      })
+    );
+    items.push(
+      ...result.Items ?? []
+    );
+    ExclusiveStartKey = result.LastEvaluatedKey;
+  } while (ExclusiveStartKey);
+  return items;
+}
+async function listFlashSales() {
+  const statuses = [
+    "SCHEDULED",
+    "ACTIVE",
+    "EXPIRED",
+    "CANCELLED"
+  ];
+  const results = await Promise.all(
+    statuses.map(
+      (status) => getFlashSalesByStatus(status)
+    )
+  );
+  return results.flat().sort(
+    (a, b) => new Date(
+      b.startAt
+    ).getTime() - new Date(
+      a.startAt
+    ).getTime()
+  );
+}
+async function updateFlashSale(flashSaleId, input) {
+  const existing = await getFlashSale(flashSaleId);
+  if (!existing) {
+    throw new Error(
+      "Flash sale not found"
+    );
+  }
+  if (existing.status === "EXPIRED" || existing.status === "CANCELLED") {
+    throw new Error(
+      "Expired or cancelled flash sales cannot be updated"
+    );
+  }
+  if (input.header !== void 0 && !input.header.trim()) {
+    throw new Error(
+      "Flash sale header is required"
+    );
+  }
+  if (input.imageUrl !== void 0 && !input.imageUrl.trim()) {
+    throw new Error(
+      "Flash sale image is required"
+    );
+  }
+  const rawStartAt = input.startAt ?? existing.startAt;
+  const rawEndAt = input.endAt ?? existing.endAt;
+  const normalizedDates = validateDates(
+    rawStartAt,
+    rawEndAt
+  );
+  const salePrice = input.salePrice ?? existing.salePrice;
+  if (!Number.isFinite(salePrice) || salePrice <= 0) {
+    throw new Error(
+      "Sale price must be greater than zero"
+    );
+  }
+  if (salePrice >= existing.originalPrice) {
+    throw new Error(
+      "Flash sale price must be lower than the original price"
+    );
+  }
+  await validateNoOverlap(
+    existing.productId,
+    normalizedDates.startAt,
+    normalizedDates.endAt,
+    flashSaleId
+  );
+  const updatedAt = nowIso();
+  const newStatus = getStatus(
+    normalizedDates.startAt,
+    normalizedDates.endAt
+  );
+  const updatedHeader = input.header !== void 0 ? input.header.trim() : existing.header;
+  const updatedImageUrl = input.imageUrl !== void 0 ? input.imageUrl.trim() : existing.imageUrl;
+  const result = await ddb.send(
+    new import_lib_dynamodb2.UpdateCommand({
+      TableName: FLASH_SALES_TABLE,
+      Key: {
+        flashSaleId
+      },
+      UpdateExpression: `
+                SET #header = :header,
+                    imageUrl = :imageUrl,
+                    salePrice = :salePrice,
+                    startAt = :startAt,
+                    endAt = :endAt,
+                    #status = :status,
+                    updatedAt = :updatedAt
             `,
-        ExpressionAttributeNames: {
-          "#items": "items"
-        },
-        ExpressionAttributeValues: {
-          ":items": data.items,
-          ":totalProductAmount": data.totalProductAmount,
-          ":nonComboProductTotal": data.nonComboProductTotal,
-          ":comboPackageTotal": data.comboPackageTotal,
-          ":couponCode": data.couponCode ?? null,
-          ":couponType": data.couponType ?? null,
-          ":couponValue": data.couponValue ?? null,
-          ":couponDiscount": data.couponDiscount ?? 0,
-          ":additionalDiscount": data.additionalDiscount ?? 0,
-          ":additionalDiscountType": data.additionalDiscountType ?? null,
-          ":additionalDiscountValue": data.additionalDiscountValue ?? null,
-          ":packagingCharge": data.packagingCharge,
-          ":amountBeforeDiscount": data.amountBeforeDiscount,
-          ":amountAfterDiscount": data.amountAfterDiscount,
-          ":gstAmount": data.gstAmount,
-          ":grandTotal": data.grandTotal,
-          ":walletUsed": data.walletUsed,
-          ":chitAmount": data.chitAmount ?? 0,
-          ":finalPayable": data.finalPayable,
-          ":updatedAt": data.updatedAt,
-          ":modifiedAt": data.modifiedAt,
-          ":modifiedBy": data.modifiedBy,
-          ":statusHistory": data.statusHistory
-        }
-      })
+      ExpressionAttributeNames: {
+        "#header": "header",
+        "#status": "status"
+      },
+      ExpressionAttributeValues: {
+        ":header": updatedHeader,
+        ":imageUrl": updatedImageUrl,
+        ":salePrice": salePrice,
+        ":startAt": normalizedDates.startAt,
+        ":endAt": normalizedDates.endAt,
+        ":status": newStatus,
+        ":updatedAt": updatedAt
+      },
+      ReturnValues: "ALL_NEW"
+    })
+  );
+  const updatedSale = result.Attributes;
+  if (newStatus === "ACTIVE") {
+    await activateProductFlashSale(
+      updatedSale
     );
-  }
-};
-
-// src/services/orderPricing.service.ts
-var OrderPricingService = class {
-  calculateProductTotals(items) {
-    let totalProductAmount = 0;
-    let nonComboProductTotal = 0;
-    let comboPackageTotal = 0;
-    for (const item of items) {
-      totalProductAmount += item.total;
-      if (item.isComboPackage) {
-        comboPackageTotal += item.total;
-      } else {
-        nonComboProductTotal += item.total;
-      }
-    }
-    return {
-      totalProductAmount,
-      nonComboProductTotal,
-      comboPackageTotal
-    };
-  }
-  calculatePackaging(nonComboProductTotal, config) {
-    if (config.enablePackagingCharge === false || config.packagingPercent <= 0) {
-      return 0;
-    }
-    return Math.round(
-      nonComboProductTotal * config.packagingPercent / 100
-    );
-  }
-  calculateGSTForAdditionalDiscount(discountedGrossTotal, state, config) {
-    return this.calculateGST(
-      discountedGrossTotal,
-      state,
-      config
-    );
-  }
-  calculateGST(discountedGrossTotal, state, config) {
-    if (config.enableGst === false) {
-      return 0;
-    }
-    const isTamilNadu = state?.toLowerCase().includes("tamil nadu") || state?.toLowerCase().includes("pondicherry") || state?.toLowerCase().includes("puducherry");
-    if (isTamilNadu && config.disableGstForTN) {
-      return 0;
-    }
-    const gstDenominator = Number(config?.gstDenominator ?? 2);
-    const effectivePercent = config.gstPercent / gstDenominator;
-    return Math.round(
-      discountedGrossTotal * effectivePercent / 100
-    );
-  }
-  calculateFinalPayable(grandTotal, walletUsed) {
-    return Math.max(
-      0,
-      grandTotal - walletUsed
-    );
-  }
-  calculateAmountBeforeDiscount(items, config) {
-    const totals = this.calculateProductTotals(items);
-    const packagingCharge = this.calculatePackaging(
-      totals.nonComboProductTotal,
-      config
-    );
-    return totals.totalProductAmount + packagingCharge;
-  }
-  calculate(input) {
-    const totals = this.calculateProductTotals(input.items);
-    const packagingCharge = this.calculatePackaging(
-      totals.nonComboProductTotal,
-      input.config
-    );
-    const amountBeforeDiscount = totals.totalProductAmount + packagingCharge;
-    const couponCode = input.couponResult?.couponCode ?? null;
-    const couponType = input.couponResult?.couponType ?? null;
-    const couponValue = input.couponResult?.couponValue ?? null;
-    let couponDiscount = 0;
-    if (couponCode && couponType && couponValue != null) {
-      if (couponType === "PERCENTAGE") {
-        couponDiscount = Math.round(
-          amountBeforeDiscount * couponValue / 100
+  } else {
+    if (existing.status === "ACTIVE") {
+      try {
+        await deactivateProductFlashSale(
+          existing
         );
-      } else {
-        couponDiscount = couponValue;
+      } catch (error2) {
+        console.error(
+          "Failed to deactivate previous product flash sale:",
+          error2
+        );
       }
-      couponDiscount = Math.min(
-        couponDiscount,
-        amountBeforeDiscount
+    }
+  }
+  return updatedSale;
+}
+async function cancelFlashSale(flashSaleId) {
+  const existing = await getFlashSale(flashSaleId);
+  if (!existing) {
+    throw new Error(
+      "Flash sale not found"
+    );
+  }
+  if (existing.status === "EXPIRED" || existing.status === "CANCELLED") {
+    return;
+  }
+  if (existing.status === "ACTIVE") {
+    try {
+      await deactivateProductFlashSale(
+        existing
       );
-    }
-    const productTotal = totals.totalProductAmount;
-    const requestedAdditionalDiscount = Number(input.additionalDiscount ?? 0);
-    const appliedAdditionalDiscount = Math.min(
-      Math.max(requestedAdditionalDiscount, 0),
-      productTotal,
-      Math.max(
-        0,
-        amountBeforeDiscount - couponDiscount
-      )
-    );
-    const amountAfterDiscount = amountBeforeDiscount - couponDiscount - appliedAdditionalDiscount;
-    const gstAmount = this.calculateGST(
-      amountAfterDiscount,
-      input.state,
-      input.config
-    );
-    const grandTotal = amountAfterDiscount + gstAmount;
-    const appliedWallet = Math.min(
-      input.walletUsed,
-      grandTotal
-    );
-    const finalPayable = this.calculateFinalPayable(
-      grandTotal,
-      appliedWallet
-    );
-    return {
-      totalProductAmount: totals.totalProductAmount,
-      nonComboProductTotal: totals.nonComboProductTotal,
-      comboPackageTotal: totals.comboPackageTotal,
-      packagingCharge,
-      amountBeforeDiscount,
-      couponCode,
-      couponType,
-      couponValue,
-      couponDiscount,
-      additionalDiscount: appliedAdditionalDiscount,
-      amountAfterDiscount,
-      gstAmount,
-      grandTotal,
-      walletUsed: appliedWallet,
-      finalPayable
-    };
-  }
-};
-
-// src/repo/coupon.repo.ts
-var import_lib_dynamodb6 = require("@aws-sdk/lib-dynamodb");
-var TABLE = process.env.COUPONS_TABLE;
-var CouponRepository = class {
-  async getCoupon(code) {
-    const result = await ddb.send(
-      new import_lib_dynamodb6.GetCommand({
-        TableName: TABLE,
-        Key: {
-          couponCode: code
-        }
-      })
-    );
-    return result.Item;
-  }
-  async createCoupon(coupon) {
-    await ddb.send(
-      new import_lib_dynamodb6.PutCommand({
-        TableName: TABLE,
-        Item: coupon,
-        ConditionExpression: "attribute_not_exists(couponCode)"
-      })
-    );
-    return coupon;
-  }
-  async listCoupons() {
-    const result = await ddb.send(
-      new import_lib_dynamodb6.ScanCommand({
-        TableName: TABLE
-      })
-    );
-    return result.Items ?? [];
-  }
-  async deleteCoupon(couponCode) {
-    await ddb.send(
-      new import_lib_dynamodb6.DeleteCommand({
-        TableName: TABLE,
-        Key: {
-          couponCode
-        }
-      })
-    );
-  }
-};
-
-// src/services/coupon.service.ts
-var CouponService = class {
-  constructor() {
-    this.repo = new CouponRepository();
-  }
-  normalizeExpiryDate(expiryDate) {
-    const value = expiryDate.trim();
-    if (!value) {
-      throw new Error("Expiry Date is required");
-    }
-    if (value.endsWith("Z") || /[+-]\d{2}:\d{2}$/.test(value)) {
-      const date2 = new Date(value);
-      if (Number.isNaN(date2.getTime())) {
-        throw new Error("Invalid Expiry Date");
-      }
-      return date2.toISOString();
-    }
-    const date = /* @__PURE__ */ new Date(`${value}:00+05:30`);
-    if (Number.isNaN(date.getTime())) {
-      throw new Error("Invalid Expiry Date");
-    }
-    return date.toISOString();
-  }
-  async createCoupon(payload) {
-    if (!payload.type) {
-      throw new Error("Coupon type is required");
-    }
-    if (payload.value === void 0 || payload.value === null || payload.value <= 0) {
-      throw new Error("Coupon value must be greater than zero");
-    }
-    if (payload.type === "PERCENTAGE" && payload.value > 100) {
-      throw new Error("Percentage cannot exceed 100");
-    }
-    if (!payload.expiryDate) {
-      throw new Error("Expiry Date is required");
-    }
-    const expiryDate = this.normalizeExpiryDate(
-      payload.expiryDate
-    );
-    if (new Date(expiryDate).getTime() <= Date.now()) {
-      throw new Error("Expiry Date must be a future date");
-    }
-    const couponCode = payload.couponCode?.trim().toUpperCase();
-    if (!couponCode) {
-      throw new Error("Coupon Code is required");
-    }
-    const now = (/* @__PURE__ */ new Date()).toISOString();
-    const coupon = {
-      couponCode,
-      description: payload.description ?? "",
-      type: payload.type,
-      value: payload.value,
-      expiryDate,
-      createdAt: now,
-      updatedAt: now
-    };
-    return await this.repo.createCoupon(coupon);
-  }
-  async getCoupons() {
-    const coupons = await this.repo.listCoupons();
-    return coupons.sort(
-      (a, b) => b.createdAt.localeCompare(a.createdAt)
-    );
-  }
-  async deleteCoupon(couponCode) {
-    if (!couponCode) {
-      throw new Error("Coupon code is required");
-    }
-    await this.repo.deleteCoupon(couponCode);
-  }
-  async validateCoupon(couponCode, orderAmount) {
-    if (!couponCode?.trim()) {
-      throw new Error("Coupon Code is required");
-    }
-    const coupon = await this.repo.getCoupon(
-      couponCode.trim().toUpperCase()
-    );
-    if (!coupon) {
-      throw new Error("Invalid Coupon Code");
-    }
-    const expiryTime = new Date(
-      coupon.expiryDate
-    ).getTime();
-    if (Number.isNaN(expiryTime)) {
+    } catch (error2) {
       console.error(
-        "Invalid coupon expiryDate:",
-        coupon.expiryDate
+        "Failed to deactivate product flash sale:",
+        error2
       );
-      throw new Error("Invalid Coupon Expiry");
-    }
-    if (expiryTime <= Date.now()) {
-      throw new Error("Coupon Expired");
-    }
-    let discount = 0;
-    if (coupon.type === "FLAT") {
-      discount = Math.min(
-        coupon.value,
-        orderAmount
+      throw new Error(
+        "Flash sale could not be cancelled because the product state could not be updated"
       );
-    } else {
-      discount = orderAmount * coupon.value / 100;
     }
-    discount = Math.round(discount);
-    const payable = Math.max(
-      0,
-      orderAmount - discount
-    );
-    return {
-      couponCode: coupon.couponCode,
-      couponType: coupon.type,
-      couponValue: coupon.value,
-      couponDiscount: discount,
-      payable
-    };
   }
-};
+  await ddb.send(
+    new import_lib_dynamodb2.UpdateCommand({
+      TableName: FLASH_SALES_TABLE,
+      Key: {
+        flashSaleId
+      },
+      UpdateExpression: `
+                SET #status = :cancelledStatus,
+                    updatedAt = :updatedAt
+            `,
+      ExpressionAttributeNames: {
+        "#status": "status"
+      },
+      ExpressionAttributeValues: {
+        ":cancelledStatus": "CANCELLED",
+        ":updatedAt": nowIso()
+      },
+      ConditionExpression: "#status <> :cancelledStatus"
+    })
+  );
+}
 
-// src/services/order.service.ts
-var CANCELLABLE_STATUSES = ["ORDER_PLACED", "ORDER_CONFIRMED"];
-var OrderService = class {
-  constructor(repo = new OrderRepository()) {
-    this.repo = repo;
-    this.couponService = new CouponService();
-    this.pricingService = new OrderPricingService();
+// src/handlers/flashSale.ts
+function getErrorMessage(error2) {
+  if (error2 instanceof Error) {
+    return error2.message;
   }
-  async createOrder(input) {
-    const now = Date.now();
-    const orderId = this.generateOrderId(now);
-    const isTamilNadu = input.deliveryState.toLowerCase() === "tamil nadu" || input.deliveryState.toLowerCase() === "pondicherry" || input.deliveryState.toLowerCase() === "puducherry";
-    const deliveryDays = isTamilNadu ? 5 : 10;
-    const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1e3;
-    const items = await this.repo.buildItemsSnapshot(
-      input.cartItems
-    );
-    const config = await this.repo.getAdminConfig();
-    const amountBeforeDiscount = this.pricingService.calculateAmountBeforeDiscount(
-      items,
-      config
-    );
-    let couponResult;
-    if (input.couponCode) {
-      couponResult = await this.couponService.validateCoupon(
-        input.couponCode,
-        amountBeforeDiscount
-      );
-    }
-    const pricing = this.pricingService.calculate({
-      items,
-      walletUsed: input.walletUsed,
-      state: input.deliveryState,
-      config,
-      couponResult
-    });
-    const user = await this.repo.getUserByMobile(input.userId);
-    const availableCredit = Number(user?.walletCredit || 0);
-    if (input.walletUsed > availableCredit) {
-      throw new Error("Invalid wallet usage");
-    }
-    const paymentMode = input.paymentMode ?? "OFFLINE";
-    const paymentStatus = input.paymentStatus ?? (paymentMode === "ONLINE" ? "PENDING" : "NOT_REQUIRED");
-    const transactionId = input.transactionId ?? null;
-    const order = {
-      orderId,
-      meta: "ORDER",
-      userId: input.userId,
-      address: input.address,
-      deliveryState: input.deliveryState,
-      items,
-      status: "ORDER_PLACED",
-      totalProductAmount: pricing.totalProductAmount,
-      nonComboProductTotal: pricing.nonComboProductTotal,
-      comboPackageTotal: pricing.comboPackageTotal,
-      packagingCharge: pricing.packagingCharge,
-      amountBeforeDiscount: pricing.amountBeforeDiscount,
-      couponCode: pricing.couponCode,
-      couponType: pricing.couponType,
-      couponValue: pricing.couponValue,
-      couponDiscount: pricing.couponDiscount,
-      amountAfterDiscount: pricing.amountAfterDiscount,
-      gstAmount: pricing.gstAmount,
-      grandTotal: pricing.grandTotal,
-      walletUsed: pricing.walletUsed,
-      finalPayable: pricing.finalPayable,
-      paymentMode,
-      paymentStatus,
-      transactionId,
-      expectedDelivery,
-      createdAt: now,
-      updatedAt: now,
-      statusHistory: [
-        {
-          status: "ORDER_PLACED",
-          at: now,
-          by: `USER#${input.userId}`
-        }
-      ]
-    };
-    await this.repo.create(order);
-    if (input.walletUsed > 0) {
-      await this.repo.deductWalletCredit(
-        input.userId,
-        pricing.walletUsed
-      );
-    }
-    if (pricing.couponCode) {
-      await this.couponService.deleteCoupon(
-        pricing.couponCode
-      );
-    }
-    return {
-      orderId,
-      pricing
-    };
+  return "Internal Server Error";
+}
+function isNotFoundError(message) {
+  return message === "Flash sale not found";
+}
+function isConflictError(message) {
+  return message.startsWith(
+    "Product already has a flash sale"
+  ) || message.includes(
+    "could not be activated"
+  ) || message.includes(
+    "could not be cancelled"
+  );
+}
+function isValidationError(message) {
+  const validationMessages = [
+    "Product ID is required",
+    "Flash sale header is required",
+    "Flash sale image is required",
+    "Sale price must be greater than zero",
+    "Invalid start date",
+    "Invalid end date",
+    "Start date must be before end date",
+    "Flash sale end date must be in the future",
+    "Product not found",
+    "Product has an invalid price",
+    "Flash sale price must be lower than the original price",
+    "Expired or cancelled flash sales cannot be updated",
+    "Flash sale ID is required"
+  ];
+  if (validationMessages.includes(message)) {
+    return true;
   }
-  async applyAdditionalDiscount(input) {
-    const {
-      orderId,
-      userId,
-      role,
-      discountType,
-      discountValue
-    } = input;
-    if (!orderId) {
-      throw new Error("Order ID required");
-    }
-    const order = await this.repo.getById(orderId);
-    if (!order) {
-      throw new Error("Order not found");
-    }
-    const allowedStatuses = [
-      "ORDER_PLACED",
-      "ORDER_CONFIRMED"
-    ];
-    if (!allowedStatuses.includes(order.status)) {
-      throw new Error(
-        "Additional discount cannot be applied at this stage"
-      );
-    }
-    if (discountType !== "FLAT" && discountType !== "PERCENTAGE") {
-      throw new Error(
-        "Invalid discount type"
-      );
-    }
-    if (discountType === "PERCENTAGE" && discountValue > 100) {
-      throw new Error(
-        "Percentage discount cannot exceed 100%"
-      );
-    }
-    const config = await this.repo.getAdminConfig();
-    const productTotal = Number(
-      order.totalProductAmount ?? 0
-    );
-    const amountBeforeDiscount = Number(
-      order.amountBeforeDiscount ?? 0
-    );
-    const couponDiscount = Number(
-      order.couponDiscount ?? 0
-    );
-    let additionalDiscount = 0;
-    if (discountType === "PERCENTAGE") {
-      additionalDiscount = Math.round(
-        productTotal * discountValue / 100
-      );
-    } else {
-      additionalDiscount = discountValue;
-    }
-    additionalDiscount = Math.min(
-      Math.max(additionalDiscount, 0),
-      productTotal,
-      Math.max(
-        0,
-        amountBeforeDiscount - couponDiscount
-      )
-    );
-    const amountAfterDiscount = amountBeforeDiscount - couponDiscount - additionalDiscount;
-    const gstAmount = this.pricingService.calculateGSTForAdditionalDiscount(
-      amountAfterDiscount,
-      order.deliveryState,
-      config
-    );
-    const grandTotal = amountAfterDiscount + gstAmount;
-    const previousWalletUsed = Number(
-      order.walletUsed ?? 0
-    );
-    const walletUsed = Math.min(
-      Math.max(0, previousWalletUsed),
-      grandTotal
-    );
-    const finalPayable = Math.max(
-      0,
-      grandTotal - walletUsed
-    );
-    const now = Date.now();
-    await this.repo.updateDiscount(orderId, {
-      additionalDiscount,
-      additionalDiscountType: discountType,
-      additionalDiscountValue: discountValue,
-      amountAfterDiscount,
-      gstAmount,
-      grandTotal,
-      walletUsed,
-      finalPayable,
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: role === "STAFF" ? `STAFF#${userId}` : `ADMIN#${userId}`,
-      statusHistory: [
-        ...order.statusHistory || [],
-        {
-          status: "ADDITIONAL_DISCOUNT_APPLIED",
-          at: now,
-          by: role === "STAFF" ? `STAFF#${userId}` : `ADMIN#${userId}`,
-          additionalDiscount,
-          additionalDiscountType: discountType,
-          additionalDiscountValue: discountValue
-        }
-      ]
-    });
-    return await this.repo.getById(orderId);
+  return message.startsWith(
+    "Invalid start"
+  ) || message.startsWith(
+    "Invalid end"
+  );
+}
+function requireAdmin(event) {
+  const { userId, role } = verifyJwt(event);
+  if (!userId) {
+    throw new Error("Unauthorized");
   }
-  generateOrderId(now) {
-    const d = new Date(now);
-    const ymd = d.getFullYear().toString() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
-    const rand = Math.floor(1e3 + Math.random() * 9e3);
-    return `ORD-${ymd}-${rand}`;
-  }
-  async getUserOrders(userId, limit, cursor) {
-    return this.repo.getOrdersByUser(userId, limit, cursor);
-  }
-  async cancelOrder(orderId, userId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) throw new Error("Order not found");
-    if (order.userId !== userId) throw new Error("Unauthorized");
-    if (!CANCELLABLE_STATUSES.includes(order.status)) {
-      throw new Error("Order cannot be cancelled at this stage");
-    }
-    const now = Date.now();
-    await this.repo.updateStatus(orderId, {
-      status: "CANCELLED",
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: `USER#${userId}`,
-      statusHistory: [
-        ...order.statusHistory || [],
-        {
-          status: "CANCELLED",
-          at: now,
-          by: `USER#${userId}`
-        }
-      ]
-    });
-  }
-  async getOrderById(orderId) {
-    const order = await this.repo.getById(orderId);
-    if (!order) throw new Error("Order not found");
-    return order;
-  }
-  async adjustOrder(input) {
-    const {
-      userId,
-      role,
-      orderId,
-      items,
-      walletUsed
-    } = input;
-    if (!orderId) {
-      throw new Error("Order ID required");
-    }
-    if (!Array.isArray(items)) {
-      throw new Error("Invalid items");
-    }
-    const order = await this.repo.getById(orderId);
-    if (!order) {
-      throw new Error("Order not found");
-    }
-    const existingChitAmount = Math.max(
-      0,
-      Number(order.chitAmount ?? 0)
+  if (role !== "admin") {
+    throw new Error(
+      "Admin access required"
     );
-    const isAdmin = role !== "user";
-    if (!isAdmin && order.userId !== userId) {
-      throw new Error("Unauthorized");
-    }
-    const blockedStatuses = ["DISPATCHED", "CANCELLED"];
-    if (blockedStatuses.includes(order.status)) {
-      throw new Error("Order cannot be adjusted at this stage");
-    }
-    if (items.length === 0) {
-      throw new Error("Order cannot be empty");
-    }
-    for (const item of items) {
-      if (!item.productId) {
-        throw new Error("Invalid productId");
-      }
-      if (!Number.isInteger(item.quantity) || item.quantity <= 0) {
-        throw new Error("Quantity must be a positive integer");
-      }
-    }
-    const cartItems = items.map((item) => ({
-      itemId: item.productId,
-      quantity: item.quantity
-    }));
-    const updatedItems = await this.repo.buildItemsSnapshot(cartItems);
-    const config = await this.repo.getAdminConfig();
-    let couponResult;
-    if (order.couponCode) {
-      couponResult = {
-        couponCode: order.couponCode,
-        couponType: order.couponType,
-        couponValue: Number(order.couponValue ?? 0),
-        couponDiscount: Number(order.couponDiscount ?? 0)
-      };
-    }
-    const additionalDiscountType = order.additionalDiscountType ?? null;
-    const additionalDiscountValue = Number(order.additionalDiscountValue ?? 0);
-    let additionalDiscount = 0;
-    const productTotal = updatedItems.reduce(
-      (total, item) => total + Number(item.total ?? 0),
-      0
-    );
-    if (additionalDiscountType === "PERCENTAGE" && additionalDiscountValue > 0) {
-      additionalDiscount = Math.round(
-        productTotal * additionalDiscountValue / 100
-      );
-    } else if (additionalDiscountType === "FLAT" && additionalDiscountValue > 0) {
-      additionalDiscount = additionalDiscountValue;
-    }
-    additionalDiscount = Math.min(
-      Math.max(additionalDiscount, 0),
-      productTotal
-    );
-    const pricing = this.pricingService.calculate({
-      items: updatedItems,
-      walletUsed,
-      state: order.deliveryState ?? order.address,
-      config,
-      couponResult,
-      additionalDiscount
-    });
-    const effectiveChitAmount = Math.min(
-      existingChitAmount,
-      Math.max(
-        Number(pricing.grandTotal) - Number(pricing.walletUsed ?? 0),
-        0
-      )
-    );
-    const finalPayable = Math.max(
-      Number(pricing.finalPayable ?? 0) - effectiveChitAmount,
-      0
-    );
-    const now = Date.now();
-    await this.repo.updateItems(orderId, {
-      items: updatedItems,
-      totalProductAmount: pricing.totalProductAmount,
-      nonComboProductTotal: pricing.nonComboProductTotal,
-      comboPackageTotal: pricing.comboPackageTotal,
-      packagingCharge: pricing.packagingCharge,
-      amountBeforeDiscount: pricing.amountBeforeDiscount,
-      couponCode: pricing.couponCode,
-      couponType: pricing.couponType,
-      couponValue: pricing.couponValue,
-      couponDiscount: pricing.couponDiscount,
-      additionalDiscount: pricing.additionalDiscount,
-      additionalDiscountType,
-      additionalDiscountValue,
-      amountAfterDiscount: pricing.amountAfterDiscount,
-      gstAmount: pricing.gstAmount,
-      grandTotal: pricing.grandTotal,
-      walletUsed: pricing.walletUsed,
-      chitAmount: effectiveChitAmount,
-      finalPayable,
-      updatedAt: now,
-      modifiedAt: now,
-      modifiedBy: isAdmin ? "ADMIN" : `USER#${userId}`,
-      statusHistory: [
-        ...order.statusHistory || [],
-        {
-          status: "ORDER_ADJUSTED",
-          at: now,
-          by: isAdmin ? `ADMIN#${userId}` : `USER#${userId}`
-        }
-      ]
-    });
-    return await this.repo.getById(orderId);
-  }
-  async refreshOrderAmount(input) {
-    const {
-      orderId,
-      userId,
-      role
-    } = input;
-    if (!orderId) {
-      throw new Error("Order ID required");
-    }
-    const order = await this.repo.getById(orderId);
-    if (!order) {
-      throw new Error("Order not found");
-    }
-    const items = (order.items || []).map(
-      (item) => ({
-        productId: item.productId,
-        quantity: item.quantity
-      })
-    );
-    if (items.length === 0) {
-      throw new Error("Order cannot be empty");
-    }
-    return await this.adjustOrder({
-      orderId,
-      userId,
-      role,
-      items,
-      walletUsed: Number(
-        order.walletUsed ?? 0
-      )
-    });
-  }
-};
-
-// src/handlers/adminRefreshOrderAmount.ts
-var orderService = new OrderService();
-async function handler(event) {
-  try {
-    const {
-      userId,
-      role
-    } = verifyJwt(event);
-    if (role !== "admin" && role !== "staff") {
-      return {
-        statusCode: 403,
-        body: JSON.stringify({
-          message: "Forbidden"
-        })
-      };
-    }
-    const orderId = event.pathParameters?.orderId;
-    if (!orderId) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: "Order ID is required"
-        })
-      };
-    }
-    const order = await orderService.refreshOrderAmount({
-      orderId,
-      userId,
-      role
-    });
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: "Order amount refreshed successfully",
-        order
-      })
-    };
-  } catch (error) {
-    console.error(
-      "Admin Refresh Order Amount Error:",
-      error
-    );
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: error?.message || "Unable to refresh order amount"
-      })
-    };
   }
 }
+var createHandler = async (event) => {
+  try {
+    requireAdmin(event);
+    if (!event.body) {
+      return error(
+        "Request body is required",
+        400
+      );
+    }
+    let body;
+    try {
+      body = JSON.parse(
+        event.body
+      );
+    } catch {
+      return error(
+        "Invalid JSON request body",
+        400
+      );
+    }
+    const productId = typeof body.productId === "string" ? body.productId.trim() : "";
+    const header = typeof body.header === "string" ? body.header.trim() : "";
+    const imageUrl = typeof body.imageUrl === "string" ? body.imageUrl.trim() : "";
+    const salePrice = Number(body.salePrice);
+    const startAt = typeof body.startAt === "string" ? body.startAt : "";
+    const endAt = typeof body.endAt === "string" ? body.endAt : "";
+    const flashSale = await createFlashSale({
+      productId,
+      header,
+      imageUrl,
+      salePrice,
+      startAt,
+      endAt
+    });
+    return success({
+      data: flashSale
+    });
+  } catch (error2) {
+    console.error(
+      "Create flash sale error:",
+      error2
+    );
+    const message = getErrorMessage(error2);
+    if (message === "Unauthorized") {
+      return error(
+        "Unauthorized",
+        401
+      );
+    }
+    if (message === "Admin access required") {
+      return error(
+        "Admin access required",
+        403
+      );
+    }
+    if (isConflictError(message)) {
+      return error(
+        message,
+        409
+      );
+    }
+    if (isValidationError(message)) {
+      return error(
+        message,
+        400
+      );
+    }
+    return error(
+      "Failed to create flash sale",
+      500
+    );
+  }
+};
+var listHandler = async (event) => {
+  try {
+    requireAdmin(event);
+    const flashSales = await listFlashSales();
+    return success({
+      data: flashSales
+    });
+  } catch (error2) {
+    console.error(
+      "List flash sales error:",
+      error2
+    );
+    const message = getErrorMessage(error2);
+    if (message === "Unauthorized") {
+      return error(
+        "Unauthorized",
+        401
+      );
+    }
+    if (message === "Admin access required") {
+      return error(
+        "Admin access required",
+        403
+      );
+    }
+    return error(
+      "Failed to retrieve flash sales",
+      500
+    );
+  }
+};
+var getHandler = async (event) => {
+  try {
+    requireAdmin(event);
+    const flashSaleId = event.pathParameters?.flashSaleId?.trim();
+    if (!flashSaleId) {
+      return error(
+        "Flash sale ID is required",
+        400
+      );
+    }
+    const flashSale = await getFlashSale(
+      flashSaleId
+    );
+    if (!flashSale) {
+      return error(
+        "Flash sale not found",
+        404
+      );
+    }
+    return success({
+      data: flashSale
+    });
+  } catch (error2) {
+    console.error(
+      "Get flash sale error:",
+      error2
+    );
+    const message = getErrorMessage(error2);
+    if (message === "Unauthorized") {
+      return error(
+        "Unauthorized",
+        401
+      );
+    }
+    if (message === "Admin access required") {
+      return error(
+        "Admin access required",
+        403
+      );
+    }
+    if (isNotFoundError(message)) {
+      return error(
+        message,
+        404
+      );
+    }
+    return error(
+      "Failed to retrieve flash sale",
+      500
+    );
+  }
+};
+var updateHandler = async (event) => {
+  try {
+    requireAdmin(event);
+    const flashSaleId = event.pathParameters?.flashSaleId?.trim();
+    if (!flashSaleId) {
+      return error(
+        "Flash sale ID is required",
+        400
+      );
+    }
+    if (!event.body) {
+      return error(
+        "Request body is required",
+        400
+      );
+    }
+    let body;
+    try {
+      body = JSON.parse(
+        event.body
+      );
+    } catch {
+      return error(
+        "Invalid JSON request body",
+        400
+      );
+    }
+    const input = {};
+    if (body.header !== void 0) {
+      if (typeof body.header !== "string") {
+        return error(
+          "Flash sale header must be a string",
+          400
+        );
+      }
+      input.header = body.header.trim();
+    }
+    if (body.imageUrl !== void 0) {
+      if (typeof body.imageUrl !== "string") {
+        return error(
+          "Flash sale image must be a string",
+          400
+        );
+      }
+      input.imageUrl = body.imageUrl.trim();
+    }
+    if (body.salePrice !== void 0) {
+      const salePrice = Number(
+        body.salePrice
+      );
+      if (!Number.isFinite(
+        salePrice
+      )) {
+        return error(
+          "Sale price must be a valid number",
+          400
+        );
+      }
+      input.salePrice = salePrice;
+    }
+    if (body.startAt !== void 0) {
+      if (typeof body.startAt !== "string") {
+        return error(
+          "Start date must be a valid date",
+          400
+        );
+      }
+      input.startAt = body.startAt;
+    }
+    if (body.endAt !== void 0) {
+      if (typeof body.endAt !== "string") {
+        return error(
+          "End date must be a valid date",
+          400
+        );
+      }
+      input.endAt = body.endAt;
+    }
+    const flashSale = await updateFlashSale(
+      flashSaleId,
+      input
+    );
+    return success({
+      data: flashSale
+    });
+  } catch (error2) {
+    console.error(
+      "Update flash sale error:",
+      error2
+    );
+    const message = getErrorMessage(error2);
+    if (message === "Unauthorized") {
+      return error(
+        "Unauthorized",
+        401
+      );
+    }
+    if (message === "Admin access required") {
+      return error(
+        "Admin access required",
+        403
+      );
+    }
+    if (isNotFoundError(message)) {
+      return error(
+        message,
+        404
+      );
+    }
+    if (isConflictError(message)) {
+      return error(
+        message,
+        409
+      );
+    }
+    if (isValidationError(message)) {
+      return error(
+        message,
+        400
+      );
+    }
+    return error(
+      "Failed to update flash sale",
+      500
+    );
+  }
+};
+var cancelHandler = async (event) => {
+  try {
+    requireAdmin(event);
+    const flashSaleId = event.pathParameters?.flashSaleId?.trim();
+    if (!flashSaleId) {
+      return error(
+        "Flash sale ID is required",
+        400
+      );
+    }
+    await cancelFlashSale(
+      flashSaleId
+    );
+    return success({
+      message: "Flash sale cancelled successfully"
+    });
+  } catch (error2) {
+    console.error(
+      "Cancel flash sale error:",
+      error2
+    );
+    const message = getErrorMessage(error2);
+    if (message === "Unauthorized") {
+      return error(
+        "Unauthorized",
+        401
+      );
+    }
+    if (message === "Admin access required") {
+      return error(
+        "Admin access required",
+        403
+      );
+    }
+    if (isNotFoundError(message)) {
+      return error(
+        message,
+        404
+      );
+    }
+    if (isConflictError(message)) {
+      return error(
+        message,
+        409
+      );
+    }
+    return error(
+      "Failed to cancel flash sale",
+      500
+    );
+  }
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  handler
+  cancelHandler,
+  createHandler,
+  getHandler,
+  listHandler,
+  updateHandler
 });
 /*! Bundled license information:
 
 safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 */
-//# sourceMappingURL=adminRefreshOrderAmount.js.map
+//# sourceMappingURL=flashSale.js.map

@@ -99,6 +99,8 @@ export class AiRecommendationOrchestratorService {
                     name: product.name,
                     image: product.image ?? null,
                     price: product.price,
+                    isFlashSale: product.isFlashSale,
+                    flashSalePrice: product.flashSalePrice,
                     originalPrice: product.originalPrice,
                     discountText: product.discountText,
                     categoryId: product.categoryId,
@@ -107,7 +109,6 @@ export class AiRecommendationOrchestratorService {
                 };
 
             })
-
             .filter(
                 (item): item is NonNullable<typeof item> =>
                     item !== null
@@ -230,6 +231,8 @@ export class AiRecommendationOrchestratorService {
                 price: product.price,
                 originalPrice: product.originalPrice,
                 discountText: product.discountText,
+                isFlashSale: product.isFlashSale,
+                flashSalePrice: product.flashSalePrice,
                 categoryId: product.categoryId,
                 brandId: product.brandId,
                 qty: product.qty,

@@ -25,6 +25,8 @@ export class OrderRepository {
                     image: p.image || null,
                     originalPrice: p.originalPrice || null,
                     discountText: p.discountText || '',
+                    isFlashSale: p.isFlashSale || false,
+                    flashSalePrice: p.flashSalePrice || null,
                     isComboPackage: p.isComboPackage || false,
                     sequenceNumber: p.sequenceNumber || 0,
                     packQuantity: p.packQuantity || 0,
@@ -41,13 +43,21 @@ export class OrderRepository {
                     `Product ${c.itemId} not found`
                 );
             }
+
+            const effectivePrice =
+                product.isFlashSale === true &&
+                    typeof product.flashSalePrice === "number" &&
+                    product.flashSalePrice > 0
+                    ? product.flashSalePrice
+                    : product.price;
+
             return {
                 productId: c.itemId,
                 name: product.name,
                 image: product.image,
-                price: product.price,
+                price: effectivePrice,
                 quantity: c.quantity,
-                total: product.price * c.quantity,
+                total: effectivePrice * c.quantity,
                 originalPrice: product.originalPrice,
                 discountText: product.discountText,
                 isComboPackage: product.isComboPackage,

@@ -56,3 +56,30 @@ export async function getPresignedInvoiceUpload(
     };
 }
 
+export async function getPresignedFlashSaleUpload(
+    flashSaleId: string,
+    file: { name: string; type: string }
+) {
+    const key = `flash-sales/${flashSaleId}/${randomUUID()}-${file.name}`;
+
+    const uploadUrl = await getSignedUrl(
+        s3,
+        new PutObjectCommand({
+            Bucket: BUCKET,
+            Key: key,
+            ContentType: file.type,
+        }),
+        { expiresIn: 300 }
+    );
+
+    const fileUrl =
+        STAGE === "prod"
+            ? `https://${CLOUDFRONT_DOMAIN}/${key}`
+            : `https://${BUCKET}.s3.amazonaws.com/${key}`;
+
+    return {
+        uploadUrl,
+        fileUrl,
+    };
+}
+

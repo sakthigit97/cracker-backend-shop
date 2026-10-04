@@ -4369,6 +4369,8 @@ var ProductService = class {
         sequenceNumber: p.sequenceNumber || 0,
         cartonQty: p.cartonQty || 0,
         bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
+        flashSalePrice: p.flashSalePrice || 0,
+        isFlashSale: p.isFlashSale || false,
         isBulkOrderOnly: p.isBulkOrderOnly || false,
         isRetailOnly: p.isRetailOnly || false,
         packQuantity: p.packQuantity || 0,
@@ -4402,6 +4404,8 @@ var OrderRepository = class {
           image: p.image || null,
           originalPrice: p.originalPrice || null,
           discountText: p.discountText || "",
+          isFlashSale: p.isFlashSale || false,
+          flashSalePrice: p.flashSalePrice || null,
           isComboPackage: p.isComboPackage || false,
           sequenceNumber: p.sequenceNumber || 0,
           packQuantity: p.packQuantity || 0,
@@ -4417,13 +4421,14 @@ var OrderRepository = class {
           `Product ${c.itemId} not found`
         );
       }
+      const effectivePrice = product.isFlashSale === true && typeof product.flashSalePrice === "number" && product.flashSalePrice > 0 ? product.flashSalePrice : product.price;
       return {
         productId: c.itemId,
         name: product.name,
         image: product.image,
-        price: product.price,
+        price: effectivePrice,
         quantity: c.quantity,
-        total: product.price * c.quantity,
+        total: effectivePrice * c.quantity,
         originalPrice: product.originalPrice,
         discountText: product.discountText,
         isComboPackage: product.isComboPackage,

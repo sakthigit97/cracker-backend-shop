@@ -26,6 +26,7 @@ provider:
     COUPONS_TABLE: Coupons-${self:custom.stage}
     OTP_TABLE: OtpTable-${self:custom.stage}
     ADMIN_CODES_TABLE: AdminCodes-${self:custom.stage}
+    FLASH_SALES_TABLE: FlashSales-${self:custom.stage}
     OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
     CONFIRM_ORDER_TID: ${env:CONFIRM_ORDER_TID}
     ORDER_SUBMIT_TID: ${env:ORDER_SUBMIT_TID}
@@ -102,6 +103,8 @@ provider:
             - arn:aws:dynamodb:${self:custom.region}:*:table/OtpTable-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/Coupons-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/AdminCodes-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/FlashSales-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/FlashSales-${self:custom.stage}/index/*
 
         - Effect: Allow
           Action:
@@ -845,6 +848,7 @@ resources:
                 - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/brands/*
                 - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/imports/*
                 - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/config/*
+                - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/flash-sales/*
 
             - Sid: AllowCloudFrontRead
               Effect: Allow

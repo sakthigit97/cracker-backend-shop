@@ -26,6 +26,7 @@ provider:
     COUPONS_TABLE: Coupons-${self:custom.stage}
     OTP_TABLE: OtpTable-${self:custom.stage}
     ADMIN_CODES_TABLE: AdminCodes-${self:custom.stage}
+    FLASH_SALES_TABLE: FlashSales-${self:custom.stage}
     OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
     CONFIRM_ORDER_TID: ${env:CONFIRM_ORDER_TID}
     ORDER_SUBMIT_TID: ${env:ORDER_SUBMIT_TID}
@@ -105,6 +106,8 @@ provider:
             - arn:aws:dynamodb:${self:custom.region}:*:table/OtpTable-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/Coupons-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/AdminCodes-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/FlashSales-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/FlashSales-${self:custom.stage}/index/*
 
         - Effect: Allow
           Action:
@@ -125,11 +128,11 @@ provider:
             - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/config/*
             - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/templates/*
             - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/invoices/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/flash-sales/*
 
 functions:
   bulkAdjustOrder:
     handler: src/handlers/bulkOrderAdjust.handler
-
     events:
       - httpApi:
           path: /bulk-order/{orderId}/adjust
@@ -264,3 +267,101 @@ functions:
       - httpApi:
           path: /admin/orders/{orderId}/revert-chit-balance
           method: POST
+
+  createFlashSale:
+    handler: src/handlers/flashSale.createHandler
+    events:
+      - httpApi:
+          path: /admin/flash-sales
+          method: post
+
+  listFlashSales:
+    handler: src/handlers/flashSale.listHandler
+    events:
+      - httpApi:
+          path: /admin/flash-sales
+          method: get
+
+  getFlashSale:
+    handler: src/handlers/flashSale.getHandler
+    events:
+      - httpApi:
+          path: /admin/flash-sales/{flashSaleId}
+          method: get
+
+  updateFlashSale:
+    handler: src/handlers/flashSale.updateHandler
+    events:
+      - httpApi:
+          path: /admin/flash-sales/{flashSaleId}
+          method: put
+
+  cancelFlashSale:
+    handler: src/handlers/flashSale.cancelHandler
+    events:
+      - httpApi:
+          path: /admin/flash-sales/{flashSaleId}
+          method: delete
+
+  adminFlashSalePresign:
+    handler: src/handlers/flashSalePresign.handler
+    events:
+      - httpApi:
+          path: /admin/flash-sales/presign
+          method: POST
+
+  flashSaleScheduler:
+    handler: src/handlers/flashSaleScheduler.handler
+    events:
+      - schedule:
+          rate: cron(0 0 * * ? *)
+          enabled: true
+
+  getActiveFlashSales:
+    handler: src/handlers/getActiveFlashSales.handler
+    events:
+      - httpApi:
+          path: /flash-sales/active
+          method: get
+
+resources:
+  Resources:
+    FlashSalesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: FlashSales-${self:custom.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: flashSaleId
+            AttributeType: S
+          - AttributeName: productId
+            AttributeType: S
+          - AttributeName: startAt
+            AttributeType: S
+          - AttributeName: status
+            AttributeType: S
+          - AttributeName: endAt
+            AttributeType: S
+
+        KeySchema:
+          - AttributeName: flashSaleId
+            KeyType: HASH
+
+        GlobalSecondaryIndexes:
+          - IndexName: productId-startAt-index
+            KeySchema:
+              - AttributeName: productId
+                KeyType: HASH
+              - AttributeName: startAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+          - IndexName: status-endAt-index
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: endAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL

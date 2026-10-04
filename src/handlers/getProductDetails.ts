@@ -44,6 +44,8 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
             isComboPackage: productRes.Item.isComboPackage || false,
             cartonQty: productRes.Item.cartonQty || 0,
             bulkOrderBasePrice: productRes.Item.bulkOrderBasePrice || 0,
+            flashSalePrice: productRes.Item.flashSalePrice || 0,
+            isFlashSale: productRes.Item.isFlashSale || false,
             isBulkOrderOnly: productRes.Item.isBulkOrderOnly || false,
             isRetailOnly: productRes.Item.isRetailOnly || false,
             packQuantity: productRes.Item.packQuantity || 0,

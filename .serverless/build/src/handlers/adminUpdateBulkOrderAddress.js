@@ -4378,6 +4378,8 @@ var ProductService = class {
         sequenceNumber: p.sequenceNumber || 0,
         cartonQty: p.cartonQty || 0,
         bulkOrderBasePrice: p.bulkOrderBasePrice || 0,
+        flashSalePrice: p.flashSalePrice || 0,
+        isFlashSale: p.isFlashSale || false,
         isBulkOrderOnly: p.isBulkOrderOnly || false,
         isRetailOnly: p.isRetailOnly || false,
         packQuantity: p.packQuantity || 0,

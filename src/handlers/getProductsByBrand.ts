@@ -83,6 +83,8 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
           price: priceInfo.price,
           originalPrice: priceInfo.originalPrice,
           discountText: priceInfo.discountText,
+          isFlashSale: p.isFlashSale || false,
+          flashSalePrice: p.flashSalePrice,
           categoryId: p.categoryId,
           brandId: p.brandId,
           qty: p.quantity,
