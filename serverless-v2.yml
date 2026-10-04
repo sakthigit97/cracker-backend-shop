@@ -324,6 +324,13 @@ functions:
           path: /flash-sales/active
           method: get
 
+  adminGetComboProductNames:
+    handler: src/handlers/adminGetComboProductNames.handler
+    events:
+      - httpApi:
+          path: /admin/combo-packages/{comboProductId}/products
+          method: get
+
 resources:
   Resources:
     FlashSalesTable:

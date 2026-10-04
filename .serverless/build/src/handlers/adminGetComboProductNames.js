@@ -3963,12 +3963,12 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// src/handlers/adminGetComboPackages.ts
-var adminGetComboPackages_exports = {};
-__export(adminGetComboPackages_exports, {
+// src/handlers/adminGetComboProductNames.ts
+var adminGetComboProductNames_exports = {};
+__export(adminGetComboProductNames_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(adminGetComboPackages_exports);
+module.exports = __toCommonJS(adminGetComboProductNames_exports);
 
 // src/utils/auth.ts
 var import_jsonwebtoken = __toESM(require_jsonwebtoken());
@@ -4173,7 +4173,7 @@ var AdminGetComboPackagesService = class {
   }
 };
 
-// src/handlers/adminGetComboPackages.ts
+// src/handlers/adminGetComboProductNames.ts
 var service = new AdminGetComboPackagesService();
 var handler = async (event) => {
   try {
@@ -4184,17 +4184,26 @@ var handler = async (event) => {
         body: "Forbidden"
       };
     }
-    const combos = await service.listComboPackages();
+    const comboProductId = event.pathParameters?.comboProductId;
+    if (!comboProductId) {
+      return {
+        statusCode: 400,
+        body: "comboProductId is required"
+      };
+    }
+    const result = await service.getComboProductNames(
+      comboProductId
+    );
     return {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(combos)
+      body: JSON.stringify(result)
     };
   } catch (err) {
     console.error(
-      "AdminGetComboPackages error",
+      "AdminGetComboProductNames error",
       err
     );
     return {
@@ -4212,4 +4221,4 @@ var handler = async (event) => {
 safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 */
-//# sourceMappingURL=adminGetComboPackages.js.map
+//# sourceMappingURL=adminGetComboProductNames.js.map

@@ -102,4 +102,55 @@ export class AdminGetComboPackagesService {
 
         return combos;
     }
+
+    async getComboProductNames(
+        comboProductId: string
+    ) {
+        const [allProducts, config] =
+            await Promise.all([
+                this.comboRepo.listAllProducts(),
+                this.configRepo.getGlobalConfig(),
+            ]);
+
+        const packageTags =
+            config?.packageTags || [];
+
+        const packageTag =
+            packageTags.find(
+                (tag: any) =>
+                    tag?.productId ===
+                    comboProductId
+            );
+
+        if (!packageTag?.id) {
+            return {
+                productNames: [],
+            };
+        }
+
+        const productNames =
+            allProducts
+                .filter(
+                    (product: any) =>
+                        product.isComboPackage !== true &&
+                        Array.isArray(
+                            product.packageTagIds
+                        ) &&
+                        product.packageTagIds.includes(
+                            packageTag.id
+                        )
+                )
+                .map(
+                    (product: any) =>
+                        String(
+                            product.name ?? ""
+                        ).trim()
+                )
+                .filter(Boolean);
+
+        return {
+            productNames,
+        };
+    }
+
 }
