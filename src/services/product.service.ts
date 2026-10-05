@@ -132,4 +132,21 @@ export class ProductService {
     async deleteProduct(productId: string) {
         return this.repo.deleteProduct(productId);
     }
+
+    async getProductsForCartCleanup(productIds: string[]) {
+        const uniqueIds = [...new Set(productIds)];
+        const allProducts: any[] = [];
+
+        for (let i = 0; i < uniqueIds.length; i += 100) {
+            const chunk = uniqueIds.slice(i, i + 100);
+
+            const products = await this.repo.batchGet(chunk);
+
+            if (products?.length) {
+                allProducts.push(...products);
+            }
+        }
+
+        return allProducts;
+    }
 }

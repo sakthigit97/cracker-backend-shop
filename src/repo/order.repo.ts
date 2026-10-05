@@ -64,7 +64,9 @@ export class OrderRepository {
                 sequenceNumber: product.sequenceNumber || 0,
                 packQuantity: product.packQuantity || 0,
                 packUnit: product.packUnit || '',
-                categoryId: product.categoryId || ''
+                categoryId: product.categoryId || '',
+                isFlashSale: product.isFlashSale,
+                flashSalePrice: product.flashSalePrice,
             };
         });
         return snapshot;

@@ -331,6 +331,13 @@ functions:
           path: /admin/combo-packages/{comboProductId}/products
           method: get
 
+  cartCleanup:
+    handler: src/handlers/cartCleanup.handler
+    events:
+      - httpApi:
+          path: /cart/cleanup
+          method: POST
+
 resources:
   Resources:
     FlashSalesTable:
