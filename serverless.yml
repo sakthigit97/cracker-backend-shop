@@ -57,6 +57,7 @@ provider:
         - https://dz9f4nfbnyjk1.cloudfront.net
         - https://www.sivakasicrackers.co.in
         - https://sivakasicrackers.co.in
+        - https://localhost
       allowedHeaders:
         - Content-Type
         - Authorization
