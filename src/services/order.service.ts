@@ -1,6 +1,7 @@
 import { OrderRepository } from "../repo/order.repo";
 import { OrderPricingService } from "./orderPricing.service";
 import { CouponService } from "./coupon.service";
+import { validateMinimumOrder } from "../utils/minimumOrder";
 
 interface CreateOrderInput {
     userId: string;
@@ -56,6 +57,12 @@ export class OrderService {
             config,
             couponResult,
         });
+
+        validateMinimumOrder(
+            pricing.grandTotal,
+            input.deliveryState,
+            config
+        );
 
         const user = await this.repo.getUserByMobile(input.userId);
         const availableCredit = Number(user?.walletCredit || 0);
