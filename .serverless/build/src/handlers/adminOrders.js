@@ -4111,7 +4111,7 @@ var handler = async (event) => {
     const q = event.queryStringParameters || {};
     const data = await service.listOrders({
       status: q.status || "ORDER_PLACED",
-      limit: Number(q.limit || 10),
+      limit: Number(q.limit || 100),
       cursor: q.cursor ? JSON.parse(q.cursor) : void 0,
       fromDate: q.fromDate ? Number(q.fromDate) : void 0,
       toDate: q.toDate ? Number(q.toDate) : void 0,
