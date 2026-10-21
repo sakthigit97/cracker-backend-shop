@@ -1,13 +1,15 @@
+
 export function isTamilNadu(state?: string): boolean {
     const normalizedState = (state ?? "")
         .trim()
-        .toLowerCase();
+        .toLowerCase()
+        .replace(/\s+/g, " ");
 
-    return (
-        normalizedState.includes("tamil nadu") ||
-        normalizedState.includes("pondicherry") ||
-        normalizedState.includes("puducherry")
-    );
+    return [
+        "tamil nadu",
+        "pondicherry",
+        "puducherry",
+    ].includes(normalizedState);
 }
 
 export function validateMinimumOrder(
@@ -15,13 +17,35 @@ export function validateMinimumOrder(
     state: string,
     config: any
 ): void {
-    const minimumOrderValue = isTamilNadu(state)
-        ? config?.tnMinOrderValue ?? 3000
-        : config?.otherStateMinOrderValue ?? 5000;
+    const normalizedState = (state ?? "")
+        .trim()
+        .toLowerCase();
 
-    if (grandTotal < minimumOrderValue) {
+    const minimumOrderValue = Number(
+        isTamilNadu(normalizedState)
+            ? config?.tnMinOrderValue ?? 3000
+            : config?.otherStateMinOrderValue ?? 5000
+    );
+
+    const orderAmount = Number(grandTotal);
+
+    console.log("Minimum order validation:", {
+        deliveryState: state,
+        normalizedState,
+        orderAmount,
+        minimumOrderValue,
+        tnMinOrderValue: config?.tnMinOrderValue,
+        otherStateMinOrderValue: config?.otherStateMinOrderValue,
+        passed: orderAmount >= minimumOrderValue,
+    });
+
+    if (!Number.isFinite(orderAmount) ||
+        !Number.isFinite(minimumOrderValue) ||
+        orderAmount < minimumOrderValue) {
         const error: any = new Error(
-            `Minimum order amount for ${state} is ₹${minimumOrderValue}. Please add more items to continue.`
+            `Minimum order amount for ${state} is ₹${minimumOrderValue}. ` +
+            `Current eligible order amount is ₹${orderAmount}. ` +
+            `Please add more items to continue.`
         );
 
         error.statusCode = 400;

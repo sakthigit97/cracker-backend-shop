@@ -25,10 +25,9 @@ export const handler = async (
             };
         }
 
-        const result =
-            await service.getComboProductNames(
-                comboProductId
-            );
+        const result = await service.getComboProductNames(
+            comboProductId
+        );
 
         return {
             statusCode: 200,

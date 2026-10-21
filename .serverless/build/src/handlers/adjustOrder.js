@@ -4785,14 +4785,31 @@ var CouponService = class {
 
 // src/utils/minimumOrder.ts
 function isTamilNadu(state) {
-  const normalizedState = (state ?? "").trim().toLowerCase();
-  return normalizedState.includes("tamil nadu") || normalizedState.includes("pondicherry") || normalizedState.includes("puducherry");
+  const normalizedState = (state ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+  return [
+    "tamil nadu",
+    "pondicherry",
+    "puducherry"
+  ].includes(normalizedState);
 }
 function validateMinimumOrder(grandTotal, state, config) {
-  const minimumOrderValue = isTamilNadu(state) ? config?.tnMinOrderValue ?? 3e3 : config?.otherStateMinOrderValue ?? 5e3;
-  if (grandTotal < minimumOrderValue) {
+  const normalizedState = (state ?? "").trim().toLowerCase();
+  const minimumOrderValue = Number(
+    isTamilNadu(normalizedState) ? config?.tnMinOrderValue ?? 3e3 : config?.otherStateMinOrderValue ?? 5e3
+  );
+  const orderAmount = Number(grandTotal);
+  console.log("Minimum order validation:", {
+    deliveryState: state,
+    normalizedState,
+    orderAmount,
+    minimumOrderValue,
+    tnMinOrderValue: config?.tnMinOrderValue,
+    otherStateMinOrderValue: config?.otherStateMinOrderValue,
+    passed: orderAmount >= minimumOrderValue
+  });
+  if (!Number.isFinite(orderAmount) || !Number.isFinite(minimumOrderValue) || orderAmount < minimumOrderValue) {
     const error = new Error(
-      `Minimum order amount for ${state} is \u20B9${minimumOrderValue}. Please add more items to continue.`
+      `Minimum order amount for ${state} is \u20B9${minimumOrderValue}. Current eligible order amount is \u20B9${orderAmount}. Please add more items to continue.`
     );
     error.statusCode = 400;
     throw error;
@@ -4835,8 +4852,19 @@ var OrderService = class {
       config,
       couponResult
     });
+    console.log("CREATE ORDER - SERVER PRICING:", {
+      deliveryState: input.deliveryState,
+      config,
+      totalProductAmount: pricing.totalProductAmount,
+      amountAfterDiscount: pricing.amountAfterDiscount,
+      gstAmount: pricing.gstAmount,
+      packagingCharge: pricing.packagingCharge,
+      grandTotal: pricing.grandTotal,
+      walletUsed: pricing.walletUsed,
+      finalPayable: pricing.finalPayable
+    });
     validateMinimumOrder(
-      pricing.grandTotal,
+      Number(pricing.grandTotal),
       input.deliveryState,
       config
     );

@@ -1,10 +1,12 @@
 import { AdminConfigRepo } from "../repo/adminConfig.repo";
 import { AdminGetComboPackagesRepository } from "../repo/adminGetComboPackages.repo";
+import { AdminCategoryRepository } from "../repo/adminCategory.repo";
 
 export class AdminGetComboPackagesService {
     constructor(
         private comboRepo = new AdminGetComboPackagesRepository(),
-        private configRepo = new AdminConfigRepo()
+        private configRepo = new AdminConfigRepo(),
+        private categoryRepo = new AdminCategoryRepository()
     ) { }
 
     async listComboPackages() {
@@ -103,24 +105,24 @@ export class AdminGetComboPackagesService {
         return combos;
     }
 
-    async getComboProductNames(
-        comboProductId: string
-    ) {
-        const [allProducts, config] =
+
+    async getComboProductNames(comboProductId: string) {
+        const [allProducts, config, categoryResult] =
             await Promise.all([
                 this.comboRepo.listAllProducts(),
                 this.configRepo.getGlobalConfig(),
+                this.categoryRepo.listCategories({
+                    limit: 1000,
+                }),
             ]);
 
-        const packageTags =
-            config?.packageTags || [];
+        const packageTags = config?.packageTags || [];
+        const categories = categoryResult.items || [];
 
-        const packageTag =
-            packageTags.find(
-                (tag: any) =>
-                    tag?.productId ===
-                    comboProductId
-            );
+        const packageTag = packageTags.find(
+            (tag: any) =>
+                tag?.productId === comboProductId
+        );
 
         if (!packageTag?.id) {
             return {
@@ -128,25 +130,64 @@ export class AdminGetComboPackagesService {
             };
         }
 
-        const productNames =
-            allProducts
-                .filter(
-                    (product: any) =>
-                        product.isComboPackage !== true &&
-                        Array.isArray(
-                            product.packageTagIds
-                        ) &&
-                        product.packageTagIds.includes(
-                            packageTag.id
-                        )
+        // Category order: categoryId -> sortOrder
+        const categoryOrderMap = new Map<string, number>(
+            categories.map((category: any) => [
+                category.categoryId,
+                Number(
+                    category.sortOrder ??
+                    Number.MAX_SAFE_INTEGER
+                ),
+            ])
+        );
+
+        // Get products belonging to this combo package
+        const products = allProducts.filter(
+            (product: any) =>
+                product.isComboPackage !== true &&
+                Array.isArray(product.packageTagIds) &&
+                product.packageTagIds.includes(
+                    packageTag.id
                 )
-                .map(
-                    (product: any) =>
-                        String(
-                            product.name ?? ""
-                        ).trim()
-                )
-                .filter(Boolean);
+        );
+
+        // Sort by category first, then product sequence
+        products.sort((a: any, b: any) => {
+            const aCategoryOrder =
+                categoryOrderMap.get(
+                    a.categoryId ?? ""
+                ) ?? Number.MAX_SAFE_INTEGER;
+
+            const bCategoryOrder =
+                categoryOrderMap.get(
+                    b.categoryId ?? ""
+                ) ?? Number.MAX_SAFE_INTEGER;
+
+            const categoryDiff =
+                aCategoryOrder - bCategoryOrder;
+
+            if (categoryDiff !== 0) {
+                return categoryDiff;
+            }
+
+            const aSequence =
+                a.sequenceNumber == null
+                    ? Number.MAX_SAFE_INTEGER
+                    : Number(a.sequenceNumber);
+
+            const bSequence =
+                b.sequenceNumber == null
+                    ? Number.MAX_SAFE_INTEGER
+                    : Number(b.sequenceNumber);
+
+            return aSequence - bSequence;
+        });
+
+        const productNames = products
+            .map((product: any) =>
+                String(product.name ?? "").trim()
+            )
+            .filter(Boolean);
 
         return {
             productNames,

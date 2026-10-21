@@ -58,8 +58,20 @@ export class OrderService {
             couponResult,
         });
 
+        console.log("CREATE ORDER - SERVER PRICING:", {
+            deliveryState: input.deliveryState,
+            config,
+            totalProductAmount: pricing.totalProductAmount,
+            amountAfterDiscount: pricing.amountAfterDiscount,
+            gstAmount: pricing.gstAmount,
+            packagingCharge: pricing.packagingCharge,
+            grandTotal: pricing.grandTotal,
+            walletUsed: pricing.walletUsed,
+            finalPayable: pricing.finalPayable,
+        });
+
         validateMinimumOrder(
-            pricing.grandTotal,
+            Number(pricing.grandTotal),
             input.deliveryState,
             config
         );
