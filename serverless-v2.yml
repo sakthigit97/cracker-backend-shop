@@ -27,10 +27,12 @@ provider:
     OTP_TABLE: OtpTable-${self:custom.stage}
     ADMIN_CODES_TABLE: AdminCodes-${self:custom.stage}
     FLASH_SALES_TABLE: FlashSales-${self:custom.stage}
+    CHITS_TABLE: Chits-${self:custom.stage}
     OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
     CONFIRM_ORDER_TID: ${env:CONFIRM_ORDER_TID}
     ORDER_SUBMIT_TID: ${env:ORDER_SUBMIT_TID}
     PAYMENT_CONFIRM_TID: ${env:PAYMENT_CONFIRM_TID}
+    CHIT_REMINDER_TID: ${env:CHIT_REMINDER_TID, ''}
     CART_UPDATED_TID: ${env:CART_UPDATED_TID}
     ORDER_DISPATCHED_TID: ${env:ORDER_DISPATCHED_TID}
     MSG91_ESTIMATE_TEMPLATE: ${env:MSG91_ESTIMATE_TEMPLATE}
@@ -109,6 +111,8 @@ provider:
             - arn:aws:dynamodb:${self:custom.region}:*:table/AdminCodes-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/FlashSales-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/FlashSales-${self:custom.stage}/index/*
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Chits-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Chits-${self:custom.stage}/index/*
 
         - Effect: Allow
           Action:
@@ -339,8 +343,93 @@ functions:
           path: /cart/cleanup
           method: POST
 
+  createChitScheme:
+    handler: src/handlers/chit.createScheme
+    events:
+      - httpApi:
+          path: /admin/chits
+          method: POST
+
+  listChitSchemes:
+    handler: src/handlers/chit.listSchemes
+    events:
+      - httpApi:
+          path: /admin/chits
+          method: GET
+
+  listAvailableChitSchemes:
+    handler: src/handlers/chit.listAvailableSchemes
+    events:
+      - httpApi:
+          path: /chits/available
+          method: GET
+
+  joinChitScheme:
+    handler: src/handlers/chit.joinScheme
+    events:
+      - httpApi:
+          path: /chits/{chitId}/join
+          method: POST
+
+  listMyChitSchemes:
+    handler: src/handlers/chit.listMySchemes
+    events:
+      - httpApi:
+          path: /chits/mine
+          method: GET
+
+  listChitMembers:
+    handler: src/handlers/chit.listMembers
+    events:
+      - httpApi:
+          path: /admin/chits/{chitId}/members
+          method: GET
+
+  recordChitPayment:
+    handler: src/handlers/chit.recordPayment
+    events:
+      - httpApi:
+          path: /admin/chits/{chitId}/members/{userId}/payments
+          method: POST
+
+  chitReminderScheduler:
+    handler: src/handlers/chit.sendScheduledReminders
+    events:
+      - schedule:
+          rate: cron(0 3 * * ? *)
+          enabled: true
+
 resources:
   Resources:
+    ChitsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Chits-${self:custom.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: chitId
+            AttributeType: S
+          - AttributeName: recordId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: schemeId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: chitId
+            KeyType: HASH
+          - AttributeName: recordId
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: userId-schemeId-index
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: schemeId
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
     FlashSalesTable:
       Type: AWS::DynamoDB::Table
       Properties:
