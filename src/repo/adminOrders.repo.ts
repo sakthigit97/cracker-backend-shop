@@ -28,9 +28,15 @@ export class AdminOrdersRepository {
             };
 
             const filterParts: string[] = [];
+            const expressionAttributeNames: Record<string, string> = {
+                "#status": "status",
+            };
+            let keyConditionExpression = "#status = :s";
 
-            if (fromDate && toDate) {
-                filterParts.push("createdAt BETWEEN :from AND :to");
+            if (fromDate !== undefined && toDate !== undefined) {
+                keyConditionExpression +=
+                    " AND #createdAt BETWEEN :from AND :to";
+                expressionAttributeNames["#createdAt"] = "createdAt";
                 values[":from"] = fromDate;
                 values[":to"] = toDate;
             }
@@ -44,17 +50,15 @@ export class AdminOrdersRepository {
                 new QueryCommand({
                     TableName: TABLE,
                     IndexName: "status-createdAt-index",
-                    KeyConditionExpression: "#status = :s",
+                    KeyConditionExpression: keyConditionExpression,
                     FilterExpression:
                         filterParts.length > 0
                             ? filterParts.join(" AND ")
                             : undefined,
-                    ExpressionAttributeNames: {
-                        "#status": "status",
-                    },
+                    ExpressionAttributeNames: expressionAttributeNames,
                     ExpressionAttributeValues: values,
                     ScanIndexForward: false,
-                    Limit: limit,
+                    Limit: limit - items.length,
                     ExclusiveStartKey: lastKey,
                 })
             );
