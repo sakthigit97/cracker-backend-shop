@@ -1,5 +1,6 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
+    DeleteCommand,
     DynamoDBDocumentClient,
     GetCommand,
     ScanCommand,
@@ -26,10 +27,6 @@ export class AdminUpdateComboPackageRepository {
         comboId: string,
         newProductIds: string[]
     ) {
-        // ------------------------------------------------------------
-        // 1. Get config and verify combo exists
-        // ------------------------------------------------------------
-
         const configResult =
             await docClient.send(
                 new GetCommand({
@@ -150,10 +147,6 @@ export class AdminUpdateComboPackageRepository {
         };
     }
 
-    // ------------------------------------------------------------
-    // Add combo tag ID
-    // ------------------------------------------------------------
-
     private async addPackageTagId(
         productId: string,
         comboId: string
@@ -185,10 +178,6 @@ export class AdminUpdateComboPackageRepository {
             })
         );
     }
-
-    // ------------------------------------------------------------
-    // Remove combo tag ID
-    // ------------------------------------------------------------
 
     private async removePackageTagId(
         productId: string,
@@ -244,10 +233,6 @@ export class AdminUpdateComboPackageRepository {
         );
     }
 
-    // ------------------------------------------------------------
-    // Get combo product price
-    // ------------------------------------------------------------
-
     private async getComboPrice(
         productId: string
     ) {
@@ -265,6 +250,150 @@ export class AdminUpdateComboPackageRepository {
 
         return Number(
             result.Item?.price ?? 0
+        );
+    }
+
+    async deleteComboPackage(comboId: string) {
+
+        const configResult =
+            await docClient.send(
+                new GetCommand({
+                    TableName: CONFIG_TABLE,
+                    Key: {
+                        configId: "global",
+                    },
+                })
+            );
+
+        const config: any =
+            configResult.Item;
+
+        if (!config) {
+            return null;
+        }
+
+        const packageTags =
+            Array.isArray(config.packageTags)
+                ? config.packageTags
+                : [];
+
+        const packageTag =
+            packageTags.find(
+                (tag: any) =>
+                    tag.id === comboId
+            );
+
+        if (!packageTag) {
+            return null;
+        }
+
+        const comboProductId =
+            packageTag.productId;
+
+
+        const mappedProducts: any[] = [];
+
+        let lastEvaluatedKey:
+            Record<string, any> | undefined = undefined;
+
+        do {
+
+            const mappedProductsResult: any =
+                await docClient.send(
+                    new ScanCommand({
+                        TableName: PRODUCTS_TABLE,
+                        ProjectionExpression:
+                            "productId, packageTagIds",
+                        FilterExpression:
+                            "contains(packageTagIds, :comboId)",
+                        ExpressionAttributeValues: {
+                            ":comboId": comboId,
+                        },
+                        ExclusiveStartKey:
+                            lastEvaluatedKey,
+                    })
+                );
+
+            mappedProducts.push(
+                ...(mappedProductsResult.Items ?? [])
+            );
+
+            lastEvaluatedKey =
+                mappedProductsResult.LastEvaluatedKey;
+        } while (lastEvaluatedKey);
+
+        for (const product of mappedProducts) {
+            const productId =
+                product.productId;
+
+            if (!productId) {
+                continue;
+            }
+
+            if (
+                comboProductId &&
+                productId === comboProductId
+            ) {
+                continue;
+            }
+
+            await this.removePackageTagId(
+                productId,
+                comboId
+            );
+        }
+
+        if (comboProductId) {
+            await this.deleteComboProduct(
+                comboProductId
+            );
+        }
+
+        const updatedPackageTags =
+            packageTags.filter(
+                (tag: any) =>
+                    tag.id !== comboId
+            );
+
+        await docClient.send(
+            new UpdateCommand({
+                TableName: CONFIG_TABLE,
+                Key: {
+                    configId: "global",
+                },
+                UpdateExpression:
+                    "SET packageTags = :packageTags",
+                ExpressionAttributeValues: {
+                    ":packageTags":
+                        updatedPackageTags,
+                },
+                ConditionExpression:
+                    "attribute_exists(configId)",
+            })
+        );
+
+        return {
+            comboId,
+            productId:
+                comboProductId,
+            name:
+                packageTag.name,
+            deleted: true,
+        };
+    }
+
+    private async deleteComboProduct(
+        productId: string
+    ) {
+        await docClient.send(
+            new DeleteCommand({
+                TableName: PRODUCTS_TABLE,
+                Key: {
+                    productId,
+                },
+                ConditionExpression:
+                    "attribute_exists(productId)",
+            })
         );
     }
 }

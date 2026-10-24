@@ -1,6 +1,7 @@
 import { OrderRepository } from "../repo/order.repo";
 import { OrderPricingService } from "./orderPricing.service";
 import { CouponService } from "./coupon.service";
+import { validateMinimumOrder } from "../utils/minimumOrder";
 
 interface CreateOrderInput {
     userId: string;
@@ -26,7 +27,10 @@ export class OrderService {
     async createOrder(input: CreateOrderInput): Promise<any> {
         const now = Date.now();
         const orderId = this.generateOrderId(now);
-        const isTamilNadu = input.deliveryState.toLowerCase() === "tamil nadu";
+        const isTamilNadu =
+            input.deliveryState.toLowerCase() === "tamil nadu" ||
+            input.deliveryState.toLowerCase() === "pondicherry" ||
+            input.deliveryState.toLowerCase() === "puducherry";
         const deliveryDays = isTamilNadu ? 5 : 10;
         const expectedDelivery = now + deliveryDays * 24 * 60 * 60 * 1000;
         const items = await this.repo.buildItemsSnapshot(
@@ -53,6 +57,24 @@ export class OrderService {
             config,
             couponResult,
         });
+
+        console.log("CREATE ORDER - SERVER PRICING:", {
+            deliveryState: input.deliveryState,
+            config,
+            totalProductAmount: pricing.totalProductAmount,
+            amountAfterDiscount: pricing.amountAfterDiscount,
+            gstAmount: pricing.gstAmount,
+            packagingCharge: pricing.packagingCharge,
+            grandTotal: pricing.grandTotal,
+            walletUsed: pricing.walletUsed,
+            finalPayable: pricing.finalPayable,
+        });
+
+        validateMinimumOrder(
+            Number(pricing.grandTotal),
+            input.deliveryState,
+            config
+        );
 
         const user = await this.repo.getUserByMobile(input.userId);
         const availableCredit = Number(user?.walletCredit || 0);
@@ -360,6 +382,11 @@ export class OrderService {
             throw new Error("Order not found");
         }
 
+        const existingChitAmount = Math.max(
+            0,
+            Number(order.chitAmount ?? 0)
+        );
+
         const isAdmin = role !== "user";
         if (!isAdmin && order.userId !== userId) {
             throw new Error("Unauthorized");
@@ -445,8 +472,23 @@ export class OrderService {
             additionalDiscount,
         });
 
-        const now = Date.now();
 
+        const effectiveChitAmount = Math.min(
+            existingChitAmount,
+            Math.max(
+                Number(pricing.grandTotal) -
+                Number(pricing.walletUsed ?? 0),
+                0
+            )
+        );
+
+        const finalPayable = Math.max(
+            Number(pricing.finalPayable ?? 0) -
+            effectiveChitAmount,
+            0
+        );
+
+        const now = Date.now();
         await this.repo.updateItems(orderId, {
             items: updatedItems,
 
@@ -498,8 +540,11 @@ export class OrderService {
             walletUsed:
                 pricing.walletUsed,
 
+            chitAmount:
+                effectiveChitAmount,
+
             finalPayable:
-                pricing.finalPayable,
+                finalPayable,
 
             updatedAt: now,
 

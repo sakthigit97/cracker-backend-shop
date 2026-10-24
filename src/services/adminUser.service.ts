@@ -7,6 +7,8 @@ export class AdminUserService {
 
     async listUsers(input: {
         search?: string;
+        isBulkUser?: boolean;
+        rolefilter?: string;
         isActive?: "true" | "false";
         cursor?: string;
         limit: number;
@@ -30,8 +32,11 @@ export class AdminUserService {
             address?: string;
             city?: string;
             state?: string;
+            district?: string;
             pincode?: string;
             walletCredit?: number;
+            chitBalance?: number;
+            isBulkUser?: boolean;
         }
     ) {
         return this.repo.updateUser(
@@ -48,5 +53,8 @@ export class AdminUserService {
             mobile,
             isBulkUser
         );
+    }
+    async getUserByMobile(mobile: string) {
+        return this.repo.getUserByMobile(mobile);
     }
 }

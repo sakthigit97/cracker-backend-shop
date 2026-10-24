@@ -2,6 +2,7 @@ import {
     ScanCommand,
     DeleteCommand,
     UpdateCommand,
+    GetCommand,
 } from "@aws-sdk/lib-dynamodb";
 
 import { ddb } from "../utils/dynamo";
@@ -15,10 +16,14 @@ export class AdminUserRepository {
         limit,
         cursor,
         search,
+        isBulkUser,
+        rolefilter
     }: {
         limit: number;
         cursor?: string;
         search?: string;
+        isBulkUser?: boolean;
+        rolefilter?: string;
     }) {
         const searchValue = search?.trim().toLowerCase() || "";
         let exclusiveStartKey:
@@ -35,10 +40,7 @@ export class AdminUserRepository {
         }
 
         const items: any[] = [];
-
-        let lastEvaluatedKey =
-            exclusiveStartKey;
-
+        let lastEvaluatedKey = exclusiveStartKey;
         let scanCount = 0;
 
         do {
@@ -51,7 +53,7 @@ export class AdminUserRepository {
 
             const expressionAttributeValues: Record<
                 string,
-                string
+                any
             > = {};
 
             let filterExpression:
@@ -67,6 +69,25 @@ export class AdminUserRepository {
 
                 filterExpression =
                     "contains(#st, :q)";
+            }
+
+            if (isBulkUser !== undefined) {
+                expressionAttributeNames["#bulk"] =
+                    "isBulkUser";
+
+                expressionAttributeValues[":bulk"] =
+                    isBulkUser;
+
+                filterExpression = filterExpression
+                    ? `${filterExpression} AND #bulk = :bulk`
+                    : "#bulk = :bulk";
+            }
+
+            if (rolefilter !== undefined) {
+                expressionAttributeNames["#role"] = "role";
+                expressionAttributeValues[":role"] = rolefilter;
+                filterExpression = filterExpression ? `${filterExpression} AND #role = :role`
+                    : "#role = :role";
             }
 
             const response =
@@ -191,9 +212,12 @@ export class AdminUserRepository {
             role?: string;
             address?: string;
             city?: string;
+            district?: string;
             state?: string;
             pincode?: string;
             walletCredit?: number;
+            chitBalance?: number;
+            isBulkUser?: boolean;
         }
     ) {
         const updates: string[] = [];
@@ -263,6 +287,20 @@ export class AdminUserRepository {
             ] = input.city.trim();
         }
 
+        if (input.district !== undefined) {
+            updates.push(
+                "#district = :district"
+            );
+
+            expressionAttributeNames[
+                "#district"
+            ] = "district";
+
+            expressionAttributeValues[
+                ":district"
+            ] = input.district.trim();
+        }
+
         if (input.state !== undefined) {
             updates.push(
                 "#state = :state"
@@ -304,6 +342,34 @@ export class AdminUserRepository {
             expressionAttributeValues[
                 ":walletCredit"
             ] = input.walletCredit;
+        }
+
+        if (input.chitBalance !== undefined) {
+            updates.push(
+                "#chitBalance = :chitBalance"
+            );
+
+            expressionAttributeNames[
+                "#chitBalance"
+            ] = "chitBalance";
+
+            expressionAttributeValues[
+                ":chitBalance"
+            ] = input.chitBalance;
+        }
+
+        if (input.isBulkUser !== undefined) {
+            updates.push(
+                "#isBulkUser = :isBulkUser"
+            );
+
+            expressionAttributeNames[
+                "#isBulkUser"
+            ] = "isBulkUser";
+
+            expressionAttributeValues[
+                ":isBulkUser"
+            ] = input.isBulkUser;
         }
 
         if (updates.length === 0) {
@@ -360,5 +426,18 @@ export class AdminUserRepository {
             })
         );
         return result.Attributes;
+    }
+
+    async getUserByMobile(mobile: string) {
+        const result = await ddb.send(
+            new GetCommand({
+                TableName: TABLE,
+                Key: {
+                    mobile,
+                },
+            })
+        );
+
+        return result.Item ?? null;
     }
 }

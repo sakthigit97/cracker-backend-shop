@@ -26,10 +26,13 @@ provider:
     COUPONS_TABLE: Coupons-${self:custom.stage}
     OTP_TABLE: OtpTable-${self:custom.stage}
     ADMIN_CODES_TABLE: AdminCodes-${self:custom.stage}
+    FLASH_SALES_TABLE: FlashSales-${self:custom.stage}
+    CHITS_TABLE: Chits-${self:custom.stage}
     OTP_TEMPLATE_ID: ${env:OTP_TEMPLATE_ID}
     CONFIRM_ORDER_TID: ${env:CONFIRM_ORDER_TID}
     ORDER_SUBMIT_TID: ${env:ORDER_SUBMIT_TID}
     PAYMENT_CONFIRM_TID: ${env:PAYMENT_CONFIRM_TID}
+    CHIT_REMINDER_TID: ${env:CHIT_REMINDER_TID, ''}
     CART_UPDATED_TID: ${env:CART_UPDATED_TID}
     ORDER_DISPATCHED_TID: ${env:ORDER_DISPATCHED_TID}
     MSG91_ESTIMATE_TEMPLATE: ${env:MSG91_ESTIMATE_TEMPLATE}
@@ -56,6 +59,7 @@ provider:
         - https://dz9f4nfbnyjk1.cloudfront.net
         - https://www.sivakasicrackers.co.in
         - https://sivakasicrackers.co.in
+        - https://localhost
 
       allowedHeaders:
         - Content-Type
@@ -89,6 +93,7 @@ provider:
             - dynamodb:BatchWriteItem
           Resource:
             - arn:aws:dynamodb:${self:custom.region}:*:table/Users-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Users-${self:custom.stage}/index/*
             - arn:aws:dynamodb:${self:custom.region}:*:table/Products-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/Products-${self:custom.stage}/index/*
             - arn:aws:dynamodb:${self:custom.region}:*:table/Categories-${self:custom.stage}
@@ -104,6 +109,10 @@ provider:
             - arn:aws:dynamodb:${self:custom.region}:*:table/OtpTable-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/Coupons-${self:custom.stage}
             - arn:aws:dynamodb:${self:custom.region}:*:table/AdminCodes-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/FlashSales-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/FlashSales-${self:custom.stage}/index/*
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Chits-${self:custom.stage}
+            - arn:aws:dynamodb:${self:custom.region}:*:table/Chits-${self:custom.stage}/index/*
 
         - Effect: Allow
           Action:
@@ -124,11 +133,11 @@ provider:
             - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/config/*
             - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/templates/*
             - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/invoices/*
+            - arn:aws:s3:::sivakasi-pyropark-${aws:accountId}-${self:provider.stage}/flash-sales/*
 
 functions:
   bulkAdjustOrder:
     handler: src/handlers/bulkOrderAdjust.handler
-
     events:
       - httpApi:
           path: /bulk-order/{orderId}/adjust
@@ -235,3 +244,228 @@ functions:
       - httpApi:
           path: /admin/orders/{orderId}/address
           method: PUT
+
+  adminDeleteComboPackage:
+    handler: src/handlers/adminDeleteComboPackage.handler
+    events:
+      - httpApi:
+          path: /admin/combo-packages/{comboId}
+          method: DELETE
+
+  getUserByMobile:
+    handler: src/handlers/getUserByMobile.handler
+    events:
+      - httpApi:
+          path: /admin/users/{mobile}
+          method: GET
+
+  adminApplyChitBalance:
+    handler: src/handlers/adminApplyChitBalance.handler
+    events:
+      - httpApi:
+          path: /admin/orders/{orderId}/apply-chit-balance
+          method: POST
+
+  adminRevertChitBalance:
+    handler: src/handlers/adminRevertChitBalance.handler
+    events:
+      - httpApi:
+          path: /admin/orders/{orderId}/revert-chit-balance
+          method: POST
+
+  createFlashSale:
+    handler: src/handlers/flashSale.createHandler
+    events:
+      - httpApi:
+          path: /admin/flash-sales
+          method: post
+
+  listFlashSales:
+    handler: src/handlers/flashSale.listHandler
+    events:
+      - httpApi:
+          path: /admin/flash-sales
+          method: get
+
+  getFlashSale:
+    handler: src/handlers/flashSale.getHandler
+    events:
+      - httpApi:
+          path: /admin/flash-sales/{flashSaleId}
+          method: get
+
+  updateFlashSale:
+    handler: src/handlers/flashSale.updateHandler
+    events:
+      - httpApi:
+          path: /admin/flash-sales/{flashSaleId}
+          method: put
+
+  cancelFlashSale:
+    handler: src/handlers/flashSale.cancelHandler
+    events:
+      - httpApi:
+          path: /admin/flash-sales/{flashSaleId}
+          method: delete
+
+  adminFlashSalePresign:
+    handler: src/handlers/flashSalePresign.handler
+    events:
+      - httpApi:
+          path: /admin/flash-sales/presign
+          method: POST
+
+  flashSaleScheduler:
+    handler: src/handlers/flashSaleScheduler.handler
+    events:
+      - schedule:
+          rate: cron(0 0 * * ? *)
+          enabled: true
+
+  getActiveFlashSales:
+    handler: src/handlers/getActiveFlashSales.handler
+    events:
+      - httpApi:
+          path: /flash-sales/active
+          method: get
+
+  adminGetComboProductNames:
+    handler: src/handlers/adminGetComboProductNames.handler
+    events:
+      - httpApi:
+          path: /admin/combo-packages/{comboProductId}/products
+          method: get
+
+  cartCleanup:
+    handler: src/handlers/cartCleanup.handler
+    events:
+      - httpApi:
+          path: /cart/cleanup
+          method: POST
+
+  createChitScheme:
+    handler: src/handlers/chit.createScheme
+    events:
+      - httpApi:
+          path: /admin/chits
+          method: POST
+
+  listChitSchemes:
+    handler: src/handlers/chit.listSchemes
+    events:
+      - httpApi:
+          path: /admin/chits
+          method: GET
+
+  listAvailableChitSchemes:
+    handler: src/handlers/chit.listAvailableSchemes
+    events:
+      - httpApi:
+          path: /chits/available
+          method: GET
+
+  joinChitScheme:
+    handler: src/handlers/chit.joinScheme
+    events:
+      - httpApi:
+          path: /chits/{chitId}/join
+          method: POST
+
+  listMyChitSchemes:
+    handler: src/handlers/chit.listMySchemes
+    events:
+      - httpApi:
+          path: /chits/mine
+          method: GET
+
+  listChitMembers:
+    handler: src/handlers/chit.listMembers
+    events:
+      - httpApi:
+          path: /admin/chits/{chitId}/members
+          method: GET
+
+  recordChitPayment:
+    handler: src/handlers/chit.recordPayment
+    events:
+      - httpApi:
+          path: /admin/chits/{chitId}/members/{userId}/payments
+          method: POST
+
+  chitReminderScheduler:
+    handler: src/handlers/chit.sendScheduledReminders
+    events:
+      - schedule:
+          rate: cron(0 3 * * ? *)
+          enabled: true
+
+resources:
+  Resources:
+    ChitsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Chits-${self:custom.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: chitId
+            AttributeType: S
+          - AttributeName: recordId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: schemeId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: chitId
+            KeyType: HASH
+          - AttributeName: recordId
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: userId-schemeId-index
+            KeySchema:
+              - AttributeName: userId
+                KeyType: HASH
+              - AttributeName: schemeId
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+    FlashSalesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: FlashSales-${self:custom.stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: flashSaleId
+            AttributeType: S
+          - AttributeName: productId
+            AttributeType: S
+          - AttributeName: startAt
+            AttributeType: S
+          - AttributeName: status
+            AttributeType: S
+          - AttributeName: endAt
+            AttributeType: S
+
+        KeySchema:
+          - AttributeName: flashSaleId
+            KeyType: HASH
+
+        GlobalSecondaryIndexes:
+          - IndexName: productId-startAt-index
+            KeySchema:
+              - AttributeName: productId
+                KeyType: HASH
+              - AttributeName: startAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+
+          - IndexName: status-endAt-index
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: endAt
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL

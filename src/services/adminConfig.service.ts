@@ -1,4 +1,5 @@
 import { AdminConfigRepo } from "../repo/adminConfig.repo";
+import { invalidateNotificationConfigCache } from "../utils/notificationConfigCache";
 
 export class AdminConfigService {
     constructor(private repo: AdminConfigRepo) { }
@@ -10,6 +11,7 @@ export class AdminConfigService {
                 isPaymentEnabled: false,
                 isEmailEnabled: false,
                 isSmsEnabled: false,
+                isChitReminderSMSEnabled: false,
                 maintenanceMode: false,
                 sliderImages: [],
             };
@@ -20,6 +22,7 @@ export class AdminConfigService {
 
     async updateConfig(payload: Record<string, any>) {
         const updated = await this.repo.updateGlobalConfig(payload);
+        invalidateNotificationConfigCache();
         const { configId, updatedAt, ...publicConfig } = updated;
         return publicConfig;
     }

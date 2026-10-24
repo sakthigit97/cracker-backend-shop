@@ -63,10 +63,10 @@ export class OrderPricingService {
         if (config.enableGst === false) {
             return 0;
         }
-
         const isTamilNadu =
-            state?.toLowerCase().includes("tamil nadu");
-
+            state?.toLowerCase().includes("tamil nadu") ||
+            state?.toLowerCase().includes("pondicherry") ||
+            state?.toLowerCase().includes("puducherry");
         if (
             isTamilNadu &&
             config.disableGstForTN

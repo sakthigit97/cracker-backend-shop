@@ -25,12 +25,18 @@ export class AdminOrdersRepository {
         do {
             const values: any = {
                 ":s": status,
-                ":m": "ORDER",
             };
 
-            let filterParts: string[] = [];
-            if (fromDate && toDate) {
-                filterParts.push("createdAt BETWEEN :from AND :to");
+            const filterParts: string[] = [];
+            const expressionAttributeNames: Record<string, string> = {
+                "#status": "status",
+            };
+            let keyConditionExpression = "#status = :s";
+
+            if (fromDate !== undefined && toDate !== undefined) {
+                keyConditionExpression +=
+                    " AND #createdAt BETWEEN :from AND :to";
+                expressionAttributeNames["#createdAt"] = "createdAt";
                 values[":from"] = fromDate;
                 values[":to"] = toDate;
             }
@@ -43,26 +49,22 @@ export class AdminOrdersRepository {
             const res = await ddb.send(
                 new QueryCommand({
                     TableName: TABLE,
-                    IndexName: "status-meta-index",
-                    KeyConditionExpression: "#status = :s AND #meta = :m",
+                    IndexName: "status-createdAt-index",
+                    KeyConditionExpression: keyConditionExpression,
                     FilterExpression:
                         filterParts.length > 0
                             ? filterParts.join(" AND ")
                             : undefined,
-                    ExpressionAttributeNames: {
-                        "#status": "status",
-                        "#meta": "meta",
-                    },
+                    ExpressionAttributeNames: expressionAttributeNames,
                     ExpressionAttributeValues: values,
                     ScanIndexForward: false,
-                    Limit: limit,
+                    Limit: limit - items.length,
                     ExclusiveStartKey: lastKey,
                 })
             );
 
             const fetched = res.Items || [];
             items.push(...fetched);
-
             lastKey = res.LastEvaluatedKey;
 
         } while (items.length < limit && lastKey);

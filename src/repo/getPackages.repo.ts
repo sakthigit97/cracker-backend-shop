@@ -18,9 +18,7 @@ export class GetPackagesRepository {
             })
         );
 
-        const packageTags =
-            config.Item?.packageTags || [];
-
+        const packageTags = config.Item?.packageTags || [];
         const productsRes = await ddb.send(
             new ScanCommand({
                 TableName: PRODUCTS_TABLE,

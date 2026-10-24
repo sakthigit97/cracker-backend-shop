@@ -106,7 +106,7 @@ export const handler = async (event: any) => {
         console.error("Create order failed", err);
 
         return {
-            statusCode: 500,
+            statusCode: err.statusCode || 500,
             body: JSON.stringify({
                 message: err.message || "Unauthorized",
             }),

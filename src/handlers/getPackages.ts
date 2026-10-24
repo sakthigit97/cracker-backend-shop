@@ -4,7 +4,6 @@ const service = new GetPackagesService();
 export const handler = async () => {
     try {
         const data = await service.getPackages();
-
         return {
             statusCode: 200,
             body: JSON.stringify(data),

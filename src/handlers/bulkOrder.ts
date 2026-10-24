@@ -159,11 +159,10 @@ async function restoreBulkOrder(
 
         const username =
             role === "admin"
-                ? "Admin"
+                ? `ADMIN#${userId}`
                 : `USER#${userId}`;
 
         let body: any;
-
         try {
             body = JSON.parse(
                 event.body || "{}"
@@ -186,9 +185,6 @@ async function restoreBulkOrder(
             );
         }
 
-        /*
-         * Get bulk order
-         */
         const res = await ddb.send(
             new GetCommand({
                 TableName:
@@ -202,7 +198,6 @@ async function restoreBulkOrder(
         );
 
         const order = res.Item;
-
         if (!order) {
             return errorResponse(
                 "Bulk order not found",
@@ -210,9 +205,6 @@ async function restoreBulkOrder(
             );
         }
 
-        /*
-         * Only cancelled orders can be restored.
-         */
         if (
             order.status !==
             "CANCELLED"
@@ -223,12 +215,7 @@ async function restoreBulkOrder(
             );
         }
 
-        /*
-         * Restore is allowed only within
-         * 30 days of cancellation.
-         */
         const now = Date.now();
-
         const updatedAt =
             Number(
                 order.updatedAt || 0
@@ -284,11 +271,6 @@ async function restoreBulkOrder(
                         modifiedBy = :modifiedBy,
                         statusHistory = :statusHistory
                 `,
-
-                /*
-                 * Prevent restoring an order that
-                 * has already been changed.
-                 */
                 ConditionExpression:
                     "#status = :expectedStatus",
 

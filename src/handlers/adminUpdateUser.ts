@@ -24,7 +24,6 @@ export const handler = async (event: any) => {
         }
 
         let body: any;
-
         try {
             body = event.body
                 ? JSON.parse(event.body)
@@ -45,8 +44,11 @@ export const handler = async (event: any) => {
             "address",
             "city",
             "state",
+            "district",
             "pincode",
-            "walletCredit"
+            "walletCredit",
+            "chitBalance",
+            "isBulkUser",
         ];
 
         const hasUnknownField =
@@ -60,7 +62,7 @@ export const handler = async (event: any) => {
                 statusCode: 400,
                 body: JSON.stringify({
                     message:
-                        "Only name, role, address, city, state, pincode and walletCredit can be updated",
+                        "Only name, role, address, city, state, district, pincode, walletCredit, chitBalance and isBulkUser can be updated",
                 }),
             };
         }
@@ -71,8 +73,11 @@ export const handler = async (event: any) => {
             address?: string;
             city?: string;
             state?: string;
+            district?: string;
             pincode?: string;
             walletCredit?: number;
+            chitBalance?: number;
+            isBulkUser?: boolean;
         } = {};
 
         if (body.name !== undefined) {
@@ -162,6 +167,23 @@ export const handler = async (event: any) => {
                 body.city.trim();
         }
 
+        if (body.district !== undefined) {
+            if (
+                typeof body.district !== "string"
+            ) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({
+                        message:
+                            "District must be a string",
+                    }),
+                };
+            }
+
+            input.district =
+                body.district.trim();
+        }
+
         if (body.state !== undefined) {
             if (
                 typeof body.state !== "string"
@@ -226,14 +248,49 @@ export const handler = async (event: any) => {
             input.walletCredit = body.walletCredit;
         }
 
+        if (body.chitBalance !== undefined) {
+            if (
+                typeof body.chitBalance !== "number" ||
+                !Number.isFinite(body.chitBalance) ||
+                body.chitBalance < 0
+            ) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({
+                        message:
+                            "Chit balance must be a valid non-negative number",
+                    }),
+                };
+            }
+
+            input.chitBalance = body.chitBalance;
+        }
+
+        if (body.isBulkUser !== undefined) {
+            if (typeof body.isBulkUser !== "boolean") {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({
+                        message:
+                            "isBulkUser must be a boolean",
+                    }),
+                };
+            }
+
+            input.isBulkUser = body.isBulkUser;
+        }
+
         const hasUpdate =
             input.name !== undefined ||
             input.role !== undefined ||
             input.address !== undefined ||
             input.city !== undefined ||
+            input.district !== undefined ||
             input.state !== undefined ||
             input.pincode !== undefined ||
-            input.walletCredit !== undefined;
+            input.walletCredit !== undefined ||
+            input.chitBalance !== undefined ||
+            input.isBulkUser !== undefined;
 
         if (!hasUpdate) {
             return {

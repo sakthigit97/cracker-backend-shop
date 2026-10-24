@@ -1,7 +1,14 @@
-import { UpdateCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import {
+    UpdateCommand,
+    QueryCommand,
+    TransactWriteCommand,
+} from "@aws-sdk/lib-dynamodb";
+
 import { ddb } from "../utils/dynamo";
 
 const TABLE = process.env.ORDERS_TABLE!;
+const USERS_TABLE = process.env.USERS_TABLE!;
+
 export class AdminUpdateOrderRepository {
     async getOrderById(orderId: string) {
         const res = await ddb.send(
@@ -167,6 +174,184 @@ export class AdminUpdateOrderRepository {
         );
 
         return res.Attributes;
+    }
+
+    async applyChitBalance(input: {
+        orderId: string;
+        userId: string;
+        chitAmount: number;
+        finalPayable: number;
+        expectedFinalPayable: number;
+        adminId: string;
+        status: string;
+    }) {
+        const now = Date.now();
+
+        await ddb.send(
+            new TransactWriteCommand({
+                TransactItems: [
+                    {
+                        Update: {
+                            TableName: TABLE,
+
+                            Key: {
+                                orderId: input.orderId,
+                                meta: "ORDER",
+                            },
+                            UpdateExpression:
+                                "SET finalPayable = :finalPayable, " +
+                                "chitAmount = :chitAmount, " +
+                                "modifiedAt = :now, " +
+                                "modifiedBy = :by, " +
+                                "statusHistory = list_append(" +
+                                "if_not_exists(statusHistory, :emptyHistory), " +
+                                ":historyEntry" +
+                                ")",
+
+                            ConditionExpression:
+                                "#status <> :cancelled " +
+                                "AND #status <> :dispatched " +
+                                "AND (attribute_not_exists(chitAmount) OR chitAmount = :zero) " +
+                                "AND finalPayable = :expectedFinalPayable",
+
+                            ExpressionAttributeNames: {
+                                "#status": "status",
+                            },
+
+                            ExpressionAttributeValues: {
+                                ":finalPayable": input.finalPayable,
+                                ":chitAmount": input.chitAmount,
+                                ":expectedFinalPayable":
+                                    input.expectedFinalPayable,
+                                ":now": now,
+                                ":by": `ADMIN#${input.adminId}`,
+                                ":cancelled": "CANCELLED",
+                                ":dispatched": "DISPATCHED",
+                                ":zero": 0,
+                                ":emptyHistory": [],
+                                ":historyEntry": [
+                                    {
+                                        status: input.status,
+                                        at: now,
+                                        by: `ADMIN#${input.adminId}`,
+                                        comment: `Chit balance applied: ₹${input.chitAmount}`,
+                                    },
+                                ],
+                            },
+                        },
+                    },
+
+                    {
+                        Update: {
+                            TableName: USERS_TABLE,
+
+                            Key: {
+                                mobile: input.userId,
+                            },
+
+                            UpdateExpression:
+                                "SET chitBalance = chitBalance - :chitAmount",
+
+                            ConditionExpression:
+                                "attribute_exists(mobile) " +
+                                "AND chitBalance >= :chitAmount",
+
+                            ExpressionAttributeValues: {
+                                ":chitAmount": input.chitAmount,
+                            },
+                        },
+                    },
+                ],
+            })
+        );
+
+        return await this.getOrderById(input.orderId);
+    }
+
+    async revertChitBalance(input: {
+        orderId: string;
+        userId: string;
+        chitAmount: number;
+        finalPayable: number;
+        expectedFinalPayable: number;
+        adminId: string;
+        status: string;
+    }) {
+        const now = Date.now();
+
+        await ddb.send(
+            new TransactWriteCommand({
+                TransactItems: [
+                    {
+                        Update: {
+                            TableName: TABLE,
+
+                            Key: {
+                                orderId: input.orderId,
+                                meta: "ORDER",
+                            },
+
+                            UpdateExpression:
+                                "SET finalPayable = :finalPayable, " +
+                                "chitAmount = :zero, " +
+                                "modifiedAt = :now, " +
+                                "modifiedBy = :by, " +
+                                "statusHistory = list_append(" +
+                                "if_not_exists(statusHistory, :emptyHistory), " +
+                                ":historyEntry" +
+                                ")",
+
+                            ConditionExpression:
+                                "#status <> :cancelled " +
+                                "AND #status <> :dispatched " +
+                                "AND chitAmount = :chitAmount " +
+                                "AND finalPayable = :expectedFinalPayable",
+
+                            ExpressionAttributeNames: {
+                                "#status": "status",
+                            },
+
+                            ExpressionAttributeValues: {
+                                ":finalPayable": input.finalPayable,
+                                ":zero": 0,
+                                ":chitAmount": input.chitAmount,
+                                ":expectedFinalPayable":
+                                    input.expectedFinalPayable,
+                                ":now": now,
+                                ":by": `ADMIN#${input.adminId}`,
+                                ":cancelled": "CANCELLED",
+                                ":dispatched": "DISPATCHED",
+                                ":emptyHistory": [],
+                                ":historyEntry": [
+                                    {
+                                        status: input.status,
+                                        at: now,
+                                        by: `ADMIN#${input.adminId}`,
+                                        comment: `Chit balance reverted: ₹${input.chitAmount}`,
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        Update: {
+                            TableName: USERS_TABLE,
+                            Key: {
+                                mobile: input.userId,
+                            },
+                            UpdateExpression:
+                                "SET chitBalance = chitBalance + :chitAmount",
+                            ConditionExpression:
+                                "attribute_exists(mobile)",
+                            ExpressionAttributeValues: {
+                                ":chitAmount": input.chitAmount,
+                            },
+                        },
+                    },
+                ],
+            })
+        );
+        return await this.getOrderById(input.orderId);
     }
 
 }

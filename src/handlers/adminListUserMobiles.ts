@@ -14,7 +14,6 @@ export const handler = async (event: any) => {
         }
 
         const mobiles = await service.listUserMobiles();
-
         return {
             statusCode: 200,
             body: JSON.stringify({

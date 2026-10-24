@@ -10,9 +10,14 @@ export const handler = async (event: any) => {
         }
 
         const q = event.queryStringParameters || {};
+        const requestedLimit = Number(q.limit);
+        const limit =
+            Number.isFinite(requestedLimit) && requestedLimit > 0
+                ? Math.min(Math.floor(requestedLimit), 25)
+                : 25;
         const data = await service.listOrders({
             status: q.status || "ORDER_PLACED",
-            limit: Number(q.limit || 10),
+            limit,
             cursor: q.cursor ? JSON.parse(q.cursor) : undefined,
             fromDate: q.fromDate ? Number(q.fromDate) : undefined,
             toDate: q.toDate ? Number(q.toDate) : undefined,
