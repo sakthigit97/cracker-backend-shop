@@ -41,6 +41,8 @@ export class AdminGetComboPackagesService {
             const relatedProducts = comboId
                 ? allProducts.filter(
                     (product: any) =>
+                        (product.isActive === true ||
+                            product.isActive === "true") &&
                         product.isComboPackage !== true &&
                         Array.isArray(product.packageTagIds) &&
                         product.packageTagIds.includes(comboId)
@@ -144,6 +146,8 @@ export class AdminGetComboPackagesService {
         // Get products belonging to this combo package
         const products = allProducts.filter(
             (product: any) =>
+                (product.isActive === true ||
+                    product.isActive === "true") &&
                 product.isComboPackage !== true &&
                 Array.isArray(product.packageTagIds) &&
                 product.packageTagIds.includes(

@@ -4261,7 +4261,7 @@ var AdminGetComboPackagesService = class {
       );
       const comboId = packageTag?.id || null;
       const relatedProducts = comboId ? allProducts.filter(
-        (product) => product.isComboPackage !== true && Array.isArray(product.packageTagIds) && product.packageTagIds.includes(comboId)
+        (product) => (product.isActive === true || product.isActive === "true") && product.isComboPackage !== true && Array.isArray(product.packageTagIds) && product.packageTagIds.includes(comboId)
       ) : [];
       const products = relatedProducts.map(
         (product) => ({
@@ -4325,7 +4325,7 @@ var AdminGetComboPackagesService = class {
       ])
     );
     const products = allProducts.filter(
-      (product) => product.isComboPackage !== true && Array.isArray(product.packageTagIds) && product.packageTagIds.includes(
+      (product) => (product.isActive === true || product.isActive === "true") && product.isComboPackage !== true && Array.isArray(product.packageTagIds) && product.packageTagIds.includes(
         packageTag.id
       )
     );
