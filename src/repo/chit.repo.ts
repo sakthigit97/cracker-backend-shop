@@ -3,6 +3,7 @@ import {
     PutCommand,
     QueryCommand,
     ScanCommand,
+    TransactWriteCommand,
     UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { ddb } from "../utils/dynamo";
@@ -109,26 +110,68 @@ export class ChitRepository {
 
     async updateMemberPayments(
         member: ChitMember,
-        expectedVersion: number
+        expectedVersion: number,
+        payoutAmount?: number
     ) {
+        const updateExpression =
+            "SET installments = :installments, totalPaid = :totalPaid, " +
+            "#version = :nextVersion, updatedAt = :updatedAt";
+        const expressionAttributeNames = { "#version": "version" };
+        const expressionAttributeValues = {
+            ":installments": member.installments,
+            ":totalPaid": member.totalPaid,
+            ":nextVersion": expectedVersion + 1,
+            ":expectedVersion": expectedVersion,
+            ":updatedAt": member.updatedAt,
+        };
+
+        if (payoutAmount !== undefined) {
+            await ddb.send(new TransactWriteCommand({
+                TransactItems: [
+                    {
+                        Update: {
+                            TableName: CHITS_TABLE,
+                            Key: {
+                                chitId: member.chitId,
+                                recordId: member.recordId,
+                            },
+                            UpdateExpression: updateExpression,
+                            ConditionExpression: "#version = :expectedVersion",
+                            ExpressionAttributeNames: expressionAttributeNames,
+                            ExpressionAttributeValues: expressionAttributeValues,
+                        },
+                    },
+                    {
+                        Update: {
+                            TableName: USERS_TABLE,
+                            Key: { mobile: member.userId },
+                            UpdateExpression:
+                                "SET #chitBalance = if_not_exists(#chitBalance, :zero) + :payoutAmount",
+                            ConditionExpression: "attribute_exists(mobile)",
+                            ExpressionAttributeNames: {
+                                "#chitBalance": "chitBalance",
+                            },
+                            ExpressionAttributeValues: {
+                                ":zero": 0,
+                                ":payoutAmount": payoutAmount,
+                            },
+                        },
+                    },
+                ],
+            }));
+            return { ...member, version: expectedVersion + 1 };
+        }
+
         await ddb.send(new UpdateCommand({
             TableName: CHITS_TABLE,
             Key: {
                 chitId: member.chitId,
                 recordId: member.recordId,
             },
-            UpdateExpression:
-                "SET installments = :installments, totalPaid = :totalPaid, " +
-                "#version = :nextVersion, updatedAt = :updatedAt",
+            UpdateExpression: updateExpression,
             ConditionExpression: "#version = :expectedVersion",
-            ExpressionAttributeNames: { "#version": "version" },
-            ExpressionAttributeValues: {
-                ":installments": member.installments,
-                ":totalPaid": member.totalPaid,
-                ":nextVersion": expectedVersion + 1,
-                ":expectedVersion": expectedVersion,
-                ":updatedAt": member.updatedAt,
-            },
+            ExpressionAttributeNames: expressionAttributeNames,
+            ExpressionAttributeValues: expressionAttributeValues,
         }));
         return { ...member, version: expectedVersion + 1 };
     }

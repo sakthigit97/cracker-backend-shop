@@ -307,12 +307,26 @@ export class ChitService {
             }
             : item
         );
-        return this.repo.updateMemberPayments({
-            ...member,
-            installments,
-            totalPaid: money(member.totalPaid + input.amount),
-            updatedAt: now,
-        }, member.version);
+        const complete = installments.every(
+            (item) => item.status === "paid" && item.paidAmount >= item.amount
+        );
+        const scheme = complete
+            ? await this.repo.getScheme(chitId)
+            : null;
+        if (complete && !scheme) {
+            throw new ChitError("Scheme not found.", 404);
+        }
+        const payoutAmount = scheme?.packageAmount;
+        return this.repo.updateMemberPayments(
+            {
+                ...member,
+                installments,
+                totalPaid: money(member.totalPaid + input.amount),
+                updatedAt: now,
+            },
+            member.version,
+            payoutAmount
+        );
     }
 
     async sendScheduledReminders() {

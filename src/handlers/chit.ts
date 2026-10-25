@@ -29,9 +29,12 @@ function failure(error: unknown) {
         typeof error === "object" &&
         error !== null &&
         "name" in error &&
-        error.name === "ConditionalCheckFailedException"
+        (error.name === "ConditionalCheckFailedException" ||
+            error.name === "TransactionCanceledException")
     ) {
-        return response(409, { message: "This record changed or already exists. Refresh and try again." });
+        return response(409, {
+            message: "The payment or chit balance changed. Refresh and try again.",
+        });
     }
     console.error("Chit request failed", error);
     return response(500, { message: "Unable to complete the chit request." });
